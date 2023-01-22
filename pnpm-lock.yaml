@@ -50,9 +50,12 @@ importers:
       '@electron-toolkit/utils': ^1.0.2
       '@electron/notarize': ^1.2.3
       '@tanstack/vue-query': ^4.22.4
+      '@trpc/client': ^10.9.0
+      '@trpc/server': ^10.9.0
       '@types/node': 16.18.11
       '@vitejs/plugin-vue': ^4.0.0
       '@vueuse/core': ^9.11.1
+      api: workspace:*
       electron: ^21.3.3
       electron-builder: ^23.6.0
       electron-store: ^8.1.0
@@ -61,6 +64,7 @@ importers:
       eslint-config-custom: workspace:*
       pinia: ^2.0.29
       sass: ^1.57.1
+      superjson: ^1.12.1
       typescript: ^4.9.4
       unocss: ^0.48.4
       unplugin-auto-import: ^0.12.1
@@ -80,9 +84,12 @@ importers:
       '@electron-toolkit/tsconfig': 1.0.1_@types+node@16.18.11
       '@electron/notarize': 1.2.3
       '@tanstack/vue-query': 4.22.4_vue@3.2.45
+      '@trpc/client': 10.9.0_@trpc+server@10.9.0
+      '@trpc/server': 10.9.0
       '@types/node': 16.18.11
       '@vitejs/plugin-vue': 4.0.0_vite@4.0.4+vue@3.2.45
       '@vueuse/core': 9.11.1_vue@3.2.45
+      api: link:../api
       electron: 21.3.5
       electron-builder: 23.6.0
       electron-vite: 1.0.18_vite@4.0.4
@@ -90,6 +97,7 @@ importers:
       eslint-config-custom: link:../../packages/eslint-config-custom
       pinia: 2.0.29_prq2uz4lho2pwp6irk4cfkrxwu
       sass: 1.57.1
+      superjson: 1.12.1
       typescript: 4.9.4
       unocss: 0.48.4_vite@4.0.4
       unplugin-auto-import: 0.12.1_@vueuse+core@9.11.1
@@ -969,9 +977,16 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
+  /@trpc/client/10.9.0_@trpc+server@10.9.0:
+    resolution: {integrity: sha512-id6318qpgqllNOuBp7nuciXFPXCe+zae5d4r1hze6Eyp5fFFNO58TqA+4Q44KIcHgpfWyW2egs6iPeql3PrdKA==}
+    peerDependencies:
+      '@trpc/server': 10.9.0
+    dependencies:
+      '@trpc/server': 10.9.0
+    dev: true
+
   /@trpc/server/10.9.0:
     resolution: {integrity: sha512-5psyZgbvy29pJND32hwkWTMbv6s86IbsPOeDopsgNF0VegZT6Dsijmb7Ub/TDhuJVQVq5u4u5briMXi3SxmBkw==}
-    dev: false
 
   /@trysound/sax/0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -2434,7 +2449,6 @@ packages:
     engines: {node: '>=12.13'}
     dependencies:
       is-what: 4.1.8
-    dev: false
 
   /core-util-is/1.0.2:
     resolution: {integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==}
@@ -4214,7 +4228,6 @@ packages:
   /is-what/4.1.8:
     resolution: {integrity: sha512-yq8gMao5upkPoGEU9LsB2P+K3Kt8Q3fQFCGyNCWOAnJAMzEXVV9drYb0TXr42TTliLLhKIBvulgAXgtLLnwzGA==}
     engines: {node: '>=12.13'}
-    dev: false
 
   /isarray/1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
@@ -5547,7 +5560,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       copy-anything: 3.0.3
-    dev: false
 
   /supports-color/5.5.0:
     resolution: {integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==}
