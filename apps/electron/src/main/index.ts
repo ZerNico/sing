@@ -1,7 +1,20 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, screen, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import Store from 'electron-store'
+
+interface Config {
+  windowBounds: {
+    width: number
+    height: number
+    x: number
+    y: number
+  }
+  windowMaximized: boolean
+}
+
+const store = new Store<Config>()
 
 function createWindow(): void {
   // Create the browser window.
@@ -17,8 +30,45 @@ function createWindow(): void {
     }
   })
 
+  // Restore window position and maximized state
+  const bounds = store.get('windowBounds')
+
+  if (bounds) {
+    const displays = screen.getAllDisplays()
+    // check if the window is visible with stored bounds
+    // this is to prevent the window from being offscreen if the display is changed
+    const visible = displays.some((display) => {
+      return (
+        bounds.x + bounds.width >= display.bounds.x
+        && bounds.x <= display.bounds.x + display.bounds.width
+        && bounds.y + bounds.height >= display.bounds.y
+        && bounds.y <= display.bounds.y + display.bounds.height
+      )
+    })
+
+    if (visible) {
+      mainWindow.setBounds(bounds)
+    }
+  }
+
+  const maximized = store.get('windowMaximized')
+  if (maximized) {
+    mainWindow.maximize()
+  }
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+  })
+
+  mainWindow.on('close', () => {
+    // Save window bounds and maximized state on close
+    const bounds = mainWindow.getNormalBounds()
+    const maximized = mainWindow.isMaximized()
+    store.set({ windowMaximized: maximized, windowBounds: bounds })
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
