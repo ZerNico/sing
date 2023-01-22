@@ -1,7 +1,7 @@
 <template>
-  <div>
-    App
-  </div>
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <style lang="scss">
