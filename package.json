@@ -1,0 +1,25 @@
+{
+  "name": "fastify-trpc-next",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel --force",
+    "lint": "turbo run lint",
+    "test:e2e": "turbo run test:e2e",
+    "start": "turbo run start"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "turbo": "1.6.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {},
+  "packageManager": "pnpm@7.20.0"
+}
