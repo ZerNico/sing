@@ -10,12 +10,16 @@
       "outputs": []
     },
     "dev": {
+      "dependsOn": ["db:generate"],
       "cache": false
     },
     "start": {
       "persistent": true,
       "dependsOn": ["^build"]
     },
-    "test:e2e": {}
+    "test:e2e": {},
+    "db:generate": {
+      "cache": false
+    }
   }
 }
