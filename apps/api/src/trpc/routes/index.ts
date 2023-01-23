@@ -1,10 +1,10 @@
 import { router } from '../trpc'
-import { exampleRouter } from './example'
 import { healthRouter } from './health'
+import { lobbyRouter } from './lobby'
 
 export const appRouter = router({
   health: healthRouter,
-  example: exampleRouter,
+  lobby: lobbyRouter,
 })
 
 export type AppRouter = typeof appRouter

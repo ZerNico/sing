@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lobby {
+  id    String  @id @default(uuid())
+  code  String  @unique @db.VarChar(10)
+  name  String?
+  users User[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique @db.VarChar(100)
+  createdAt DateTime @default(now())
+  lobby     Lobby?   @relation(fields: [lobbyId], references: [id])
+  lobbyId   String?
+}
+

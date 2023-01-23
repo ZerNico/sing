@@ -21,14 +21,12 @@ server.register(sensible)
 server.register(fastifyTRPCPlugin, {
   prefix: '/trpc',
   trpcOptions: { router: appRouter, createContext },
-});
+})
 
-(async () => {
-  await server.listen({ port: env.PORT }, (err) => {
-    if (err) {
-      console.error(err)
-      process.exit(1)
-    }
-    console.log(`Server listening on ${env.PORT}`)
-  })
-})()
+server.listen({ port: env.PORT }, (err) => {
+  if (err) {
+    console.error(err)
+    process.exit(1)
+  }
+  console.log(`Server listening on ${env.PORT}`)
+})
