@@ -7,5 +7,6 @@ module.exports = {
     '@typescript-eslint/brace-style': ['error', '1tbs', { allowSingleLine: true }],
     'turbo/no-undeclared-env-vars': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
+    'antfu/if-newline': 'off',
   },
 }

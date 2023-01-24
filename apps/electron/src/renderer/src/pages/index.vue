@@ -35,6 +35,8 @@ const { position, increment, decrement } = useLoop(buttons.length - 1)
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 
 const onNavigate = (event: MenuNavigationEvent) => {
+  if (isLoading.value) return
+
   if (event.action === 'confirm') {
     buttons.at(position.value)?.action()
   } else if (event.action === 'right') {
@@ -49,18 +51,28 @@ const gradient = { start: '#11998ec5', end: '#38ef7dc5' }
 
 <template>
   <Layout class="gradient-bg-main">
-    <div class="flex flex-col items-center justify-center text-2cqw test">
+    <div class="flex flex-col items-center justify-center text-2cqw">
       <Icon v-if="isLoading" icon="Spinner" class="text-5cqw animate-spin" />
       <div v-if="isError" class="flex flex-col items-center gap-8cqh">
         <p class="text-2cqw font-semibold">
           Could not connect to server.
         </p>
         <div class="flex gap-1cqw">
-          <Button v-for="button, index in buttons" :key="button.text" :active="position === index" :gradient="gradient">
+          <Button
+            v-for="button, index in buttons"
+            :key="button.text"
+            :active="position === index"
+            :gradient="gradient"
+            @mouseenter="() => position = index"
+            @click="button.action"
+          >
             {{ button.text }}
           </Button>
         </div>
       </div>
     </div>
+    <template #footer>
+      <KeyHints :hints="['navigate', 'confirm']" />
+    </template>
   </Layout>
 </template>

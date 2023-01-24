@@ -1,7 +1,32 @@
+<script setup lang="ts">
+const emit = defineEmits<{
+  (event: 'back'): void
+  (event: 'forward'): void
+}>()
+
+const onClick = (e: MouseEvent) => {
+  if (e.button === 4) {
+    emit('forward')
+    e.preventDefault()
+  } else if (e.button === 3) {
+    emit('back')
+    e.preventDefault()
+  }
+}
+</script>
+
 <template>
-  <div class="w-full h-full flex items-center justify-center">
-    <div class="layout children:(h-full w-full)">
-      <slot />
+  <div class="w-full h-full flex items-center justify-center" @mouseup="onClick">
+    <div class="layout flex flex-col py-7cqh">
+      <div class="px-5cqw">
+        <slot name="header" />
+      </div>
+      <div class="flex-grow children:(h-full w-full)">
+        <slot />
+      </div>
+      <div class="px-5cqw">
+        <slot name="footer" />
+      </div>
     </div>
   </div>
 </template>
