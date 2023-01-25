@@ -41,6 +41,7 @@ export const lobbyRouter = router({
 
     return {
       jwt: token,
+      lobby,
     }
   }),
 })

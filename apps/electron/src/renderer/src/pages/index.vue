@@ -9,12 +9,13 @@ const router = useRouter()
 
 const createLobby = () => client.lobby.create.mutate()
 
-const { isLoading, isError, mutate } = useMutation({
+const { isLoading, isError, isSuccess, mutate } = useMutation({
   mutationFn: createLobby,
   retry: 4,
   retryDelay: 1000,
   onSuccess: (data) => {
     lobbyStore.jwt = data.jwt
+    lobbyStore.lobby = data.lobby
     router.push('/home')
   },
 })
@@ -53,7 +54,7 @@ const gradient = { start: '#11998ec5', end: '#38ef7dc5' }
   <Layout class="gradient-bg-main">
     <div class="flex flex-col items-center justify-center text-2cqw">
       <Icon v-if="isLoading" icon="Spinner" class="text-5cqw animate-spin" />
-      <div v-if="isError" class="flex flex-col items-center gap-8cqh">
+      <div v-if="isError && !isSuccess" class="flex flex-col items-center gap-8cqh">
         <p class="text-2cqw font-semibold">
           Could not connect to server.
         </p>
