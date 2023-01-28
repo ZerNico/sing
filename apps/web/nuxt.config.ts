@@ -14,4 +14,7 @@ export default defineNuxtConfig({
     zitadelOrgDomain: '',
     authSecret: '',
   },
+  unocss: {
+    preflight: true,
+  },
 })

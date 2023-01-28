@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div>
-    Index
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
