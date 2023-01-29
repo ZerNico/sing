@@ -1,7 +1,9 @@
 import type { Lobby } from '@prisma/client'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 import { signJwt } from '../../../jwt/jwt'
+import { oAuthedProcedure } from '../../middlewares/oauth'
 import { publicProcedure, router } from '../../trpc'
 
 export const lobbyRouter = router({
@@ -43,6 +45,65 @@ export const lobbyRouter = router({
       jwt: token,
       lobby,
     }
+  }),
+  join: oAuthedProcedure
+    .input(z.object({ code: z.string().transform(val => val.toUpperCase()) }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.lobby.update({
+          where: { code: input.code },
+          data: {
+            users: {
+              connect: {
+                id: ctx.user.id,
+              },
+            },
+          },
+        })
+        return
+      } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Lobby not found',
+            cause: e,
+          })
+        }
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to join lobby',
+          cause: e,
+        })
+      }
+    }),
+  leave: oAuthedProcedure.mutation(async ({ ctx }) => {
+    try {
+      await ctx.prisma.user.update({
+        where: { id: ctx.user.id },
+        data: {
+          lobby: {
+            disconnect: true,
+          },
+        },
+      })
+      return
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to leave lobby',
+        cause: e,
+      })
+    }
+  }),
+  joined: oAuthedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: ctx.user.id },
+      include: {
+        lobby: true,
+      },
+    })
+
+    return { lobby: user?.lobby }
   }),
 })
 

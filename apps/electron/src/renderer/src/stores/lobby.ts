@@ -13,3 +13,7 @@ export const useLobbyStore = defineStore('lobby', {
     lobby: undefined,
   }),
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useLobbyStore, import.meta.hot))
+}

@@ -16,8 +16,14 @@
     "nuxt-typed-router": "^2.1.4"
   },
   "dependencies": {
+    "@kyvg/vue3-notification": "^2.8.0",
     "@sidebase/nuxt-auth": "0.4.0-alpha.3",
+    "@tanstack/vue-query": "^4.22.4",
+    "@trpc/client": "^10.9.0",
+    "@trpc/server": "^10.9.0",
     "@vueuse/nuxt": "^9.11.1",
-    "next-auth": "4.18.8"
+    "api": "workspace:*",
+    "next-auth": "4.18.8",
+    "superjson": "^1.12.1"
   }
 }
