@@ -10,33 +10,7 @@ const router = useRouter()
 const queryClient = useQueryClient()
 const { notify } = useNotification()
 
-const queryJoined = () => client.lobby.joined.query()
 const mutateJoin = (code: string) => client.lobby.join.mutate({ code })
-
-const joined = useQuery({
-  queryKey: ['queryJoined'],
-  queryFn: queryJoined,
-  retry: 2,
-  retryDelay: 0,
-  refetchOnWindowFocus: false,
-  onError: () => {
-    notify({
-      type: 'error',
-      title: 'Error',
-      text: 'Something went wrong!',
-    })
-  },
-})
-
-onServerPrefetch(async () => {
-  await joined.suspense()
-})
-
-watch(joined.data, (data) => {
-  if (data?.lobby) {
-    router.push('/lobby')
-  }
-}, { immediate: true })
 
 const join = useMutation({
   mutationFn: mutateJoin,
@@ -82,7 +56,7 @@ const onSubmit = (e: Event) => {
         <label for="code" class="block mb-2 text-sm font-medium text-white">Lobby code</label>
         <input id="code" v-model="code" name="code" class="text-xl border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white" placeholder="FW6BM" required>
       </div>
-      <Button :disabled="joined.isLoading.value" type="submit">
+      <Button :disabled="join.isLoading.value" type="submit">
         Join
       </Button>
     </form>
