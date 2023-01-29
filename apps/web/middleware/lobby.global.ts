@@ -1,5 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  if (to.path.startsWith('/lobby') && !await getLobby()) {
+  if (to.path.startsWith('/lobby') && !(await getLobby())) {
     return navigateTo('/join')
   } else if (to.path === '/join' && await getLobby()) {
     return navigateTo('/lobby')
@@ -8,5 +8,6 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
 const getLobby = async () => {
   const { client } = useTRPC()
-  return await client.lobby.joined.query()
+  const response = await client.lobby.joined.query()
+  return response.lobby
 }

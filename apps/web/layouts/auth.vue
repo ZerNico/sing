@@ -1,6 +1,31 @@
 <script setup lang="ts">
+import { notify } from '@kyvg/vue3-notification'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
+
+const router = useRouter()
+const queryClient = useQueryClient()
+const { client } = useTRPC()
 const { isLoggedIn, logOut, user } = useAuth()
 const runtimeConfig = useRuntimeConfig()
+
+const mutateLeave = () => client.lobby.leave.mutate()
+
+const leave = useMutation({
+  mutationFn: mutateLeave,
+  retry: 2,
+  retryDelay: 0,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['queryJoined'] })
+    router.push('/')
+  },
+  onError: () => {
+    notify({
+      type: 'error',
+      title: 'Error',
+      text: 'Something went wrong!',
+    })
+  },
+})
 </script>
 
 <template>
@@ -18,8 +43,8 @@ const runtimeConfig = useRuntimeConfig()
             <HeadlessMenuItem v-slot="{ active }">
               <a :href="runtimeConfig.public.zitadelIssuer" target="_blank" class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']">Edit profile</a>
             </HeadlessMenuItem>
-            <HeadlessMenuItem v-slot="{ active }">
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']">Leave session</a>
+            <HeadlessMenuItem v-slot="{ active }" role="button">
+              <a class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']" @click="() => leave.mutate()">Leave session</a>
             </HeadlessMenuItem>
             <HeadlessMenuItem v-slot="{ active }" role="button">
               <a class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']" @click="() => logOut()">Sign out</a>
