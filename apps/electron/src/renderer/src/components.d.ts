@@ -15,5 +15,7 @@ declare module '@vue/runtime-core' {
     ModeCard: typeof import('./components/menu/index/ModeCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TitleBar: typeof import('./components/menu/TitleBar.vue')['default']
+    WideButton: typeof import('./components/menu/WideButton.vue')['default']
   }
 }

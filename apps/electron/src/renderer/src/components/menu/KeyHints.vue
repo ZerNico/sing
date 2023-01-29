@@ -19,6 +19,12 @@ const hints = computed((): { icon: keyof typeof icons; text: string; size: strin
           text: 'Confirm',
           size: 'text-1.3cqw',
         }
+      } else if (hint === 'back') {
+        return {
+          icon: 'KeyEscape',
+          text: 'Back',
+          size: 'text-1.5cqw',
+        }
       }
     } else if (keyMode.value === 'gamepad') {
       if (hint === 'navigate') {
@@ -31,6 +37,12 @@ const hints = computed((): { icon: keyof typeof icons; text: string; size: strin
         return {
           icon: 'XboxA',
           text: 'Confirm',
+          size: 'text-1.3cqw',
+        }
+      } else if (hint === 'back') {
+        return {
+          icon: 'XboxB',
+          text: 'Back',
           size: 'text-1.3cqw',
         }
       }

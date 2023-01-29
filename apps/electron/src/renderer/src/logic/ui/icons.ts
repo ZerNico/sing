@@ -8,6 +8,9 @@ import Gear from '@renderer/assets/icons/gear.svg?component'
 import Person from '@renderer/assets/icons/person.svg?component'
 import Group from '@renderer/assets/icons/group.svg?component'
 import VinylRecord from '@renderer/assets/icons/vinyl-record.svg?component'
+import ChevronLeft from '@renderer/assets/icons/chevron-left.svg?component'
+import KeyEscape from '@renderer/assets/icons/keys/key-escape.svg?component'
+import XboxB from '@renderer/assets/icons/keys/xbox-b.svg?component'
 
 export {
   Spinner,
@@ -20,4 +23,7 @@ export {
   Person,
   Group,
   VinylRecord,
+  ChevronLeft,
+  KeyEscape,
+  XboxB,
 }
