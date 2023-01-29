@@ -54,7 +54,7 @@ const onSubmit = (e: Event) => {
       </p>
       <div>
         <label for="code" class="block mb-2 text-sm font-medium text-white">Lobby code</label>
-        <input id="code" v-model="code" name="code" class="text-xl border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white" placeholder="FW6BM" required>
+        <input id="code" v-model="code" maxlength="10" name="code" class="uppercase text-xl border text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white" placeholder="CODE" required>
       </div>
       <Button :disabled="join.isLoading.value" type="submit">
         Join
