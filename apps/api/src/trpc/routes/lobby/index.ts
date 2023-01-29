@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { signJwt } from '../../../jwt/jwt'
+import { authedProcedure } from '../../middlewares/auth'
 import { oAuthedProcedure } from '../../middlewares/oauth'
 import { publicProcedure, router } from '../../trpc'
 
@@ -104,6 +105,26 @@ export const lobbyRouter = router({
     })
 
     return { lobby: user?.lobby }
+  }),
+  status: authedProcedure.query(async ({ ctx }) => {
+    try {
+      const lobby = await ctx.prisma.lobby.findUnique({
+        where: { id: ctx.user.sub },
+        include: {
+          users: true,
+        },
+      })
+
+      if (!lobby) throw new TRPCError({ code: 'NOT_FOUND', message: 'Lobby not found' })
+
+      return { lobby }
+    } catch (e) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to get lobby status',
+        cause: e,
+      })
+    }
   }),
 })
 

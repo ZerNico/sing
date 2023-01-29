@@ -6,6 +6,7 @@ import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
+import { loadGuards } from './router-guards'
 
 const app = createApp(App)
 const router = createRouter({
@@ -13,6 +14,8 @@ const router = createRouter({
   routes,
 })
 const pinia = createPinia()
+
+loadGuards(router)
 
 app.use(router)
 app.use(pinia)

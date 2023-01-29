@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { ofetch } from 'ofetch'
+import { FetchError, ofetch } from 'ofetch'
 import { z } from 'zod'
 import { env } from '../../config/env'
 import { middleware, publicProcedure } from '../trpc'
@@ -63,7 +63,13 @@ const isOAuthed = middleware(async ({ ctx, next }) => {
 
     return next({ ctx: { ...ctx, user } })
   } catch (e) {
-    if (e instanceof TRPCError) throw e
+    if (e instanceof FetchError) {
+      throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Could not verify access token', cause: e })
+    }
+    if (e instanceof TRPCError) {
+      throw e
+    }
+
     throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', cause: e })
   }
 })

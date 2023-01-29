@@ -5,6 +5,7 @@ import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigatio
 
 const router = useRouter()
 const lobbyStore = useLobbyStore()
+const { client } = useTRPC()
 
 const webUrl = import.meta.env.RENDERER_VITE_WEB_URL
 
@@ -71,13 +72,30 @@ const onNavigate = (event: MenuNavigationEvent) => {
     decrement()
   }
 }
+
+const queryStatus = () => client.lobby.status.query()
+
+const status = useQuery({
+  queryKey: ['queryStatus'],
+  queryFn: queryStatus,
+  retry: 2,
+  retryDelay: 0,
+  refetchOnWindowFocus: false,
+  cacheTime: 10000, // 10 seconds
+  refetchInterval: 10000, // 10 seconds
+})
 </script>
 
 <template>
   <Layout class="gradient-bg-main">
     <template #header>
-      <div class="uppercase font-bold text-2cqw">
-        Tune Perfect
+      <div class="flex justify-between items-center">
+        <div class="uppercase font-bold text-2cqw">
+          Tune Perfect
+        </div>
+        <div v-if="status.data.value?.lobby" class="flex gap-0.2cqw">
+          <Avatar v-for="user in status.data.value?.lobby.users.slice(0, 15)" :key="user.id" :username="user.username" :src="user.picture ?? undefined" />
+        </div>
       </div>
     </template>
     <div class="flex flex-col items-center justify-center px-5cqw py-5cqh">
