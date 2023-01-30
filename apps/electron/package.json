@@ -21,7 +21,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "electron-trpc": "^0.3.2"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -40,6 +41,7 @@
     "eslint": "^8.31.0",
     "eslint-config-custom": "workspace:*",
     "pinia": "^2.0.29",
+    "pinia-plugin-persistedstate": "^3.0.2",
     "qrcode": "^1.5.1",
     "sass": "^1.57.1",
     "superjson": "^1.12.1",

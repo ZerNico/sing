@@ -1,8 +1,10 @@
-import { app, shell, screen, BrowserWindow } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import { BrowserWindow, app, screen, shell } from 'electron'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import { createIPCHandler } from 'electron-trpc/main'
 import Store from 'electron-store'
+import icon from '../../resources/icon.png?asset'
+import { ipcRouter } from './trpc/routes'
 
 interface Config {
   windowBounds: {
@@ -26,9 +28,11 @@ function createWindow(): void {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
+      sandbox: false,
+    },
   })
+
+  createIPCHandler({ router: ipcRouter, windows: [mainWindow] })
 
   // Restore window position and maximized state
   const bounds = store.get('windowBounds')
@@ -78,8 +82,8 @@ function createWindow(): void {
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (is.dev && process.env.ELECTRON_RENDERER_URL) {
+    mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -101,7 +105,7 @@ app.whenReady().then(() => {
 
   createWindow()
 
-  app.on('activate', function () {
+  app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

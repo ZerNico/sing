@@ -1,5 +1,5 @@
-import { resolve } from "path";
-import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import { resolve } from 'path'
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import Vue from '@vitejs/plugin-vue'
 import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
@@ -18,7 +18,8 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        "@renderer": resolve("src/renderer/src"),
+        '@renderer': resolve('src/renderer/src'),
+
       },
     },
     plugins: [
@@ -34,22 +35,22 @@ export default defineConfig({
 
       AutoImport({
         imports: [
-          "vue",
-          "vue/macros",
-          "vue-router",
-          "@vueuse/core",
-          "pinia",
+          'vue',
+          'vue/macros',
+          'vue-router',
+          '@vueuse/core',
+          'pinia',
           {
-            "@tanstack/vue-query": ["useQuery", "useMutation"],
+            '@tanstack/vue-query': ['useQuery', 'useMutation'],
           },
         ],
-        dts: "src/auto-imports.d.ts",
-        dirs: ["./src/composables", "./src/stores"],
+        dts: 'src/auto-imports.d.ts',
+        dirs: ['./src/composables', './src/stores'],
         vueTemplate: true,
       }),
 
       Components({
-        dts: "src/components.d.ts",
+        dts: 'src/components.d.ts',
       }),
 
       Unocss(),
@@ -57,4 +58,4 @@ export default defineConfig({
       svgLoader(),
     ],
   },
-});
+})

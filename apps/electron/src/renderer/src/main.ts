@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import routes from 'virtual:generated-pages'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'
@@ -14,6 +15,7 @@ const router = createRouter({
   routes,
 })
 const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
 loadGuards(router)
 

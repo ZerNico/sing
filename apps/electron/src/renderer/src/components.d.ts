@@ -10,6 +10,7 @@ declare module '@vue/runtime-core' {
     Avatar: typeof import('./components/Avatar.vue')['default']
     Button: typeof import('./components/menu/Button.vue')['default']
     Icon: typeof import('./components/Icon.vue')['default']
+    IconButton: typeof import('./components/menu/IconButton.vue')['default']
     KeyHints: typeof import('./components/menu/KeyHints.vue')['default']
     Layout: typeof import('./components/Layout.vue')['default']
     ModeCard: typeof import('./components/menu/index/ModeCard.vue')['default']
