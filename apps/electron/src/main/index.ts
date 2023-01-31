@@ -1,5 +1,6 @@
 import { join } from 'path'
-import { BrowserWindow, app, screen, shell } from 'electron'
+import url from 'url'
+import { BrowserWindow, app, protocol, screen, shell } from 'electron'
 import { electronApp, is, optimizer } from '@electron-toolkit/utils'
 import { createIPCHandler } from 'electron-trpc/main'
 import Store from 'electron-store'
@@ -17,6 +18,13 @@ interface Config {
 }
 
 const store = new Store<Config>()
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'atom',
+    privileges: { supportFetchAPI: true },
+  },
+])
 
 function createWindow(): void {
   // Create the browser window.
@@ -95,6 +103,11 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
+
+  protocol.registerFileProtocol('atom', (request, callback) => {
+    const filePath = url.fileURLToPath(`file://${request.url.slice('atom://'.length)}`)
+    callback(filePath)
+  })
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

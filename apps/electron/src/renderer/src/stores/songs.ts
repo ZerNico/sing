@@ -1,12 +1,16 @@
+import type { LocalSong } from '@renderer/logic/song/song'
+
 interface SongsState {
   paths: string[]
   needsUpdate: boolean
+  songs: Map<string, LocalSong>
 }
 
 export const useSongsStore = defineStore('songs', {
   state: (): SongsState => ({
     paths: [],
     needsUpdate: true,
+    songs: new Map(),
   }),
   actions: {
     addPath(path: string) {
@@ -18,9 +22,12 @@ export const useSongsStore = defineStore('songs', {
       this.paths = this.paths.filter(p => p !== path)
       this.needsUpdate = true
     },
+    addSongs(songs: LocalSong[]) {
+      songs.forEach(song => this.songs.set(song.meta.hash, song))
+    },
   },
   persist: {
-    key: 'paths',
+    paths: ['paths'],
   },
 })
 
