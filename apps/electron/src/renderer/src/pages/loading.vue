@@ -7,16 +7,15 @@ const songsStore = useSongsStore()
 const { ipc } = useTRPC()
 
 const load = async () => {
-  songsStore.needsUpdate = false
-
+  songsStore.clearSongs()
   for (const path of songsStore.paths) {
     const tree = await ipc.songs.getTree.query({ path })
     const songs = await parseTree(tree)
     songsStore.addSongs(songs)
   }
 
+  songsStore.needsUpdate = false
   const redirect = route.query.redirect as string
-
   router.replace(redirect)
 }
 load()

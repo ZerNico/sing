@@ -25,6 +25,9 @@ export const useSongsStore = defineStore('songs', {
     addSongs(songs: LocalSong[]) {
       songs.forEach(song => this.songs.set(song.meta.hash, song))
     },
+    clearSongs() {
+      this.songs.clear()
+    },
   },
   persist: {
     paths: ['paths'],
