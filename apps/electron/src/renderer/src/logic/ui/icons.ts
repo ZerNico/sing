@@ -13,6 +13,7 @@ import KeyEscape from '@renderer/assets/icons/keys/key-escape.svg?component'
 import XboxB from '@renderer/assets/icons/keys/xbox-b.svg?component'
 import Plus from '@renderer/assets/icons/plus.svg?component'
 import Folder from '@renderer/assets/icons/folder.svg?component'
+import TriangleArrow from '@renderer/assets/icons/triangle-arrow.svg?component'
 
 export {
   Spinner,
@@ -30,4 +31,5 @@ export {
   XboxB,
   Plus,
   Folder,
+  TriangleArrow,
 }

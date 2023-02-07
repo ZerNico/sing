@@ -9,11 +9,13 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Avatar: typeof import('./components/Avatar.vue')['default']
     Button: typeof import('./components/menu/Button.vue')['default']
+    copy: typeof import('./components/menu/WideButton copy.vue')['default']
     Icon: typeof import('./components/Icon.vue')['default']
     IconButton: typeof import('./components/menu/IconButton.vue')['default']
     KeyHints: typeof import('./components/menu/KeyHints.vue')['default']
     Layout: typeof import('./components/Layout.vue')['default']
     ModeCard: typeof import('./components/menu/index/ModeCard.vue')['default']
+    RangeInput: typeof import('./components/menu/RangeInput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TitleBar: typeof import('./components/menu/TitleBar.vue')['default']

@@ -13,6 +13,13 @@ const onClick = (e: MouseEvent) => {
     e.preventDefault()
   }
 }
+
+// prevent tab button from focusing on the next element
+useEventListener('keydown', (e: KeyboardEvent) => {
+  if (e.key === 'Tab') {
+    e.preventDefault()
+  }
+})
 </script>
 
 <template>

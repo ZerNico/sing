@@ -34,6 +34,7 @@
     "@trpc/server": "^10.9.0",
     "@types/node": "16.18.11",
     "@vitejs/plugin-vue": "^4.0.0",
+    "@vue-macros/volar": "^0.8.1",
     "@vueuse/core": "^9.11.1",
     "@vueuse/integrations": "^9.11.1",
     "api": "workspace:*",
