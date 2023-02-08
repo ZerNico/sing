@@ -40,6 +40,14 @@ const onFocus = (e: Event) => {
   e.preventDefault()
   return false
 }
+
+const next = () => onClick('right')
+const prev = () => onClick('left')
+
+defineExpose({
+  next,
+  prev,
+})
 </script>
 
 <template>
@@ -58,6 +66,9 @@ const onFocus = (e: Event) => {
         <div class="relative h-2.8cqh w-50cqw">
           <input
             type="range"
+            :min="props.min"
+            :max="props.max"
+            :step="props.step"
             :value="modelValue"
             class="w-full h-full cursor-pointer slider focus:outline-none focus:ring-0 focus:shadow-none"
             @input="onInput"

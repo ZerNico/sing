@@ -4,6 +4,16 @@ interface SettingsState {
     game: number
     preview: number
   }
+  microphones: Microphone[]
+}
+
+export interface Microphone {
+  label: string
+  id: string
+  color: string
+  channel: number
+  gain: number
+  delay: number
 }
 
 export const useSettingsStore = defineStore('settings', {
@@ -13,7 +23,16 @@ export const useSettingsStore = defineStore('settings', {
       game: 100,
       preview: 50,
     },
+    microphones: [],
   }),
+  actions: {
+    deleteMicrophone(index: number) {
+      this.microphones.splice(index, 1)
+    },
+    saveMicrophone(index: number, Microphone: Microphone) {
+      this.microphones[index] = Microphone
+    },
+  },
   persist: true,
 })
 

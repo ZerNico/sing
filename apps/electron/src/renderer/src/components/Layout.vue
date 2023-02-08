@@ -19,6 +19,10 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Tab') {
     e.preventDefault()
   }
+  // prevent arrow keys from scrolling the page
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault()
+  }
 })
 </script>
 
@@ -28,7 +32,7 @@ useEventListener('keydown', (e: KeyboardEvent) => {
       <div class="px-5cqw">
         <slot name="header" />
       </div>
-      <div class="flex-grow children:(h-full w-full)">
+      <div class="flex-grow overflow-y-auto scrollbar children:(h-full w-full)">
         <slot />
       </div>
       <div class="px-5cqw">
@@ -59,5 +63,18 @@ useEventListener('keydown', (e: KeyboardEvent) => {
     height: auto;
     width: 100%;
   }
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #666;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #ddd;
+  height: 10px;
 }
 </style>
