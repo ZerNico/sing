@@ -1,3 +1,16 @@
+<script setup lang="ts">
+useEventListener('keydown', (e: KeyboardEvent) => {
+  // prevent tab button from focusing on the next element
+  if (e.key === 'Tab') {
+    e.preventDefault()
+  }
+  // prevent arrow keys from scrolling the page
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault()
+  }
+})
+</script>
+
 <template>
   <main class="h-screen w-screen text-white">
     <RouterView v-slot="{ Component }">

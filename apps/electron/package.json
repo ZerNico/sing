@@ -43,6 +43,7 @@
     "electron-vite": "^1.0.17",
     "eslint": "^8.31.0",
     "eslint-config-custom": "workspace:*",
+    "fuse.js": "^6.6.2",
     "ofetch": "^1.0.0",
     "pinia": "^2.0.29",
     "pinia-plugin-persistedstate": "^3.0.2",

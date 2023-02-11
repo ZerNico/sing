@@ -13,17 +13,6 @@ const onClick = (e: MouseEvent) => {
     e.preventDefault()
   }
 }
-
-// prevent tab button from focusing on the next element
-useEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.key === 'Tab') {
-    e.preventDefault()
-  }
-  // prevent arrow keys from scrolling the page
-  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-    e.preventDefault()
-  }
-})
 </script>
 
 <template>

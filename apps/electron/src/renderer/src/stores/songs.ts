@@ -29,6 +29,11 @@ export const useSongsStore = defineStore('songs', {
       this.songs.clear()
     },
   },
+  getters: {
+    getSongs: (state) => {
+      return Array.from(state.songs.values())
+    },
+  },
   persist: {
     paths: ['paths'],
   },

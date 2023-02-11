@@ -30,7 +30,7 @@ const cards: {
     icon: 'VinylRecord',
     title: 'Sing',
     gradient: { start: '#11998e', end: '#38ef7d' },
-    action: () => router.push('/sing'),
+    action: () => router.push('/songs'),
     animation: 'spin',
     description: 'Sing your favorite songs, alone or with your friends!',
   },
