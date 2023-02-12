@@ -159,19 +159,20 @@ defineExpose({
 </script>
 
 <template>
-  <div class="bg-red">
+  <div>
+    <div v-if="!props.song" class="h-full w-full" />
     <video
-      v-if="song?.urls.video && !videoError"
+      v-if="props.song?.urls.video && !videoError"
       ref="videoEl"
-      :src="song?.urls.video"
+      :src="props.song?.urls.video"
       class="w-full h-full object-cover"
       muted
       @canplay="startPlayback"
       @error="videoError = true"
     />
     <img
-      v-else-if="song?.urls.background && !backgroundError"
-      :src="song?.urls.background"
+      v-else-if="props.song?.urls.background && !backgroundError"
+      :src="props.song?.urls.background"
       class="w-full h-full object-cover"
       @error="backgroundError = true"
     >

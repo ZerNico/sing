@@ -5,6 +5,8 @@ import type { GamepadButtonEvent } from './useGamepad'
 
 export interface MenuNavigationEvent {
   repeat: boolean
+  origin: 'gamepad' | 'keyboard'
+  originalKey: string
   action:
   | 'left'
   | 'right'
@@ -12,8 +14,8 @@ export interface MenuNavigationEvent {
   | 'down'
   | 'back'
   | 'confirm'
-  | 'pageup'
-  | 'pagedown'
+  | 'sortleft'
+  | 'sortright'
   | 'search'
   | 'random'
 }
@@ -25,84 +27,102 @@ export default function useMenuNavigation(
 
   const onButtonDown = (event: GamepadButtonEvent) => {
     keyMode.value = 'gamepad'
+    const callback = (action: MenuNavigationEvent['action']) => {
+      refCallback.value({
+        action,
+        repeat: event.repeat,
+        origin: 'gamepad',
+        originalKey: event.button,
+      })
+    }
     if (
       event.button === 'DPAD_LEFT'
       || (event.button === 'L_AXIS_X' && event.direction < -0.5)
     ) {
-      refCallback.value({ action: 'left', repeat: event.repeat })
+      callback('left')
     }
     if (
       event.button === 'DPAD_RIGHT'
       || (event.button === 'L_AXIS_X' && event.direction > 0.5)
     ) {
-      refCallback.value({ action: 'right', repeat: event.repeat })
+      callback('right')
     }
     if (
       event.button === 'DPAD_UP'
       || (event.button === 'L_AXIS_Y' && event.direction < -0.5)
     ) {
-      refCallback.value({ action: 'up', repeat: event.repeat })
+      callback('up')
     }
     if (
       event.button === 'DPAD_DOWN'
       || (event.button === 'L_AXIS_Y' && event.direction > 0.5)
     ) {
-      refCallback.value({ action: 'down', repeat: event.repeat })
+      callback('down')
     }
 
     if (event.button === 'B') {
-      refCallback.value({ action: 'back', repeat: event.repeat })
+      callback('back')
     }
     if (event.button === 'A') {
-      refCallback.value({ action: 'confirm', repeat: event.repeat })
+      callback('confirm')
     }
     if (event.button === 'RB') {
-      refCallback.value({ action: 'pagedown', repeat: event.repeat })
+      callback('sortright')
     }
     if (event.button === 'LB') {
-      refCallback.value({ action: 'pageup', repeat: event.repeat })
+      callback('sortleft')
     }
     if (event.button === 'START') {
-      refCallback.value({ action: 'search', repeat: event.repeat })
+      callback('search')
     }
     if (event.button === 'Y') {
-      refCallback.value({ action: 'random', repeat: event.repeat })
+      callback('random')
     }
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
     keyMode.value = 'keyboard'
+
+    const callback = (action: MenuNavigationEvent['action']) => {
+      refCallback.value({
+        action,
+        repeat: event.repeat,
+        origin: 'keyboard',
+        originalKey: event.key,
+      })
+    }
+
     if (event.key === 'ArrowLeft') {
-      refCallback.value({ action: 'left', repeat: event.repeat })
+      callback('left')
     }
     if (event.key === 'ArrowRight') {
-      refCallback.value({ action: 'right', repeat: event.repeat })
+      callback('right')
     }
     if (event.key === 'ArrowUp') {
-      refCallback.value({ action: 'up', repeat: event.repeat })
+      callback('up')
     }
     if (event.key === 'ArrowDown') {
-      refCallback.value({ action: 'down', repeat: event.repeat })
+      callback('down')
     }
     if (['Escape', 'Backspace'].includes(event.key)) {
-      refCallback.value({ action: 'back', repeat: event.repeat })
+      callback('back')
     }
     if (['Enter', 'Space'].includes(event.key)) {
-      refCallback.value({ action: 'confirm', repeat: event.repeat })
+      callback('confirm')
     }
     if (event.key === 'PageUp') {
-      refCallback.value({ action: 'pageup', repeat: event.repeat })
+      callback('sortleft')
     }
     if (event.key === 'PageDown') {
-      refCallback.value({ action: 'pagedown', repeat: event.repeat })
+      callback('sortright')
     }
     if (event.key === 'F3') {
       event.preventDefault()
-      refCallback.value({ action: 'search', repeat: event.repeat })
+      callback('search')
     }
     if (event.key === 'F4') {
       event.preventDefault()
-      refCallback.value({ action: 'random', repeat: event.repeat })
+      callback('random')
     }
   }
 

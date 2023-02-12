@@ -14,6 +14,16 @@ import XboxB from '@renderer/assets/icons/keys/xbox-b.svg?component'
 import Plus from '@renderer/assets/icons/plus.svg?component'
 import Folder from '@renderer/assets/icons/folder.svg?component'
 import TriangleArrow from '@renderer/assets/icons/triangle-arrow.svg?component'
+import KeyF3 from '@renderer/assets/icons/keys/key-f3.svg?component'
+import KeyF4 from '@renderer/assets/icons/keys/key-f4.svg?component'
+import XboxY from '@renderer/assets/icons/keys/xbox-y.svg?component'
+import XboxMenu from '@renderer/assets/icons/keys/xbox-menu.svg?component'
+import KeyPageUp from '@renderer/assets/icons/keys/key-page-up.svg?component'
+import KeyPageDown from '@renderer/assets/icons/keys/key-page-down.svg?component'
+import XboxLB from '@renderer/assets/icons/keys/xbox-lb.svg?component'
+import XboxRB from '@renderer/assets/icons/keys/xbox-rb.svg?component'
+import Minus from '@renderer/assets/icons/minus.svg?component'
+import Search from '@renderer/assets/icons/search.svg?component'
 
 export {
   Spinner,
@@ -32,4 +42,14 @@ export {
   Plus,
   Folder,
   TriangleArrow,
+  KeyF3,
+  KeyF4,
+  XboxY,
+  XboxMenu,
+  KeyPageUp,
+  KeyPageDown,
+  XboxLB,
+  XboxRB,
+  Minus,
+  Search,
 }

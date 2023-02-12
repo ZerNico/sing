@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
 const position = songsScrollPosition
 const fuse = new Fuse<LocalSong>([], {
-  keys: ['title', 'artist'],
+  keys: ['meta.title', 'meta.artist'],
   threshold: 0.2,
   shouldSort: false,
 })
@@ -80,16 +80,16 @@ const searchedSongs = computed(() => {
     return []
   }
 
+  nextTick(() => {
+    emit('selectSong', songs.value.at(position.value)?.song)
+  })
+
   if (props.searchText.length === 0) {
     return sortedSongs.value
   }
 
   fuse.setCollection(sortedSongs.value)
   const result = fuse.search(props.searchText)
-
-  nextTick(() => {
-    emit('selectSong', songs.value.at(position.value)?.song)
-  })
 
   return result.map(item => item.item)
 })
@@ -240,7 +240,7 @@ const selectRandomSong = () => {
   emit('selectSong', songs.value.at(position.value)?.song)
   setTimeout(() => {
     selectingRandomSong.value = false
-  }, 5)
+  }, 10)
 }
 
 emit('selectSong', songs.value.at(position.value)?.song)

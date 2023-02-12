@@ -57,17 +57,17 @@ const onTransitionEnd = (e: TransitionEvent) => {
         {{ props.sortTag }}
       </div>
       <div
-        class="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full gradient-bg outline-white outline outline-4 outline-offset-[-3px] text-white gap-2 font-500 px-1/6 pointer-events-none"
+        class="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full gradient-bg outline-white outline outline-0.4cqh outline-offset--0.38cqh text-white gap-1cqh font-500 px-1/6 pointer-events-none"
         :class="{
           'opacity-0': !props.active,
           'transition-opacity duration-250': !props.disableAnimation,
         }"
       >
-        <p class="text-1.0cqw">
+        <p class="text-1.8cqh">
           {{ props.song.meta.title }}
         </p>
         <div class="border-white border-b-2 w-4 mt-2 mb-1" />
-        <p class="text-0.8cqw">
+        <p class="text-1.3cqh">
           {{ props.song.meta.artist }}
         </p>
       </div>

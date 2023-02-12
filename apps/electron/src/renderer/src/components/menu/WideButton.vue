@@ -7,7 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="relative cursor-pointer pt-1.7vh pb-1.8cqh">
+  <div class="relative cursor-pointer pt-1.7cqh pb-1.8cqh">
     <div class="text-center text-white font-bold relative z-1 text-1.8cqw">
       {{ label }}
     </div>

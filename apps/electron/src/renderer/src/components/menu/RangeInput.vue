@@ -51,7 +51,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative pt-0.9vh pb-2.1cqh select-none">
+  <div class="relative pt-0.9cqh pb-2.1cqh select-none">
     <div class="relative z-1 flex flex-col items-center gap-1cqh">
       <div class="text-white font-bold text-1.5cqw flex">
         {{ label }}

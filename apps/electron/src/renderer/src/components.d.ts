@@ -19,6 +19,7 @@ declare module '@vue/runtime-core' {
     RangeInput: typeof import('./components/menu/RangeInput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Search: typeof import('./components/menu/songs/Search.vue')['default']
     SongCard: typeof import('./components/menu/songs/SongCard.vue')['default']
     SongPlayer: typeof import('./components/SongPlayer.vue')['default']
     Songs: typeof import('./components/menu/songs.vue')['default']

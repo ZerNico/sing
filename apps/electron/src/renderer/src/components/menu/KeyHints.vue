@@ -25,6 +25,12 @@ const hints = computed((): { icon: keyof typeof icons; text: string; size: strin
           text: 'Back',
           size: 'text-1.5cqw',
         }
+      } else if (hint === 'random') {
+        return {
+          icon: 'KeyF4',
+          text: 'Random',
+          size: 'text-1.2cqw',
+        }
       }
     } else if (keyMode.value === 'gamepad') {
       if (hint === 'navigate') {
@@ -43,6 +49,12 @@ const hints = computed((): { icon: keyof typeof icons; text: string; size: strin
         return {
           icon: 'XboxB',
           text: 'Back',
+          size: 'text-1.3cqw',
+        }
+      } else if (hint === 'random') {
+        return {
+          icon: 'XboxY',
+          text: 'Random',
           size: 'text-1.3cqw',
         }
       }
