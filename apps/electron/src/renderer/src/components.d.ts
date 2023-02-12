@@ -27,6 +27,7 @@ declare module '@vue/runtime-core' {
     Test: typeof import('./components/menu/Test.vue')['default']
     Tester: typeof import('./components/menu/Tester.vue')['default']
     TitleBar: typeof import('./components/menu/TitleBar.vue')['default']
+    VirtualKeyboard: typeof import('./components/menu/songs/VirtualKeyboard.vue')['default']
     WideButton: typeof import('./components/menu/WideButton.vue')['default']
   }
 }

@@ -38,7 +38,10 @@ const blur = () => {
     inputEl.value.blur()
   }
 }
-defineExpose({ focus, blur })
+
+const getInputEl = () => inputEl.value
+
+defineExpose({ focus, blur, getInputEl })
 </script>
 
 <template>

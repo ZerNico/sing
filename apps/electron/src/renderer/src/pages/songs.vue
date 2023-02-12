@@ -35,7 +35,6 @@ const startRound = () => {
 
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
-  if (event.action === 'random') selectRandomSong()
   if (!searchFocused.value) {
     if (event.action === 'search') searchEl.value?.focus()
     else if (event.action === 'up') songScrollerEl.value?.prev(event.repeat)
@@ -44,8 +43,12 @@ const onNavigate = (event: MenuNavigationEvent) => {
     else if (event.action === 'sortleft') switchSortKey(-1)
     else if (event.action === 'sortright') switchSortKey(1)
     else if (event.action === 'confirm') startRound()
+    else if (event.action === 'random') selectRandomSong()
   } else {
-    if (event.action === 'confirm' || event.action === 'search' || (event.action === 'back' && event.originalKey !== 'Backspace')) searchEl.value?.blur()
+    if (event.origin === 'keyboard') {
+      if (event.action === 'confirm' || event.action === 'search' || (event.action === 'back' && event.originalKey !== 'Backspace')) searchEl.value?.blur()
+      else if (event.action === 'random') selectRandomSong()
+    }
   }
 }
 
@@ -88,6 +91,9 @@ const selectRandomSong = () => {
           @select-song="onSongSelect"
           @start-round="startRound"
         />
+      </div>
+      <div v-if="keyMode === 'gamepad' && searchFocused" class="absolute bottom-0 pl-5cqw pb-15cqh z-2">
+        <VirtualKeyboard v-model="songsSearchText" :search-el="searchEl" />
       </div>
       <div class="w-full h-full relative py-7cqh flex flex-col">
         <div class="px-5cqw flex gap-5cqw items-center">

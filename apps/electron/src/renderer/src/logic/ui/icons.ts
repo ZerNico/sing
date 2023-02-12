@@ -24,6 +24,10 @@ import XboxLB from '@renderer/assets/icons/keys/xbox-lb.svg?component'
 import XboxRB from '@renderer/assets/icons/keys/xbox-rb.svg?component'
 import Minus from '@renderer/assets/icons/minus.svg?component'
 import Search from '@renderer/assets/icons/search.svg?component'
+import Backspace from '@renderer/assets/icons/backspace.svg?component'
+import Shift from '@renderer/assets/icons/shift.svg?component'
+import ShiftPressed from '@renderer/assets/icons/shift-pressed.svg?component'
+import XboxX from '@renderer/assets/icons/keys/xbox-x.svg?component'
 
 export {
   Spinner,
@@ -52,4 +56,8 @@ export {
   XboxRB,
   Minus,
   Search,
+  Backspace,
+  Shift,
+  ShiftPressed,
+  XboxX,
 }
