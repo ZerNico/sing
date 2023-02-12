@@ -185,7 +185,6 @@ const action = () => {
   if (key.action) {
     key.action()
   } else if (key.text) {
-    // modelValue.value += key.text
     write(key.text)
   }
 }
@@ -211,6 +210,17 @@ const onButtonDown = (event: GamepadButtonEvent) => {
   if (event.button === 'Y') write(' ')
   if (event.button === 'LT') moveCursor(-1)
   if (event.button === 'RT') moveCursor(1)
+}
+
+const onClick = (e: MouseEvent, row: number, col: number) => {
+  const key = keys.value[row][col]
+  if (key.action) {
+    key.action()
+  } else if (key.text) {
+    write(key.text)
+  }
+  e.preventDefault()
+  e.stopPropagation()
 }
 
 const { startLoop, stopLoop } = useGamepad(useRepeatThrottleFn(e => onButtonDown(e), 50))
@@ -244,6 +254,7 @@ onUnmounted(() => {
           class="bg-zinc-700 w-full h-full flex items-center justify-center outline-0.2cqh outline-offset--0.2cqh relative"
           :class="[key.class, currRow === rowIndex && currCol === keyIndex ? 'outline-white outline' : '']"
           @mouseenter="() => { currRow = rowIndex; currCol = keyIndex }"
+          @mousedown="(e) => onClick(e, rowIndex, keyIndex)"
         >
           <Icon v-if="key.icon" :icon="key.active?.value === true && key.activeIcon ? key.activeIcon : key.icon" class="text-1cqw" :class="[key.iconClass]" />
           <span v-else>{{ key.active?.value === true && key.activeText ? key.activeText : key.text }}</span>
