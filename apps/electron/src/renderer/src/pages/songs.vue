@@ -9,6 +9,7 @@ import { loop } from '@renderer/logic/utils/math.utils'
 import { keyMode } from '@renderer/logic/ui/keys'
 
 const songsStore = useSongsStore()
+const roundStore = useRoundStore()
 const router = useRouter()
 
 const currentSong = ref<LocalSong>()
@@ -30,7 +31,8 @@ const onSongSelect = (song?: LocalSong) => {
 }
 
 const startRound = () => {
-  console.log('start round')
+  roundStore.song = currentSong.value
+  router.push('/round/selection')
 }
 
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))

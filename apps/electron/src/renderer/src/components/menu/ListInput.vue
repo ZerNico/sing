@@ -4,7 +4,7 @@ const props = withDefaults(defineProps<{
   label: string
   gradient: { start: string; end: string }
   options: (string | number)[]
-  displayType: 'text' | 'color'
+  displayType?: 'text' | 'color'
 }>(), {
   displayType: 'text',
 })

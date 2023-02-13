@@ -226,6 +226,7 @@ declare global {
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
   const useRepeatThrottleFn: typeof import('./composables/useRepeatThrottleFn')['default']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
+  const useRoundStore: typeof import('./stores/round')['useRoundStore']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
   const useScreenOrientation: typeof import('@vueuse/core')['useScreenOrientation']
@@ -523,6 +524,7 @@ declare module 'vue' {
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useRepeatThrottleFn: UnwrapRef<typeof import('./composables/useRepeatThrottleFn')['default']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
+    readonly useRoundStore: UnwrapRef<typeof import('./stores/round')['useRoundStore']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useScreenOrientation: UnwrapRef<typeof import('@vueuse/core')['useScreenOrientation']>
