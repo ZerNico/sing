@@ -60,6 +60,7 @@ export default NuxtAuthHandler({
       // Persist the OAuth access_token and user in token
       if (account && user) {
         token.accessToken = account.access_token
+
         token.user = user
       }
 
