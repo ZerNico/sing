@@ -152,9 +152,15 @@ const onError = () => {
   emit('error')
 }
 
+const getAudioTime = () => {
+  if (!audioEl.value) return 0
+  return audioEl.value.currentTime
+}
+
 defineExpose({
   play,
   pause,
+  getAudioTime,
 })
 </script>
 

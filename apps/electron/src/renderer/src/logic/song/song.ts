@@ -35,4 +35,8 @@ export class LocalSong {
     this.voices = voices
     this.urls = urls
   }
+
+  public isDuet() {
+    return this.voices.length > 1
+  }
 }

@@ -44,9 +44,4 @@ export class Sentence {
         - this.notes[0].startBeat
     }
   }
-
-  // check if the sentence is already played
-  isAlreadyPlayed(beat: number): boolean {
-    return this.linebreakBeat <= beat
-  }
 }
