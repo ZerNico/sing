@@ -183,8 +183,8 @@ defineExpose({
       @error="backgroundError = true"
     >
     <div v-else class="w-full h-full relative overflow-hidden">
-      <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110">
-      <img :src="coverUrl" class="w-full h-full object-contain relative">
+      <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110" @error="coverError = true">
+      <img :src="coverUrl" class="w-full h-full object-contain relative" @error="coverError = true">
     </div>
 
     <audio ref="audioEl" :src="song?.urls.mp3" @canplay="startPlayback" @ended="onEnded" @error="onError" />

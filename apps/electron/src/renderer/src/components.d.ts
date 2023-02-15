@@ -30,6 +30,7 @@ declare module '@vue/runtime-core' {
     SongPlayer: typeof import('./components/SongPlayer.vue')['default']
     Songs: typeof import('./components/menu/songs.vue')['default']
     SongScroller: typeof import('./components/menu/songs/SongScroller.vue')['default']
+    SungPitchNote: typeof import('./components/game/SungPitchNote.vue')['default']
     Test: typeof import('./components/menu/Test.vue')['default']
     Tester: typeof import('./components/menu/Tester.vue')['default']
     TitleBar: typeof import('./components/menu/TitleBar.vue')['default']

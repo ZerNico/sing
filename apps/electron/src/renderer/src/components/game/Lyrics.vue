@@ -16,9 +16,12 @@ const props = defineProps<{
 
 const lyricsNoteEls = useTemplateRefsList<InstanceType<typeof LyricsNote>>()
 const emptyNote = ref(new Note('Normal', 0, 0, 0, ' '))
-const nextSentenceString = computed(() => {
-  if (!props.nextSentence) return ' '
-  return props.nextSentence.notes.map(note => note.text).join('')
+const nextSentence = computed(() => {
+  const notes = props.nextSentence?.notes.map((note) => {
+    return { text: note.text, italic: note.type === 'Freestyle' }
+  })
+  if (!notes) return [{ text: ' ', italic: false }]
+  return notes
 })
 
 const leadInStartPercentage = ref(0)
@@ -65,8 +68,15 @@ defineExpose({
       />
       <div class="flex-grow" />
     </div>
-    <div class="whitespace-pre-wrap text-white/50 text-center text-1.7cqw -mt-0.5cqw">
-      {{ nextSentenceString }}
+    <div class="text-white/50 text-center text-1.7cqw -mt-0.5cqw">
+      <span
+        v-for="note, index in nextSentence"
+        :key="index"
+        class="whitespace-pre-wrap"
+        :class="[note.italic ? 'italic' : '']"
+      >
+        {{ note.text }}
+      </span>
     </div>
   </div>
 </template>

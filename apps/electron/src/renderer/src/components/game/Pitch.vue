@@ -2,13 +2,17 @@
 import type { Note } from '@renderer/logic/song/note'
 import type { Sentence } from '@renderer/logic/song/sentence'
 import type { LocalSong } from '@renderer/logic/song/song'
+import { millisecondInSongToBeatWithoutGap } from '@renderer/logic/utils/bpm.utils'
+import type { Beat, PitchProcessor, ProcessedBeat } from '@renderer/logic/voice/pitch-processor'
 import type { Microphone } from '@renderer/stores/settings'
+import SungPitchNote from './SungPitchNote.vue'
 
 const props = defineProps<{
   song: LocalSong
   sentence?: Sentence
   position: 'top' | 'bottom'
   microphone: Microphone
+  pitchProcessor: PitchProcessor
 }>()
 
 const rowCount = 16
@@ -54,10 +58,107 @@ const calculateNoteRow = (midiNote: number): number => {
   return noteRow
 }
 
+// display the sung pitch in the closer octave to the actual midi note for better user experience
+const calculateSungNoteRow = (processedBeat: ProcessedBeat) => {
+  if (processedBeat.sungNote === processedBeat.note.midiNote)
+    return calculateNoteRow(processedBeat.sungNote)
+
+  const noteRow = calculateNoteRow(processedBeat.sungNote)
+  const alternativeNoteRow = noteRow - 12
+
+  // check if alternative note row is inside rows
+  if (alternativeNoteRow >= 0 && alternativeNoteRow < rowCount) {
+    const correctNoteRow = calculateNoteRow(processedBeat.note.midiNote)
+
+    // check what is closer to correctNoteRow
+    if (
+      Math.abs(correctNoteRow - noteRow)
+      < Math.abs(correctNoteRow - alternativeNoteRow)
+    )
+      return noteRow
+    else return alternativeNoteRow
+  }
+
+  return calculateNoteRow(processedBeat.sungNote)
+}
+
 const calculateGap = (note: Note, prevNote: Note): number => {
   if (!prevNote) return 0
   return note.startBeat - (prevNote.startBeat + prevNote.length)
 }
+
+const calculateGapProcessed = (note: ProcessedBeat, prevNote: ProcessedBeat): number => {
+  const prevEnd = prevNote ? prevNote.beat + prevNote.length : props.sentence?.minBeat || 0
+  return note.beat - prevEnd
+}
+
+const sungNoteEls = useTemplateRefsList<InstanceType<typeof SungPitchNote>>()
+
+const processableBeats: Beat[] = []
+const processedBeats = ref<ProcessedBeat[]>([])
+
+watch(
+  () => props.sentence,
+  (sentence) => {
+    processedBeats.value.length = 0
+
+    sentence?.notes.forEach((note) => {
+      for (let beat = 0; beat < note.length; beat++) {
+        const processableBeat: Beat = {
+          note,
+          beat: note.startBeat + beat,
+          isFirstBeat: beat === 0,
+          isLastBeat: note.startBeat + beat === sentence.maxBeat - 1,
+        }
+        processableBeats.push(processableBeat)
+      }
+    })
+  },
+  { immediate: true },
+)
+
+const delayInBeats = computed(() => {
+  return millisecondInSongToBeatWithoutGap(props.song, props.microphone.delay)
+})
+
+const update = async (currentBeat: number) => {
+  // use delayed beat to adjust to microphone delay
+  const delayedBeat = currentBeat - delayInBeats.value
+
+  sungNoteEls.value.forEach((note) => {
+    note?.update(delayedBeat)
+  })
+
+  if (processableBeats.length === 0) return
+
+  if (delayedBeat > processableBeats[0].beat + 1) {
+    const beat = processableBeats.shift()
+    if (props.pitchProcessor && beat) {
+      const processedBeat = await props.pitchProcessor.process(beat)
+      if (processedBeat) handleProcessedBeat(processedBeat)
+    }
+  }
+}
+
+let lastBeatWasValid = false
+const handleProcessedBeat = (processedBeat: ProcessedBeat) => {
+  if (processedBeat.sungNote > 0 && props.sentence && processedBeat.beat >= props.sentence.minBeat) {
+    const prevNote = processedBeats.value.at(-1)
+    // extend previous note if new beat is part of same note and the singing was continuous
+    if (lastBeatWasValid && !processedBeat.isFirstBeat && prevNote && processedBeat.sungNote === prevNote.sungNote) {
+      prevNote.length++
+      // else create new displayed note
+    } else {
+      processedBeats.value.push(processedBeat)
+    }
+  }
+
+  lastBeatWasValid = processedBeat.sungNote > 0
+}
+
+defineExpose({
+  update,
+})
 </script>
 
 <template>
@@ -68,7 +169,7 @@ const calculateGap = (note: Note, prevNote: Note): number => {
     <div class="relative w-full h-full">
       <div v-if="props.sentence" ref="noteFieldEl" class="absolute w-full h-full flex">
         <PitchNote
-          v-for="(note, index) in props.sentence.notes"
+          v-for="note, index in props.sentence.notes"
           :key="index"
           :row-height="rowHeight"
           :row="calculateNoteRow(note.midiNote)"
@@ -79,6 +180,21 @@ const calculateGap = (note: Note, prevNote: Note): number => {
           :gap="
             calculateGap(note, props.sentence.notes[index - 1] || null)
           "
+        />
+      </div>
+      <div v-if="props.sentence" class="absolute w-full h-full flex">
+        <SungPitchNote
+          v-for="(beat, index) in processedBeats"
+          :key="index"
+          :ref="sungNoteEls.set"
+          :microphone="props.microphone"
+          :row-height="rowHeight"
+          :row="calculateSungNoteRow(beat)"
+          :column-width="columnWidth"
+          :length="beat.length"
+          :midi-note="beat.sungNote"
+          :gap="calculateGapProcessed(beat, processedBeats[index - 1] || null)"
+          :note-type="beat.note.type"
         />
       </div>
     </div>

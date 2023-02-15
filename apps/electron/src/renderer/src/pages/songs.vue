@@ -74,10 +74,19 @@ const switchSortKey = (direction: -1 | 1) => {
 const selectRandomSong = () => {
   songScrollerEl.value?.selectRandomSong()
 }
+
+const onClick = (e: MouseEvent) => {
+  if (e.button === 4) {
+    e.preventDefault()
+  } else if (e.button === 3) {
+    back()
+    e.preventDefault()
+  }
+}
 </script>
 
 <template>
-  <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @wheel="onWheel">
+  <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @wheel="onWheel" @mouseup="onClick">
     <div class="layout relative">
       <div class="h-full w-full absolute">
         <SongPlayer ref="songPlayerEl" :song="currentSong" class="w-full h-full opacity-30" />

@@ -1,0 +1,29 @@
+{
+  "name": "pitch-worklet-processor",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./pitchWorklet.js": {
+      "types": "./dist/worklet-processor.d.ts",
+      "default": "./dist/worklet-processor.mjs"
+    }
+  },
+  "devDependencies": {
+    "@types/audioworklet": "^0.0.36",
+    "dywapitchtrack": "^0.2.0",
+    "tsup": "^6.6.3",
+    "typescript": "^4.9.4"
+  }
+}

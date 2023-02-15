@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import type { LocalSong } from '@renderer/logic/song/song'
+import type { PitchProcessor } from '@renderer/logic/voice/pitch-processor'
 import type { Microphone } from '@renderer/stores/settings'
 import Lyrics from './Lyrics.vue'
+import Pitch from './Pitch.vue'
 
 const props = defineProps<{
   song: LocalSong
   position: 'top' | 'bottom'
   voiceIndex: number
   microphone: Microphone
+  pitchProcessor: PitchProcessor
 }>()
 
 const lyricsEl = ref<InstanceType<typeof Lyrics>>()
+const pitchEl = ref<InstanceType<typeof Pitch>>()
 
 const voice = computed(() => props.song.voices.at(props.voiceIndex)!)
 const sentenceIndex = ref(0)
@@ -24,6 +28,7 @@ const update = (beat: number) => {
     sentenceIndex.value++
   }
   lyricsEl.value?.update(beat)
+  pitchEl.value?.update(beat)
 }
 
 defineExpose({
@@ -45,11 +50,13 @@ defineExpose({
       :position="props.position"
     />
     <Pitch
+      ref="pitchEl"
       :song="props.song"
       :sentence="sentence"
       :microphone="props.microphone"
       :position="props.position"
       class="flex-grow w-full"
+      :pitch-processor="props.pitchProcessor"
     />
   </div>
 </template>

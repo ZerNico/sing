@@ -186,17 +186,20 @@ const parseSongTxt = (txt: string) => {
 }
 
 function tagToNoteType(tag: string): NoteType {
-  switch (tag) {
+  switch (tag.toUpperCase()) {
     case ':':
       return 'Normal'
     case '*':
       return 'Golden'
     case 'F':
       return 'Freestyle'
+    // Use Rap notes as Freestyle notes for now
     case 'R':
-      return 'Rap'
+      // return 'Rap'
+      return 'Freestyle'
     case 'G':
-      return 'RapGolden'
+      // return 'RapGolden'
+      return 'Freestyle'
   }
   return 'Normal'
 }

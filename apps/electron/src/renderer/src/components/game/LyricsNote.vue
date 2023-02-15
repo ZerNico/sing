@@ -16,6 +16,10 @@ const update = (beat: number) => {
   percentage.value = clamp(per, 0, 100)
 }
 
+const isItalic = computed(() => {
+  return props.note.type === 'Freestyle'
+})
+
 defineExpose({
   update,
 })
@@ -24,7 +28,7 @@ defineExpose({
 <template>
   <div
     class="gradient whitespace-pre bg-clip-text text-transparent text-2.0cqw leading-relaxed"
-    :class="{ italic: ['Freestyle', 'Rap', 'RapGolden'].includes(props.note.type) }"
+    :class="[isItalic ? 'italic' : '']"
   >
     {{ props.note.text }}
   </div>
