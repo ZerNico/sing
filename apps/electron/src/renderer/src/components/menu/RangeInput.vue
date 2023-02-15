@@ -51,9 +51,9 @@ defineExpose({
 </script>
 
 <template>
-  <div class="relative pt-0.9cqh pb-2.1cqh select-none">
-    <div class="relative z-1 flex flex-col items-center gap-1cqh">
-      <div class="text-white font-bold text-1.5cqw flex">
+  <div class="relative py-2.1cqh select-none">
+    <div class="relative z-1 flex items-center gap-1cqh px-10cqw">
+      <div class="text-white h-full font-bold text-1.5cqw flex items-center justify-center flex-grow">
         {{ label }}
       </div>
       <div class="flex items-center gap-2cqh">
