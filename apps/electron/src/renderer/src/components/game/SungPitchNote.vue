@@ -46,8 +46,8 @@ defineExpose({
 
 <template>
   <div class="spacer" />
-  <div class="wrapper py-0.35vw" :class="{ 'opacity-0': props.noteType === 'Freestyle' }">
-    <div class="note rounded-full h-full mx-0.35vw" />
+  <div class="wrapper py-0.35cqw" :class="{ 'opacity-0': props.noteType === 'Freestyle' }">
+    <div class="note rounded-full h-full mx-0.35cqw" />
   </div>
 </template>
 

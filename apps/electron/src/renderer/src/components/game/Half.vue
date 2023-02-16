@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Note } from '@renderer/logic/song/note'
 import type { LocalSong } from '@renderer/logic/song/song'
 import type { PitchProcessor } from '@renderer/logic/voice/pitch-processor'
 import type { Microphone } from '@renderer/stores/settings'
@@ -11,6 +12,11 @@ const props = defineProps<{
   voiceIndex: number
   microphone: Microphone
   pitchProcessor: PitchProcessor
+}>()
+
+const emit = defineEmits<{
+  (event: 'score', note: Note): void
+  (event: 'bonus', beatCount: number): void
 }>()
 
 const lyricsEl = ref<InstanceType<typeof Lyrics>>()
@@ -57,6 +63,8 @@ defineExpose({
       :position="props.position"
       class="flex-grow w-full"
       :pitch-processor="props.pitchProcessor"
+      @score="(note) => emit('score', note)"
+      @bonus="(beatCount) => emit('bonus', beatCount)"
     />
   </div>
 </template>

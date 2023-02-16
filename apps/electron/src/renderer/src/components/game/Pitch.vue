@@ -15,6 +15,11 @@ const props = defineProps<{
   pitchProcessor: PitchProcessor
 }>()
 
+const emit = defineEmits<{
+  (event: 'score', note: Note): void
+  (event: 'bonus', beatCount: number): void
+}>()
+
 const rowCount = 16
 const noteFieldEl = ref<HTMLDivElement>()
 const noteFieldSize = useElementSize(noteFieldEl)
@@ -135,7 +140,10 @@ const update = async (currentBeat: number) => {
     const beat = processableBeats.shift()
     if (props.pitchProcessor && beat) {
       const processedBeat = await props.pitchProcessor.process(beat)
-      if (processedBeat) handleProcessedBeat(processedBeat)
+      if (processedBeat) {
+        handleProcessedBeat(processedBeat)
+        handleScore(processedBeat)
+      }
     }
   }
 }
@@ -154,6 +162,26 @@ const handleProcessedBeat = (processedBeat: ProcessedBeat) => {
   }
 
   lastBeatWasValid = processedBeat.sungNote > 0
+}
+
+let successBeats = 0
+let totalBeats = 0
+const handleScore = (processedBeat: ProcessedBeat) => {
+  if (processedBeat.note.type !== 'Freestyle') {
+    totalBeats++
+    if (processedBeat.sungNote > 0 && processedBeat.sungNote === processedBeat.note.midiNote) {
+      successBeats++
+      emit('score', processedBeat.note)
+    }
+  }
+
+  if (processedBeat.isLastBeat) {
+    if (successBeats / totalBeats >= 0.9) {
+      emit('bonus', totalBeats)
+    }
+    successBeats = 0
+    totalBeats = 0
+  }
 }
 
 defineExpose({

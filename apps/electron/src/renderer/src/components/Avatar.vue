@@ -26,7 +26,7 @@ const initials = computed(() => {
 
 <template>
   <img v-if="!error" class="h-2cqw w-2cqw rounded-full" :src="props.src" @error="onError">
-  <div v-else class="inline-block h-2cqw w-2cqw bg-blue-500 rounded-full text-white flex items-center justify-center text-1cqw overflow-hidden">
+  <div v-else class="inline-block h-2cqw w-2cqw bg-#2ec468 rounded-full text-white flex items-center justify-center text-1cqw overflow-hidden">
     {{ initials }}
   </div>
 </template>

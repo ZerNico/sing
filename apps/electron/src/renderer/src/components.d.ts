@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     Button: typeof import('./components/menu/Button.vue')['default']
     copy: typeof import('./components/menu/RangeInput copy.vue')['default']
     Half: typeof import('./components/game/Half.vue')['default']
+    HUD: typeof import('./components/game/HUD.vue')['default']
     Icon: typeof import('./components/Icon.vue')['default']
     IconButton: typeof import('./components/menu/IconButton.vue')['default']
     KeyHints: typeof import('./components/menu/KeyHints.vue')['default']

@@ -2,11 +2,13 @@
 import type { LocalSong } from '@renderer/logic/song/song'
 import SongPlayer from '@renderer/components/SongPlayer.vue'
 import Half from '@renderer/components/game/Half.vue'
+import HUD from '@renderer/components/game/HUD.vue'
 import { millisecondInSongToBeat } from '@renderer/logic/utils/bpm.utils'
 import { PitchProcessorFactory } from '@renderer/logic/voice/pitch-processor-factory'
 import type { PitchProcessor } from '@renderer/logic/voice/pitch-processor'
 import type { Ref } from 'vue'
 import placeholder from '@renderer/assets/images/cover-placeholder.png?url'
+import type { Note } from '@renderer/logic/song/note'
 
 const roundStore = useRoundStore()
 const settingsStore = useSettingsStore()
@@ -20,14 +22,17 @@ const back = () => {
 
 const songPlayerEl = ref<InstanceType<typeof SongPlayer>>()
 const halfEls = useTemplateRefsList<InstanceType<typeof Half>>()
+const HUDEl = ref<InstanceType<typeof HUD>>()
 
 const song = computed(() => roundStore.song as LocalSong | undefined)
 
 const gameLoop = () => {
   if (!songPlayerEl.value || !song.value) return
   const time = songPlayerEl.value?.getAudioTime()
+  const duration = songPlayerEl.value?.getAudioDuration()
   const beat = millisecondInSongToBeat(song.value, time * 1000)
   halfEls.value.forEach(half => half.update(beat))
+  HUDEl.value?.update(time, duration)
 }
 
 const { pause, resume, isActive } = useRafFn(() => {
@@ -60,6 +65,7 @@ onMounted(async () => {
     back()
     return
   }
+  roundStore.resetScore()
   await initPitch()
   setTimeout(() => {
     ready.value = true
@@ -93,6 +99,14 @@ const onClick = (e: MouseEvent) => {
     e.preventDefault()
   }
 }
+
+const onScore = (index: 1 | 2, note: Note) => {
+  roundStore.addScore(index, note)
+}
+
+const onBonus = (index: 1 | 2, beatCount: number) => {
+  roundStore.addBonus(index, beatCount)
+}
 </script>
 
 <template>
@@ -108,6 +122,8 @@ const onClick = (e: MouseEvent) => {
           :voice-index="0"
           :microphone="settingsStore.microphones.at(0)!"
           :pitch-processor="pitchProcessors.at(0)!"
+          @score="(note) => onScore(1, note)"
+          @bonus="(beatCount) => onBonus(1, beatCount)"
         />
         <Half
           v-if="roundStore.player2 && settingsStore.microphones.at(1) && pitchProcessors.at(1)"
@@ -117,8 +133,19 @@ const onClick = (e: MouseEvent) => {
           :voice-index="song.isDuet() ? 1 : 0"
           :microphone="settingsStore.microphones.at(1)!"
           :pitch-processor="pitchProcessors.at(1)!"
+          @score="(note) => onScore(2, note)"
+          @bonus="(beatCount) => onBonus(2, beatCount)"
         />
       </div>
+      <HUD
+        ref="HUDEl"
+        :player1="roundStore.player1"
+        :player2="roundStore.player2"
+        :microphones="settingsStore.microphones"
+        :score1="roundStore.totalScore1"
+        :score2="roundStore.totalScore2"
+        class="absolute w-full h-full"
+      />
       <div
         class="absolute h-full w-full overflow-hidden transition-opacity duration-1000"
         :class="{ 'opacity-0': ready }"

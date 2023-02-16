@@ -157,10 +157,16 @@ const getAudioTime = () => {
   return audioEl.value.currentTime
 }
 
+const getAudioDuration = () => {
+  if (!audioEl.value) return 0
+  return audioEl.value.duration
+}
+
 defineExpose({
   play,
   pause,
   getAudioTime,
+  getAudioDuration,
 })
 </script>
 
