@@ -50,7 +50,7 @@ const parseLocalSong = async (songFile: DirectoryTree, parentFolder: DirectoryTr
     const urls: any = { }
     // find paths for all files in the parent folder using the file names from the parsed song
     const findFile = (name: string) => {
-      const file = parentFolder.children?.find(file => file.name === name)
+      const file = parentFolder.children?.find(file => file.name.toLowerCase() === name.toLowerCase())
       if (file) return file.path
       return null
     }
