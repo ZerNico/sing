@@ -36,8 +36,6 @@ const update = (currentTime: number, duration: number) => {
 }
 
 useIntervalFn(() => {
-  console.log(leader.value)
-
   if (!props.player1 && !props.player2) return
 
   if (!props.player2) leader.value = 0

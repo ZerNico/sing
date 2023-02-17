@@ -18,10 +18,13 @@ export interface MenuNavigationEvent {
   | 'sortright'
   | 'search'
   | 'random'
+  | 'menu'
 }
 
 export default function useMenuNavigation(
   callback: MaybeRef<(event: MenuNavigationEvent) => void>,
+  // options with immediate that defaults to true
+  options: { immediate?: boolean } = { immediate: true },
 ) {
   const refCallback = ref(callback)
 
@@ -74,6 +77,7 @@ export default function useMenuNavigation(
     }
     if (event.button === 'START') {
       callback('search')
+      callback('menu')
     }
     if (event.button === 'Y') {
       callback('random')
@@ -107,7 +111,7 @@ export default function useMenuNavigation(
     if (['Escape', 'Backspace'].includes(event.key)) {
       callback('back')
     }
-    if (['Enter', 'Space'].includes(event.key)) {
+    if (['Enter', ' '].includes(event.key)) {
       callback('confirm')
     }
     if (event.key === 'PageUp') {
@@ -128,13 +132,15 @@ export default function useMenuNavigation(
 
   useEventListener('keydown', onKeyDown)
 
-  const { startLoop, stopLoop } = useGamepad(onButtonDown)
+  const { startLoop, stopLoop, update } = useGamepad(onButtonDown)
 
   onMounted(() => {
-    startLoop()
+    if (options.immediate) startLoop()
   })
 
   onUnmounted(() => {
     stopLoop()
   })
+
+  return { update }
 }

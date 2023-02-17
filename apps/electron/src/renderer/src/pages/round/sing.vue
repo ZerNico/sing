@@ -9,6 +9,7 @@ import type { PitchProcessor } from '@renderer/logic/voice/pitch-processor'
 import type { Ref } from 'vue'
 import placeholder from '@renderer/assets/images/cover-placeholder.png?url'
 import type { Note } from '@renderer/logic/song/note'
+import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigation'
 
 const roundStore = useRoundStore()
 const settingsStore = useSettingsStore()
@@ -26,8 +27,11 @@ const HUDEl = ref<InstanceType<typeof HUD>>()
 
 const song = computed(() => roundStore.song as LocalSong | undefined)
 
+const ready = ref(false)
+const paused = ref(false)
+
 const gameLoop = () => {
-  if (!songPlayerEl.value || !song.value) return
+  if (!songPlayerEl.value || !song.value || paused.value) return
   const time = songPlayerEl.value?.getAudioTime()
   const duration = songPlayerEl.value?.getAudioDuration()
   const beat = millisecondInSongToBeat(song.value, time * 1000)
@@ -35,20 +39,34 @@ const gameLoop = () => {
   HUDEl.value?.update(time, duration)
 }
 
-const { pause, resume, isActive } = useRafFn(() => {
+const { resume } = useRafFn(() => {
+  update()
   gameLoop()
 })
 
-// useEventListener for space bar to pause and resume
-useEventListener('keydown', (e: KeyboardEvent) => {
-  if (e.code === 'Space') {
-    if (isActive.value) {
-      pause()
-      songPlayerEl.value?.pause()
-    } else {
-      resume()
-      songPlayerEl.value?.play()
+const { update } = useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150), { immediate: false })
+const onNavigate = (event: MenuNavigationEvent) => {
+  if (!ready.value) return
+
+  if (event.action === 'back' || event.action === 'menu') {
+    paused.value = !paused.value
+  }
+  if (paused.value) {
+    if (event.action === 'confirm') {
+      buttons.at(position.value)?.action()
+    } else if (event.action === 'down') {
+      increment()
+    } else if (event.action === 'up') {
+      decrement()
     }
+  }
+}
+
+watch(paused, (isPaused) => {
+  if (isPaused) {
+    songPlayerEl.value?.pause()
+  } else {
+    songPlayerEl.value?.play()
   }
 })
 
@@ -81,7 +99,6 @@ onBeforeUnmount(async () => {
   await pFactory.stopStreams()
 })
 
-const ready = ref(false)
 const coverError = ref(false)
 
 const coverUrl = computed(() => {
@@ -107,60 +124,82 @@ const onScore = (index: 1 | 2, note: Note) => {
 const onBonus = (index: 1 | 2, beatCount: number) => {
   roundStore.addBonus(index, beatCount)
 }
+
+const buttons = [
+  { label: 'Resume', action: () => paused.value = false },
+  { label: 'Exit', action: () => console.log('exit') },
+]
+const { position, increment, decrement } = useLoop(buttons.length - 1)
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @mouseup="onClick">
     <div v-if="song" class="layout relative">
-      <SongPlayer ref="songPlayerEl" :song="song" class="w-full h-full absolute" @error="back" />
-      <div class="absolute h-full w-full">
-        <Half
-          v-if="roundStore.player1 && settingsStore.microphones.at(0) && pitchProcessors.at(0)"
-          :ref="halfEls.set"
-          class="h-50cqh w-full"
-          :song="song" position="top"
-          :voice-index="0"
-          :microphone="settingsStore.microphones.at(0)!"
-          :pitch-processor="pitchProcessors.at(0)!"
-          @score="(note) => onScore(1, note)"
-          @bonus="(beatCount) => onBonus(1, beatCount)"
+      <div :class="{ 'opacity-0': paused }">
+        <SongPlayer ref="songPlayerEl" :song="song" class="w-full h-full absolute" @error="back" />
+        <div class="absolute h-full w-full">
+          <Half
+            v-if="roundStore.player1 && settingsStore.microphones.at(0) && pitchProcessors.at(0)"
+            :ref="halfEls.set"
+            class="h-50cqh w-full"
+            :song="song" position="top"
+            :voice-index="0"
+            :microphone="settingsStore.microphones.at(0)!"
+            :pitch-processor="pitchProcessors.at(0)!"
+            @score="(note) => onScore(1, note)"
+            @bonus="(beatCount) => onBonus(1, beatCount)"
+          />
+          <Half
+            v-if="roundStore.player2 && settingsStore.microphones.at(1) && pitchProcessors.at(1)"
+            :ref="halfEls.set"
+            class="h-50cqh w-full"
+            :song="song" position="bottom"
+            :voice-index="song.isDuet() ? 1 : 0"
+            :microphone="settingsStore.microphones.at(1)!"
+            :pitch-processor="pitchProcessors.at(1)!"
+            @score="(note) => onScore(2, note)"
+            @bonus="(beatCount) => onBonus(2, beatCount)"
+          />
+        </div>
+        <HUD
+          ref="HUDEl"
+          :player1="roundStore.player1"
+          :player2="roundStore.player2"
+          :microphones="settingsStore.microphones"
+          :score1="roundStore.totalScore1"
+          :score2="roundStore.totalScore2"
+          class="absolute w-full h-full"
         />
-        <Half
-          v-if="roundStore.player2 && settingsStore.microphones.at(1) && pitchProcessors.at(1)"
-          :ref="halfEls.set"
-          class="h-50cqh w-full"
-          :song="song" position="bottom"
-          :voice-index="song.isDuet() ? 1 : 0"
-          :microphone="settingsStore.microphones.at(1)!"
-          :pitch-processor="pitchProcessors.at(1)!"
-          @score="(note) => onScore(2, note)"
-          @bonus="(beatCount) => onBonus(2, beatCount)"
-        />
-      </div>
-      <HUD
-        ref="HUDEl"
-        :player1="roundStore.player1"
-        :player2="roundStore.player2"
-        :microphones="settingsStore.microphones"
-        :score1="roundStore.totalScore1"
-        :score2="roundStore.totalScore2"
-        class="absolute w-full h-full"
-      />
-      <div
-        class="absolute h-full w-full overflow-hidden transition-opacity duration-1000"
-        :class="{ 'opacity-0': ready }"
-      >
-        <div class="h-full w-full relative bg-black flex items-center justify-center">
-          <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-70" @error="coverError = true">
-          <div class=" relative min-w-0 text-center">
-            <div class="truncate text-1.5cqw font-semibold">
-              {{ song.meta.artist }}
-            </div>
-            <div class="truncate font-bold bg-clip-text text-transparent gradient-title text-6.0cqw">
-              {{ song.meta.title }}
+        <div
+          class="absolute h-full w-full overflow-hidden transition-opacity duration-1000"
+          :class="{ 'opacity-0': ready }"
+        >
+          <div class="h-full w-full relative bg-black flex items-center justify-center">
+            <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-70" @error="coverError = true">
+            <div class=" relative min-w-0 text-center">
+              <div class="truncate text-1.5cqw font-semibold">
+                {{ song.meta.artist }}
+              </div>
+              <div class="truncate font-bold bg-clip-text text-transparent gradient-title text-6.0cqw">
+                {{ song.meta.title }}
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div
+        v-if="paused"
+        class="flex flex-col justify-center absolute h-full w-full"
+      >
+        <WideButton
+          v-for="(button, i) in buttons"
+          :key="button.label"
+          :label="button.label"
+          :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
+          :active="position === i"
+          @mouseenter="() => (position = i)"
+          @click="button.action"
+        />
       </div>
     </div>
   </div>
