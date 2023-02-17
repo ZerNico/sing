@@ -30,7 +30,7 @@ const micCount = computed(() => {
 const guest: User = { username: 'Guest', id: 'guest', orgDomain: 'guest', createdAt: new Date(), updatedAt: new Date(), picture: null, lobbyId: null }
 
 const users = computed(() => {
-  const users = status.data?.value?.lobby.users ?? []
+  const users = status.data.value ?? []
   return [guest, ...users]
 })
 
@@ -51,18 +51,21 @@ const buttons = computed(() => {
   return [player1Button, player2Button, startButton] as const
 })
 
-const queryStatus = () => client.lobby.status.query()
+const queryUsers = async () => {
+  const lobbyStatus = await client.lobby.status.query()
+  return lobbyStatus.lobby.users
+}
+const fallback = useOfflineFallbackFn(queryUsers, [])
 
 const status = useQuery({
   queryKey: ['queryStatus'],
-  queryFn: queryStatus,
+  queryFn: fallback,
   retry: 2,
   retryDelay: 0,
   refetchOnWindowFocus: false,
   cacheTime: 10000, // 10 seconds
   refetchInterval: 10000, // 10 seconds
-  onSuccess: (data) => {
-    const users = data.lobby.users
+  onSuccess: (users) => {
     if (users.length === 0) return
     if (selectionPlayer1.value === '') selectionPlayer1.value = users[0].username
     if (selectionPlayer2.value === '') selectionPlayer2.value = users[0].username

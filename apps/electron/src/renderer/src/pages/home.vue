@@ -73,11 +73,16 @@ const onNavigate = (event: MenuNavigationEvent) => {
   }
 }
 
-const queryStatus = () => client.lobby.status.query()
+const queryUsers = async () => {
+  const lobbyStatus = await client.lobby.status.query()
+  return lobbyStatus.lobby.users
+}
+
+const fallback = useOfflineFallbackFn(queryUsers, [])
 
 const status = useQuery({
   queryKey: ['queryStatus'],
-  queryFn: queryStatus,
+  queryFn: fallback,
   retry: 2,
   retryDelay: 0,
   refetchOnWindowFocus: false,
@@ -93,8 +98,8 @@ const status = useQuery({
         <div class="uppercase font-bold text-2cqw">
           Tune Perfect
         </div>
-        <div v-if="status.data.value?.lobby" class="flex gap-0.2cqw">
-          <Avatar v-for="user in status.data.value?.lobby.users.slice(0, 15)" :key="user.id" :username="user.username" :src="user.picture ?? undefined" />
+        <div class="flex gap-0.2cqw">
+          <Avatar v-for="user in status.data.value?.slice(0, 15)" :key="user.id" :username="user.username" :src="user.picture ?? undefined" />
         </div>
       </div>
     </template>
