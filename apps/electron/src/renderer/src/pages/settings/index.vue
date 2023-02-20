@@ -27,6 +27,15 @@ const onNavigate = (event: MenuNavigationEvent) => {
     decrement()
   }
 }
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

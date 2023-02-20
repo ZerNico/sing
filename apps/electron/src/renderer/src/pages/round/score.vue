@@ -50,6 +50,12 @@ const onNavigate = (event: MenuNavigationEvent) => {
 const next = () => {
   router.push('/songs')
 }
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

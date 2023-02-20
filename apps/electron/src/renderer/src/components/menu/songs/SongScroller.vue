@@ -24,6 +24,8 @@ const fuse = new Fuse<LocalSong>([], {
 })
 const songs = ref([]) as Ref<SongWithData[]>
 
+const select = useSoundEffect('select')
+
 // aditional data needed for displaying songs
 interface SongWithData {
   song: LocalSong
@@ -202,6 +204,7 @@ const handlePositionChange = (delta: number, fast: boolean) => {
   if (animating.value) return
   if (lastAnimation.value && Date.now() - lastAnimation.value.getTime() < 10)
     return
+  select.play()
   setFastScrolling()
   animating.value = true
   direction.value = delta
@@ -215,6 +218,7 @@ const onTransitionEnd = () => {
   setFastScrolling()
   if (fastScrolling.value) {
     setTimeout(() => {
+      select.play()
       animating.value = true
     }, 10)
   } else {

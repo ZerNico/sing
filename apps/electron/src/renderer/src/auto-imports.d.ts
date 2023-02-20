@@ -241,6 +241,7 @@ declare global {
   const useSlots: typeof import('vue')['useSlots']
   const useSongsStore: typeof import('./stores/songs')['useSongsStore']
   const useSorted: typeof import('@vueuse/core')['useSorted']
+  const useSoundEffect: typeof import('./composables/useSoundEffect')['useSoundEffect']
   const useSpeechRecognition: typeof import('@vueuse/core')['useSpeechRecognition']
   const useSpeechSynthesis: typeof import('@vueuse/core')['useSpeechSynthesis']
   const useStepper: typeof import('@vueuse/core')['useStepper']
@@ -540,6 +541,7 @@ declare module 'vue' {
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useSongsStore: UnwrapRef<typeof import('./stores/songs')['useSongsStore']>
     readonly useSorted: UnwrapRef<typeof import('@vueuse/core')['useSorted']>
+    readonly useSoundEffect: UnwrapRef<typeof import('./composables/useSoundEffect')['useSoundEffect']>
     readonly useSpeechRecognition: UnwrapRef<typeof import('@vueuse/core')['useSpeechRecognition']>
     readonly useSpeechSynthesis: UnwrapRef<typeof import('@vueuse/core')['useSpeechSynthesis']>
     readonly useStepper: UnwrapRef<typeof import('@vueuse/core')['useStepper']>

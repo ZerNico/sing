@@ -3,6 +3,7 @@ interface SettingsState {
     master: number
     game: number
     preview: number
+    menu: number
   }
   microphones: Microphone[]
 }
@@ -23,6 +24,7 @@ export const useSettingsStore = defineStore('settings', {
       master: 50,
       game: 100,
       preview: 50,
+      menu: 100,
     },
     microphones: [],
   }),
@@ -32,6 +34,17 @@ export const useSettingsStore = defineStore('settings', {
     },
     saveMicrophone(index: number, Microphone: Microphone) {
       this.microphones[index] = Microphone
+    },
+  },
+  getters: {
+    getMenuVolume: (state) => {
+      return state.volume.menu * (state.volume.master / 100)
+    },
+    getPreviewVolume: (state) => {
+      return state.volume.preview * (state.volume.master / 100)
+    },
+    getGameVolume: (state) => {
+      return state.volume.game * (state.volume.master / 100)
     },
   },
   persist: true,

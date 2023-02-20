@@ -87,6 +87,8 @@ const startPlayback = () => {
     return
   }
 
+  audioEl.value.volume = props.volume
+
   if (!videoEl.value) {
     audioEl.value?.play()
     return

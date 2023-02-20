@@ -37,6 +37,15 @@ const toPath = (index: number) => {
 }
 
 const gradient = { start: '#36D1DC', end: '#5B86E5' }
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

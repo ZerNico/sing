@@ -48,6 +48,15 @@ const onNavigate = (event: MenuNavigationEvent) => {
 }
 
 const gradient = { start: '#11998ec5', end: '#38ef7dc5' }
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

@@ -89,6 +89,15 @@ const status = useQuery({
   cacheTime: 10000, // 10 seconds
   refetchInterval: 10000, // 10 seconds
 })
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

@@ -8,6 +8,7 @@ import { songsSearchText, songsSortKey } from '@renderer/logic/ui/pageStates'
 import { loop } from '@renderer/logic/utils/math.utils'
 import { keyMode } from '@renderer/logic/ui/keys'
 
+const settingsStore = useSettingsStore()
 const songsStore = useSongsStore()
 const roundStore = useRoundStore()
 const router = useRouter()
@@ -83,13 +84,27 @@ const onClick = (e: MouseEvent) => {
     e.preventDefault()
   }
 }
+
+const select = useSoundEffect('select')
+watch(songsSortKey, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
+
+const volume = computed(() => {
+  const volume = settingsStore.getPreviewVolume / 100
+  return volume
+})
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @wheel="onWheel" @mouseup="onClick">
     <div class="layout relative">
       <div class="h-full w-full absolute">
-        <SongPlayer ref="songPlayerEl" :song="currentSong" class="w-full h-full opacity-30" />
+        <SongPlayer ref="songPlayerEl" :volume="volume" :song="currentSong" class="w-full h-full opacity-30" />
       </div>
       <div class="bg-white/80 h-full w-full absolute top-clip" />
       <div class="bg-white/80 h-full w-full absolute bottom-clip" />

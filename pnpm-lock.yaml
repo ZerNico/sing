@@ -67,6 +67,7 @@ importers:
       '@vue-macros/volar': ^0.8.1
       '@vueuse/core': ^9.11.1
       '@vueuse/integrations': ^9.11.1
+      '@vueuse/sound': ^2.0.1
       api: workspace:*
       directory-tree: ^3.5.1
       dywapitchtrack: ^0.2.0
@@ -116,6 +117,7 @@ importers:
       '@vue-macros/volar': 0.8.1_vue-tsc@1.0.24+vue@3.2.45
       '@vueuse/core': 9.11.1_vue@3.2.45
       '@vueuse/integrations': 9.11.1_xspgc6xf2bmp6jt3meiuvsfu2i
+      '@vueuse/sound': 2.0.1_vue@3.2.45
       api: link:../api
       dywapitchtrack: 0.2.0
       electron: 21.3.5
@@ -3380,6 +3382,20 @@ packages:
       - vue
     dev: true
 
+  /@vueuse/sound/2.0.1_vue@3.2.45:
+    resolution: {integrity: sha512-7Fbp9lQkuUnpTXS9vPbvT2FDYHuwJbvKPivOYETaVVSmcZKoczw6zcsebsARkH5Ged0f045YUOZnV/RuCzyLXQ==}
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      howler: 2.2.3
+      vue: 3.2.45
+      vue-demi: 0.13.11_vue@3.2.45
+    dev: true
+
   /@zhead/schema/1.0.9:
     resolution: {integrity: sha512-MBubVXXEJX86ZBL6CDK0rYi1mC82zuben1MwwAEe98EFN1w4Oy0l2roJaM51MwQEvZ+WTi6o4lCxUShtLQJk8A==}
 
@@ -6379,6 +6395,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       lru-cache: 6.0.0
+    dev: true
+
+  /howler/2.2.3:
+    resolution: {integrity: sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==}
     dev: true
 
   /html-tags/3.2.0:

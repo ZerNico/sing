@@ -33,6 +33,12 @@ const deleteSong = async () => {
   songsStore.removePath(songsStore.paths[id.value])
   back()
 }
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

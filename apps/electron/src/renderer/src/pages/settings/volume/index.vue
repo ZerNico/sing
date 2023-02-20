@@ -26,6 +26,11 @@ const sliders = [
     value: computed(() => settingsStore.volume.preview),
     setter: (value: number) => (settingsStore.volume.preview = value),
   },
+  {
+    label: 'Menu Volume',
+    value: computed(() => settingsStore.volume.menu),
+    setter: (value: number) => (settingsStore.volume.menu = value),
+  },
 ]
 
 const { position, increment, decrement } = useLoop(sliders.length - 1)
@@ -46,6 +51,15 @@ const onNavigate = (event: MenuNavigationEvent) => {
     decrement()
   }
 }
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

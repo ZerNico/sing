@@ -22,6 +22,9 @@ export default defineConfig({
 
       },
     },
+    optimizeDeps: {
+      exclude: ['vue-demi'],
+    },
     plugins: [
       VueMacros({
         plugins: {

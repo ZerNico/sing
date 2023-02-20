@@ -58,6 +58,12 @@ const kick = () => {
   if (isLoading.value) return
   mutate()
 }
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

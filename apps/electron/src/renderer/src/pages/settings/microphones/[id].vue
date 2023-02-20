@@ -132,6 +132,15 @@ const buttonRefs = ref<any[]>([])
 const setRefs = (ref: any, index) => {
   buttonRefs.value[index] = ref
 }
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

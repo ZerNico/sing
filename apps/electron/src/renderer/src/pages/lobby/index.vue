@@ -54,6 +54,15 @@ const onNavigate = (event: MenuNavigationEvent) => {
 const toDetails = (user: User) => {
   router.push(`/lobby/${user.id}`)
 }
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
+
+const confirm = useSoundEffect('confirm')
+
+onBeforeUnmount(() => {
+  confirm.play()
+})
 </script>
 
 <template>

@@ -31,6 +31,8 @@ const currCol = ref(0)
 const shift = ref(false)
 const special = ref(false)
 
+const select = useSoundEffect('select')
+
 const backspace = () => {
   const input = props.searchEl?.getInputEl()
   if (!input) return
@@ -84,6 +86,7 @@ const scrollToSelectionStart = (input: HTMLInputElement) => {
 const blur = () => {
   const input = props.searchEl?.getInputEl()
   if (!input) return
+  select.play()
   input.blur()
 }
 
@@ -231,6 +234,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   stopLoop()
+})
+
+watch([currRow, currCol], () => {
+  select.play()
 })
 </script>
 

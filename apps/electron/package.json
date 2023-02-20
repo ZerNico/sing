@@ -37,6 +37,7 @@
     "@vue-macros/volar": "^0.8.1",
     "@vueuse/core": "^9.11.1",
     "@vueuse/integrations": "^9.11.1",
+    "@vueuse/sound": "^2.0.1",
     "api": "workspace:*",
     "dywapitchtrack": "^0.2.0",
     "electron": "^21.3.3",

@@ -146,13 +146,21 @@ const score2 = computed(() => {
   if (!voice) return 0
   return roundStore.totalScore2(voice.getMaxScore().totalScore)
 })
+
+const volume = computed(() => {
+  const volume = settingsStore.getPreviewVolume / 100
+  return volume
+})
+
+const select = useSoundEffect('select')
+watch(position, () => select.play())
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @mouseup="onClick">
     <div v-if="song" class="layout relative">
       <div :class="{ 'opacity-0': paused }">
-        <SongPlayer ref="songPlayerEl" :song="song" class="w-full h-full absolute opacity-80" @error="back" @ended="exit" />
+        <SongPlayer ref="songPlayerEl" :volume="volume" :song="song" class="w-full h-full absolute opacity-80" @error="back" @ended="exit" />
         <div class="absolute h-full w-full">
           <Half
             v-if="roundStore.player1 && settingsStore.microphones.at(0) && pitchProcessors.at(0)"
