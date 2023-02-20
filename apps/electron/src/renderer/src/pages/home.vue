@@ -78,7 +78,7 @@ const queryUsers = async () => {
   return lobbyStatus.lobby.users
 }
 
-const fallback = useOfflineFallbackFn(queryUsers, [])
+const fallback = useOfflineFallbackFn(queryUsers, async () => [])
 
 const status = useQuery({
   queryKey: ['queryStatus'],

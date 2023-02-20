@@ -126,6 +126,29 @@ export const lobbyRouter = router({
       })
     }
   }),
+  kick: authedProcedure
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.prisma.lobby.update({
+          where: { id: ctx.user.sub },
+          data: {
+            users: {
+              disconnect: {
+                id: input.userId,
+              },
+            },
+          },
+        })
+        return
+      } catch (e) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to kick user from lobby',
+          cause: e,
+        })
+      }
+    }),
 })
 
 const generateLobbyCode = (length: number) => {
