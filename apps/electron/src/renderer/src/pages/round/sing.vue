@@ -21,6 +21,10 @@ const back = () => {
   router.back()
 }
 
+const exit = () => {
+  router.push('/round/score')
+}
+
 const songPlayerEl = ref<InstanceType<typeof SongPlayer>>()
 const halfEls = useTemplateRefsList<InstanceType<typeof Half>>()
 const HUDEl = ref<InstanceType<typeof HUD>>()
@@ -112,7 +116,6 @@ const onClick = (e: MouseEvent) => {
   if (e.button === 4) {
     e.preventDefault()
   } else if (e.button === 3) {
-    back()
     e.preventDefault()
   }
 }
@@ -127,16 +130,29 @@ const onBonus = (index: 1 | 2, beatCount: number) => {
 
 const buttons = [
   { label: 'Resume', action: () => paused.value = false },
-  { label: 'Exit', action: () => console.log('exit') },
+  { label: 'Exit', action: exit },
 ]
 const { position, increment, decrement } = useLoop(buttons.length - 1)
+
+const score1 = computed(() => {
+  const voice = song.value?.voices.at(0)
+  if (!voice) return 0
+  return roundStore.totalScore1(voice.getMaxScore().totalScore)
+})
+
+const score2 = computed(() => {
+  if (!song.value) return 0
+  const voice = song.value?.voices.at(song.value.isDuet() ? 1 : 0)
+  if (!voice) return 0
+  return roundStore.totalScore2(voice.getMaxScore().totalScore)
+})
 </script>
 
 <template>
   <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @mouseup="onClick">
     <div v-if="song" class="layout relative">
       <div :class="{ 'opacity-0': paused }">
-        <SongPlayer ref="songPlayerEl" :song="song" class="w-full h-full absolute" @error="back" />
+        <SongPlayer ref="songPlayerEl" :song="song" class="w-full h-full absolute opacity-80" @error="back" @ended="exit" />
         <div class="absolute h-full w-full">
           <Half
             v-if="roundStore.player1 && settingsStore.microphones.at(0) && pitchProcessors.at(0)"
@@ -166,8 +182,8 @@ const { position, increment, decrement } = useLoop(buttons.length - 1)
           :player1="roundStore.player1"
           :player2="roundStore.player2"
           :microphones="settingsStore.microphones"
-          :score1="roundStore.totalScore1"
-          :score2="roundStore.totalScore2"
+          :score1="score1"
+          :score2="score2"
           class="absolute w-full h-full"
         />
         <div
@@ -176,7 +192,7 @@ const { position, increment, decrement } = useLoop(buttons.length - 1)
         >
           <div class="h-full w-full relative bg-black flex items-center justify-center">
             <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-70" @error="coverError = true">
-            <div class=" relative min-w-0 text-center">
+            <div class="relative min-w-0 text-center">
               <div class="truncate text-1.5cqw font-semibold">
                 {{ song.meta.artist }}
               </div>

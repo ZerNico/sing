@@ -105,7 +105,7 @@ const actionKeys: Key[][] = [
   [
     { text: 'shft', active: shift, action: () => shift.value = !shift.value, rowSpan: 2, icon: 'Shift', activeIcon: 'ShiftPressed', iconClass: 'text-1.8cqw!', keyHintIcon: 'XboxLB' },
     { text: '@#', active: special, action: () => special.value = !special.value, activeText: 'Aa', rowSpan: 2, keyHintIcon: 'XboxRB' },
-    { text: 'Space', rowSpan: 4, keyHintIcon: 'XboxY' },
+    { text: 'Space', rowSpan: 4, keyHintIcon: 'XboxY', action: () => write(' ') },
     { text: 'Backspace', rowSpan: 2, icon: 'Backspace', iconClass: 'text-1.8cqw!', keyHintIcon: 'XboxX', action: backspace },
   ],
   [

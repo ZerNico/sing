@@ -122,7 +122,7 @@ const onClick = (e: MouseEvent) => {
             <div class="text-1.3cqw font-semibold max-w-1/4 text-black">
               {{ currentSong?.meta.artist }}
             </div>
-            <div>
+            <div class="max-w-65cqw">
               <span
                 class="font-bold bg-clip-text text-transparent gradient-title text-5.0cqw leading-tight"
               >

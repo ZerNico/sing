@@ -62,7 +62,8 @@ export class PitchProcessor {
       if (midiDifference > 6) {
         midiDifference = 12 - midiDifference
       }
-      if (midiDifference < 2.5) {
+      // TODO: make this configurable by the user
+      if (midiDifference < 2) {
         return midiNote
       }
     }

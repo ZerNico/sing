@@ -2,9 +2,9 @@ import type { MaybeRef } from '@vueuse/core'
 
 import { loop } from '@renderer/logic/utils/math.utils'
 
-export default function useLoop(max: MaybeRef<number>) {
+export default function useLoop(max: MaybeRef<number>, options?: { initial?: number }) {
   const maxNumber = ref(max)
-  const position = ref(0)
+  const position = ref(options?.initial ?? 0)
 
   const increment = () => {
     position.value = loop(position.value + 1, 0, maxNumber.value)

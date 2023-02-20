@@ -2,7 +2,7 @@ import type { Note } from '@renderer/logic/song/note'
 import type { LocalSong } from '@renderer/logic/song/song'
 import type { User } from '@renderer/logic/types'
 
-interface Score {
+export interface Score {
   goldenScore: number
   score: number
   bonusScore: number
@@ -55,10 +55,10 @@ export const useRoundStore = defineStore('round', {
   },
   getters: {
     totalScore1: (state) => {
-      return state.score1.score + state.score1.bonusScore
+      return (maxScore: number) => Math.round((state.score1.score + state.score1.bonusScore) / maxScore * 10000)
     },
     totalScore2: (state) => {
-      return state.score2.score + state.score2.bonusScore
+      return (maxScore: number) => Math.round((state.score2.score + state.score2.bonusScore) / maxScore * 10000)
     },
   },
 })

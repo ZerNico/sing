@@ -17,7 +17,7 @@ const emit = defineEmits<{
 
 <template>
   <div class="flex flex-row items-center gap-0.5cqw text-neutral-400 font-semibold uppercase">
-    <Icon icon="ChevronLeft" role="button" class="text-2cqw" @click="emit('back')" />
+    <Icon v-if="props.backArrow" icon="ChevronLeft" role="button" class="text-2cqw" @click="emit('back')" />
     <div class="text-1.3cqw -mt-0.15cqw">
       {{ props.title }}
     </div>
