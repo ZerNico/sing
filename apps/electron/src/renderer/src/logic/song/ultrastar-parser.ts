@@ -88,7 +88,9 @@ const parseLocalSong = async (songFile: DirectoryTree, parentFolder: DirectoryTr
 }
 
 const parseSongTxt = (txt: string) => {
-  const meta: any = { }
+  const meta: any = {
+    relative: false,
+  }
   const fileNames: any = { }
 
   let notes: Note[] = []
@@ -102,7 +104,8 @@ const parseSongTxt = (txt: string) => {
   lines.forEach((line) => {
     if (line === '') return
     if (line.startsWith('#')) {
-      const [property, value]: string[] = line.substring(1, line.length).trim().split(':')
+      const [property, v]: string[] = line.substring(1, line.length).trim().split(':')
+      const value = v.trim()
 
       switch (property.toLocaleLowerCase()) {
         case 'title':
@@ -142,7 +145,7 @@ const parseSongTxt = (txt: string) => {
           fileNames.background = value
           break
         case 'relative':
-          meta.relative = value === 'true'
+          meta.relative = value.toLowerCase() === 'yes' || value.toLowerCase() === 'true'
           break
         case 'videogap':
           meta.videoGap = value.replace(',', '.')

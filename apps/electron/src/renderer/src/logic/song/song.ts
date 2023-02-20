@@ -11,7 +11,7 @@ export const metaSchema = z.object({
   bpm: z.coerce.number(),
   gap: z.coerce.number().default(0),
   author: z.string().optional(),
-  relative: z.literal(false).default(false),
+  relative: z.literal(false),
   hash: z.string(),
   videoGap: z.coerce.number().default(0),
 })
