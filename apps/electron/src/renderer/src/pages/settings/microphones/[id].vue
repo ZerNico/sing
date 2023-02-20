@@ -38,6 +38,7 @@ const saveMicrophone = () => {
     channel: channel.value,
     label: label.value,
     id: microphone?.deviceId,
+    threshold: threshold.value,
   }
 
   settingsStore.saveMicrophone(id.value, mic)
@@ -49,6 +50,7 @@ const color = ref('#00B5FF')
 const channel = ref(1)
 const delay = ref(250)
 const gain = ref(1)
+const threshold = ref(2)
 
 const loading = ref(true)
 
@@ -61,6 +63,7 @@ watch(id, (newId) => {
   color.value = microphone.color
   channel.value = microphone.channel
   label.value = microphone.label
+  threshold.value = microphone.threshold
 }, { immediate: true })
 
 const mediaDevices = ref<MediaDeviceInfo[]>([])
@@ -76,6 +79,7 @@ const buttons = [
   { type: 'list', label: 'Channel', value: channel, options: ref([1, 2, 3]), displayType: 'text' },
   { type: 'range', label: 'Delay', value: delay, min: 0, max: 600, step: 1, clickStep: 10 },
   { type: 'range', label: 'Gain', value: gain, min: 0.5, max: 2, step: 0.1, clickStep: 0.1 },
+  { type: 'range', label: 'Threshold', value: threshold, min: 0, max: 5, step: 0.1, clickStep: 0.1 },
   { type: 'button', label: 'Delete', action: deleteMicrophone },
   { type: 'button', label: 'Save', action: saveMicrophone },
 ] as const

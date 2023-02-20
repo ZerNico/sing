@@ -14,6 +14,7 @@ export interface Microphone {
   channel: number
   gain: number
   delay: number
+  threshold: number
 }
 
 export const useSettingsStore = defineStore('settings', {

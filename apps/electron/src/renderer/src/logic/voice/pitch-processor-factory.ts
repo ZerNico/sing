@@ -36,7 +36,8 @@ export class PitchProcessorFactory {
       gainNode.gain.value = microphone.gain
       splitterNode.connect(gainNode, microphone.channel, 0)
 
-      const pitchWorkletNode = await this.createPitchWorkletNode(gainNode)
+      const pitchWorkletNode = await this.createPitchWorkletNode(microphone)
+      gainNode.connect(pitchWorkletNode)
 
       return new PitchProcessor(pitchWorkletNode)
     } catch (e) {
@@ -65,12 +66,11 @@ export class PitchProcessorFactory {
     return stream
   }
 
-  private async createPitchWorkletNode(node: AudioNode) {
+  private async createPitchWorkletNode(microphone: Microphone) {
     const wasm = await ofetch(pitchWasmUrl, { responseType: 'blob' })
     const wasmArrayBuffer = await wasm.arrayBuffer()
 
-    const pitchWorkletNode = new PitchWorkletNode(this.ctx, { samplesPerBeat: this.samplesPerBeat, wasmBinary: wasmArrayBuffer, threshold: 2 })
-    node.connect(pitchWorkletNode)
+    const pitchWorkletNode = new PitchWorkletNode(this.ctx, { samplesPerBeat: this.samplesPerBeat, wasmBinary: wasmArrayBuffer, threshold: microphone.threshold })
 
     return pitchWorkletNode
   }
