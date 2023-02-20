@@ -58,8 +58,18 @@ const parseLocalSong = async (songFile: DirectoryTree, parentFolder: DirectoryTr
     Object.keys(fileNames).forEach((key) => {
       if (typeof fileNames[key] === 'string') {
         const path = findFile(fileNames[key])
+
         if (path) {
-          urls[key] = `atom://${path}`
+          const unixPath = path.replace(/\\/g, '/')
+          const [driveLetter, ...parts] = unixPath?.split('/') ?? []
+          let encodedPath = parts.map(encodeURIComponent).join('/')
+          if (driveLetter !== '') {
+            encodedPath = `${driveLetter}/${encodedPath}`
+          } else {
+            encodedPath = `/${encodedPath}`
+          }
+
+          urls[key] = `atom://${encodedPath}`
         }
       }
     })
