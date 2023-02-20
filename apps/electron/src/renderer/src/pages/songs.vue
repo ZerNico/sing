@@ -93,20 +93,10 @@ const onClick = (e: MouseEvent) => {
       </div>
       <div class="bg-white/80 h-full w-full absolute top-clip" />
       <div class="bg-white/80 h-full w-full absolute bottom-clip" />
-      <div class="h-full w-full absolute top-0 left-0 flex items-center justify-end overflow-y-hidden pr-1/15 pointer-events-none">
-        <SongScroller
-          ref="songScrollerEl"
-          :sort-key="songsSortKey"
-          :songs="songsStore.getSongs"
-          :search-text="songsSearchText"
-          @select-song="onSongSelect"
-          @start-round="startRound"
-        />
-      </div>
       <div v-if="keyMode === 'gamepad' && searchFocused" class="absolute bottom-0 pl-5cqw pb-15cqh z-2">
         <VirtualKeyboard v-model="songsSearchText" :search-el="searchEl" />
       </div>
-      <div class="w-full h-full relative py-7cqh flex flex-col">
+      <div class="w-full h-full absolute py-7cqh flex flex-col">
         <div class="px-5cqw flex gap-5cqw items-center">
           <TitleBar title="Songs" class="text-black!" @back="back" />
           <Search
@@ -175,6 +165,16 @@ const onClick = (e: MouseEvent) => {
             </div>
           </div>
         </div>
+      </div>
+      <div class="h-full w-full absolute top-0 left-0 flex items-center justify-end overflow-y-hidden pr-1/15 pointer-events-none">
+        <SongScroller
+          ref="songScrollerEl"
+          :sort-key="songsSortKey"
+          :songs="songsStore.getSongs"
+          :search-text="songsSearchText"
+          @select-song="onSongSelect"
+          @start-round="startRound"
+        />
       </div>
     </div>
   </div>

@@ -272,7 +272,7 @@ defineExpose({ next, prev, selectRandomSong })
             || (i === 4 && animating && direction === 1)
             || (i === 2 && animating && direction === -1),
           '!duration-150': fastScrolling,
-          'pointer-events-auto': i === 3,
+          'pointer-events-auto cursor-pointer': i === 3,
           'transition-all duration-250': !selectingRandomSong,
         }"
         @transitionend="(e) => e.stopPropagation()"
