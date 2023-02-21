@@ -140,8 +140,11 @@ const volume = computed(() => {
           />
         </div>
         <div class="flex-grow px-5cqw flex flex-col">
-          <div v-if="currentSong" class="pt-14cqh">
-            <div class="text-1.3cqw font-semibold max-w-1/4 text-black">
+          <div v-if="currentSong" class="pt-9cqh">
+            <div class="flex pb-1.3cqh">
+              <Icon icon="Duet" class="text-1.5cqw" :class="{ 'opacity-0': !currentSong.isDuet() }" />
+            </div>
+            <div class="text-1.3cqw font-semibold max-w-20cqw text-black">
               {{ currentSong?.meta.artist }}
             </div>
             <div class="max-w-65cqw">
