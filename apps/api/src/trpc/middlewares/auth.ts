@@ -10,15 +10,8 @@ const isOAuthed = middleware(async ({ ctx, next }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
-  try {
-    const payload = verifyJwt(token)
-    return next({ ctx: { ...ctx, user: payload } })
-  } catch (e) {
-    if (e instanceof TRPCError) {
-      throw e
-    }
-    throw new TRPCError({ code: 'UNAUTHORIZED', cause: e })
-  }
+  const payload = verifyJwt(token)
+  return next({ ctx: { ...ctx, user: payload } })
 })
 
 export const authedProcedure = publicProcedure.use(isOAuthed)

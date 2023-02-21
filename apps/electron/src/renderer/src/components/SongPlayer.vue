@@ -164,6 +164,11 @@ const getAudioDuration = () => {
   return audioEl.value.duration
 }
 
+watch(videoError, (value) => {
+  if (!value) return
+  startPlayback()
+})
+
 defineExpose({
   play,
   pause,

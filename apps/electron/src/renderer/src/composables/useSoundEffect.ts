@@ -20,7 +20,7 @@ export const useSoundEffect = (sound: MaybeRef<Sound>) => {
   })
 
   const volume = computed(() => {
-    return settingsStore.getMenuVolume / 100
+    return settingsStore.getMenuVolume / 100 * 2
   })
 
   const s = useSound(sfx, { volume })

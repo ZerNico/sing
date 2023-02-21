@@ -1,11 +1,14 @@
-export default function useOfflineFallbackFn<T>(fn: () => T, fallbackFn: () => T) {
+type InferArgs<T> = T extends (...t: [...infer Arg]) => any ? Arg : never
+type InferReturn<T> = T extends (...t: [...infer Arg]) => infer Res ? Res : never
+
+export default function useOfflineFallbackFn<TFunc extends (...args: any[]) => any>(fn: TFunc, fallbackFn: TFunc): (...args: InferArgs<TFunc>) => InferReturn<TFunc> {
   const lobbyStore = useLobbyStore()
 
-  return () => {
+  return (...args: InferArgs<TFunc>) => {
     if (!lobbyStore.offline) {
-      return fn()
+      return fn(...args)
     }
 
-    return fallbackFn()
+    return fallbackFn(...args)
   }
 }

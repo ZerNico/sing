@@ -6,6 +6,7 @@ import type { LocalSong } from '@renderer/logic/song/song'
 const router = useRouter()
 const roundStore = useRoundStore()
 const settingsStore = useSettingsStore()
+const { client } = useTRPC()
 
 const song = computed(() => roundStore.song as LocalSong | undefined)
 
@@ -48,6 +49,7 @@ const onNavigate = (event: MenuNavigationEvent) => {
 }
 
 const next = () => {
+  if (isLoading.value) return
   router.push('/songs')
 }
 
@@ -56,6 +58,36 @@ const confirm = useSoundEffect('confirm')
 onBeforeUnmount(() => {
   confirm.play()
 })
+
+const uploadHighscore = async () => {
+  if (!song.value) return
+
+  if (roundStore.player1 && roundStore.player1.id !== 'guest') {
+    await client.highscore.create.mutate({
+      userId: roundStore.player1.id,
+      score: score1.value,
+      hash: song.value.meta.hash,
+    })
+  }
+
+  if (roundStore.player2 && roundStore.player2.id !== 'guest') {
+    await client.highscore.create.mutate({
+      userId: roundStore.player2.id,
+      score: score2.value,
+      hash: song.value.meta.hash,
+    })
+  }
+}
+
+const fallback = useOfflineFallbackFn(uploadHighscore, async () => {})
+
+const { isLoading, mutate } = useMutation({
+  mutationFn: fallback,
+  retry: 1,
+  retryDelay: 0,
+})
+
+mutate()
 </script>
 
 <template>
@@ -90,9 +122,12 @@ onBeforeUnmount(() => {
         </div>
         <div class="px-5cqw flex justify-between">
           <KeyHints :hints="['confirm']" class="text-white!" />
-          <Button :active="true" :gradient="{ start: '#11998ec5', end: '#38ef7dc5' }" @click="next">
-            Continue
-          </Button>
+          <div class="relative">
+            <Button :class="{ 'opacity-0 pointer-events-none': isLoading }" :active="true" :gradient="{ start: '#11998ec5', end: '#38ef7dc5' }" @click="next">
+              Continue
+            </Button>
+            <Icon icon="Spinner" :class="{ 'opacity-0': !isLoading }" class="animate-spin text-2.5cqw absolute right-0 bottom-0 pointer-events-none" />
+          </div>
         </div>
       </div>
     </div>

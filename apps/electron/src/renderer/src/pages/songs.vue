@@ -7,11 +7,13 @@ import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigatio
 import { songsSearchText, songsSortKey } from '@renderer/logic/ui/pageStates'
 import { loop } from '@renderer/logic/utils/math.utils'
 import { keyMode } from '@renderer/logic/ui/keys'
+import type { ClientRouterOutput } from '@renderer/composables/useTRPC'
 
 const settingsStore = useSettingsStore()
 const songsStore = useSongsStore()
 const roundStore = useRoundStore()
 const router = useRouter()
+const { client } = useTRPC()
 
 const currentSong = ref<LocalSong>()
 const searchFocused = ref(false)
@@ -21,14 +23,29 @@ const songPlayerEl = ref<InstanceType<typeof SongPlayer>>()
 const searchEl = ref<InstanceType<typeof Search>>()
 
 const back = () => {
-  router.push('/')
+  router.push('/home')
 }
 
+const highscores = ref<ClientRouterOutput['highscore']['get']['highscores']>()
+
 const onSongSelect = (song?: LocalSong) => {
+  if (song === currentSong.value) return
+  highscores.value = undefined
+  if (!song) return
+
   currentSong.value = song
   nextTick(() => {
     songPlayerEl.value?.play()
   })
+  // check if song is the same after 1 second
+  setTimeout(async () => {
+    if (currentSong.value !== song) return
+    const scores = await client.highscore.get.query({ hash: song.meta.hash })
+    // check if song is the same after async call
+    if (currentSong.value !== song) return
+
+    highscores.value = scores.highscores
+  }, 1000)
 }
 
 const startRound = () => {
@@ -122,7 +139,7 @@ const volume = computed(() => {
             @focusout="searchFocused = false"
           />
         </div>
-        <div class="flex-grow px-5cqw">
+        <div class="flex-grow px-5cqw flex flex-col">
           <div v-if="currentSong" class="pt-14cqh">
             <div class="text-1.3cqw font-semibold max-w-1/4 text-black">
               {{ currentSong?.meta.artist }}
@@ -134,6 +151,9 @@ const volume = computed(() => {
                 {{ currentSong?.meta.title }}
               </span>
             </div>
+          </div>
+          <div class="flex-grow flex items-center">
+            <Highscore :highscores="highscores" :max="5" />
           </div>
         </div>
         <div class="px-5cqw flex justify-between pr-26cqw select-none">
