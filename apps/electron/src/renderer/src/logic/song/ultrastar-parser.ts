@@ -15,6 +15,8 @@ class ParseError extends Error {
 }
 
 export const parseTree = async (tree: DirectoryTree) => {
+  if (!tree?.children) return []
+
   const txts: { file: DirectoryTree; parent: DirectoryTree }[] = []
 
   // go through all directories and files (recursively) and find all .txt files, then store them in txts to get the parent folder, you have to save the parent temporarily in a variable
