@@ -82,7 +82,7 @@ const onWheel = (e: WheelEvent) => {
   }
 }
 
-const sortKeys = ['Artist', 'Title', 'Year']
+const sortKeys = ['Artist', 'Title', 'Year'] as const
 const switchSortKey = (direction: -1 | 1) => {
   const index = sortKeys.indexOf(songsSortKey.value)
   const nextIndex = loop(index + direction, 0, sortKeys.length - 1)

@@ -1,4 +1,5 @@
 import type { LocalSong } from '@renderer/logic/song/song'
+import { songsScrollPosition, songsSearchText, songsSortKey } from '@renderer/logic/ui/pageStates'
 
 interface SongsState {
   paths: string[]
@@ -26,6 +27,10 @@ export const useSongsStore = defineStore('songs', {
       songs.forEach(song => this.songs.set(song.meta.hash, song))
     },
     clearSongs() {
+      songsScrollPosition.value = 0
+      songsSearchText.value = ''
+      songsSortKey.value = 'Artist'
+
       this.songs.clear()
     },
   },
