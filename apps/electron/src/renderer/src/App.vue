@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { client } = useTRPC()
+
 useEventListener('keydown', (e: KeyboardEvent) => {
   // prevent tab button from focusing on the next element
   if (e.key === 'Tab') {
@@ -8,6 +10,11 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
     e.preventDefault()
   }
+})
+
+useEventListener('beforeunload', async () => {
+  await client.lobby.delete.mutate()
+  return true
 })
 </script>
 

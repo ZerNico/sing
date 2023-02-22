@@ -149,6 +149,11 @@ export const lobbyRouter = router({
         })
       }
     }),
+  delete: authedProcedure.mutation(async ({ ctx }) => {
+    await ctx.prisma.lobby.delete({
+      where: { id: ctx.user.sub },
+    })
+  }),
 })
 
 const generateLobbyCode = (length: number) => {
