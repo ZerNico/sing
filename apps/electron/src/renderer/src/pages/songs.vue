@@ -50,6 +50,7 @@ const onSongSelect = (song?: LocalSong) => {
 
 const startRound = () => {
   roundStore.song = currentSong.value
+  roundStore.type = 'sing'
   router.push('/round/selection')
 }
 

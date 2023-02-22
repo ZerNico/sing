@@ -6,6 +6,7 @@ import type { LocalSong } from '@renderer/logic/song/song'
 const router = useRouter()
 const roundStore = useRoundStore()
 const settingsStore = useSettingsStore()
+const versusStore = useVersusStore()
 const { client } = useTRPC()
 
 const song = computed(() => roundStore.song as LocalSong | undefined)
@@ -13,7 +14,7 @@ const song = computed(() => roundStore.song as LocalSong | undefined)
 const coverError = ref(false)
 
 const coverUrl = computed(() => {
-  if (song.value && !coverError.value) {
+  if (song.value && !coverError.value && song.value.urls.cover) {
     return song.value.urls.cover
   }
   return placeholder
@@ -50,7 +51,37 @@ const onNavigate = (event: MenuNavigationEvent) => {
 
 const next = () => {
   if (isLoading.value) return
-  router.push('/songs')
+  if (roundStore.type === 'sing') {
+    router.push('/songs')
+  } else if (roundStore.type === 'versus') {
+    addVersusScore()
+    router.push('/party/versus')
+  }
+}
+
+const addVersusScore = () => {
+  // if both scores are 0, skip
+  if (score1.value === 0 && score2.value === 0) return
+
+  // remove first matchup
+  const matchup = versusStore.matchups.shift()
+  if (!matchup) return
+  // find players in score and add score, increase rounds and if won, increase wins
+  const p1 = versusStore.scores.find(s => s.player.id === matchup.player1.id)
+  const p2 = versusStore.scores.find(s => s.player.id === matchup.player2.id)
+  if (!p1 || !p2) return
+  p1.score += score1.value
+  p2.score += score2.value
+  p1.rounds++
+  p2.rounds++
+  if (score1.value > score2.value) {
+    p1.wins++
+  } else if (score2.value > score1.value) {
+    p2.wins++
+  } else {
+    p1.wins += 1
+    p2.wins += 1
+  }
 }
 
 const confirm = useSoundEffect('confirm')

@@ -9,6 +9,7 @@ export interface Score {
 }
 
 interface RoundState {
+  type: 'sing' | 'versus'
   song?: LocalSong
   player1?: User
   player2?: User
@@ -18,6 +19,7 @@ interface RoundState {
 
 export const useRoundStore = defineStore('round', {
   state: (): RoundState => ({
+    type: 'sing',
     score1: {
       goldenScore: 0,
       score: 0,

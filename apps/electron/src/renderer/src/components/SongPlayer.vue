@@ -139,7 +139,7 @@ const backgroundError = ref(false)
 const coverError = ref(false)
 
 const coverUrl = computed(() => {
-  if (props.song?.urls.cover && !coverError.value) {
+  if (props.song?.urls.cover && !coverError.value && props.song.urls.cover) {
     return props.song.urls.cover
   }
   return placeholder

@@ -106,7 +106,7 @@ onBeforeUnmount(async () => {
 const coverError = ref(false)
 
 const coverUrl = computed(() => {
-  if (song.value && !coverError.value) {
+  if (song.value && !coverError.value && song.value.urls.cover) {
     return song.value.urls.cover
   }
   return placeholder
@@ -204,7 +204,7 @@ watch(position, () => select.play())
               <div class="truncate text-1.5cqw font-semibold">
                 {{ song.meta.artist }}
               </div>
-              <div class="truncate font-bold bg-clip-text text-transparent gradient-title text-6.0cqw">
+              <div class="truncate font-bold bg-clip-text text-transparent text-6.0cqw" :class="[roundStore.type === 'sing' ? 'gradient-title-sing' : 'gradient-title-versus']">
                 {{ song.meta.title }}
               </div>
             </div>
@@ -252,7 +252,11 @@ watch(position, () => select.play())
   }
 }
 
-.gradient-title {
+.gradient-title-sing {
   background-image: linear-gradient(180deg, #11998e 0%, #38ef7d 100%);
+}
+
+.gradient-title-versus {
+  background-image: linear-gradient(180deg, #7420FB 0%, #CF56E3 100%);
 }
 </style>

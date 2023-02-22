@@ -82,7 +82,7 @@ const text = computed(() => {
   <div class="w-20cqw rounded-0.45cqw bg-black overflow-hidden">
     <div class="w-full h-full card flex flex-col items-center py-2cqw px-2.5cqw gap-1.5cqw">
       <div class="flex flex-col items-center gap-0.3cqw max-w-full">
-        <Avatar :username="player.username" class="w-3cqw! h-3cqw! text-1.5cqw! border outline outline-0.2cqw" />
+        <Avatar :username="player.username" :src="player.picture || undefined" class="w-3cqw! h-3cqw! text-1.5cqw! border outline outline-0.2cqw" />
         <div class="font-semibold text-1.9cqw truncate text-ellipsis max-w-full">
           {{ player.username }}
         </div>

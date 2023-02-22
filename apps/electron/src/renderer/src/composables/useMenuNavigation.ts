@@ -19,6 +19,8 @@ export interface MenuNavigationEvent {
   | 'search'
   | 'random'
   | 'menu'
+  | 'joker1'
+  | 'joker2'
 }
 
 export default function useMenuNavigation(
@@ -71,9 +73,11 @@ export default function useMenuNavigation(
     }
     if (event.button === 'RB') {
       callback('sortright')
+      callback('joker2')
     }
     if (event.button === 'LB') {
       callback('sortleft')
+      callback('joker1')
     }
     if (event.button === 'START') {
       callback('search')
@@ -127,6 +131,12 @@ export default function useMenuNavigation(
     if (event.key === 'F4') {
       event.preventDefault()
       callback('random')
+    }
+    if (event.key === '1') {
+      callback('joker1')
+    }
+    if (event.key === '2') {
+      callback('joker2')
     }
   }
 

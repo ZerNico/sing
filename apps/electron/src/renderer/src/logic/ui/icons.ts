@@ -29,6 +29,8 @@ import Shift from '@renderer/assets/icons/shift.svg?component'
 import ShiftPressed from '@renderer/assets/icons/shift-pressed.svg?component'
 import XboxX from '@renderer/assets/icons/keys/xbox-x.svg?component'
 import Duet from '@renderer/assets/icons/duet.svg?component'
+import Key1 from '@renderer/assets/icons/keys/key-1.svg?component'
+import Key2 from '@renderer/assets/icons/keys/key-2.svg?component'
 
 export {
   Spinner,
@@ -62,4 +64,6 @@ export {
   ShiftPressed,
   XboxX,
   Duet,
+  Key1,
+  Key2,
 }
