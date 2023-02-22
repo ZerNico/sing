@@ -6,6 +6,9 @@ import sensible from '@fastify/sensible'
 import { createContext } from './trpc/context'
 import { env } from './config/env'
 import { appRouter } from './trpc/routes'
+import { startCron } from './cron'
+
+startCron()
 
 const server = fastify({
   maxParamLength: 5000,

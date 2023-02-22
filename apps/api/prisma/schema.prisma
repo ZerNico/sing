@@ -11,10 +11,12 @@ datasource db {
 }
 
 model Lobby {
-  id    String  @id @default(uuid())
-  code  String  @unique @db.VarChar(10)
-  name  String?
-  users User[]
+  id        String   @id @default(uuid())
+  code      String   @unique @db.VarChar(10)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String?
+  users     User[]
 }
 
 model User {

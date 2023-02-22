@@ -19,6 +19,7 @@ importers:
       '@trpc/server': ^10.9.0
       '@types/jsonwebtoken': ^9.0.1
       '@types/node': ^18.11.18
+      croner: ^5.7.0
       dotenv-cli: ^7.0.0
       eslint: ^8.32.0
       eslint-config-custom: workspace:*
@@ -37,6 +38,7 @@ importers:
       '@fastify/sensible': 5.2.0
       '@prisma/client': 4.10.1_prisma@4.9.0
       '@trpc/server': 10.9.0
+      croner: 5.7.0
       dotenv-cli: 7.0.0
       fastify: 4.12.0
       jsonwebtoken: 9.0.0
@@ -4289,6 +4291,11 @@ packages:
 
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+
+  /croner/5.7.0:
+    resolution: {integrity: sha512-9pSLe+tDJnmNak2JeMkz6ZmTCXP5p6vCxSd4kvDqrTJkqAP62j2uAEIZjf8cPDZIakStujqVzh5Y5MIWH3yYAw==}
+    engines: {node: '>=6.0'}
+    dev: false
 
   /cross-spawn/7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
