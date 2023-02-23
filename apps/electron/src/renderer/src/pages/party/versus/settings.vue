@@ -103,7 +103,7 @@ const gradient = { start: '#36D1DC', end: '#5B86E5' }
     <template #header>
       <TitleBar title="Versus" description="Settings" @back="back" />
     </template>
-    <div class="flex flex-col justify-center">
+    <div>
       <template v-for="button, index in buttons">
         <RangeInput
           v-if="button.type === 'range'"

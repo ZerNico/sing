@@ -149,50 +149,48 @@ onBeforeUnmount(() => {
       <TitleBar title="Settings" :description="label" @back="back" />
     </template>
 
-    <div class="flex items-center">
-      <div class="max-h-full w-full">
-        <template v-for="button, index in buttons">
-          <RangeInput
-            v-if="button.type === 'range'"
-            :key="`range${button.label}`"
-            :ref="(el) => setRefs(el, index)"
-            v-model="button.value.value"
-            :active="index === position"
-            :label="button.label"
-            :gradient="gradient"
-            :min="button.min"
-            :max="button.max"
-            :step="button.step"
-            :click-step="button.clickStep"
-            class="w-full"
-            @mouseenter="position = index"
-          />
-          <ListInput
-            v-else-if="button.type === 'list'"
-            :key="`list${button.label}`"
-            :ref="(el) => setRefs(el, index)"
-            v-model="button.value.value"
-            :active="index === position"
-            :label="button.label"
-            :gradient="gradient"
-            :options="button.options.value"
-            :display-type="button.displayType"
-            class="w-full"
-            @mouseenter="position = index"
-          />
-          <WideButton
-            v-else-if="button.type === 'button'"
-            :key="`button${button.label}`"
-            :ref="(el) => setRefs(el, index)"
-            :label="button.label"
-            :gradient="gradient"
-            :active="index === position"
-            class="w-full"
-            @click="button.action"
-            @mouseenter="position = index"
-          />
-        </template>
-      </div>
+    <div>
+      <template v-for="button, index in buttons">
+        <RangeInput
+          v-if="button.type === 'range'"
+          :key="`range${button.label}`"
+          :ref="(el) => setRefs(el, index)"
+          v-model="button.value.value"
+          :active="index === position"
+          :label="button.label"
+          :gradient="gradient"
+          :min="button.min"
+          :max="button.max"
+          :step="button.step"
+          :click-step="button.clickStep"
+          class="w-full"
+          @mouseenter="position = index"
+        />
+        <ListInput
+          v-else-if="button.type === 'list'"
+          :key="`list${button.label}`"
+          :ref="(el) => setRefs(el, index)"
+          v-model="button.value.value"
+          :active="index === position"
+          :label="button.label"
+          :gradient="gradient"
+          :options="button.options.value"
+          :display-type="button.displayType"
+          class="w-full"
+          @mouseenter="position = index"
+        />
+        <WideButton
+          v-else-if="button.type === 'button'"
+          :key="`button${button.label}`"
+          :ref="(el) => setRefs(el, index)"
+          :label="button.label"
+          :gradient="gradient"
+          :active="index === position"
+          class="w-full"
+          @click="button.action"
+          @mouseenter="position = index"
+        />
+      </template>
     </div>
     <template #footer>
       <KeyHints :hints="['back', 'confirm']" />

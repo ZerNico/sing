@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
     <template #header>
       <TitleBar title="Settings" description="Volume" @back="back" />
     </template>
-    <div class="flex flex-col justify-center">
+    <div>
       <RangeInput
         v-for="(slider, i) in sliders"
         :key="slider.label"

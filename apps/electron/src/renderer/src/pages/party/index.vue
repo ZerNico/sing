@@ -32,7 +32,7 @@ onBeforeUnmount(() => {
     <template #header>
       <TitleBar title="Party" @back="back" />
     </template>
-    <div class="flex flex-col justify-center">
+    <div>
       <WideButton
         label="Versus"
         :gradient="{ start: '#36D1DC', end: '#5B86E5' }"

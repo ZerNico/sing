@@ -17,14 +17,18 @@ const onClick = (e: MouseEvent) => {
 
 <template>
   <div class="w-full h-full flex items-center justify-center" @mouseup="onClick">
-    <div class="layout flex flex-col py-7cqh">
-      <div class="px-5cqw">
+    <div class="layout grid grid-rows-[min-content_1fr_min-content]">
+      <div class="absolute w-full h-full">
+        <slot name="background" />
+      </div>
+      <div class="px-5cqw pt-7cqh pb-1cqh relative">
         <slot name="header" />
       </div>
-      <div class="flex-grow overflow-y-auto scrollbar children:(h-full w-full)">
+
+      <div class="relative overflow-y-auto scrollbar grid place-items-center children:w-full">
         <slot />
       </div>
-      <div class="px-5cqw">
+      <div class="px-5cqw pb-7cqh pt-1cqh relative">
         <slot name="footer" />
       </div>
     </div>

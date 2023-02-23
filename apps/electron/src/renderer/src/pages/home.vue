@@ -56,6 +56,15 @@ const goToParty = async () => {
     return
   }
 
+  if (settingsStore.microphones.length < 2) {
+    if (error.value) return
+    error.value = 'You need 2 microphones to play party games. Go to settings and add more microphones.'
+    setTimeout(() => {
+      error.value = undefined
+    }, 3000)
+    return
+  }
+
   const users = await fallback()
   if (users.length < 2) {
     if (error.value) return
@@ -165,7 +174,7 @@ const error = ref()
         </div>
       </div>
     </template>
-    <div class="flex flex-col items-center justify-center px-5cqw py-5cqh">
+    <div class="flex flex-col items-center justify-center px-5cqw py-5cqh h-full">
       <div class="w-full h-3/7 flex items-center gap-2cqw">
         <div class="flex-grow flex">
           <div class="flex  bg-red-600 rounded-0.45cqw p-1cqw max-w-30cqw items-center gap-0.7cqw" :class="[!error ? 'opacity-0' : 'transition-opacity']">

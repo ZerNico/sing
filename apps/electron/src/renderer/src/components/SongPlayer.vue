@@ -181,7 +181,7 @@ defineExpose({
   <div>
     <div v-if="!props.song" class="h-full w-full" />
     <video
-      v-if="props.song?.urls.video && !videoError"
+      v-else-if="props.song?.urls.video && !videoError"
       ref="videoEl"
       :src="props.song?.urls.video"
       class="w-full h-full object-cover"

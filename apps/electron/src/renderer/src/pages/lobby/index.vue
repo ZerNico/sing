@@ -46,8 +46,10 @@ const onNavigate = (event: MenuNavigationEvent) => {
     }
   } else if (event.action === 'down') {
     increment()
+    scrollIntoView(position.value)
   } else if (event.action === 'up') {
     decrement()
+    scrollIntoView(position.value)
   }
 }
 
@@ -63,6 +65,19 @@ const confirm = useSoundEffect('confirm')
 onBeforeUnmount(() => {
   confirm.play()
 })
+
+const buttonRefs = ref<any[]>([])
+const setRefs = (ref: any, index) => {
+  buttonRefs.value[index] = ref
+}
+
+const scrollIntoView = (index: number) => {
+  const el = buttonRefs.value[index]
+  if (!el) return
+  setTimeout(() => {
+    unrefElement<HTMLDivElement>(el)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, 5)
+}
 </script>
 
 <template>
@@ -70,17 +85,20 @@ onBeforeUnmount(() => {
     <template #header>
       <TitleBar title="Lobby" @back="back" />
     </template>
-    <div class="flex flex-col justify-center">
+
+    <div>
       <WideButton
-        v-for="(user, i) in users"
+        v-for="user, index in users"
         :key="user.username"
+        :ref="(el) => setRefs(el, index)"
         :label="user.username"
         :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
-        :active="position === i"
-        @mouseenter="() => (position = i)"
+        :active="position === index"
+        @mouseenter="() => (position = index)"
         @click="() => toDetails(user)"
       />
     </div>
+
     <template #footer>
       <KeyHints :hints="['back', 'navigate', 'confirm']" />
     </template>

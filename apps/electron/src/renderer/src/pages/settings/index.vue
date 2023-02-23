@@ -43,7 +43,7 @@ onBeforeUnmount(() => {
     <template #header>
       <TitleBar title="Settings" @back="back" />
     </template>
-    <div class="flex flex-col justify-center">
+    <div>
       <WideButton
         v-for="(button, i) in buttons"
         :key="button.label"

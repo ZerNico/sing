@@ -46,7 +46,7 @@ onBeforeUnmount(() => {
     <template #header>
       <TitleBar title="Settings" :description="path" @back="back" />
     </template>
-    <div class="flex flex-col justify-center">
+    <div>
       <WideButton
         label="Delete"
         :gradient="{ start: '#36D1DC', end: '#5B86E5' }"

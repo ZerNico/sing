@@ -83,7 +83,7 @@ const searchedSongs = computed(() => {
   }
 
   nextTick(() => {
-    emit('selectSong', songs.value.at(position.value)?.song)
+    emit('selectSong', songs.value.at(position.value % songs.value.length)?.song)
   })
 
   if (props.searchText.length === 0) {
