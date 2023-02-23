@@ -32,42 +32,35 @@ const isOAuthed = middleware(async ({ ctx, next }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
 
-  try {
-    // Check if token is valid and get user info
-    const response = await ofetch<UserInfoResponse>(`${env.ZITADEL_URL}/oidc/v1/userinfo`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }).catch((e) => {
-      throw new TRPCError({ code: 'UNAUTHORIZED', cause: e })
-    })
+  // Check if token is valid and get user info
+  const response = await ofetch<UserInfoResponse>(`${env.ZITADEL_URL}/oidc/v1/userinfo`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).catch((e) => {
+    throw new TRPCError({ code: 'UNAUTHORIZED', cause: e })
+  })
 
-    // remove org domain from username
-    const orgDomain = response['urn:zitadel:iam:org:domain:primary']
-    const username = response.preferred_username.replace(`@${orgDomain}`, '')
+  // remove org domain from username
+  const orgDomain = response['urn:zitadel:iam:org:domain:primary']
+  const username = response.preferred_username.replace(`@${orgDomain}`, '')
 
-    // validate user info
-    const parsedUser = userSchema.parse({
-      id: response.sub,
-      username,
-      picture: response.picture,
-      orgDomain,
-    })
+  // validate user info
+  const parsedUser = userSchema.parse({
+    id: response.sub,
+    username,
+    picture: response.picture,
+    orgDomain,
+  })
 
-    // create or update user
-    const user = await ctx.prisma.user.upsert({
-      where: { id: parsedUser.id },
-      update: { ...parsedUser },
-      create: { ...parsedUser },
-    })
-    return next({ ctx: { ...ctx, user } })
-  } catch (e) {
-    if (e instanceof TRPCError) {
-      throw e
-    }
+  // create or update user
+  const user = await ctx.prisma.user.upsert({
+    where: { id: parsedUser.id },
+    update: { ...parsedUser },
+    create: { ...parsedUser },
+  })
 
-    throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', cause: e })
-  }
+  return next({ ctx: { ...ctx, user } })
 })
 
 export const oAuthedProcedure = publicProcedure.use(isOAuthed)

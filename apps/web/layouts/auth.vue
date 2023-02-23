@@ -15,8 +15,8 @@ const leave = useMutation({
   retry: 2,
   retryDelay: 0,
   onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['queryJoined'] })
-    router.push('/')
+    queryClient.invalidateQueries({ queryKey: ['queryJoined', 'queryUsers'] })
+    router.push('/join')
   },
   onError: () => {
     notify({
@@ -35,7 +35,7 @@ const leave = useMutation({
         <div>
           <HeadlessMenuButton class="flex rounded-full bg-gray-800 text-sm hover:(ring-2 ring-offset-2 ring-offset-gray-800 ring-blue-500)">
             <span class="sr-only">Open user menu</span>
-            <Avatar :first-name="user?.firstName" :last-name="user?.lastName" :username="user?.username" :src="user?.image" alt="User Avatar" />
+            <Avatar :username="user?.username" :src="user?.image" alt="User Avatar" />
           </HeadlessMenuButton>
         </div>
         <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
@@ -44,7 +44,7 @@ const leave = useMutation({
               <a :href="runtimeConfig.public.zitadelIssuer" target="_blank" class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']">Edit profile</a>
             </HeadlessMenuItem>
             <HeadlessMenuItem v-slot="{ active }" role="button">
-              <a class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']" @click="() => leave.mutate()">Leave session</a>
+              <a class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']" @click="() => leave.mutate()">Leave lobby</a>
             </HeadlessMenuItem>
             <HeadlessMenuItem v-slot="{ active }" role="button">
               <a class="block px-4 py-2 text-sm text-gray-700" :class="[active ? 'bg-gray-100' : '']" @click="() => logOut()">Sign out</a>
@@ -53,6 +53,8 @@ const leave = useMutation({
         </transition>
       </HeadlessMenu>
     </NavBar>
-    <slot />
+    <main class="p-5">
+      <slot />
+    </main>
   </div>
 </template>

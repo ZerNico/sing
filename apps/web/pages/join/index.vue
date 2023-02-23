@@ -11,9 +11,10 @@ const queryClient = useQueryClient()
 const { notify } = useNotification()
 
 const mutateJoin = (code: string) => client.lobby.join.mutate({ code })
+const proxy = useAuthProxyFn(mutateJoin)
 
 const join = useMutation({
-  mutationFn: mutateJoin,
+  mutationFn: proxy,
   retry: 2,
   retryDelay: 0,
   onSuccess: () => {
@@ -48,7 +49,7 @@ const onSubmit = (e: Event) => {
 
 <template>
   <div class="flex items-center justify-center p-5">
-    <form class="py-6 px-8 flex flex-col gap-10 bg-black/20 text-white bg-gray-700 rounded-lg shadow min-w-1/4" @submit="onSubmit">
+    <form class="py-6 px-8 flex flex-col gap-10 text-white bg-gray-800 border border-gray-700 rounded-lg min-w-1/4" @submit="onSubmit">
       <p class="font-medium text-xl">
         Enter your lobby code
       </p>

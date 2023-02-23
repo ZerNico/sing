@@ -13,9 +13,10 @@ const router = useRouter()
 const { notify } = useNotification()
 
 const mutateJoin = (code: string) => client.lobby.join.mutate({ code })
+const proxy = useAuthProxyFn(mutateJoin)
 
 const join = useMutation({
-  mutationFn: mutateJoin,
+  mutationFn: proxy,
   retry: 2,
   retryDelay: 0,
   onSuccess: () => {

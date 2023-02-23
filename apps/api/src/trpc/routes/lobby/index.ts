@@ -78,23 +78,14 @@ export const lobbyRouter = router({
       }
     }),
   leave: oAuthedProcedure.mutation(async ({ ctx }) => {
-    try {
-      await ctx.prisma.user.update({
-        where: { id: ctx.user.id },
-        data: {
-          lobby: {
-            disconnect: true,
-          },
+    await ctx.prisma.user.update({
+      where: { id: ctx.user.id },
+      data: {
+        lobby: {
+          disconnect: true,
         },
-      })
-      return
-    } catch (e) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to leave lobby',
-        cause: e,
-      })
-    }
+      },
+    })
   }),
   joined: oAuthedProcedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findUnique({
@@ -107,47 +98,46 @@ export const lobbyRouter = router({
     return { lobby: user?.lobby }
   }),
   status: authedProcedure.query(async ({ ctx }) => {
-    try {
-      const lobby = await ctx.prisma.lobby.findUnique({
-        where: { id: ctx.user.sub },
-        include: {
-          users: true,
+    const lobby = await ctx.prisma.lobby.findUnique({
+      where: { id: ctx.user.sub },
+      include: {
+        users: true,
+      },
+    })
+
+    if (!lobby) throw new TRPCError({ code: 'NOT_FOUND', message: 'Lobby not found' })
+
+    return { lobby }
+  }),
+  users: oAuthedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: ctx.user.id },
+      include: {
+        lobby: {
+          include: {
+            users: true,
+          },
         },
-      })
+      },
+    })
 
-      if (!lobby) throw new TRPCError({ code: 'NOT_FOUND', message: 'Lobby not found' })
+    if (!user?.lobby) throw new TRPCError({ code: 'NOT_FOUND', message: 'Lobby not found' })
 
-      return { lobby }
-    } catch (e) {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to get lobby status',
-        cause: e,
-      })
-    }
+    return { users: user.lobby.users }
   }),
   kick: authedProcedure
     .input(z.object({ userId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      try {
-        await ctx.prisma.lobby.update({
-          where: { id: ctx.user.sub },
-          data: {
-            users: {
-              disconnect: {
-                id: input.userId,
-              },
+      await ctx.prisma.lobby.update({
+        where: { id: ctx.user.sub },
+        data: {
+          users: {
+            disconnect: {
+              id: input.userId,
             },
           },
-        })
-        return
-      } catch (e) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to kick user from lobby',
-          cause: e,
-        })
-      }
+        },
+      })
     }),
   delete: authedProcedure.mutation(async ({ ctx }) => {
     await ctx.prisma.lobby.delete({

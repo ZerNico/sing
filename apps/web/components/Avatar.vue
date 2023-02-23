@@ -2,8 +2,6 @@
 const props = defineProps<{
   src?: string
   alt?: string
-  firstName?: string
-  lastName?: string
   username?: string
 }>()
 
@@ -19,11 +17,8 @@ watch(() => props.src, (src) => {
 }, { immediate: true })
 
 const initials = computed(() => {
-  if (props.firstName && props.lastName) {
-    return `${props.firstName[0]}${props.lastName[0]}`
-  }
   if (props.username) {
-    return props.username[0]
+    return props.username[0].toUpperCase()
   }
   return '?'
 })
