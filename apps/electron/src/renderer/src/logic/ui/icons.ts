@@ -31,6 +31,7 @@ import XboxX from '@renderer/assets/icons/keys/xbox-x.svg?component'
 import Duet from '@renderer/assets/icons/duet.svg?component'
 import Key1 from '@renderer/assets/icons/keys/key-1.svg?component'
 import Key2 from '@renderer/assets/icons/keys/key-2.svg?component'
+import Info from '@renderer/assets/icons/info.svg?component'
 
 export {
   Spinner,
@@ -66,4 +67,5 @@ export {
   Duet,
   Key1,
   Key2,
+  Info,
 }
