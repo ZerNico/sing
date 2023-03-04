@@ -3,8 +3,12 @@
 
   "pipeline": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "dependsOn": ["^build", "db:generate"],
+      "outputs": ["dist/**", ".output/**"]
+    },
+    "release": {
+      "dependsOn": ["^build", "db:generate"],
+      "outputs": ["dist/**", ".output/**"]
     },
     "lint": {
       "outputs": []

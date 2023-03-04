@@ -24,7 +24,7 @@ export const useSettingsStore = defineStore('settings', {
       master: 50,
       game: 100,
       preview: 50,
-      menu: 100,
+      menu: 50,
     },
     microphones: [],
   }),

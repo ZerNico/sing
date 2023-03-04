@@ -86,7 +86,7 @@ watch(users, (newUsers) => {
   }
 })
 
-const { position, increment, decrement } = useLoop(buttons.value.length - 1, { initial: 2 })
+const { position, increment, decrement } = useLoop(buttons.value.length - 1, { initial: micCount.value })
 
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {

@@ -11,8 +11,8 @@ const createLobby = () => client.lobby.create.mutate()
 
 const { isLoading, isError, isSuccess, mutate } = useMutation({
   mutationFn: createLobby,
-  retry: 4,
-  retryDelay: 1000,
+  retry: 3,
+  retryDelay: 0,
   onSuccess: (data) => {
     lobbyStore.jwt = data.jwt
     lobbyStore.lobby = data.lobby

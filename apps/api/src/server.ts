@@ -26,7 +26,7 @@ server.register(fastifyTRPCPlugin, {
   trpcOptions: { router: appRouter, createContext },
 })
 
-server.listen({ port: env.PORT }, (err) => {
+server.listen({ host: '0.0.0.0', port: env.PORT }, (err) => {
   if (err) {
     console.error(err)
     process.exit(1)
