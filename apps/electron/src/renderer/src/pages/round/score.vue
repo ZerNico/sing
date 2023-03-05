@@ -133,7 +133,7 @@ mutate()
       />
       <ScoreCard
         v-if="roundStore.player2 && song && settingsStore.microphones.at(1) && song?.voices.at(song.isDuet() ? 1 : 0)"
-        :score="roundStore.score1"
+        :score="roundStore.score2"
         :total-score="score2"
         :song="song"
         :player="roundStore.player2"
