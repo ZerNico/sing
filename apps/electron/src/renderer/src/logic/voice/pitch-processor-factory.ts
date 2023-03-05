@@ -34,7 +34,7 @@ export class PitchProcessorFactory {
       // add gain
       const gainNode = this.ctx.createGain()
       gainNode.gain.value = microphone.gain
-      splitterNode.connect(gainNode, microphone.channel, 0)
+      splitterNode.connect(gainNode, microphone.channel - 1, 0)
 
       const pitchWorkletNode = await this.createPitchWorkletNode(microphone)
       gainNode.connect(pitchWorkletNode)
