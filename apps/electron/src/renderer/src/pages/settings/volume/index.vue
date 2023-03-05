@@ -6,7 +6,7 @@ const router = useRouter()
 const settingsStore = useSettingsStore()
 
 const back = () => {
-  router.back()
+  router.push({ name: '/settings/' })
 }
 
 const sliders = [
@@ -38,7 +38,7 @@ const { position, increment, decrement } = useLoop(sliders.length - 1)
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'left' || event.action === 'right') {
     const button = sliders.at(position.value)
     if (button) {

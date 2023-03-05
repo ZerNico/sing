@@ -23,7 +23,7 @@ const songPlayerEl = ref<InstanceType<typeof SongPlayer>>()
 const searchEl = ref<InstanceType<typeof Search>>()
 
 const back = () => {
-  router.push('/home')
+  router.push({ name: '/home' })
 }
 
 const highscores = ref<ClientRouterOutput['highscore']['get']['highscores']>()
@@ -54,7 +54,7 @@ const onSongSelect = (song?: LocalSong) => {
 const startRound = () => {
   roundStore.song = currentSong.value
   roundStore.type = 'sing'
-  router.push('/round/selection')
+  router.push({ name: '/round/selection' })
 }
 
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))

@@ -22,7 +22,7 @@ const back = () => {
 }
 
 const exit = () => {
-  router.push('/round/score')
+  router.push({ name: '/round/score' })
 }
 
 const songPlayerEl = ref<InstanceType<typeof SongPlayer>>()

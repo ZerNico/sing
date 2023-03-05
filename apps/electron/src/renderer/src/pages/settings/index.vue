@@ -4,13 +4,13 @@ import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigatio
 const router = useRouter()
 
 const back = () => {
-  router.back()
+  router.push({ name: '/home' })
 }
 
 const buttons = [
-  { label: 'Volume', action: () => router.push('/settings/volume') },
-  { label: 'Microphones', action: () => router.push('/settings/microphones') },
-  { label: 'Songs', action: () => router.push('/settings/songs') },
+  { label: 'Volume', action: () => router.push({ name: '/settings/volume/' }) },
+  { label: 'Microphones', action: () => router.push({ name: '/settings/microphones/' }) },
+  { label: 'Songs', action: () => router.push({ name: '/settings/songs/' }) },
 ]
 
 const { position, increment, decrement } = useLoop(buttons.length - 1)
@@ -18,7 +18,7 @@ const { position, increment, decrement } = useLoop(buttons.length - 1)
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     buttons.at(position.value)?.action()
   } else if (event.action === 'down') {

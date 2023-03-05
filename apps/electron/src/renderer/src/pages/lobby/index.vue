@@ -6,7 +6,7 @@ const router = useRouter()
 const { client } = useTRPC()
 
 const back = () => {
-  router.push('/home')
+  router.push({ name: '/home' })
 }
 
 const queryUsers = async () => {
@@ -38,7 +38,7 @@ const { position, increment, decrement } = useLoop(maxPosition)
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     const user = users.value.at(position.value)
     if (user) {
@@ -54,7 +54,7 @@ const onNavigate = (event: MenuNavigationEvent) => {
 }
 
 const toDetails = (user: User) => {
-  router.push(`/lobby/${user.id}`)
+  router.push({ name: '/lobby/[id]', params: { id: user.id } })
 }
 
 const select = useSoundEffect('select')

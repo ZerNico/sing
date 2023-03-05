@@ -7,7 +7,7 @@ const songsStore = useSongsStore()
 
 const back = () => {
   if (loading.value) return
-  router.back()
+  router.push({ name: '/settings/' })
 }
 
 const maxPosition = computed(() => {
@@ -24,7 +24,7 @@ useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     if (position.value === maxPosition.value) {
       pickFolder()
@@ -53,7 +53,7 @@ const pickFolder = async () => {
 
 const toPath = (index: number) => {
   if (loading.value) return
-  router.push(`/settings/songs/${index}`)
+  router.push({ name: '/settings/songs/[id]', params: { id: index } })
 }
 
 const folderName = (path: string) => {

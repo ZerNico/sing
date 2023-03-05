@@ -9,7 +9,7 @@ const roundStore = useRoundStore()
 const { client } = useTRPC()
 
 const back = () => {
-  router.back()
+  router.push({ name: '/songs' })
 }
 
 const start = () => {
@@ -20,7 +20,7 @@ const start = () => {
   if (micCount.value >= 2) {
     roundStore.player2 = users.value.find(user => user.username === selectionPlayer2.value) ?? guest
   }
-  router.push('/round/sing')
+  router.push({ name: '/round/sing' })
 }
 
 const micCount = computed(() => {
@@ -91,7 +91,7 @@ const { position, increment, decrement } = useLoop(buttons.value.length - 1, { i
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     const button = buttons.value.at(position.value)
     if (button && button.type === 'button') {

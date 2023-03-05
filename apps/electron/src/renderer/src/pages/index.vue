@@ -16,7 +16,7 @@ const { isLoading, isError, isSuccess, mutate } = useMutation({
   onSuccess: (data) => {
     lobbyStore.jwt = data.jwt
     lobbyStore.lobby = data.lobby
-    router.push('/home')
+    router.push({ name: '/home' })
   },
 })
 mutate()
@@ -27,7 +27,7 @@ const buttons = [
     text: 'Offline',
     action: () => {
       lobbyStore.offline = true
-      router.push('/home')
+      router.push({ name: '/home' })
     },
   }]
 

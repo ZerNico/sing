@@ -2,15 +2,15 @@
 import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigation'
 
 const router = useRouter()
-const route = useRoute()
+const route = useRoute('/lobby/[id]')
 const { client } = useTRPC()
 
 const back = () => {
-  router.push('/lobby')
+  router.push({ name: '/lobby/' })
 }
 
 const kickUser = async () => {
-  const id = route.params.id as string
+  const id = route.params.id
   await client.lobby.kick.mutate({ userId: id })
 }
 
@@ -21,7 +21,7 @@ const { isLoading, mutate } = useMutation({
   retry: 4,
   retryDelay: 1000,
   onSuccess: () => {
-    router.push('/lobby')
+    back()
   },
 })
 
@@ -49,7 +49,7 @@ const username = computed(() => {
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     kick()
   }

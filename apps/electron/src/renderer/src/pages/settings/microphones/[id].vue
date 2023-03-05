@@ -6,15 +6,15 @@ import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigatio
 import type { Microphone } from '@renderer/stores/settings'
 
 const router = useRouter()
-const route = useRoute()
+const route = useRoute('/settings/microphones/[id]')
 const settingsStore = useSettingsStore()
 
 const back = () => {
-  router.back()
+  router.push({ name: '/settings/microphones/' })
 }
 
 const id = computed(() => {
-  return parseInt(route.params.id as string)
+  return parseInt(route.params.id)
 })
 
 const deleteMicrophone = () => {

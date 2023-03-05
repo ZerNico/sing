@@ -66,6 +66,7 @@
     "unplugin-auto-import": "^0.12.1",
     "unplugin-vue-components": "^0.22.12",
     "unplugin-vue-macros": "^1.4.2",
+    "unplugin-vue-router": "^0.5.4",
     "vite": "^4.0.4",
     "vite-plugin-pages": "^0.28.0",
     "vite-svg-loader": "^4.0.0",

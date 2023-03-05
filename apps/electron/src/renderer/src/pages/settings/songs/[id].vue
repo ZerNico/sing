@@ -3,14 +3,13 @@ import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigatio
 
 const router = useRouter()
 const songsStore = useSongsStore()
-const route = useRoute()
+const route = useRoute('/settings/songs/[id]')
 
 const back = () => {
-  router.back()
+  router.push({ name: '/settings/songs/' })
 }
 
 const id = computed(() => {
-  if (typeof route.params.id !== 'string') return
   return parseInt(route.params.id)
 })
 

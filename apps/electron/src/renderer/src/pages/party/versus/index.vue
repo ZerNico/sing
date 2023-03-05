@@ -80,7 +80,7 @@ const volume = computed(() => {
 
 const back = () => {
   confirm.play()
-  router.push('/party/versus/settings')
+  router.push({ name: '/party/versus/settings' })
 }
 
 const startRound = () => {
@@ -89,7 +89,7 @@ const startRound = () => {
   roundStore.song = song.value
   roundStore.player1 = matchup.value.player1
   roundStore.player2 = matchup.value.player2
-  router.push('/round/sing')
+  router.push({ name: '/round/sing' })
 }
 
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))

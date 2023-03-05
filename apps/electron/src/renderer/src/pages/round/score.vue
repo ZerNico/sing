@@ -44,10 +44,10 @@ const onNavigate = (event: MenuNavigationEvent) => {
 const next = () => {
   if (isLoading.value) return
   if (roundStore.type === 'sing') {
-    router.push('/songs')
+    router.push({ name: '/songs' })
   } else if (roundStore.type === 'versus') {
     addVersusScore()
-    router.push('/party/versus')
+    router.push({ name: '/party/versus/' })
   }
 }
 

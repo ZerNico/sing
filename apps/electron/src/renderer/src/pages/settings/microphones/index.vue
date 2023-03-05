@@ -5,7 +5,7 @@ const router = useRouter()
 const settingsStore = useSettingsStore()
 
 const back = () => {
-  router.back()
+  router.push({ name: '/settings/' })
 }
 
 const maxPosition = computed(() => {
@@ -22,7 +22,7 @@ useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     toPath(position.value)
   } else if (event.action === 'left') {
@@ -33,7 +33,7 @@ const onNavigate = (event: MenuNavigationEvent) => {
 }
 
 const toPath = (index: number) => {
-  router.push(`/settings/microphones/${index}`)
+  router.push({ name: '/settings/microphones/[id]', params: { id: index } })
 }
 
 const gradient = { start: '#36D1DC', end: '#5B86E5' }

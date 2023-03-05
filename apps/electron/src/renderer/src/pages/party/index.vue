@@ -4,17 +4,17 @@ import type { MenuNavigationEvent } from '@renderer/composables/useMenuNavigatio
 const router = useRouter()
 
 const back = () => {
-  router.push('/home')
+  router.push({ name: '/home' })
 }
 
 const toVersus = () => {
-  router.push('/party/versus/settings')
+  router.push({ name: '/party/versus/settings' })
 }
 
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     toVersus()
   }

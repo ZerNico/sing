@@ -7,7 +7,7 @@ const versusStore = useVersusStore()
 const { client } = useTRPC()
 
 const back = () => {
-  router.push('/party')
+  router.push({ name: '/party/' })
 }
 
 const start = async () => {
@@ -18,7 +18,7 @@ const start = async () => {
   versusStore.players.push(...players)
   versusStore.matchups.push(...matchups)
   versusStore.scores.push(...players.map(player => ({ player, score: 0, rounds: 0, wins: 0 })))
-  await router.push('/party/versus')
+  await router.push({ name: '/party/versus/' })
   versusStore.playing = true
 }
 
@@ -30,7 +30,7 @@ const restart = () => {
 }
 
 const resume = () => {
-  router.push('/party/versus')
+  router.push({ name: '/party/versus/' })
 }
 
 const buttons = computed(() => {
@@ -64,7 +64,7 @@ const { position, increment, decrement } = useLoop(maxPosition)
 useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
-    router.back()
+    back()
   } else if (event.action === 'confirm') {
     const button = buttons.value.at(position.value)
     if (button?.type === 'button') button.action()

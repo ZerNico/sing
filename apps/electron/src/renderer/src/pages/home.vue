@@ -41,7 +41,7 @@ const checkNeededSettings = () => {
 
 const goToSongs = () => {
   if (!checkNeededSettings()) return
-  router.push('/songs')
+  router.push({ name: '/songs' })
 }
 
 const goToParty = async () => {
@@ -75,7 +75,7 @@ const goToParty = async () => {
     return
   }
 
-  router.push('/party')
+  router.push({ name: '/party/' })
 }
 
 const cards: {
@@ -107,7 +107,7 @@ const cards: {
     icon: 'Group',
     title: 'Lobby',
     gradient: { start: '#c94b4b', end: '#ffc0cb' },
-    action: () => router.push('/lobby'),
+    action: () => router.push({ name: '/lobby/' }),
     animation: 'pulse',
     description: 'Manage the party you are in and invite your friends.',
   },
@@ -115,7 +115,7 @@ const cards: {
     icon: 'Gear',
     title: 'Settings',
     gradient: { start: '#36D1DC', end: '#5B86E5' },
-    action: () => router.push('/settings'),
+    action: () => router.push({ name: '/settings/' }),
     animation: 'spin',
     description: 'Change your settings or add your songs and microphones.',
   },
