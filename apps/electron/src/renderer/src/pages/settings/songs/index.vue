@@ -57,7 +57,8 @@ const toPath = (index: number) => {
 }
 
 const folderName = (path: string) => {
-  const name = path.split('\\').pop()
+  const unixPath = path.replace(/\\/g, '/')
+  const name = unixPath.split('/').pop()
   return name || 'Error'
 }
 
