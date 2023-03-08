@@ -29,7 +29,7 @@ export default defineConfig({
       VueRouter({
         routesFolder: 'src/renderer/src/pages',
         dts: 'src/renderer/src/typed-router.d.ts',
-        importMode: 'sync',
+        importMode: 'async',
       }),
 
       VueMacros({

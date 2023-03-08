@@ -164,7 +164,7 @@ const confirm = useSoundEffect('confirm')
       <div class="w-65cqw">
         <div v-if="matchup" class="flex flex-col gap-1cqw">
           <div class="flex flex-col items-center">
-            <div class="text-1.3cqw font-semibold max-w-55cqw truncate leading-none">
+            <div class="text-1.3cqw font-semibold max-w-55cqw truncate">
               {{ song.meta.artist }}
             </div>
             <div

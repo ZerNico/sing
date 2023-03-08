@@ -85,21 +85,27 @@ onBeforeUnmount(() => {
 const uploadHighscore = async () => {
   if (!song.value) return
 
+  const requests: Promise<unknown>[] = []
+
   if (roundStore.player1 && roundStore.player1.id !== 'guest' && score1.value > 0) {
-    await client.highscore.create.mutate({
+    requests.push(client.highscore.create.mutate({
       userId: roundStore.player1.id,
       score: score1.value,
       hash: song.value.meta.hash,
-    })
+    }))
   }
 
   if (roundStore.player2 && roundStore.player2.id !== 'guest' && score2.value > 0) {
-    await client.highscore.create.mutate({
+    requests.push(client.highscore.create.mutate({
       userId: roundStore.player2.id,
       score: score2.value,
       hash: song.value.meta.hash,
-    })
+    }))
   }
+  if (requests.length > 0) {
+    await Promise.all(requests)
+  }
+  highscores.refetch()
 }
 
 const fallback = useOfflineFallbackFn(uploadHighscore, async () => {})
@@ -109,8 +115,25 @@ const { isLoading, mutate } = useMutation({
   retry: 1,
   retryDelay: 0,
 })
-
 mutate()
+
+const queryHighscores = async () => {
+  if (!song.value) return []
+  const scores = await client.highscore.get.query({ hash: song.value.meta.hash })
+  return scores.highscores
+}
+
+const highscoreFallback = useOfflineFallbackFn(queryHighscores, async () => [])
+
+const highscores = useQuery({
+  queryKey: ['queryHighscores'],
+  queryFn: highscoreFallback,
+  retry: 2,
+  retryDelay: 0,
+  refetchOnWindowFocus: false,
+  cacheTime: 10000, // 10 seconds
+  refetchInterval: 10000, // 10 seconds
+})
 </script>
 
 <template>
@@ -121,26 +144,32 @@ mutate()
     <template #header>
       <TitleBar title="Score" class="text-white!" :back-arrow="false" />
     </template>
-    <div class="flex items-center justify-center gap-3cqw">
-      <ScoreCard
-        v-if="roundStore.player1 && song && settingsStore.microphones.at(0) && song?.voices.at(0)"
-        :score="roundStore.score1"
-        :total-score="score1"
-        :song="song"
-        :player="roundStore.player1"
-        :microphone="settingsStore.microphones.at(0)!"
-        :voice="song?.voices.at(0)!"
-      />
-      <ScoreCard
-        v-if="roundStore.player2 && song && settingsStore.microphones.at(1) && song?.voices.at(song.isDuet() ? 1 : 0)"
-        :score="roundStore.score2"
-        :total-score="score2"
-        :song="song"
-        :player="roundStore.player2"
-        :microphone="settingsStore.microphones.at(1)!"
-        :voice="song?.voices.at(song.isDuet() ? 1 : 0)!"
-      />
+    <div class="flex justify-center items-center">
+      <div class="flex-grow max-w-30cqw px-4cqw">
+        <Highscore :highscores="highscores.data.value" :max="10" />
+      </div>
+      <div class="flex items-center justify-center gap-3cqw ">
+        <ScoreCard
+          v-if="roundStore.player1 && song && settingsStore.microphones.at(0) && song?.voices.at(0)"
+          :score="roundStore.score1"
+          :total-score="score1"
+          :song="song"
+          :player="roundStore.player1"
+          :microphone="settingsStore.microphones.at(0)!"
+          :voice="song?.voices.at(0)!"
+        />
+        <ScoreCard
+          v-if="roundStore.player2 && song && settingsStore.microphones.at(1) && song?.voices.at(song.isDuet() ? 1 : 0)"
+          :score="roundStore.score2"
+          :total-score="score2"
+          :song="song"
+          :player="roundStore.player2"
+          :microphone="settingsStore.microphones.at(1)!"
+          :voice="song?.voices.at(song.isDuet() ? 1 : 0)!"
+        />
+      </div>
     </div>
+
     <template #footer>
       <div class="flex justify-between">
         <KeyHints :hints="['confirm']" class="text-white!" />

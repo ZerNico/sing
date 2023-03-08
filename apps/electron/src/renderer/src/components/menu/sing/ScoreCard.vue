@@ -87,8 +87,8 @@ const text = computed(() => {
           {{ player.username }}
         </div>
       </div>
-      <div class="w-full rounded-0.45cqw overflow-hidden text-center">
-        <div class="bg-white/30 ">
+      <div class="w-full rounded-0.45cqw overflow-hidden text-center min-h-0">
+        <div class="bg-white/30">
           <span class="transition-opacity duration-500 leading-loose text-1.2cqw font-semibold" :class="{ 'opacity-0': !textVisible }">
             {{ text }}
           </span>

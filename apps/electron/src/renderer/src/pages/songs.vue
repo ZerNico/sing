@@ -12,6 +12,7 @@ import type { ClientRouterOutput } from '@renderer/composables/useTRPC'
 const settingsStore = useSettingsStore()
 const songsStore = useSongsStore()
 const roundStore = useRoundStore()
+const lobbyStore = useLobbyStore()
 const router = useRouter()
 const { client } = useTRPC()
 
@@ -42,7 +43,7 @@ const onSongSelect = (song?: LocalSong) => {
   })
   // check if song is the same after 1 second
   setTimeout(async () => {
-    if (currentSong.value !== song) return
+    if (currentSong.value !== song || lobbyStore.offline) return
     const scores = await client.highscore.get.query({ hash: song.meta.hash })
     // check if song is the same after async call
     if (currentSong.value !== song) return
