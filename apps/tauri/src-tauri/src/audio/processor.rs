@@ -1,14 +1,16 @@
-use std::sync::{Arc, Mutex};
+use std::{sync::{Arc, Mutex, RwLock}, os::windows::process, time::Instant};
 
 use ringbuf::{HeapRb, Rb};
 
-use super::{dywapitchtrack::DywaPitchTracker, utils::above_noise_supression_threshold};
+use super::{dywapitchtrack::DywaPitchTracker, utils::above_noise_supression_threshold, recorder::MicrophoneOptions};
 
 #[derive(Clone)]
 pub struct Processor {
     rb: Arc<Mutex<HeapRb<f32>>>,
     pitchtrack: Arc<Mutex<DywaPitchTracker>>,
-    samples_per_beat: Arc<Mutex<i32>>,
+    samples_per_beat: Arc<RwLock<i32>>,
+    gain: Arc<RwLock<f32>>,
+    threshold: Arc<RwLock<f32>>
 }
 
 impl Processor {
@@ -19,7 +21,9 @@ impl Processor {
         Self {
             rb: Arc::new(Mutex::new(buffer)),
             pitchtrack: Arc::new(Mutex::new(DywaPitchTracker::new())),
-            samples_per_beat: Arc::new(Mutex::new(0)),
+            samples_per_beat: Arc::new(RwLock::new(0)),
+            gain: Arc::new(RwLock::new(1.0)),
+            threshold: Arc::new(RwLock::new(2.0))
         }
     }
 
@@ -29,7 +33,12 @@ impl Processor {
     }
 
     pub fn set_samples_per_beat(&mut self, samples_per_beat: i32) {
-        *self.samples_per_beat.lock().unwrap() = samples_per_beat;
+        *self.samples_per_beat.write().unwrap() = samples_per_beat;
+    }
+
+    pub fn set_options(&mut self, options: &MicrophoneOptions) {
+        *self.gain.write().unwrap() = options.gain;
+        *self.threshold.write().unwrap() = options.threshold;
     }
 
     pub fn get_pitch(&self) -> f32 {
@@ -39,9 +48,11 @@ impl Processor {
         let combined_slice_len = combined_slice.len() as i32;
 
         let mut pitchtrack = self.pitchtrack.lock().unwrap();
-        let samples_per_beat = self.samples_per_beat.lock().unwrap();
+        let samples_per_beat = self.samples_per_beat.read().unwrap();
         let start_sample = combined_slice_len - *samples_per_beat;
         let sample_count = *samples_per_beat;
+
+        let threshold = *self.threshold.read().unwrap();
 
         let mut pitch = -1.0;
 
@@ -49,8 +60,15 @@ impl Processor {
             &combined_slice,
             start_sample as usize,
             sample_count as usize,
-            1.0,
+            threshold,
         );
+
+        // create copy of combined slice and apply gain^
+        let mut processed_slice = combined_slice.clone();
+        let gain = *self.gain.read().unwrap();
+        for x in &mut processed_slice {
+            *x *= gain;
+        }
 
         if is_above_threshold {
             pitch = pitchtrack.compute_pitch(

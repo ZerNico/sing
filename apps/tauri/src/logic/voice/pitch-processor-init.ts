@@ -15,6 +15,8 @@ export const initPitchProcessors = async (song: LocalSong, microphones: Micropho
   const rustMicrophones: RustMicrophones[] = microphones.map(microphone => ({
     name: microphone.name,
     channel: microphone.channel - 1,
+    gain: microphone.gain,
+    threshold: microphone.threshold,
   }))
 
   await invoke('start_recording', { samplesPerBeat, microphones: rustMicrophones })

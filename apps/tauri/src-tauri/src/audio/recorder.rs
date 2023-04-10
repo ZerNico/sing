@@ -17,9 +17,11 @@ pub struct Recorder {
 }
 
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
-pub struct Microphone {
+pub struct MicrophoneOptions {
     pub name: String,
     pub channel: usize,
+    pub gain: f32,
+    pub threshold: f32,
 }
 
 impl Recorder {
@@ -33,7 +35,7 @@ impl Recorder {
         }
     }
 
-    pub fn start_recording(&self, microphones: Vec<Microphone>, samples_per_beat: i32) {
+    pub fn start_recording(&self, microphones: Vec<MicrophoneOptions>, samples_per_beat: i32) {
         let mut stream_thread_sender = self.stream_thread_sender.lock().unwrap();
         if stream_thread_sender.is_some() {
             return;
@@ -49,7 +51,7 @@ impl Recorder {
         let max_mics = microphones
             .into_iter()
             .take(MICROPHONE_COUNT)
-            .collect::<Vec<Microphone>>();
+            .collect::<Vec<MicrophoneOptions>>();
 
         let processors = self.processors.clone();
 
@@ -77,9 +79,10 @@ impl Recorder {
                 if let Ok(config) = device.default_input_config() {
                     let channels = config.channels() as usize;
 
-                    for (index, _) in mics_for_device.iter() {
+                    for (index, mic) in mics_for_device.iter() {
                         processors[*index].set_sample_rate(config.sample_rate().0 as i32);
                         processors[*index].set_samples_per_beat(samples_per_beat);
+                        processors[*index].set_options(mic);
                     }
 
                     let input_data_fn = move |data: &[f32], _: &cpal::InputCallbackInfo| {

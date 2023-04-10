@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use audio::recorder::{Recorder, Microphone};
+use audio::recorder::{Recorder, MicrophoneOptions};
 use cpal::traits::{HostTrait, DeviceTrait};  
 mod audio;
 mod protocol;
@@ -11,7 +11,7 @@ struct AppState {
 }
 
 #[tauri::command]
-fn start_recording(state: tauri::State<'_, AppState>, microphones: Vec<Microphone>, samples_per_beat: i32) -> Result<(), ()> {
+fn start_recording(state: tauri::State<'_, AppState>, microphones: Vec<MicrophoneOptions>, samples_per_beat: i32) -> Result<(), ()> {
     println!("Starting recording...");
     state.recorder.start_recording(microphones, samples_per_beat);
     Ok(())
