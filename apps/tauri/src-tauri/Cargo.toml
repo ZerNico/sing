@@ -1,0 +1,33 @@
+[package]
+name = "sing"
+version = "0.0.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.2", features = [] }
+
+[dependencies]
+tauri = { version = "1.2", features = ["dialog-open", "fs-read-dir", "fs-read-file", "shell-open"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+cpal = "0.14.0"
+ringbuf = "0.3.3"
+desync = "0.8.2"
+tokio = { version = "1", features = [ "rt", "rt-multi-thread", "sync", "fs", "io-util" ] }
+tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
+tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
+percent-encoding = "2.2.0"
+url = "2.3.1"
+rand = "0.8.5"
+
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]

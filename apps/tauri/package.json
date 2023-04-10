@@ -1,0 +1,45 @@
+{
+  "name": "tauri",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "dev:vite": "vite",
+    "build:vite": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tanstack/vue-query": "^4.22.4",
+    "@tauri-apps/api": "^1.2.0",
+    "@trpc/client": "^10.9.0",
+    "@trpc/server": "^10.9.0",
+    "@vue-macros/volar": "^0.8.1",
+    "@vueuse/core": "^9.11.1",
+    "@vueuse/integrations": "^9.11.1",
+    "@vueuse/sound": "^2.0.1",
+    "api": "workspace:*",
+    "ofetch": "^1.0.0",
+    "pinia": "^2.0.29",
+    "pinia-plugin-persistedstate": "^3.0.2",
+    "unocss": "^0.48.4",
+    "unplugin-auto-import": "^0.12.1",
+    "unplugin-vue-components": "^0.22.12",
+    "unplugin-vue-macros": "^1.4.2",
+    "unplugin-vue-router": "^0.5.4",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.2.3",
+    "@types/node": "^18.7.10",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "eslint": "^8.38.0",
+    "eslint-config-custom": "workspace:*",
+    "typescript": "^4.6.4",
+    "vite": "^4.0.0",
+    "vue-tsc": "^1.0.11"
+  }
+}
