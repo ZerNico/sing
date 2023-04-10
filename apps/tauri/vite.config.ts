@@ -17,6 +17,10 @@ export default defineConfig(async () => ({
     },
   },
 
+  optimizeDeps: {
+    exclude: ['vue-demi'],
+  },
+
   plugins: [
     VueRouter({
       routesFolder: 'src/pages',

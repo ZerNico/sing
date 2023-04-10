@@ -19,6 +19,7 @@ pub fn stream_protocol_handler(
         // the `strip_prefix` only returns None when a request is made to `https://tauri.$P` on Windows
         // where `$P` is not `localhost/*`
         .unwrap_or("");
+
     let path = percent_encoding::percent_decode(path.as_bytes())
         .decode_utf8_lossy()
         .to_string();
@@ -40,12 +41,15 @@ pub fn stream_protocol_handler(
         let mime_type = {
             let mut magic_bytes = [0; 8192];
             let old_pos = file.stream_position().await?;
-            file.read_exact(&mut magic_bytes).await?;
+            let file_size = file.metadata().await?.len();
+            let bytes_to_read = std::cmp::min(magic_bytes.len(), file_size as usize) as usize;
+            file.read_exact(&mut magic_bytes[..bytes_to_read]).await?;
             file.seek(SeekFrom::Start(old_pos)).await?;
             MimeType::parse(&magic_bytes, &path)
         };
 
         resp = resp.header(CONTENT_TYPE, &mime_type);
+        
 
         // handle 206 (partial range) http requests
         let response = if let Some(range_header) = request
@@ -167,7 +171,6 @@ pub fn stream_protocol_handler(
             file.read_to_end(&mut buf).await?;
             resp.body(buf)
         };
-
         response
     })
 }
