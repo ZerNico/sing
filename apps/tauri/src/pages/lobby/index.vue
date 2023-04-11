@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 })
 
 const buttonRefs = ref<any[]>([])
-const setRefs = (ref: any, index) => {
+const setRefs = (ref: any, index: number) => {
   buttonRefs.value[index] = ref
 }
 

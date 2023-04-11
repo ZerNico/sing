@@ -9,7 +9,6 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Avatar: typeof import('./components/Avatar.vue')['default']
     Button: typeof import('./components/menu/Button.vue')['default']
-    Greet: typeof import('./components/Greet.vue')['default']
     Half: typeof import('./components/game/Half.vue')['default']
     Highscore: typeof import('./components/menu/songs/Highscore.vue')['default']
     HUD: typeof import('./components/game/HUD.vue')['default']

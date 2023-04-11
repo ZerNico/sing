@@ -1,8 +1,8 @@
 [package]
 name = "sing"
-version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
+version = "0.0.2"
+description = "Karaoke App"
+authors = ["Nico Franke"]
 license = ""
 repository = ""
 edition = "2021"

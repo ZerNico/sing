@@ -7,8 +7,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "sing",
-    "version": "0.0.0"
+    "productName": "Tune Perfect",
+    "version": "0.0.2"
   },
   "tauri": {
     "allowlist": {
