@@ -57,7 +57,7 @@ jobs:
         run: pnpm install
 
       - name: build dependencies
-        run: pnpm build --filter=tauri^...
+        run: pnpm build --filter=api
 
       - uses: tauri-apps/tauri-action@v0
         env:

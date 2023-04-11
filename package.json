@@ -12,8 +12,7 @@
     "lint": "turbo run lint",
     "test:e2e": "turbo run test:e2e",
     "start": "turbo run start",
-    "turbo:prune": "turbo prune",
-    "release": "turbo run release"
+    "turbo:prune": "turbo prune"
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",

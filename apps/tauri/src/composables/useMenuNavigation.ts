@@ -1,7 +1,7 @@
 import type { MaybeRef } from '@vueuse/core'
 
-import { keyMode } from '~/logic/ui/keys'
 import type { GamepadButtonEvent } from './useGamepad'
+import { keyMode } from '~/logic/ui/keys'
 
 export interface MenuNavigationEvent {
   repeat: boolean
@@ -115,7 +115,10 @@ export default function useMenuNavigation(
     if (['Escape', 'Backspace'].includes(event.key)) {
       callback('back')
     }
-    if (['Enter', ' '].includes(event.key)) {
+    if ([' '].includes(event.key)) {
+      callback('confirm')
+    }
+    if (['Enter'].includes(event.key) && !event.metaKey && !event.altKey) {
       callback('confirm')
     }
     if (event.key === 'PageUp') {

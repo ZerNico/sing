@@ -4,11 +4,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build", "db:generate"],
-      "outputs": ["dist/**", ".output/**"]
-    },
-    "release": {
-      "dependsOn": ["^build", "db:generate"],
-      "outputs": ["dist/**", ".output/**"]
+      "outputs": ["dist/**", ".output/**", "src-tauri/target"]
     },
     "lint": {
       "outputs": []

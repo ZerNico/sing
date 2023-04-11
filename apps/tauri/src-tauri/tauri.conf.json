@@ -26,6 +26,9 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "setFullscreen": true
       }
     },
     "bundle": {
@@ -41,7 +44,7 @@
       "targets": "all"
     },
     "security": {
-      "csp": "default-src 'self' stream: https://stream.localhost;"
+      "csp": "default-src 'self' stream: https://stream.localhost; connect-src *; img-src * data:;"
     },
     "updater": {
       "active": false
@@ -50,7 +53,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "sing",
+        "title": "Tune Perfect",
         "width": 800,
         "height": 600
       }
