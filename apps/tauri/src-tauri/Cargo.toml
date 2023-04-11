@@ -25,6 +25,7 @@ tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-wo
 percent-encoding = "2.2.0"
 url = "2.3.1"
 rand = "0.8.5"
+atomic_float = "0.1.0"
 
 
 [features]
