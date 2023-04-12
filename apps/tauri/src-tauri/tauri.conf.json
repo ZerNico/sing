@@ -41,10 +41,13 @@
         "icons/icon.ico"
       ],
       "identifier": "de.zernico.sing",
-      "targets": "all"
+      "targets": "all",
+      "macOS": {
+        "entitlements": "entitlements.mac.plist"
+      }
     },
     "security": {
-      "csp": "default-src 'self' stream: https://stream.localhost; connect-src *; img-src * data:;"
+      "csp": "default-src 'self' stream:; connect-src * stream:; img-src * data: stream:;"
     },
     "updater": {
       "active": false

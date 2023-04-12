@@ -12,6 +12,7 @@ const load = async () => {
   for (const path of songsStore.paths) {
     const entries = await readDir(path, { recursive: true })
     const root: FileEntry = { path, children: entries }
+
     const songs = await parseTree(root)
     songsStore.addSongs(songs)
   }
