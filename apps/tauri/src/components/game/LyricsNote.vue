@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { clamp } from '@vueuse/core'
 import type { Note } from '~/logic/song/note'
 import type { Microphone } from '~/stores/settings'
-import { clamp } from '@vueuse/core'
 
 const props = defineProps<{
   note: Note

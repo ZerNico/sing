@@ -49,8 +49,6 @@ const parseLocalSong = async (songFile: FileEntry, parentFolder: FileEntry) => {
   try {
     const assetUrl = convertFileSrc(songFile.path, 'stream')
 
-    console.log('assetUrl', assetUrl)
-
     const song: string = await ofetch(assetUrl, { parseResponse: txt => txt })
     const { data, fileNames, voices } = parseSongTxt(song)
 

@@ -31,7 +31,7 @@ const gapWidth = computed(() => {
 let firstBeat: number
 
 const gradientPercentage = computed(() => {
-  return Math.min(fillPercentage.value, 100) * 100
+  return Math.min(fillPercentage.value, 1) * 100
 })
 
 const update = (delayedBeat: number) => {

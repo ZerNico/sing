@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import SungPitchNote from './SungPitchNote.vue'
 import type { Note } from '~/logic/song/note'
 import type { Sentence } from '~/logic/song/sentence'
 import type { LocalSong } from '~/logic/song/song'
 import { millisecondInSongToBeatWithoutGap } from '~/logic/utils/bpm.utils'
 import type { Beat, PitchProcessor, ProcessedBeat } from '~/logic/voice/pitch-processor'
 import type { Microphone } from '~/stores/settings'
-import SungPitchNote from './SungPitchNote.vue'
 
 const props = defineProps<{
   song: LocalSong
@@ -130,20 +130,19 @@ const update = async (currentBeat: number) => {
   // use delayed beat to adjust to microphone delay
   const delayedBeat = currentBeat - delayInBeats.value
 
-  sungNoteEls.value.forEach((note) => {
-    note?.update(delayedBeat)
-  })
+  for (const el of sungNoteEls.value) {
+    el.update(delayedBeat)
+  }
 
   if (processableBeats.length === 0) return
 
   if (delayedBeat > processableBeats[0].beat + 1) {
     const beat = processableBeats.shift()
     if (props.pitchProcessor && beat) {
-      const processedBeat = await props.pitchProcessor.process(beat)
-      if (processedBeat) {
+      props.pitchProcessor.process(beat).then((processedBeat) => {
         handleProcessedBeat(processedBeat)
         handleScore(processedBeat)
-      }
+      })
     }
   }
 }

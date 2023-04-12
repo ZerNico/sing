@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import Lyrics from './Lyrics.vue'
+import Pitch from './Pitch.vue'
 import type { Note } from '~/logic/song/note'
 import type { LocalSong } from '~/logic/song/song'
 import type { PitchProcessor } from '~/logic/voice/pitch-processor'
 import type { Microphone } from '~/stores/settings'
-import Lyrics from './Lyrics.vue'
-import Pitch from './Pitch.vue'
 
 const props = defineProps<{
   song: LocalSong

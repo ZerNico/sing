@@ -47,8 +47,6 @@ const pickFolder = async () => {
   const path = await open({ directory: true, recursive: true })
 
   if (path && !Array.isArray(path)) {
-    console.log(path)
-
     songsStore.addPath(path)
   }
   loading.value = false

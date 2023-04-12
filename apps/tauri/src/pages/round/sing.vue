@@ -38,7 +38,9 @@ const gameLoop = () => {
   const time = songPlayerEl.value?.getAudioTime()
   const duration = songPlayerEl.value?.getAudioDuration()
   const beat = millisecondInSongToBeat(song.value, time * 1000)
-  halfEls.value.forEach(half => half.update(beat))
+  for (const halfEl of halfEls.value) {
+    halfEl.update(beat)
+  }
   HUDEl.value?.update(time, duration)
 }
 

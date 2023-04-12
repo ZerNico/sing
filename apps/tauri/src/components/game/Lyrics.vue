@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import LyricsNote from './LyricsNote.vue'
 import { Note } from '~/logic/song/note'
 import type { Sentence } from '~/logic/song/sentence'
 import type { LocalSong } from '~/logic/song/song'
 import { millisecondInSongToBeatWithoutGap } from '~/logic/utils/bpm.utils'
 import type { Microphone } from '~/stores/settings'
-import LyricsNote from './LyricsNote.vue'
 
 const props = defineProps<{
   song: LocalSong
@@ -36,7 +36,9 @@ const calculateLeadIn = (beat: number) => {
 }
 
 const update = (beat: number) => {
-  lyricsNoteEls.value.forEach(el => el.update(beat))
+  for (const el of lyricsNoteEls.value) {
+    el.update(beat)
+  }
   calculateLeadIn(beat)
 }
 
