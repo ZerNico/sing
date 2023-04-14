@@ -19,4 +19,9 @@ export default defineConfig({
     ['gradient-bg-secondary', { background: 'radial-gradient(at top, #2d3438 0%, #203141 100%)' }],
     [/^animate-spin-(\d+)$/, ([, d]) => ({ animation: `spin ${d}ms linear infinite` })],
   ],
+  theme: {
+    fontFamily: {
+      primary: `"Open Sans",${presetUno()?.theme?.fontFamily?.sans}`,
+    },
+  },
 })

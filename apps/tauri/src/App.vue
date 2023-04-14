@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { appWindow } from '@tauri-apps/api/window'
+import '@fontsource/open-sans/latin.css'
+
 const { client } = useTRPC()
 
 useEventListener('keydown', async (e: KeyboardEvent) => {
@@ -31,7 +33,7 @@ useEventListener('beforeunload', async () => {
 </script>
 
 <template>
-  <main class="h-screen w-screen text-white">
+  <main class="h-screen w-screen text-white font-primary">
     <RouterView v-slot="{ Component }">
       <transition name="fade">
         <component :is="Component" />

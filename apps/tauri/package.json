@@ -12,6 +12,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@fontsource/open-sans": "^4.5.14",
     "@tanstack/vue-query": "^4.22.4",
     "@tauri-apps/api": "^1.2.0",
     "@trpc/client": "^10.9.0",

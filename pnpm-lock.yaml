@@ -57,6 +57,7 @@ importers:
 
   apps/tauri:
     specifiers:
+      '@fontsource/open-sans': ^4.5.14
       '@tanstack/vue-query': ^4.22.4
       '@tauri-apps/api': ^1.2.0
       '@tauri-apps/cli': ^1.2.3
@@ -90,6 +91,7 @@ importers:
       vue-router: ^4.1.6
       vue-tsc: ^1.0.11
     dependencies:
+      '@fontsource/open-sans': 4.5.14
       '@tanstack/vue-query': 4.22.4_vue@3.2.45
       '@tauri-apps/api': 1.2.0
       '@trpc/client': 10.9.0_@trpc+server@10.9.0
@@ -1274,6 +1276,10 @@ packages:
       ms: 2.1.3
       type-is: 1.6.18
       vary: 1.1.2
+    dev: false
+
+  /@fontsource/open-sans/4.5.14:
+    resolution: {integrity: sha512-mBXIIETBlW8q/ocuUN0hyGow2iuf75hQEHQt8R/RJ/HcphVbLg8KB7pHYGbFGDqs75W+SWvTC7JkVeAjT65BuQ==}
     dev: false
 
   /@headlessui/vue/1.7.7:
@@ -3362,7 +3368,7 @@ packages:
   /@vueuse/shared/9.11.1_vue@3.2.45:
     resolution: {integrity: sha512-UTZYGAjT96hWn4buf4wstZbeheBVNcKPQuej6qpoSkjF1atdaeCD6kqm9uGL2waHfisSgH9mq0qCRiBOk5C/2w==}
     dependencies:
-      vue-demi: 0.13.11_vue@3.2.45
+      vue-demi: 0.14.0_vue@3.2.45
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
@@ -3379,7 +3385,7 @@ packages:
     dependencies:
       howler: 2.2.3
       vue: 3.2.45
-      vue-demi: 0.13.11_vue@3.2.45
+      vue-demi: 0.14.0_vue@3.2.45
     dev: false
 
   /@zhead/schema/1.0.9:
@@ -9367,6 +9373,21 @@ packages:
 
   /vue-demi/0.13.11_vue@3.2.45:
     resolution: {integrity: sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.2.45
+    dev: false
+
+  /vue-demi/0.14.0_vue@3.2.45:
+    resolution: {integrity: sha512-gt58r2ogsNQeVoQ3EhoUAvUsH9xviydl0dWJj7dabBC/2L4uBId7ujtCwDRD0JhkGsV1i0CtfLAeyYKBht9oWg==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
