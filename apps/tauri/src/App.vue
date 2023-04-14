@@ -26,6 +26,18 @@ useEventListener('keydown', async (e: KeyboardEvent) => {
   }
 })
 
+// hide the mouse cursor when idle
+
+const mouseHidden = ref(false)
+const hideMouseFn = useDebounceFn(() => {
+  mouseHidden.value = true
+}, 1000)
+
+useEventListener('mousemove', () => {
+  mouseHidden.value = false
+  hideMouseFn()
+})
+
 useEventListener('beforeunload', async () => {
   await client.lobby.delete.mutate()
   return true
@@ -33,7 +45,7 @@ useEventListener('beforeunload', async () => {
 </script>
 
 <template>
-  <main class="h-screen w-screen text-white font-primary">
+  <main class="h-screen w-screen text-white font-primary" :class="{ 'cursor-none': mouseHidden }">
     <RouterView v-slot="{ Component }">
       <transition name="fade">
         <component :is="Component" />

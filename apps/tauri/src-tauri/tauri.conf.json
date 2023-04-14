@@ -28,7 +28,8 @@
         "open": true
       },
       "window": {
-        "setFullscreen": true
+        "setFullscreen": true,
+        "setCursorVisible": true
       }
     },
     "bundle": {
