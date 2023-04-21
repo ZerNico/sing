@@ -1,7 +1,8 @@
 import { ofetch } from 'ofetch'
 import { Md5 } from 'ts-md5'
 import type { FileEntry } from '@tauri-apps/api/fs'
-import { convertFileSrc } from '@tauri-apps/api/tauri'
+import { convertFileSrc, invoke } from '@tauri-apps/api/tauri'
+
 import type { NoteType } from './note'
 import { Note } from './note'
 import { Sentence } from './sentence'
@@ -75,7 +76,9 @@ const parseLocalSong = async (songFile: FileEntry, parentFolder: FileEntry) => {
 
     const validatedUrls = urlsSchema.parse(urls)
 
-    const localSong = new LocalSong(data, validatedUrls, voices)
+    const replayGain = await invoke<number>('get_replaygain', { path: validatedUrls.mp3 })
+
+    const localSong = new LocalSong(data, validatedUrls, voices, { replayGain })
     return localSong
   } catch (error) {
     let message = 'Unknown error'

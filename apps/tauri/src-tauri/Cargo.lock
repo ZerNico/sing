@@ -1491,6 +1491,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "lofty"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fd1b8e18439c8fabf316e0a87e9cdca9667e90bcf5a080946a264fd60bbed5e8"
+dependencies = [
+ "base64 0.21.0",
+ "byteorder",
+ "flate2",
+ "lofty_attr",
+ "log",
+ "ogg_pager",
+ "once_cell",
+ "paste",
+]
+
+[[package]]
+name = "lofty_attr"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "336dfabb2fdfd932cebfcaa5d0fc57abac0d49f6ae9ddaa7c47a51bf9f74f966"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "log"
 version = "0.4.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1834,6 +1861,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3370abb7372ed744232c12954d920d1a40f1c4686de9e79e800021ef492294bd"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "ogg_pager"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d218a406e5de88e1c492d0162d569916f7436efe851ba5cc40a4bf4fa97cb40"
+dependencies = [
+ "byteorder",
 ]
 
 [[package]]
@@ -2600,6 +2636,7 @@ dependencies = [
  "atomic_float",
  "cpal",
  "desync",
+ "lofty",
  "percent-encoding",
  "rand 0.8.5",
  "ringbuf",

@@ -26,14 +26,21 @@ export const urlsSchema = z.object({
 export type Meta = z.infer<typeof metaSchema>
 export type Urls = z.infer<typeof urlsSchema>
 
+export interface Extra {
+  replayGain: number
+}
+
 export class LocalSong {
   public meta: Meta
   public urls: Urls
   public voices: Voice[]
-  constructor(song: Meta, urls: Urls, voices: Voice[]) {
+  public extra: Extra
+
+  constructor(song: Meta, urls: Urls, voices: Voice[], extra: Extra) {
     this.meta = song
     this.voices = voices
     this.urls = urls
+    this.extra = extra
   }
 
   public isDuet() {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { LocalSong } from '~/logic/song/song'
 import placeholder from '~/assets/images/cover-placeholder.png?url'
+import { clamp } from '~/logic/utils/math.utils'
 
 const props = withDefaults(
   defineProps<{
@@ -87,7 +88,11 @@ const startPlayback = () => {
     return
   }
 
-  audioEl.value.volume = props.volume
+  const replayGain = props.song.extra?.replayGain ?? 0
+  const replayGainVolume = 10 ** (replayGain / 20)
+  const volume = clamp(props.volume * replayGainVolume, 0, 1)
+
+  audioEl.value.volume = volume
 
   if (!videoEl.value) {
     audioEl.value?.play()

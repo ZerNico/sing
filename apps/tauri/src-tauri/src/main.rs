@@ -4,6 +4,7 @@
 use audio::recorder::{Recorder, MicrophoneOptions};
 use cpal::traits::{HostTrait, DeviceTrait};  
 mod audio;
+mod metadata;
 mod protocol;
 
 struct AppState {
@@ -53,6 +54,12 @@ fn get_devices() -> Vec<Device> {
     dev
 }
 
+#[tauri::command]
+async fn get_replaygain(_state: tauri::State<'_, AppState>, path: String) -> Result<f32, ()> {
+    let replaygain = metadata::replaygain::get_replaygain(path);
+    Ok(replaygain.unwrap_or(0.0))
+}
+
 fn main() {
     let state = AppState {
         recorder: Recorder::new(),
@@ -62,7 +69,7 @@ fn main() {
         .manage(state)
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_persisted_scope::init())
-        .invoke_handler(tauri::generate_handler![start_recording, stop_recording, get_pitch, get_devices])
+        .invoke_handler(tauri::generate_handler![start_recording, stop_recording, get_pitch, get_devices, get_replaygain])
         .register_uri_scheme_protocol("stream", protocol::stream_protocol_handler)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
