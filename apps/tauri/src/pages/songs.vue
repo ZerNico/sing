@@ -58,7 +58,7 @@ const startRound = () => {
   router.push({ name: '/round/selection' })
 }
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (!searchFocused.value) {
     if (event.action === 'search') searchEl.value?.focus()
@@ -71,7 +71,12 @@ const onNavigate = (event: MenuNavigationEvent) => {
     else if (event.action === 'random') selectRandomSong()
   } else {
     if (event.origin === 'keyboard') {
-      if ((event.action === 'confirm' && event.originalKey !== ' ') || event.action === 'search' || (event.action === 'back' && event.originalKey !== 'Backspace')) searchEl.value?.blur()
+      if (
+        (event.action === 'confirm' && event.originalKey !== ' ') ||
+        event.action === 'search' ||
+        (event.action === 'back' && event.originalKey !== 'Backspace')
+      )
+        searchEl.value?.blur()
       else if (event.action === 'random') selectRandomSong()
     }
   }
@@ -125,7 +130,9 @@ const volume = computed(() => {
         <div v-if="keyMode === 'gamepad' && searchFocused" class="absolute bottom-0 pl-5cqw pb-15cqh z-2">
           <VirtualKeyboard v-model="songsSearchText" :search-el="searchEl" />
         </div>
-        <div class="h-full w-full absolute flex items-center justify-end overflow-y-hidden pr-1/15 pointer-events-none z-3">
+        <div
+          class="h-full w-full absolute flex items-center justify-end overflow-y-hidden pr-1/15 pointer-events-none z-3"
+        >
           <SongScroller
             ref="songScrollerEl"
             :sort-key="songsSortKey"
@@ -158,9 +165,7 @@ const volume = computed(() => {
           {{ currentSong?.meta.artist }}
         </div>
         <div class="max-w-65cqw">
-          <span
-            class="font-bold bg-clip-text text-transparent gradient-title text-5.0cqw leading-tight"
-          >
+          <span class="font-bold bg-clip-text text-transparent gradient-title text-5.0cqw leading-tight">
             {{ currentSong?.meta.title }}
           </span>
         </div>
@@ -174,11 +179,7 @@ const volume = computed(() => {
         <KeyHints :hints="['back', 'navigate', 'confirm', 'random']" class="text-white!" />
 
         <div class="flex items-center mr-1.2cqw text-black">
-          <Icon
-            icon="Dice"
-            class="text-2cqw mr-2cqw cursor-pointer"
-            @click="selectRandomSong"
-          />
+          <Icon icon="Dice" class="text-2cqw mr-2cqw cursor-pointer" @click="selectRandomSong" />
           <Icon
             icon="TriangleArrow"
             class="rotate-90 transform text-1.1cqw cursor-pointer"
@@ -205,7 +206,7 @@ const volume = computed(() => {
               v-for="sortKey in sortKeys"
               :key="sortKey"
               role="button"
-              class=" px-0.7cqw pt-0.3cqw pb-0.4cqw rounded-full text-0.9cqw cursor-pointer"
+              class="px-0.7cqw pt-0.3cqw pb-0.4cqw rounded-full text-0.9cqw cursor-pointer"
               :class="[songsSortKey === sortKey ? 'bg-#2ec468 text-white' : 'text-black']"
               @click="songsSortKey = sortKey"
             >

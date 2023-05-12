@@ -33,7 +33,7 @@ const score2 = computed(() => {
   return roundStore.totalScore2(voice.getMaxScore().totalScore)
 })
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'confirm') {
@@ -59,8 +59,8 @@ const addVersusScore = () => {
   const matchup = versusStore.matchups.shift()
   if (!matchup) return
   // find players in score and add score, increase rounds and if won, increase wins
-  const p1 = versusStore.scores.find(s => s.player.id === matchup.player1.id)
-  const p2 = versusStore.scores.find(s => s.player.id === matchup.player2.id)
+  const p1 = versusStore.scores.find((s) => s.player.id === matchup.player1.id)
+  const p2 = versusStore.scores.find((s) => s.player.id === matchup.player2.id)
   if (!p1 || !p2) return
   p1.score += score1.value
   p2.score += score2.value
@@ -88,19 +88,23 @@ const uploadHighscore = async () => {
   const requests: Promise<unknown>[] = []
 
   if (roundStore.player1 && roundStore.player1.id !== 'guest' && score1.value > 0) {
-    requests.push(client.highscore.create.mutate({
-      userId: roundStore.player1.id,
-      score: score1.value,
-      hash: song.value.meta.hash,
-    }))
+    requests.push(
+      client.highscore.create.mutate({
+        userId: roundStore.player1.id,
+        score: score1.value,
+        hash: song.value.meta.hash,
+      })
+    )
   }
 
   if (roundStore.player2 && roundStore.player2.id !== 'guest' && score2.value > 0) {
-    requests.push(client.highscore.create.mutate({
-      userId: roundStore.player2.id,
-      score: score2.value,
-      hash: song.value.meta.hash,
-    }))
+    requests.push(
+      client.highscore.create.mutate({
+        userId: roundStore.player2.id,
+        score: score2.value,
+        hash: song.value.meta.hash,
+      })
+    )
   }
   if (requests.length > 0) {
     await Promise.all(requests)
@@ -139,7 +143,11 @@ const highscores = useQuery({
 <template>
   <Layout class="gradient-bg-secondary">
     <template #background>
-      <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-60" @error="coverError = true">
+      <img
+        :src="coverUrl"
+        class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-60"
+        @error="coverError = true"
+      />
     </template>
     <template #header>
       <TitleBar title="Score" class="text-white!" :back-arrow="false" />
@@ -148,7 +156,7 @@ const highscores = useQuery({
       <div class="flex-grow max-w-30cqw px-4cqw">
         <Highscore :highscores="highscores.data.value" :max="10" />
       </div>
-      <div class="flex items-center justify-center gap-3cqw ">
+      <div class="flex items-center justify-center gap-3cqw">
         <ScoreCard
           v-if="roundStore.player1 && song && settingsStore.microphones.at(0) && song?.voices.at(0)"
           :score="roundStore.score1"
@@ -174,10 +182,19 @@ const highscores = useQuery({
       <div class="flex justify-between">
         <KeyHints :hints="['confirm']" class="text-white!" />
         <div class="relative">
-          <Button :class="{ 'opacity-0 pointer-events-none': isLoading }" :active="true" :gradient="{ start: '#11998ec5', end: '#38ef7dc5' }" @click="next">
+          <Button
+            :class="{ 'opacity-0 pointer-events-none': isLoading }"
+            :active="true"
+            :gradient="{ start: '#11998ec5', end: '#38ef7dc5' }"
+            @click="next"
+          >
             Continue
           </Button>
-          <Icon icon="Spinner" :class="{ 'opacity-0': !isLoading }" class="animate-spin text-2.5cqw absolute right-0 bottom-0 pointer-events-none" />
+          <Icon
+            icon="Spinner"
+            :class="{ 'opacity-0': !isLoading }"
+            class="animate-spin text-2.5cqw absolute right-0 bottom-0 pointer-events-none"
+          />
         </div>
       </div>
     </template>

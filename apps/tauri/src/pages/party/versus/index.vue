@@ -22,7 +22,7 @@ const microphone2 = computed(() => {
 
 // filter out duets
 const songs = computed(() => {
-  return songsStore.getSongs.filter(song => !song.isDuet())
+  return songsStore.getSongs.filter((song) => !song.isDuet())
 })
 const songIndex = ref(Math.round(Math.random() * songs.value.length))
 const song = computed(() => songs.value.at(songIndex.value)!)
@@ -37,12 +37,16 @@ const coverUrl = computed(() => {
   return placeholder
 })
 
-watch(song, () => {
-  coverError.value = false
-  nextTick(() => {
-    songPlayerEl.value?.play()
-  })
-}, { immediate: true })
+watch(
+  song,
+  () => {
+    coverError.value = false
+    nextTick(() => {
+      songPlayerEl.value?.play()
+    })
+  },
+  { immediate: true }
+)
 
 const newSong = () => {
   // search for a new song that is not the same as the current one for 10 times max
@@ -92,7 +96,7 @@ const startRound = () => {
   router.push({ name: '/round/sing' })
 }
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()
@@ -120,9 +124,9 @@ const continueRounds = () => {
 
 const winnerText = computed(() => {
   // get all the players with the lowest position
-  const lowestPosition = Math.min(...versusStore.getScores.map(score => score.position))
-  const lowestScores = versusStore.getScores.filter(score => score.position === lowestPosition)
-  return lowestScores.map(score => score.player.username).join(' & ')
+  const lowestPosition = Math.min(...versusStore.getScores.map((score) => score.position))
+  const lowestScores = versusStore.getScores.filter((score) => score.position === lowestPosition)
+  return lowestScores.map((score) => score.player.username).join(' & ')
 })
 
 const select = useSoundEffect('select')
@@ -144,18 +148,23 @@ const confirm = useSoundEffect('confirm')
           :key="score.player.id"
           class="bg-black/30 rounded-full flex overflow-hidden items-center gap-0.5cqw h-1.5cqw text-0.8cqw"
         >
-          <div class="w-1.8cqw h-1.5cqw bg-white/80 text-black font-semibold pl-0.1cqw flex items-center justify-center" :class="{ 'bg-yellow-400': score.position === 1 }">
+          <div
+            class="w-1.8cqw h-1.5cqw bg-white/80 text-black font-semibold pl-0.1cqw flex items-center justify-center"
+            :class="{ 'bg-yellow-400': score.position === 1 }"
+          >
             {{ score.position }}.
           </div>
           <div class="flex items-center gap-0.3cqw">
-            <Avatar :src="score.player.picture || undefined" :username="score.player.username" class="h-1.3cqw! w-1.3cqw! text-0.7cqw!" />
+            <Avatar
+              :src="score.player.picture || undefined"
+              :username="score.player.username"
+              class="h-1.3cqw! w-1.3cqw! text-0.7cqw!"
+            />
             <div class="w-10cqw truncate">
               {{ score.player.username }}
             </div>
           </div>
-          <div class="w-3cqw text-end">
-            {{ score.wins }}/{{ score.rounds }}
-          </div>
+          <div class="w-3cqw text-end">{{ score.wins }}/{{ score.rounds }}</div>
           <div class="w-3.5cqw text-end pr-0.5cqw">
             {{ score.score }}
           </div>
@@ -176,7 +185,10 @@ const confirm = useSoundEffect('confirm')
           <div class="flex items-center justify-center gap-1cqw">
             <div>
               <div class="text-end opacity-0">
-                <Icon :icon="keyMode === 'keyboard' ? 'Key1' : 'XboxLB'" :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']" />
+                <Icon
+                  :icon="keyMode === 'keyboard' ? 'Key1' : 'XboxLB'"
+                  :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']"
+                />
               </div>
               <div class="bg-black rounded-0.45cqw overflow-hidden">
                 <div class="flex items-center card1 gap-0.5cqw p-0.5cqw">
@@ -184,7 +196,11 @@ const confirm = useSoundEffect('confirm')
                   <div class="text-1cqw font-semibold w-13cqw truncate">
                     {{ matchup.player1.username }}
                   </div>
-                  <div class="flex justify-end items-center min-w-4cqw select-none" role="button" @click="() => useJoker(1)">
+                  <div
+                    class="flex justify-end items-center min-w-4cqw select-none"
+                    role="button"
+                    @click="() => useJoker(1)"
+                  >
                     <Icon icon="Dice" class="text-2cqw" />
                     <div class="text-1.5cqw font-semibold">
                       {{ p1Jokers }}
@@ -193,7 +209,10 @@ const confirm = useSoundEffect('confirm')
                 </div>
               </div>
               <div class="text-end">
-                <Icon :icon="keyMode === 'keyboard' ? 'Key1' : 'XboxLB'" :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']" />
+                <Icon
+                  :icon="keyMode === 'keyboard' ? 'Key1' : 'XboxLB'"
+                  :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']"
+                />
               </div>
             </div>
             <img
@@ -202,14 +221,21 @@ const confirm = useSoundEffect('confirm')
               class="w-10cqw h-10cqw outline outline-0.2cqw"
               @error="coverError = true"
               @click="startRound"
-            >
+            />
             <div>
               <div class="opacity-0">
-                <Icon :icon="keyMode === 'keyboard' ? 'Key2' : 'XboxRB'" :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']" />
+                <Icon
+                  :icon="keyMode === 'keyboard' ? 'Key2' : 'XboxRB'"
+                  :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']"
+                />
               </div>
               <div class="bg-black rounded-0.45cqw overflow-hidden">
                 <div class="flex items-center card2 gap-0.5cqw p-0.5cqw">
-                  <div class="flex justify-start items-center min-w-4cqw select-none gap-0.2cqw" role="button" @click="() => useJoker(2)">
+                  <div
+                    class="flex justify-start items-center min-w-4cqw select-none gap-0.2cqw"
+                    role="button"
+                    @click="() => useJoker(2)"
+                  >
                     <div class="text-1.5cqw font-semibold">
                       {{ p2Jokers }}
                     </div>
@@ -222,17 +248,27 @@ const confirm = useSoundEffect('confirm')
                 </div>
               </div>
               <div>
-                <Icon :icon="keyMode === 'keyboard' ? 'Key2' : 'XboxRB'" :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']" />
+                <Icon
+                  :icon="keyMode === 'keyboard' ? 'Key2' : 'XboxRB'"
+                  :class="[keyMode === 'keyboard' ? 'text-1.1cqw mt-0.2cqw' : 'text-1.5cqw']"
+                />
               </div>
             </div>
           </div>
         </div>
         <div v-else class="flex flex-col items-center gap-10cqh">
           <div class="max-w-50cqw text-center">
-            <span class="font-bold bg-clip-text text-transparent gradient-title text-3.5cqw">{{ winnerText }} won!</span>
+            <span class="font-bold bg-clip-text text-transparent gradient-title text-3.5cqw">
+              {{ winnerText }} won!
+            </span>
           </div>
           <div class="w-full rounded-0.45cqw overflow-hidden">
-            <WideButton :gradient="{ start: '#36D1DC', end: '#5B86E5' }" label="Continue" :active="true" @click="continueRounds" />
+            <WideButton
+              :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
+              label="Continue"
+              :active="true"
+              @click="continueRounds"
+            />
           </div>
         </div>
       </div>
@@ -245,14 +281,14 @@ const confirm = useSoundEffect('confirm')
 
 <style scoped>
 .card1 {
-  background: linear-gradient(180deg,  v-bind('`${microphone1?.color}`') 0%,  v-bind('`${microphone1?.color}B0`') 100%);
+  background: linear-gradient(180deg, v-bind('`${microphone1?.color}`') 0%, v-bind('`${microphone1?.color}B0`') 100%);
 }
 
 .card2 {
-  background: linear-gradient(180deg,  v-bind('`${microphone2?.color}`') 0%,  v-bind('`${microphone2?.color}B0`') 100%);
+  background: linear-gradient(180deg, v-bind('`${microphone2?.color}`') 0%, v-bind('`${microphone2?.color}B0`') 100%);
 }
 
 .gradient-title {
-  background-image: linear-gradient(180deg, #7420FB 0%, #CF56E3 100%);
+  background-image: linear-gradient(180deg, #7420fb 0%, #cf56e3 100%);
 }
 </style>

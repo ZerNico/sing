@@ -22,7 +22,7 @@ watch(
   () => props.song.urls.cover,
   () => {
     coverError.value = false
-  },
+  }
 )
 
 const onTransitionEnd = (e: TransitionEvent) => {
@@ -44,16 +44,13 @@ const onError = (e: Event) => {
       }"
     >
       <div class="w-full h-full bg-black relative">
-        <img
-          class="object-cover w-full h-full backface-hidden"
-          :src="placeholder"
-        >
+        <img class="object-cover w-full h-full backface-hidden" :src="placeholder" />
         <img
           class="object-cover w-full h-full backface-hidden absolute inset-0"
           :src="coverUrl"
           @error="onError"
           @transitionend="onTransitionEnd"
-        >
+        />
       </div>
       <div
         v-if="props.sortTag"
@@ -82,11 +79,7 @@ const onError = (e: Event) => {
 
 <style scoped>
 .gradient-bg {
-  background: linear-gradient(
-    180deg,
-    rgba(15, 133, 123, 0.9) 0%,
-    rgba(46, 196, 104, 0.9) 100%
-  );
+  background: linear-gradient(180deg, rgba(15, 133, 123, 0.9) 0%, rgba(46, 196, 104, 0.9) 100%);
 }
 
 .tag {

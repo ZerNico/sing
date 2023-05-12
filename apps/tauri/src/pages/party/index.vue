@@ -11,7 +11,7 @@ const toVersus = () => {
   router.push({ name: '/party/versus/settings' })
 }
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()
@@ -33,12 +33,7 @@ onBeforeUnmount(() => {
       <TitleBar title="Party" @back="back" />
     </template>
     <div>
-      <WideButton
-        label="Versus"
-        :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
-        :active="true"
-        @click="toVersus"
-      />
+      <WideButton label="Versus" :gradient="{ start: '#36D1DC', end: '#5B86E5' }" :active="true" @click="toVersus" />
     </div>
     <template #footer>
       <KeyHints :hints="['back', 'confirm']" />

@@ -18,7 +18,7 @@ const maxPosition = computed(() => {
 
 const { position, increment, decrement } = useLoop(maxPosition)
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
@@ -55,7 +55,7 @@ onBeforeUnmount(() => {
     </template>
     <div class="flex flex justify-center items-center gap-1cqw">
       <IconButton
-        v-for="microphone, index in settingsStore.microphones"
+        v-for="(microphone, index) in settingsStore.microphones"
         :key="microphone.name + microphone.channel"
         :active="index === position"
         :label="microphone.name"

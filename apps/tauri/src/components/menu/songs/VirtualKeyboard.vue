@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { loop } from '~/logic/utils/math.utils'
 import type { Ref } from 'vue'
+import { loop } from '~/logic/utils/math.utils'
 import type * as icons from '~/logic/ui/icons'
 import type { GamepadButtonEvent } from '~/composables/useGamepad'
 import type Search from '~/components/menu/songs/Search.vue'
@@ -91,25 +91,136 @@ const blur = () => {
 }
 
 const normalKeys: Key[][] = [
-  [{ text: '1' }, { text: '2' }, { text: '3' }, { text: '4' }, { text: '5' }, { text: '6' }, { text: '7' }, { text: '8' }, { text: '9' }, { text: '0' }],
-  [{ text: 'q' }, { text: 'w' }, { text: 'e' }, { text: 'r' }, { text: 't' }, { text: 'y' }, { text: 'u' }, { text: 'i' }, { text: 'o' }, { text: 'p' }],
-  [{ text: 'a' }, { text: 's' }, { text: 'd' }, { text: 'f' }, { text: 'g' }, { text: 'h' }, { text: 'j' }, { text: 'k' }, { text: 'l' }, { text: '"' }],
-  [{ text: 'z' }, { text: 'x' }, { text: 'c' }, { text: 'v' }, { text: 'b' }, { text: 'n' }, { text: 'm' }, { text: '-' }, { text: '_' }, { text: '/' }],
+  [
+    { text: '1' },
+    { text: '2' },
+    { text: '3' },
+    { text: '4' },
+    { text: '5' },
+    { text: '6' },
+    { text: '7' },
+    { text: '8' },
+    { text: '9' },
+    { text: '0' },
+  ],
+  [
+    { text: 'q' },
+    { text: 'w' },
+    { text: 'e' },
+    { text: 'r' },
+    { text: 't' },
+    { text: 'y' },
+    { text: 'u' },
+    { text: 'i' },
+    { text: 'o' },
+    { text: 'p' },
+  ],
+  [
+    { text: 'a' },
+    { text: 's' },
+    { text: 'd' },
+    { text: 'f' },
+    { text: 'g' },
+    { text: 'h' },
+    { text: 'j' },
+    { text: 'k' },
+    { text: 'l' },
+    { text: '"' },
+  ],
+  [
+    { text: 'z' },
+    { text: 'x' },
+    { text: 'c' },
+    { text: 'v' },
+    { text: 'b' },
+    { text: 'n' },
+    { text: 'm' },
+    { text: '-' },
+    { text: '_' },
+    { text: '/' },
+  ],
 ]
 
 const specialKeys: Key[][] = [
-  [{ text: '@' }, { text: '#' }, { text: '€' }, { text: '_' }, { text: '&' }, { text: '-' }, { text: '+' }, { text: '(' }, { text: ')' }, { text: '/' }],
-  [{ text: '*' }, { text: ':' }, { text: ';' }, { text: ',' }, { text: '.' }, { text: '?' }, { text: '!' }, { text: '\'' }, { text: '"' }, { text: '=' }],
-  [{ text: 'ä' }, { text: 'ö' }, { text: 'ü' }, { text: 'ß' }, { text: '{' }, { text: '}' }, { text: '[' }, { text: ']' }, { text: '°' }, { text: '´' }],
-  [{ text: '~' }, { text: 'æ' }, { text: '£' }, { text: '' }, { text: '' }, { text: '' }, { text: '' }, { text: '' }, { text: '' }, { text: '' }],
+  [
+    { text: '@' },
+    { text: '#' },
+    { text: '€' },
+    { text: '_' },
+    { text: '&' },
+    { text: '-' },
+    { text: '+' },
+    { text: '(' },
+    { text: ')' },
+    { text: '/' },
+  ],
+  [
+    { text: '*' },
+    { text: ':' },
+    { text: ';' },
+    { text: ',' },
+    { text: '.' },
+    { text: '?' },
+    { text: '!' },
+    { text: "'" },
+    { text: '"' },
+    { text: '=' },
+  ],
+  [
+    { text: 'ä' },
+    { text: 'ö' },
+    { text: 'ü' },
+    { text: 'ß' },
+    { text: '{' },
+    { text: '}' },
+    { text: '[' },
+    { text: ']' },
+    { text: '°' },
+    { text: '´' },
+  ],
+  [
+    { text: '~' },
+    { text: 'æ' },
+    { text: '£' },
+    { text: '' },
+    { text: '' },
+    { text: '' },
+    { text: '' },
+    { text: '' },
+    { text: '' },
+    { text: '' },
+  ],
 ]
 
 const actionKeys: Key[][] = [
   [
-    { text: 'shft', active: shift, action: () => shift.value = !shift.value, rowSpan: 2, icon: 'Shift', activeIcon: 'ShiftPressed', iconClass: 'text-1.8cqw!', keyHintIcon: 'XboxLB' },
-    { text: '@#', active: special, action: () => special.value = !special.value, activeText: 'Aa', rowSpan: 2, keyHintIcon: 'XboxRB' },
+    {
+      text: 'shft',
+      active: shift,
+      action: () => (shift.value = !shift.value),
+      rowSpan: 2,
+      icon: 'Shift',
+      activeIcon: 'ShiftPressed',
+      iconClass: 'text-1.8cqw!',
+      keyHintIcon: 'XboxLB',
+    },
+    {
+      text: '@#',
+      active: special,
+      action: () => (special.value = !special.value),
+      activeText: 'Aa',
+      rowSpan: 2,
+      keyHintIcon: 'XboxRB',
+    },
     { text: 'Space', rowSpan: 4, keyHintIcon: 'XboxY', action: () => write(' ') },
-    { text: 'Backspace', rowSpan: 2, icon: 'Backspace', iconClass: 'text-1.8cqw!', keyHintIcon: 'XboxX', action: backspace },
+    {
+      text: 'Backspace',
+      rowSpan: 2,
+      icon: 'Backspace',
+      iconClass: 'text-1.8cqw!',
+      keyHintIcon: 'XboxX',
+      action: backspace,
+    },
   ],
   [
     { text: 'l', icon: 'TriangleArrow', iconClass: 'transform rotate-90', action: () => moveCursor(-1) },
@@ -120,11 +231,15 @@ const actionKeys: Key[][] = [
 ]
 
 const keys = computed(() => {
-  const normalKeysWithShift = normalKeys.map(row => row.map(key => ({ ...key, text: shift.value ? key.text.toUpperCase() : key.text })))
-  const specialKeysWithShift = specialKeys.map(row => row.map(key => ({ ...key, text: shift.value ? key.text.toUpperCase() : key.text })))
+  const normalKeysWithShift = normalKeys.map((row) =>
+    row.map((key) => ({ ...key, text: shift.value ? key.text.toUpperCase() : key.text }))
+  )
+  const specialKeysWithShift = specialKeys.map((row) =>
+    row.map((key) => ({ ...key, text: shift.value ? key.text.toUpperCase() : key.text }))
+  )
 
   // add green class to action keys
-  const actionKeysWithClass = actionKeys.map(row => row.map(key => ({ class: 'bg-zinc-600!', ...key })))
+  const actionKeysWithClass = actionKeys.map((row) => row.map((key) => ({ class: 'bg-zinc-600!', ...key })))
 
   if (special.value) {
     return [...specialKeysWithShift, ...actionKeysWithClass]
@@ -226,7 +341,7 @@ const onClick = (e: MouseEvent, row: number, col: number) => {
   e.stopPropagation()
 }
 
-const { startLoop, stopLoop } = useGamepad(useRepeatThrottleFn(e => onButtonDown(e), 50))
+const { startLoop, stopLoop } = useGamepad(useRepeatThrottleFn((e) => onButtonDown(e), 50))
 
 onMounted(() => {
   startLoop()
@@ -243,9 +358,9 @@ watch([currRow, currCol], () => {
 
 <template>
   <div class="bg-zinc-800 p-0.25cqw">
-    <div v-for="row, rowIndex in keys" :key="rowIndex" class="flex">
+    <div v-for="(row, rowIndex) in keys" :key="rowIndex" class="flex">
       <div
-        v-for="key, keyIndex in row"
+        v-for="(key, keyIndex) in row"
         :key="keyIndex"
         class="w-3.5cqw h-3.5cqw text-1.2cqw text-white p-0.3cqw"
         :class="{
@@ -260,10 +375,20 @@ watch([currRow, currCol], () => {
           role="button"
           class="bg-zinc-700 w-full h-full flex items-center justify-center outline-0.2cqh outline-offset--0.2cqh relative"
           :class="[key.class, currRow === rowIndex && currCol === keyIndex ? 'outline-white outline' : '']"
-          @mouseenter="() => { currRow = rowIndex; currCol = keyIndex }"
+          @mouseenter="
+            () => {
+              currRow = rowIndex
+              currCol = keyIndex
+            }
+          "
           @mousedown="(e) => onClick(e, rowIndex, keyIndex)"
         >
-          <Icon v-if="key.icon" :icon="key.active?.value === true && key.activeIcon ? key.activeIcon : key.icon" class="text-1cqw" :class="[key.iconClass]" />
+          <Icon
+            v-if="key.icon"
+            :icon="key.active?.value === true && key.activeIcon ? key.activeIcon : key.icon"
+            class="text-1cqw"
+            :class="[key.iconClass]"
+          />
           <span v-else>{{ key.active?.value === true && key.activeText ? key.activeText : key.text }}</span>
           <Icon v-if="key.keyHintIcon" :icon="key.keyHintIcon" class="absolute top-0 left-0 m-0.2cqw" />
         </div>

@@ -48,7 +48,7 @@ export const lobbyRouter = router({
     }
   }),
   join: oAuthedProcedure
-    .input(z.object({ code: z.string().transform(val => val.toUpperCase()) }))
+    .input(z.object({ code: z.string().transform((val) => val.toUpperCase()) }))
     .mutation(async ({ ctx, input }) => {
       try {
         await ctx.prisma.lobby.update({
@@ -125,20 +125,18 @@ export const lobbyRouter = router({
 
     return { users: user.lobby.users }
   }),
-  kick: authedProcedure
-    .input(z.object({ userId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.lobby.update({
-        where: { id: ctx.user.sub },
-        data: {
-          users: {
-            disconnect: {
-              id: input.userId,
-            },
+  kick: authedProcedure.input(z.object({ userId: z.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.lobby.update({
+      where: { id: ctx.user.sub },
+      data: {
+        users: {
+          disconnect: {
+            id: input.userId,
           },
         },
-      })
-    }),
+      },
+    })
+  }),
   delete: authedProcedure.mutation(async ({ ctx }) => {
     await ctx.prisma.lobby.delete({
       where: { id: ctx.user.sub },

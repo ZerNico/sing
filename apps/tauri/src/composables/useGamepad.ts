@@ -1,4 +1,26 @@
-export type GamepadButton = 'A' | 'B' | 'X' | 'Y' | 'LB' | 'RB' | 'LT' | 'RT' | 'BACK' | 'START' | 'LS' | 'RS' | 'DPAD_UP' | 'DPAD_DOWN' | 'DPAD_LEFT' | 'DPAD_RIGHT' | 'XBOX' | 'L_AXIS_X' | 'L_AXIS_Y' | 'R_AXIS_X' | 'R_AXIS_Y' | 'UNKNOWN'
+export type GamepadButton =
+  | 'A'
+  | 'B'
+  | 'X'
+  | 'Y'
+  | 'LB'
+  | 'RB'
+  | 'LT'
+  | 'RT'
+  | 'BACK'
+  | 'START'
+  | 'LS'
+  | 'RS'
+  | 'DPAD_UP'
+  | 'DPAD_DOWN'
+  | 'DPAD_LEFT'
+  | 'DPAD_RIGHT'
+  | 'XBOX'
+  | 'L_AXIS_X'
+  | 'L_AXIS_Y'
+  | 'R_AXIS_X'
+  | 'R_AXIS_Y'
+  | 'UNKNOWN'
 
 export interface GamepadButtonEvent {
   button: GamepadButton
@@ -7,7 +29,10 @@ export interface GamepadButtonEvent {
   direction: number
 }
 
-export const useGamepad = (callback: (e: GamepadButtonEvent) => void, options = { repeatTimeout: 500, axisThreshold: 0.5 }) => {
+export const useGamepad = (
+  callback: (e: GamepadButtonEvent) => void,
+  options = { repeatTimeout: 500, axisThreshold: 0.5 }
+) => {
   const { repeatTimeout, axisThreshold } = options
 
   const buttonHistories = new Map<number, Map<number, number>>()
@@ -43,12 +68,10 @@ export const useGamepad = (callback: (e: GamepadButtonEvent) => void, options = 
 
     // loop through all gamepads
     for (const gamepad of gamepads) {
-      if (!gamepad)
-        continue
+      if (!gamepad) continue
       const buttonHistory = buttonHistories.get(gamepad.index)
       const axesHistory = axesHistories.get(gamepad.index)
-      if (!buttonHistory || !axesHistory)
-        continue
+      if (!buttonHistory || !axesHistory) continue
       let pressed = false
 
       for (const [index, button] of gamepad.buttons.entries()) {
@@ -57,8 +80,7 @@ export const useGamepad = (callback: (e: GamepadButtonEvent) => void, options = 
         if (button.pressed) {
           pressed = true
           // Check if the button is pressed on first loop to prevent events on new windows when holding the button a bit too long
-          if (isInitialPress)
-            continue
+          if (isInitialPress) continue
           const lastPress = buttonHistory.get(index)
           if (!lastPress) {
             buttonHistory?.set(index, currentTime)
@@ -70,8 +92,7 @@ export const useGamepad = (callback: (e: GamepadButtonEvent) => void, options = 
           buttonHistory?.delete(index)
         }
       }
-      if (!pressed)
-        isInitialPress = false
+      if (!pressed) isInitialPress = false
 
       // Same as above but for axes
       for (const [index, axis] of gamepad.axes.entries()) {
@@ -91,17 +112,12 @@ export const useGamepad = (callback: (e: GamepadButtonEvent) => void, options = 
   }
 
   const loop = () => {
-    if (!looping)
-      return
+    if (!looping) return
     update()
     requestAnimationFrame(loop)
   }
 
-  const sendButtonEvent = (
-    gamepadId: number,
-    buttonCode: number,
-    isRepeat: boolean,
-  ) => {
+  const sendButtonEvent = (gamepadId: number, buttonCode: number, isRepeat: boolean) => {
     const event: GamepadButtonEvent = {
       repeat: isRepeat,
       button: gamepadButtons.get(buttonCode) || 'UNKNOWN',
@@ -112,12 +128,7 @@ export const useGamepad = (callback: (e: GamepadButtonEvent) => void, options = 
     callback(event)
   }
 
-  const sendAxisEvent = (
-    gamepadId: number,
-    axisCode: number,
-    isRepeat: boolean,
-    direction: number,
-  ) => {
+  const sendAxisEvent = (gamepadId: number, axisCode: number, isRepeat: boolean, direction: number) => {
     const event: GamepadButtonEvent = {
       repeat: isRepeat,
       button: gamepadAxes.get(axisCode) || 'UNKNOWN',

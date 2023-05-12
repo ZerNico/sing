@@ -49,17 +49,21 @@ const threshold = ref(2)
 
 const loading = ref(true)
 
-watch(id, (newId) => {
-  const microphone = settingsStore.microphones.at(newId)
+watch(
+  id,
+  (newId) => {
+    const microphone = settingsStore.microphones.at(newId)
 
-  if (!microphone) return
-  delay.value = microphone.delay
-  gain.value = microphone.gain
-  color.value = microphone.color
-  channel.value = microphone.channel
-  name.value = microphone.name
-  threshold.value = microphone.threshold
-}, { immediate: true })
+    if (!microphone) return
+    delay.value = microphone.delay
+    gain.value = microphone.gain
+    color.value = microphone.color
+    channel.value = microphone.channel
+    name.value = microphone.name
+    threshold.value = microphone.threshold
+  },
+  { immediate: true }
+)
 
 interface Device {
   name: string
@@ -69,7 +73,7 @@ interface Device {
 const mediaDevices = ref<Device[]>([])
 
 const micOptions = computed(() => {
-  const options = mediaDevices.value.map(device => device.name)
+  const options = mediaDevices.value.map((device) => device.name)
   return options
 })
 
@@ -86,7 +90,7 @@ const buttons = [
 
 const { position, increment, decrement } = useLoop(buttons.length - 1)
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'confirm') {
     const button = buttons.at(position.value)
@@ -151,7 +155,7 @@ onBeforeUnmount(() => {
     </template>
 
     <div>
-      <template v-for="button, index in buttons">
+      <template v-for="(button, index) in buttons">
         <RangeInput
           v-if="button.type === 'range'"
           :key="`range${button.label}`"

@@ -35,14 +35,14 @@ export const parseTree = async (tree: FileEntry) => {
 
   const results = await Promise.allSettled(txts.map(({ file, parent }) => parseLocalSong(file, parent)))
 
-  const fulfilled = results.filter(result => result.status === 'fulfilled') as PromiseFulfilledResult<LocalSong>[]
+  const fulfilled = results.filter((result) => result.status === 'fulfilled') as PromiseFulfilledResult<LocalSong>[]
 
-  const rejected = results.filter(result => result.status === 'rejected') as PromiseRejectedResult[]
+  const rejected = results.filter((result) => result.status === 'rejected') as PromiseRejectedResult[]
   rejected.forEach((result) => {
     console.error(result.reason)
   })
 
-  const songs = fulfilled.map(result => result.value)
+  const songs = fulfilled.map((result) => result.value)
   return songs
 }
 
@@ -50,13 +50,13 @@ const parseLocalSong = async (songFile: FileEntry, parentFolder: FileEntry) => {
   try {
     const assetUrl = convertFileSrc(songFile.path, 'stream')
 
-    const song: string = await ofetch(assetUrl, { parseResponse: txt => txt })
+    const song: string = await ofetch(assetUrl, { parseResponse: (txt) => txt })
     const { data, fileNames, voices } = parseSongTxt(song)
 
-    const urls: any = { }
+    const urls: any = {}
     // find paths for all files in the parent folder using the file names from the parsed song
     const findFile = (name: string) => {
-      const file = parentFolder.children?.find(file => file.name?.toLowerCase() === name.toLowerCase())
+      const file = parentFolder.children?.find((file) => file.name?.toLowerCase() === name.toLowerCase())
       if (file) return file.path
       return null
     }
@@ -93,7 +93,7 @@ const parseSongTxt = (txt: string) => {
   const meta: any = {
     relative: false,
   }
-  const fileNames: any = { }
+  const fileNames: any = {}
 
   let notes: Note[] = []
   let sentences: Sentence[] = []
@@ -158,13 +158,17 @@ const parseSongTxt = (txt: string) => {
       }
     } else if ([':', '*', 'F', 'R', 'G'].includes(line.charAt(0))) {
       const [tag, startBeat, length, txtPitch, ...text] = line.substring(0, line.length).split(' ')
-      const note = new Note(tagToNoteType(tag), parseInt(startBeat), parseInt(length), parseInt(txtPitch), text.join(' '))
+      const note = new Note(
+        tagToNoteType(tag),
+        parseInt(startBeat),
+        parseInt(length),
+        parseInt(txtPitch),
+        text.join(' ')
+      )
       notes.push(note)
       md5.appendStr(line)
     } else if (line.charAt(0) === '-') {
-      const [, linebreakBeat]: string[] = line
-        .substring(1, line.length)
-        .split(' ')
+      const [, linebreakBeat]: string[] = line.substring(1, line.length).split(' ')
       sentences.push(new Sentence(notes, parseInt(linebreakBeat)))
       notes = []
       md5.appendStr(line)
@@ -172,9 +176,7 @@ const parseSongTxt = (txt: string) => {
       if (sentences.length === 0) return
       const lastNote: Note = notes[notes.length - 1]
       if (notes.length !== 0) {
-        sentences.push(
-          new Sentence(notes, lastNote.startBeat + lastNote.length + 1),
-        )
+        sentences.push(new Sentence(notes, lastNote.startBeat + lastNote.length + 1))
       }
       voices.push(new Voice(sentences))
       notes = []
@@ -182,9 +184,7 @@ const parseSongTxt = (txt: string) => {
     } else if (line.charAt(0) === 'E') {
       if (notes.length > 0) {
         const lastNote: Note = notes[notes.length - 1]
-        sentences.push(
-          new Sentence(notes, lastNote.startBeat + lastNote.length + 1),
-        )
+        sentences.push(new Sentence(notes, lastNote.startBeat + lastNote.length + 1))
       }
 
       notes = []

@@ -15,10 +15,10 @@ const back = () => {
 const start = () => {
   if (micCount.value === 0) return
   if (micCount.value >= 1) {
-    roundStore.player1 = users.value.find(user => user.username === selectionPlayer1.value) ?? guest
+    roundStore.player1 = users.value.find((user) => user.username === selectionPlayer1.value) ?? guest
   }
   if (micCount.value >= 2) {
-    roundStore.player2 = users.value.find(user => user.username === selectionPlayer2.value) ?? guest
+    roundStore.player2 = users.value.find((user) => user.username === selectionPlayer2.value) ?? guest
   }
   router.push({ name: '/round/sing' })
 }
@@ -27,7 +27,15 @@ const micCount = computed(() => {
   return settingsStore.microphones.length
 })
 
-const guest: User = { username: 'Guest', id: 'guest', orgDomain: 'guest', createdAt: new Date(), updatedAt: new Date(), picture: null, lobbyId: null }
+const guest: User = {
+  username: 'Guest',
+  id: 'guest',
+  orgDomain: 'guest',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  picture: null,
+  lobbyId: null,
+}
 
 const users = computed(() => {
   const users = status.data.value ?? []
@@ -35,7 +43,7 @@ const users = computed(() => {
 })
 
 const usernames = computed(() => {
-  return users.value.map(user => user.username) ?? []
+  return users.value.map((user) => user.username) ?? []
 })
 
 const buttons = computed(() => {
@@ -88,7 +96,7 @@ watch(users, (newUsers) => {
 
 const { position, increment, decrement } = useLoop(buttons.value.length - 1, { initial: micCount.value })
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()
@@ -133,7 +141,7 @@ onBeforeUnmount(() => {
       <TitleBar title="Selection" @back="back" />
     </template>
     <div class="flex flex-col justify-center">
-      <template v-for="button, index in buttons">
+      <template v-for="(button, index) in buttons">
         <ListInput
           v-if="button.type === 'list'"
           :key="`list${button.label}`"

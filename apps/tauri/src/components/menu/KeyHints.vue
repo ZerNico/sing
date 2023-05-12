@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { keyMode } from '~/logic/ui/keys'
 import type * as icons from '~/logic/ui/icons'
+
 type hintType = 'navigate' | 'confirm' | 'back' | 'random'
 const props = defineProps<{ hints: hintType[] }>()
 

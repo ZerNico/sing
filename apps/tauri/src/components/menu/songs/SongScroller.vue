@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { songsScrollPosition } from '~/logic/ui/pageStates'
 import Fuse from 'fuse.js'
 import type { Ref } from 'vue'
+import { songsScrollPosition } from '~/logic/ui/pageStates'
 
 import type { LocalSong } from '~/logic/song/song'
 
@@ -66,15 +66,13 @@ watch(
 
     nextTick(() => {
       if (currentSong) {
-        const index = songs.value.findIndex(
-          song => song.key === currentSong?.key,
-        )
+        const index = songs.value.findIndex((song) => song.key === currentSong?.key)
 
         position.value = index
       }
     })
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 const searchedSongs = computed(() => {
@@ -93,7 +91,7 @@ const searchedSongs = computed(() => {
   fuse.setCollection(sortedSongs.value)
   const result = fuse.search(props.searchText)
 
-  return result.map(item => item.item)
+  return result.map((item) => item.item)
 })
 
 const taggedSongs = computed(() => {
@@ -152,7 +150,7 @@ watch(
 
     songs.value = newTaggedSongs
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 const displayedSongs = computed((): SongWithData[] => {
@@ -191,8 +189,7 @@ const setFastScrolling = () => {
   if (!lastFastScrollInput.value) {
     fastScrolling.value = false
   } else {
-    fastScrolling.value
-      = Date.now() - lastFastScrollInput.value.getTime() < 200
+    fastScrolling.value = Date.now() - lastFastScrollInput.value.getTime() < 200
   }
 }
 
@@ -202,8 +199,7 @@ const handlePositionChange = (delta: number, fast: boolean) => {
   }
 
   if (animating.value) return
-  if (lastAnimation.value && Date.now() - lastAnimation.value.getTime() < 10)
-    return
+  if (lastAnimation.value && Date.now() - lastAnimation.value.getTime() < 10) return
   select.play()
   setFastScrolling()
   animating.value = true
@@ -258,10 +254,8 @@ defineExpose({ next, prev, selectRandomSong })
       class="transform-gpu flex flex-col items-end h-full"
       :class="{
         'ease-linear': fastScrolling,
-        'translate-up transition-transform duration-250':
-          animating && direction === 1,
-        'translate-down transition-transform duration-250':
-          animating && direction === -1,
+        'translate-up transition-transform duration-250': animating && direction === 1,
+        'translate-down transition-transform duration-250': animating && direction === -1,
         '!duration-150': fastScrolling && animating && direction !== 0,
       }"
       @transitionend="onTransitionEnd"
@@ -272,9 +266,9 @@ defineExpose({ next, prev, selectRandomSong })
         class="h-1/7 text-center flex items-center justify-center card"
         :class="{
           'active-card':
-            (i === 3 && !animating)
-            || (i === 4 && animating && direction === 1)
-            || (i === 2 && animating && direction === -1),
+            (i === 3 && !animating) ||
+            (i === 4 && animating && direction === 1) ||
+            (i === 2 && animating && direction === -1),
           '!duration-150': fastScrolling,
           'pointer-events-auto cursor-pointer': i === 3,
           'transition-all duration-250': !selectingRandomSong,

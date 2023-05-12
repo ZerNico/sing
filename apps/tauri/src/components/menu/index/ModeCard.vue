@@ -36,7 +36,8 @@ const props = defineProps<{
         :class="{ 'rounded-b-0.4cqw': !props.active }"
       >
         <Icon
-          :icon="props.icon" class="block w-1/2 h-1/2"
+          :icon="props.icon"
+          class="block w-1/2 h-1/2"
           :class="{
             'animate-spin-10000': props.animation === 'spin' && props.active,
             'animate-pulse': props.animation === 'pulse' && props.active,
@@ -56,19 +57,11 @@ const props = defineProps<{
 <style scoped>
 .gradient-bg {
   aspect-ratio: 7 / 4;
-  background: linear-gradient(
-    180deg,
-    v-bind('props.gradient.start') 0%,
-    v-bind('props.gradient.end') 100%
-  );
+  background: linear-gradient(180deg, v-bind('props.gradient.start') 0%, v-bind('props.gradient.end') 100%);
 }
 
 .gradient-title {
-  background-image: linear-gradient(
-    90deg,
-    v-bind('props.gradient.start') 0%,
-    v-bind('props.gradient.end') 100%
-  );
+  background-image: linear-gradient(90deg, v-bind('props.gradient.start') 0%, v-bind('props.gradient.end') 100%);
 }
 
 .animate-pulse {

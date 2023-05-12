@@ -42,11 +42,11 @@ const status = useQuery({
 
 const username = computed(() => {
   const id = route.params.id as string
-  const user = status?.data?.value?.find(user => user.id === id)
+  const user = status?.data?.value?.find((user) => user.id === id)
   return user?.username
 })
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()
@@ -72,12 +72,7 @@ onBeforeUnmount(() => {
       <TitleBar title="Lobby" :description="username" @back="back" />
     </template>
     <div class="flex flex-col justify-center">
-      <WideButton
-        label="Kick"
-        :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
-        :active="true"
-        @click="kick"
-      />
+      <WideButton label="Kick" :gradient="{ start: '#36D1DC', end: '#5B86E5' }" :active="true" @click="kick" />
     </div>
     <template #footer>
       <KeyHints :hints="['back', 'confirm']" />
