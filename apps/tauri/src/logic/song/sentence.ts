@@ -38,10 +38,8 @@ export class Sentence {
     } else if (this.notes.length === 1) {
       this.length = this.notes[0].length
     } else {
-      this.length
-        = this.notes[this.notes.length - 1].startBeat
-        + this.notes[this.notes.length - 1].length
-        - this.notes[0].startBeat
+      this.length =
+        this.notes[this.notes.length - 1].startBeat + this.notes[this.notes.length - 1].length - this.notes[0].startBeat
     }
   }
 }

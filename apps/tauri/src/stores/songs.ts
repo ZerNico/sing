@@ -20,11 +20,11 @@ export const useSongsStore = defineStore('songs', {
       this.needsUpdate = true
     },
     removePath(path: string) {
-      this.paths = this.paths.filter(p => p !== path)
+      this.paths = this.paths.filter((p) => p !== path)
       this.needsUpdate = true
     },
     addSongs(songs: LocalSong[]) {
-      songs.forEach(song => this.songs.set(song.meta.hash, song))
+      songs.forEach((song) => this.songs.set(song.meta.hash, song))
     },
     clearSongs() {
       songsScrollPosition.value = 0
@@ -45,6 +45,5 @@ export const useSongsStore = defineStore('songs', {
 })
 
 if (import.meta.hot) {
-  // @ts-ignore Typings are wrong because of persisted-state
   import.meta.hot.accept(acceptHMRUpdate(useSongsStore, import.meta.hot))
 }

@@ -35,7 +35,7 @@ const sliders = [
 
 const { position, increment, decrement } = useLoop(sliders.length - 1)
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()

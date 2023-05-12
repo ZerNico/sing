@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { TransitionPresets } from '@vueuse/core'
 import type { LocalSong } from '~/logic/song/song'
 import type { Voice } from '~/logic/song/voice'
 import type { User } from '~/logic/types'
 import type { Score } from '~/stores/round'
 import type { Microphone } from '~/stores/settings'
-import { TransitionPresets } from '@vueuse/core'
 
 const props = defineProps<{
   song: LocalSong
@@ -82,14 +82,21 @@ const text = computed(() => {
   <div class="w-20cqw rounded-0.45cqw bg-black overflow-hidden">
     <div class="w-full h-full card flex flex-col items-center py-2cqw px-2.5cqw gap-1.5cqw">
       <div class="flex flex-col items-center gap-0.3cqw max-w-full">
-        <Avatar :username="player.username" :src="player.picture || undefined" class="w-3cqw! h-3cqw! text-1.5cqw! border outline outline-0.2cqw" />
+        <Avatar
+          :username="player.username"
+          :src="player.picture || undefined"
+          class="w-3cqw! h-3cqw! text-1.5cqw! border outline outline-0.2cqw"
+        />
         <div class="font-semibold text-1.9cqw truncate text-ellipsis max-w-full">
           {{ player.username }}
         </div>
       </div>
       <div class="w-full rounded-0.45cqw overflow-hidden text-center min-h-0">
         <div class="bg-white/30">
-          <span class="transition-opacity duration-500 leading-loose text-1.2cqw font-semibold" :class="{ 'opacity-0': !textVisible }">
+          <span
+            class="transition-opacity duration-500 leading-loose text-1.2cqw font-semibold"
+            :class="{ 'opacity-0': !textVisible }"
+          >
             {{ text }}
           </span>
         </div>
@@ -100,34 +107,22 @@ const text = computed(() => {
       <div class="w-full flex flex-col gap-1cqw">
         <div>
           <div class="flex justify-between items-center">
-            <div class="text-0.8cqw uppercase">
-              In-Tune Notes
-            </div>
-            <div class="text-1cqw">
-              {{ Math.round(inTuneNotePercentageOutput) }}%
-            </div>
+            <div class="text-0.8cqw uppercase">In-Tune Notes</div>
+            <div class="text-1cqw">{{ Math.round(inTuneNotePercentageOutput) }}%</div>
           </div>
           <div class="h-1cqw w-full rounded-0.3cqw border border-0.15cqw in-tune-progress" />
         </div>
         <div>
           <div class="flex justify-between items-center">
-            <div class="text-0.8cqw uppercase">
-              Golden Notes
-            </div>
-            <div class="text-1cqw">
-              {{ Math.round(inTuneGoldenNotePercentageOutput) }}%
-            </div>
+            <div class="text-0.8cqw uppercase">Golden Notes</div>
+            <div class="text-1cqw">{{ Math.round(inTuneGoldenNotePercentageOutput) }}%</div>
           </div>
           <div class="h-1cqw w-full rounded-0.3cqw border border-0.15cqw golden-progress" />
         </div>
         <div>
           <div class="flex justify-between items-center">
-            <div class="text-0.8cqw uppercase">
-              Perfect Singing
-            </div>
-            <div class="text-1cqw">
-              {{ Math.round(bonusPercentageOutput) }}%
-            </div>
+            <div class="text-0.8cqw uppercase">Perfect Singing</div>
+            <div class="text-1cqw">{{ Math.round(bonusPercentageOutput) }}%</div>
           </div>
           <div class="h-1cqw w-full rounded-0.3cqw border border-0.15cqw perfect-progress" />
         </div>
@@ -138,11 +133,11 @@ const text = computed(() => {
 
 <style scoped>
 .card {
-  background: linear-gradient(180deg,  v-bind('`${microphone.color}`') 0%,  v-bind('`${microphone.color}B0`') 100%);
+  background: linear-gradient(180deg, v-bind('`${microphone.color}`') 0%, v-bind('`${microphone.color}B0`') 100%);
 }
 
 .banner {
-  background: linear-gradient(90deg, #facc1530 0%, #facc15D0 50%, #facc1530 100%);
+  background: linear-gradient(90deg, #facc1530 0%, #facc15d0 50%, #facc1530 100%);
 }
 
 .score {
@@ -150,14 +145,26 @@ const text = computed(() => {
 }
 
 .in-tune-progress {
-  background: linear-gradient(90deg, #FFF v-bind('`${inTuneNotePercentageOutput}%`') ,#FFF5 v-bind('`${inTuneNotePercentageOutput}%`'));
+  background: linear-gradient(
+    90deg,
+    #fff v-bind('`${inTuneNotePercentageOutput}%`'),
+    #fff5 v-bind('`${inTuneNotePercentageOutput}%`')
+  );
 }
 
 .golden-progress {
-  background: linear-gradient(90deg, #FFF v-bind('`${inTuneGoldenNotePercentageOutput}%`') ,#FFF5 v-bind('`${inTuneGoldenNotePercentageOutput}%`'));
+  background: linear-gradient(
+    90deg,
+    #fff v-bind('`${inTuneGoldenNotePercentageOutput}%`'),
+    #fff5 v-bind('`${inTuneGoldenNotePercentageOutput}%`')
+  );
 }
 
 .perfect-progress {
-  background: linear-gradient(90deg, #FFF v-bind('`${bonusPercentageOutput}%`') ,#FFF5 v-bind('`${bonusPercentageOutput}%`'));
+  background: linear-gradient(
+    90deg,
+    #fff v-bind('`${bonusPercentageOutput}%`'),
+    #fff5 v-bind('`${bonusPercentageOutput}%`')
+  );
 }
 </style>

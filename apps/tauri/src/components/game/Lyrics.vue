@@ -62,17 +62,12 @@ defineExpose({
           :microphone="props.microphone"
         />
       </template>
-      <LyricsNote
-        v-else
-        :ref="lyricsNoteEls.set"
-        :note="emptyNote"
-        :microphone="props.microphone"
-      />
+      <LyricsNote v-else :ref="lyricsNoteEls.set" :note="emptyNote" :microphone="props.microphone" />
       <div class="flex-grow" />
     </div>
     <div class="text-white/50 text-center text-1.7cqw -mt-0.5cqw">
       <span
-        v-for="note, index in nextSentence"
+        v-for="(note, index) in nextSentence"
         :key="index"
         class="whitespace-pre-wrap"
         :class="[note.italic ? 'italic' : '']"

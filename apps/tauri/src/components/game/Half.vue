@@ -43,10 +43,7 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    class="flex"
-    :class="[props.position === 'top' ? 'flex-col' : 'flex-col-reverse']"
-  >
+  <div class="flex" :class="[props.position === 'top' ? 'flex-col' : 'flex-col-reverse']">
     <Lyrics
       ref="lyricsEl"
       :song="props.song"

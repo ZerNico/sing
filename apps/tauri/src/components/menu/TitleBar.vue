@@ -7,7 +7,7 @@ const props = withDefaults(
   }>(),
   {
     backArrow: true,
-  },
+  }
 )
 
 const emit = defineEmits<{
@@ -21,8 +21,6 @@ const emit = defineEmits<{
     <div class="text-1.3cqw -mt-0.15cqw">
       {{ props.title }}
     </div>
-    <div v-if="props.description" class="text-0.8cqw mt-0.25cqw">
-      / {{ props.description }}
-    </div>
+    <div v-if="props.description" class="text-0.8cqw mt-0.25cqw">/ {{ props.description }}</div>
   </div>
 </template>

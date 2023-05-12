@@ -29,11 +29,12 @@ const buttons = [
       lobbyStore.offline = true
       router.push({ name: '/home' })
     },
-  }]
+  },
+]
 
 const { position, increment, decrement } = useLoop(buttons.length - 1)
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 
 const onNavigate = (event: MenuNavigationEvent) => {
   if (isLoading.value) return
@@ -64,16 +65,14 @@ onBeforeUnmount(() => {
     <div class="flex flex-col items-center justify-center text-2cqw">
       <Icon v-if="isLoading" icon="Spinner" class="text-5cqw animate-spin" />
       <div v-if="isError && !isSuccess" class="flex flex-col items-center gap-8cqh">
-        <p class="text-2cqw font-semibold">
-          Could not connect to server.
-        </p>
+        <p class="text-2cqw font-semibold">Could not connect to server.</p>
         <div class="flex gap-1cqw">
           <Button
-            v-for="button, index in buttons"
+            v-for="(button, index) in buttons"
             :key="button.text"
             :active="position === index"
             :gradient="gradient"
-            @mouseenter="() => position = index"
+            @mouseenter="() => (position = index)"
             @click="button.action"
           >
             {{ button.text }}

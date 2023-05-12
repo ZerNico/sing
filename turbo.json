@@ -1,9 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
-
   "pipeline": {
     "build": {
       "dependsOn": ["^build", "db:generate"],
+      "env": ["TAURI_PLATFORM", "TAURI_DEBUG"],
       "outputs": ["dist/**", ".output/**", "src-tauri/target"]
     },
     "lint": {

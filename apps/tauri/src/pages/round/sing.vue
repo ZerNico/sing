@@ -49,7 +49,10 @@ const { resume } = useRafFn(() => {
   gameLoop()
 })
 
-const { update } = useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150), { immediate: false })
+const { update } = useMenuNavigation(
+  useRepeatThrottleFn((e) => onNavigate(e), 150),
+  { immediate: false }
+)
 const onNavigate = (event: MenuNavigationEvent) => {
   if (!ready.value) return
 
@@ -127,7 +130,7 @@ const onBonus = (index: 1 | 2, beatCount: number) => {
 }
 
 const buttons = [
-  { label: 'Resume', action: () => paused.value = false },
+  { label: 'Resume', action: () => (paused.value = false) },
   { label: 'Exit', action: exit },
 ]
 const { position, increment, decrement } = useLoop(buttons.length - 1)
@@ -158,13 +161,21 @@ watch(position, () => select.play())
   <div class="w-full h-full flex items-center justify-center gradient-bg-secondary" @mouseup="onClick">
     <div v-if="song" class="layout relative">
       <div :class="{ 'opacity-0': paused }">
-        <SongPlayer ref="songPlayerEl" :volume="volume" :song="song" class="w-full h-full absolute opacity-80" @error="back" @ended="exit" />
+        <SongPlayer
+          ref="songPlayerEl"
+          :volume="volume"
+          :song="song"
+          class="w-full h-full absolute opacity-80"
+          @error="back"
+          @ended="exit"
+        />
         <div class="absolute h-full w-full">
           <Half
             v-if="roundStore.player1 && settingsStore.microphones.at(0) && pitchProcessors.at(0)"
             :ref="halfEls.set"
             class="h-50cqh w-full"
-            :song="song" position="top"
+            :song="song"
+            position="top"
             :voice-index="0"
             :microphone="settingsStore.microphones.at(0)!"
             :pitch-processor="pitchProcessors.at(0)!"
@@ -175,7 +186,8 @@ watch(position, () => select.play())
             v-if="roundStore.player2 && settingsStore.microphones.at(1) && pitchProcessors.at(1)"
             :ref="halfEls.set"
             class="h-50cqh w-full"
-            :song="song" position="bottom"
+            :song="song"
+            position="bottom"
             :voice-index="song.isDuet() ? 1 : 0"
             :microphone="settingsStore.microphones.at(1)!"
             :pitch-processor="pitchProcessors.at(1)!"
@@ -197,22 +209,26 @@ watch(position, () => select.play())
           :class="{ 'opacity-0': ready }"
         >
           <div class="h-full w-full relative bg-black flex items-center justify-center">
-            <img :src="coverUrl" class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-70" @error="coverError = true">
+            <img
+              :src="coverUrl"
+              class="w-full h-full object-cover absolute blur-xl transform scale-110 opacity-70"
+              @error="coverError = true"
+            />
             <div class="relative min-w-0 text-center">
               <div class="truncate text-1.5cqw font-semibold">
                 {{ song.meta.artist }}
               </div>
-              <div class="truncate font-bold bg-clip-text text-transparent text-6.0cqw" :class="[roundStore.type === 'sing' ? 'gradient-title-sing' : 'gradient-title-versus']">
+              <div
+                class="truncate font-bold bg-clip-text text-transparent text-6.0cqw"
+                :class="[roundStore.type === 'sing' ? 'gradient-title-sing' : 'gradient-title-versus']"
+              >
                 {{ song.meta.title }}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div
-        v-if="paused"
-        class="flex flex-col justify-center absolute h-full w-full"
-      >
+      <div v-if="paused" class="flex flex-col justify-center absolute h-full w-full">
         <WideButton
           v-for="(button, i) in buttons"
           :key="button.label"
@@ -255,6 +271,6 @@ watch(position, () => select.play())
 }
 
 .gradient-title-versus {
-  background-image: linear-gradient(180deg, #7420FB 0%, #CF56E3 100%);
+  background-image: linear-gradient(180deg, #7420fb 0%, #cf56e3 100%);
 }
 </style>

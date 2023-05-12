@@ -18,7 +18,7 @@ const path = computed(() => {
   return songsStore.paths[id.value]
 })
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'confirm') {
     deleteSong()
@@ -46,12 +46,7 @@ onBeforeUnmount(() => {
       <TitleBar title="Settings" :description="path" @back="back" />
     </template>
     <div>
-      <WideButton
-        label="Delete"
-        :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
-        :active="true"
-        @click="deleteSong"
-      />
+      <WideButton label="Delete" :gradient="{ start: '#36D1DC', end: '#5B86E5' }" :active="true" @click="deleteSong" />
     </div>
     <template #footer>
       <KeyHints :hints="['back', 'confirm']" />

@@ -37,8 +37,7 @@ const averageMidiNote = computed(() => {
   const sentence = props.sentence
   if (!sentence) return 0
   const average = Math.round(
-    sentence.notes.map(notes => notes.midiNote).reduce((a, b) => a + b, 0)
-      / sentence.notes.length,
+    sentence.notes.map((notes) => notes.midiNote).reduce((a, b) => a + b, 0) / sentence.notes.length
   )
   return average
 })
@@ -50,11 +49,9 @@ const calculateNoteRow = (midiNote: number): number => {
   const maxNoteRowMidiNote = minNoteRowMidiNote + rowCount - 1
 
   // move by octave to fit on screen
-  while (wrappedMidiNote > maxNoteRowMidiNote && wrappedMidiNote > 0)
-    wrappedMidiNote -= 12
+  while (wrappedMidiNote > maxNoteRowMidiNote && wrappedMidiNote > 0) wrappedMidiNote -= 12
 
-  while (wrappedMidiNote < minNoteRowMidiNote && wrappedMidiNote < 127)
-    wrappedMidiNote += 12
+  while (wrappedMidiNote < minNoteRowMidiNote && wrappedMidiNote < 127) wrappedMidiNote += 12
 
   const offset: number = wrappedMidiNote - averageMidiNote.value
   let noteRow = Math.ceil(rowCount / 2 + offset)
@@ -65,8 +62,7 @@ const calculateNoteRow = (midiNote: number): number => {
 
 // display the sung pitch in the closer octave to the actual midi note for better user experience
 const calculateSungNoteRow = (processedBeat: ProcessedBeat) => {
-  if (processedBeat.sungNote === processedBeat.note.midiNote)
-    return calculateNoteRow(processedBeat.sungNote)
+  if (processedBeat.sungNote === processedBeat.note.midiNote) return calculateNoteRow(processedBeat.sungNote)
 
   const noteRow = calculateNoteRow(processedBeat.sungNote)
   const alternativeNoteRow = noteRow - 12
@@ -76,11 +72,7 @@ const calculateSungNoteRow = (processedBeat: ProcessedBeat) => {
     const correctNoteRow = calculateNoteRow(processedBeat.note.midiNote)
 
     // check what is closer to correctNoteRow
-    if (
-      Math.abs(correctNoteRow - noteRow)
-      < Math.abs(correctNoteRow - alternativeNoteRow)
-    )
-      return noteRow
+    if (Math.abs(correctNoteRow - noteRow) < Math.abs(correctNoteRow - alternativeNoteRow)) return noteRow
     else return alternativeNoteRow
   }
 
@@ -119,7 +111,7 @@ watch(
       }
     })
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 const delayInBeats = computed(() => {
@@ -139,10 +131,16 @@ const update = async (currentBeat: number) => {
   if (delayedBeat > processableBeats[0].beat + 1) {
     const beat = processableBeats.shift()
     if (props.pitchProcessor && beat) {
-      props.pitchProcessor.process(beat).then((processedBeat) => {
-        handleProcessedBeat(processedBeat)
-        handleScore(processedBeat)
-      })
+      props.pitchProcessor
+        .process(beat)
+        .then((processedBeat) => {
+          handleProcessedBeat(processedBeat)
+          handleScore(processedBeat)
+          return
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }
 }
@@ -189,14 +187,11 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    class="px-12cqw"
-    :class="[props.position === 'top' ? 'pt-2cqh pb-8cqh' : 'pt-8cqh pb-2cqh']"
-  >
+  <div class="px-12cqw" :class="[props.position === 'top' ? 'pt-2cqh pb-8cqh' : 'pt-8cqh pb-2cqh']">
     <div class="relative w-full h-full">
       <div v-if="props.sentence" ref="noteFieldEl" class="absolute w-full h-full flex">
         <PitchNote
-          v-for="note, index in props.sentence.notes"
+          v-for="(note, index) in props.sentence.notes"
           :key="index"
           :row-height="rowHeight"
           :row="calculateNoteRow(note.midiNote)"
@@ -204,9 +199,7 @@ defineExpose({
           :length="note.length"
           :midi-note="note.midiNote"
           :note-type="note.type"
-          :gap="
-            calculateGap(note, props.sentence.notes[index - 1] || null)
-          "
+          :gap="calculateGap(note, props.sentence.notes[index - 1] || null)"
         />
       </div>
       <div v-if="props.sentence" class="absolute w-full h-full flex">

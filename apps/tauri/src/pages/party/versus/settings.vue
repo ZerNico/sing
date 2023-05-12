@@ -17,7 +17,7 @@ const start = async () => {
   const matchups = createMatchups(players)
   versusStore.players.push(...players)
   versusStore.matchups.push(...matchups)
-  versusStore.scores.push(...players.map(player => ({ player, score: 0, rounds: 0, wins: 0 })))
+  versusStore.scores.push(...players.map((player) => ({ player, score: 0, rounds: 0, wins: 0 })))
   await router.push({ name: '/party/versus/' })
   versusStore.playing = true
 }
@@ -34,20 +34,20 @@ const resume = () => {
 }
 
 const buttons = computed(() => {
-  const settingsButtons = [{
-    type: 'range',
-    label: 'Jokers',
-    value: computed(() => versusStore.settings.jokers),
-    setter: (value: number) => versusStore.settings.jokers = value,
-    min: 0,
-    max: 15,
-    step: 1,
-    clickStep: 1,
-  }] as const
-
-  const startButtons = [
-    { type: 'button', label: 'Start', action: start },
+  const settingsButtons = [
+    {
+      type: 'range',
+      label: 'Jokers',
+      value: computed(() => versusStore.settings.jokers),
+      setter: (value: number) => (versusStore.settings.jokers = value),
+      min: 0,
+      max: 15,
+      step: 1,
+      clickStep: 1,
+    },
   ] as const
+
+  const startButtons = [{ type: 'button', label: 'Start', action: start }] as const
 
   const resumeButtons = [
     { type: 'button', label: 'Resume', action: resume },
@@ -61,7 +61,7 @@ const buttons = computed(() => {
 const maxPosition = computed(() => buttons.value.length - 1)
 const { position, increment, decrement } = useLoop(maxPosition)
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()
@@ -104,7 +104,7 @@ const gradient = { start: '#36D1DC', end: '#5B86E5' }
       <TitleBar title="Versus" description="Settings" @back="back" />
     </template>
     <div>
-      <template v-for="button, index in buttons">
+      <template v-for="(button, index) in buttons">
         <RangeInput
           v-if="button.type === 'range'"
           :ref="(el) => setRefs(el, index)"

@@ -23,13 +23,7 @@ export class Note {
   public txtPitch: number
   public midiNote: number
 
-  constructor(
-    type: NoteType,
-    startBeat: number,
-    length: number,
-    txtPitch: number,
-    text: string,
-  ) {
+  constructor(type: NoteType, startBeat: number, length: number, txtPitch: number, text: string) {
     this.type = type
     this.startBeat = startBeat
     this.length = length

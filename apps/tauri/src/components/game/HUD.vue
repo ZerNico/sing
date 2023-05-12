@@ -35,15 +35,19 @@ const update = (currentTime: number, duration: number) => {
   progress.value = (currentTime / duration) * 100
 }
 
-useIntervalFn(() => {
-  if (!props.player1 && !props.player2) return
+useIntervalFn(
+  () => {
+    if (!props.player1 && !props.player2) return
 
-  if (!props.player2) leader.value = 0
-  else if (!props.player1) leader.value = 1
-  else if (props.score1 > props.score2) leader.value = 0
-  else if (props.score2 > props.score1) leader.value = 1
-  else leader.value = -1
-}, 1000, { immediate: true })
+    if (!props.player2) leader.value = 0
+    else if (!props.player1) leader.value = 1
+    else if (props.score1 > props.score2) leader.value = 0
+    else if (props.score2 > props.score1) leader.value = 1
+    else leader.value = -1
+  },
+  1000,
+  { immediate: true }
+)
 
 defineExpose({
   update,
@@ -52,10 +56,7 @@ defineExpose({
 
 <template>
   <div class="flex flex-col justify-center">
-    <div
-      class="w-full flex justify-between px-5cqw items-end"
-      :class="{ 'opacity-0': !player1 }"
-    >
+    <div class="w-full flex justify-between px-5cqw items-end" :class="{ 'opacity-0': !player1 }">
       <div class="flex items-center gap-0.5cqw pb-1.5cqh">
         <Avatar :src="props.player1?.picture || undefined" :username="props.player1?.username" />
         <div class="font-semibold text-1cqw">
@@ -69,10 +70,7 @@ defineExpose({
     <div class="w-full px-5cqw">
       <div class="progress h-0.5cqh rounded-full" />
     </div>
-    <div
-      class="w-full flex justify-between px-5cqw items-start"
-      :class="{ 'opacity-0': !player2 }"
-    >
+    <div class="w-full flex justify-between px-5cqw items-start" :class="{ 'opacity-0': !player2 }">
       <div class="flex items-center gap-0.5cqw pt-1.5cqh">
         <Avatar :src="props.player2?.picture || undefined" :username="props.player2?.username" />
         <div class="font-semibold text-1cqw">
@@ -88,10 +86,6 @@ defineExpose({
 
 <style scoped>
 .progress {
-  background: linear-gradient(
-    90deg,
-    v-bind(leaderColor) v-bind('`${progress}%`'),
-    #fff2 v-bind('`${progress}%`')
-  );
+  background: linear-gradient(90deg, v-bind(leaderColor) v-bind('`${progress}%`'), #fff2 v-bind('`${progress}%`'));
 }
 </style>

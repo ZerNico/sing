@@ -45,9 +45,7 @@ defineExpose({ focus, blur, getInputEl })
 </script>
 
 <template>
-  <div
-    class="rounded-full border-black border-0.2cqw px-0.6cqw py-0.2cqw flex items-center text-black"
-  >
+  <div class="rounded-full border-black border-0.2cqw px-0.6cqw py-0.2cqw flex items-center text-black">
     <Icon icon="Search" class="text-1cqw mr-0.3cqw" />
     <div class="relative flex items-center flex-grow">
       <input
@@ -57,18 +55,13 @@ defineExpose({ focus, blur, getInputEl })
         name="search"
         @focusin="onFocusIn"
         @focusout="onFocusOut"
-      >
+      />
       <div
         class="absolute inset-0 flex items-center pointer-events-none justify-between"
         :class="{ 'opacity-0': !showPlaceholder }"
       >
-        <div class="text-0.9cqw">
-          Search
-        </div>
-        <Icon
-          :icon="keyMode === 'keyboard' ? 'KeyF3' : 'XboxMenu'"
-          class="text-1cqw ml-0.3cqw"
-        />
+        <div class="text-0.9cqw">Search</div>
+        <Icon :icon="keyMode === 'keyboard' ? 'KeyF3' : 'XboxMenu'" class="text-1cqw ml-0.3cqw" />
       </div>
     </div>
   </div>

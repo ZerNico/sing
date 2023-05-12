@@ -35,7 +35,7 @@ const maxPosition = computed(() => {
 
 const { position, increment, decrement } = useLoop(maxPosition)
 
-useMenuNavigation(useRepeatThrottleFn(e => onNavigate(e), 150))
+useMenuNavigation(useRepeatThrottleFn((e) => onNavigate(e), 150))
 const onNavigate = (event: MenuNavigationEvent) => {
   if (event.action === 'back') {
     back()
@@ -88,7 +88,7 @@ const scrollIntoView = (index: number) => {
 
     <div>
       <WideButton
-        v-for="user, index in users"
+        v-for="(user, index) in users"
         :key="user.username"
         :ref="(el) => setRefs(el, index)"
         :label="user.username"

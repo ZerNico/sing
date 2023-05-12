@@ -4,10 +4,7 @@ interface HasRepeat {
   repeat: boolean
 }
 
-export default function useRepeatThrottleFn<T extends HasRepeat>(
-  callback: (e: T) => void,
-  delay: MaybeRef<number>,
-) {
+export default function useRepeatThrottleFn<T extends HasRepeat>(callback: (e: T) => void, delay: MaybeRef<number>) {
   const delayRef = ref(delay)
 
   const disabled = ref(false)

@@ -8,25 +8,25 @@ export interface MenuNavigationEvent {
   origin: 'gamepad' | 'keyboard'
   originalKey: string
   action:
-  | 'left'
-  | 'right'
-  | 'up'
-  | 'down'
-  | 'back'
-  | 'confirm'
-  | 'sortleft'
-  | 'sortright'
-  | 'search'
-  | 'random'
-  | 'menu'
-  | 'joker1'
-  | 'joker2'
+    | 'left'
+    | 'right'
+    | 'up'
+    | 'down'
+    | 'back'
+    | 'confirm'
+    | 'sortleft'
+    | 'sortright'
+    | 'search'
+    | 'random'
+    | 'menu'
+    | 'joker1'
+    | 'joker2'
 }
 
 export default function useMenuNavigation(
   callback: MaybeRef<(event: MenuNavigationEvent) => void>,
   // options with immediate that defaults to true
-  options: { immediate?: boolean } = { immediate: true },
+  options: { immediate?: boolean } = { immediate: true }
 ) {
   const refCallback = ref(callback)
 
@@ -40,28 +40,16 @@ export default function useMenuNavigation(
         originalKey: event.button,
       })
     }
-    if (
-      event.button === 'DPAD_LEFT'
-      || (event.button === 'L_AXIS_X' && event.direction < -0.5)
-    ) {
+    if (event.button === 'DPAD_LEFT' || (event.button === 'L_AXIS_X' && event.direction < -0.5)) {
       callback('left')
     }
-    if (
-      event.button === 'DPAD_RIGHT'
-      || (event.button === 'L_AXIS_X' && event.direction > 0.5)
-    ) {
+    if (event.button === 'DPAD_RIGHT' || (event.button === 'L_AXIS_X' && event.direction > 0.5)) {
       callback('right')
     }
-    if (
-      event.button === 'DPAD_UP'
-      || (event.button === 'L_AXIS_Y' && event.direction < -0.5)
-    ) {
+    if (event.button === 'DPAD_UP' || (event.button === 'L_AXIS_Y' && event.direction < -0.5)) {
       callback('up')
     }
-    if (
-      event.button === 'DPAD_DOWN'
-      || (event.button === 'L_AXIS_Y' && event.direction > 0.5)
-    ) {
+    if (event.button === 'DPAD_DOWN' || (event.button === 'L_AXIS_Y' && event.direction > 0.5)) {
       callback('down')
     }
 

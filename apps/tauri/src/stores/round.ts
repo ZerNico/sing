@@ -57,15 +57,14 @@ export const useRoundStore = defineStore('round', {
   },
   getters: {
     totalScore1: (state) => {
-      return (maxScore: number) => Math.round((state.score1.score + state.score1.bonusScore) / maxScore * 10000)
+      return (maxScore: number) => Math.round(((state.score1.score + state.score1.bonusScore) / maxScore) * 10000)
     },
     totalScore2: (state) => {
-      return (maxScore: number) => Math.round((state.score2.score + state.score2.bonusScore) / maxScore * 10000)
+      return (maxScore: number) => Math.round(((state.score2.score + state.score2.bonusScore) / maxScore) * 10000)
     },
   },
 })
 
 if (import.meta.hot) {
-  // @ts-ignore Typings are wrong because of persisted-state
   import.meta.hot.accept(acceptHMRUpdate(useRoundStore, import.meta.hot))
 }

@@ -1,8 +1,7 @@
-import selectSfx from '~/assets/sounds/select.mp3'
-import confirmSfx from '~/assets/sounds/confirm.mp3'
-
 import { useSound } from '@vueuse/sound'
 import type { MaybeRef } from '@vueuse/core'
+import selectSfx from '~/assets/sounds/select.mp3'
+import confirmSfx from '~/assets/sounds/confirm.mp3'
 
 type Sound = 'select' | 'confirm'
 
@@ -20,7 +19,7 @@ export const useSoundEffect = (sound: MaybeRef<Sound>) => {
   })
 
   const volume = computed(() => {
-    return settingsStore.getMenuVolume / 100 * 2
+    return (settingsStore.getMenuVolume / 100) * 2
   })
 
   const s = useSound(sfx, { volume })

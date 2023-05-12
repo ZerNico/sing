@@ -29,8 +29,7 @@ const gapWidth = computed(() => {
   <div class="wrapper" :class="{ 'opacity-0': props.noteType === 'Freestyle' }">
     <div
       class="rounded-full shadow-md h-full pitch-border"
-      :class="[props.noteType === 'Golden' ? 'border-yellow-400 bg-yellow-400/20' : 'bg-black/20',
-      ]"
+      :class="[props.noteType === 'Golden' ? 'border-yellow-400 bg-yellow-400/20' : 'bg-black/20']"
     />
   </div>
 </template>
