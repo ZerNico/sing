@@ -1,0 +1,38 @@
+{
+  "name": "web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@unocss/nuxt": "^0.51.13",
+    "@vue-macros/nuxt": "^1.3.8",
+    "eslint-config-custom": "workspace:*",
+    "nuxt": "^3.5.0",
+    "unplugin-vue-macros": "^2.1.7"
+  },
+  "dependencies": {
+    "@fontsource/open-sans": "^4.5.14",
+    "@headlessui/vue": "^1.7.13",
+    "@iconify-json/carbon": "^1.1.16",
+    "@iconify-json/svg-spinners": "^1.1.1",
+    "@nuxtjs/i18n": "8.0.0-beta.12",
+    "@tanstack/vue-query": "^4.29.7",
+    "@trpc/client": "^10.26.0",
+    "@trpc/server": "^10.26.0",
+    "@unocss/preset-icons": "^0.51.13",
+    "@unocss/reset": "^0.51.13",
+    "@unocss/transformer-directives": "^0.51.13",
+    "@zernico/nuxt-logto": "^0.0.9",
+    "api": "workspace:*",
+    "browser-image-compression": "^2.0.2",
+    "devalue": "^4.3.1"
+  }
+}

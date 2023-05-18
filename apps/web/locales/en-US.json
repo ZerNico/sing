@@ -1,0 +1,45 @@
+{
+  "index": {
+    "tagline": "Unleash your inner Superstar in the Ultimate Karaoke Game.",
+    "download": "Download",
+    "join_lobby": "Join Lobby"
+  },
+  "nav": {
+    "users": "Users",
+    "profile": "Profile",
+    "join": "Join",
+    "edit_profile": "Edit Profile",
+    "sign_out": "Sign Out",
+    "leave_lobby": "Leave Lobby"
+  },
+  "user": {
+    "edit_profile_title": "Edit Profile",
+    "edit_username_label": "Username",
+    "edit_username_placeholder": "Enter your username",
+    "edit_profile_submit": "Save",
+    "edit_profile_success": "Profile updated successfully"
+  },
+  "error": {
+    "username_too_long": "Username is too long",
+    "username_too_short": "Username is too short",
+    "username_already_taken": "Username is already taken",
+    "avatar_too_large": "Avatar is too large",
+    "invalid_input": "Invalid input",
+    "unknown_error": "Unknown error",
+    "lobby_not_found": "Lobby not found",
+    "page_not_found": "Page not found"
+  },
+  "notification": {
+    "error_title": "Error",
+    "success_title": "Success",
+    "info_title": "Info",
+    "warning_title": "Warning"
+  },
+  "lobby": {
+    "enter_code_title": "Join lobby",
+    "enter_code_message": "Enter the lobby code to join a lobby",
+    "enter_code_placeholder": "Enter lobby code",
+    "enter_code_submit": "Join",
+    "enter_code_label": "Lobby Code"
+  }
+}

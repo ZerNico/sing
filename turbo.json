@@ -2,20 +2,48 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": ["^build", "db:generate"],
-      "env": ["TAURI_PLATFORM", "TAURI_DEBUG"],
-      "outputs": ["dist/**", ".output/**", "src-tauri/target"]
+      "dependsOn": [
+        "^build",
+        "db:generate"
+      ],
+      "env": [
+        "TAURI_PLATFORM",
+        "TAURI_DEBUG",
+        "VITE_API_URL",
+        "VITE_WEB_URL"
+      ],
+      "outputs": [
+        "dist/**",
+        ".output/**",
+        "src-tauri/target"
+      ]
     },
     "lint": {
       "outputs": []
     },
     "dev": {
-      "dependsOn": ["db:generate"],
+      "dependsOn": [
+        "db:generate"
+      ],
+      "env": [
+        "TAURI_PLATFORM",
+        "TAURI_DEBUG",
+        "LOGTO_APP_ID",
+        "LOGTO_APP_SECRET",
+        "LOGTO_ENDPOINT",
+        "ORIGIN",
+        "LOGTO_COOKIE_SECRET",
+        "NODE_ENV",
+        "LOGTO_RESOURCE",
+        "API_URL"
+      ],
       "cache": false
     },
     "start": {
       "persistent": true,
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "test:e2e": {},
     "db:generate": {

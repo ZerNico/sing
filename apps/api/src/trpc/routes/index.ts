@@ -1,10 +1,10 @@
 import { router } from '../trpc'
-import { healthRouter } from './health'
 import { highscoreRouter } from './highscore'
 import { lobbyRouter } from './lobby'
+import { userRouter } from './user'
 
 export const appRouter = router({
-  health: healthRouter,
+  user: userRouter,
   lobby: lobbyRouter,
   highscore: highscoreRouter,
 })

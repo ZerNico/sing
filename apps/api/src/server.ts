@@ -7,18 +7,20 @@ import { createContext } from './trpc/context'
 import { env } from './config/env'
 import { appRouter } from './trpc/routes'
 import { startCron } from './cron'
+import { registerAvatarRoutes } from './fastify/avatar'
 
 startCron()
 
 const server = fastify({
   maxParamLength: 5000,
+  bodyLimit: 10 * 1024 * 1024, // 10MB
 })
 
 server.register(cors, {
   origin: '*',
   credentials: true,
 })
-server.register(helmet)
+server.register(helmet, { crossOriginResourcePolicy: false })
 server.register(sensible)
 
 server.register(fastifyTRPCPlugin, {
@@ -26,7 +28,9 @@ server.register(fastifyTRPCPlugin, {
   trpcOptions: { router: appRouter, createContext },
 })
 
-server.listen({ host: '0.0.0.0', port: env.PORT }, (err) => {
+registerAvatarRoutes(server)
+
+server.listen({ host: '::', port: env.PORT }, (err) => {
   if (err) {
     console.error(err)
     process.exit(1)

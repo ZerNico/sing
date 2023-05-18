@@ -9,7 +9,7 @@ const props = defineProps<{
   searchEl?: InstanceType<typeof Search>
 }>()
 
-const { modelValue } = defineModel<{
+const { modelValue } = defineModels<{
   modelValue: string
 }>()
 
