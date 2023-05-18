@@ -6,7 +6,7 @@ const emit = defineEmits<{
   (e: 'focusout'): void
 }>()
 
-const { modelValue } = defineModel<{
+const { modelValue } = defineModels<{
   modelValue: string
 }>()
 

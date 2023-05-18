@@ -28,7 +28,7 @@ const props = defineProps<{
       </span>
     </div>
     <div
-      class="flex-grow flex flex-col min-h-0 transition-all duration-300 outline outline-0.35cqh rounded-0.45cqw"
+      class="flex-grow flex flex-col min-h-0 transition-all duration-200 outline outline-0.35cqh -outline-offset-1 rounded-0.45cqw"
       :class="[props.active ? 'outline-white' : 'outline-white/0']"
     >
       <div

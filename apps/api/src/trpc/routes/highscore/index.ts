@@ -1,10 +1,10 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-import { authedProcedure } from '../../middlewares/auth'
+import { lobbyAuthedProcedure } from '../../middlewares/lobby'
 import { router } from '../../trpc'
 
 export const highscoreRouter = router({
-  create: authedProcedure
+  patch: lobbyAuthedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -14,17 +14,17 @@ export const highscoreRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const lobby = await ctx.prisma.lobby.findUnique({
-        where: { id: ctx.user.sub },
+        where: { id: ctx.lobby.sub },
         include: {
           users: true,
         },
       })
 
-      if (!lobby) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Lobby not found' })
+      if (!lobby) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'error.lobby_does_not_exist' })
 
-      // check if user is in lobby
+      // Check if user is in lobby
       if (!lobby.users.find((user) => user.id === input.userId)) {
-        throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not in lobby' })
+        throw new TRPCError({ code: 'UNAUTHORIZED', message: 'error.user_not_in_lobby' })
       }
 
       const currHighscore = await ctx.prisma.highscore.findUnique({
@@ -32,7 +32,7 @@ export const highscoreRouter = router({
       })
 
       if (currHighscore) {
-        if (currHighscore.score > input.score) {
+        if (currHighscore.score >= input.score) {
           return { highscore: currHighscore }
         }
         const highscore = await ctx.prisma.highscore.update({
@@ -49,17 +49,16 @@ export const highscoreRouter = router({
 
       return { highscore }
     }),
-  get: authedProcedure.input(z.object({ hash: z.string() })).query(async ({ ctx, input }) => {
+  get: lobbyAuthedProcedure.input(z.object({ hash: z.string() })).query(async ({ ctx, input }) => {
     const lobby = await ctx.prisma.lobby.findUnique({
-      where: { id: ctx.user.sub },
+      where: { id: ctx.lobby.sub },
       include: {
         users: true,
       },
     })
 
-    if (!lobby) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Lobby not found' })
+    if (!lobby) throw new TRPCError({ code: 'UNAUTHORIZED', message: 'error.lobby_does_not_exist' })
 
-    // find highscores where hash matches and user is one of the users in lobby
     const highscores = await ctx.prisma.highscore.findMany({
       where: {
         hash: input.hash,
@@ -67,12 +66,8 @@ export const highscoreRouter = router({
           in: lobby.users.map((user) => user.id),
         },
       },
-      include: {
-        user: true,
-      },
-      orderBy: {
-        score: 'desc',
-      },
+      orderBy: { score: 'desc' },
+      include: { user: true },
     })
 
     return { highscores }

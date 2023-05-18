@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -10,29 +11,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String      @id @unique
+  username      String      @unique
+  picture       String?
+  email         String?
+  emailVerified Boolean?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  avatar        Avatar?
+  lobby         Lobby?      @relation(fields: [lobbyId], references: [id])
+  lobbyId       String?
+  highscores    Highscore[]
+}
+
+model Avatar {
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+  file   Bytes  @db.ByteA
+  mime   String
+}
+
 model Lobby {
   id        String   @id @default(uuid())
-  code      String   @unique @db.VarChar(10)
+  code      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  name      String?
   users     User[]
 }
 
-model User {
-  id         String      @id @unique
-  username   String      @db.VarChar(100)
-  picture    String?     @db.VarChar(200)
-  orgDomain  String      @db.VarChar(100)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  lobby      Lobby?      @relation(fields: [lobbyId], references: [id])
-  lobbyId    String?
-  highscores Highscore[]
-}
-
 model Highscore {
-  hash      String   @db.VarChar(100)
+  hash      String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   score     Int

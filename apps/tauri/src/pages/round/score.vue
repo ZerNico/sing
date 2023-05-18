@@ -89,7 +89,7 @@ const uploadHighscore = async () => {
 
   if (roundStore.player1 && roundStore.player1.id !== 'guest' && score1.value > 0) {
     requests.push(
-      client.highscore.create.mutate({
+      client.highscore.patch.mutate({
         userId: roundStore.player1.id,
         score: score1.value,
         hash: song.value.meta.hash,
@@ -99,7 +99,7 @@ const uploadHighscore = async () => {
 
   if (roundStore.player2 && roundStore.player2.id !== 'guest' && score2.value > 0) {
     requests.push(
-      client.highscore.create.mutate({
+      client.highscore.patch.mutate({
         userId: roundStore.player2.id,
         score: score2.value,
         hash: song.value.meta.hash,

@@ -1,6 +1,7 @@
 import type { AppRouter } from 'api/src/types'
 import type { CreateTRPCProxyClient } from '@trpc/client'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
+import { joinURL } from 'ufo'
 
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
 import SuperJSON from 'superjson'
@@ -12,7 +13,7 @@ export const useTRPC = (): { client: CreateTRPCProxyClient<AppRouter> } => {
     transformer: SuperJSON,
     links: [
       httpBatchLink({
-        url: import.meta.env.VITE_API_URL,
+        url: joinURL(import.meta.env.VITE_API_URL, 'trpc'),
         async headers() {
           if (!lobbyStore.jwt) {
             return {}

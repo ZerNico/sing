@@ -1,0 +1,45 @@
+{
+  "index": {
+    "tagline": "Entfessle deinen inneren Superstar im ultimativen Karaoke-Spiel.",
+    "download": "Herunterladen",
+    "join_lobby": "Lobby beitreten"
+  },
+  "nav": {
+    "users": "Nutzer",
+    "profile": "Profil",
+    "join": "Beitreten",
+    "edit_profile": "Profil bearbeiten",
+    "sign_out": "Abmelden",
+    "leave_lobby": "Lobby verlassen"
+  },
+  "user": {
+    "edit_profile_title": "Profil bearbeiten",
+    "edit_username_label": "Benutzername",
+    "edit_username_placeholder": "Gib deinen Benutzernamen ein",
+    "edit_profile_submit": "Speichern",
+    "edit_profile_success": "Profil erfolgreich aktualisiert"
+  },
+  "error": {
+    "username_too_long": "Benutzername ist zu lang",
+    "username_too_short": "Benutzername ist zu kurz",
+    "username_already_taken": "Benutzername ist bereits vergeben",
+    "avatar_too_large": "Avatar ist zu groß",
+    "invalid_input": "Ungültige Eingabe",
+    "unknown_error": "Unbekannter Fehler",
+    "lobby_not_found": "Lobby nicht gefunden",
+    "page_not_found": "Seite nicht gefunden"
+  },
+  "notification": {
+    "error_title": "Fehler",
+    "success_title": "Erfolg",
+    "info_title": "Info",
+    "warning_title": "Warnung"
+  },
+  "lobby": {
+    "enter_code_title": "Lobby beitreten",
+    "enter_code_message": "Gib den Lobby-Code ein, um einer Lobby beizutreten",
+    "enter_code_placeholder": "Lobby-Code eingeben",
+    "enter_code_submit": "Beitreten",
+    "enter_code_label": "Lobby-Code"
+  }
+}

@@ -12,7 +12,7 @@ const props = withDefaults(
   }
 )
 
-const { modelValue } = defineModel<{
+const { modelValue } = defineModels<{
   modelValue: string | number
 }>()
 
