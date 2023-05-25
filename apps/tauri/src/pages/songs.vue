@@ -156,7 +156,7 @@ const volume = computed(() => {
         />
       </div>
     </template>
-    <div class="px-5cqw h-full flex flex-col">
+    <div class="h-full flex flex-col">
       <div v-if="currentSong" class="pt-9cqh">
         <div class="flex pb-1.3cqh">
           <Icon icon="Duet" class="text-1.5cqw" :class="{ 'opacity-0': !currentSong.isDuet() }" />

@@ -1,21 +1,19 @@
 use std::sync::{
-    atomic::{AtomicI32, Ordering},
+    atomic::{AtomicUsize, Ordering},
     Arc, Mutex,
 };
 
 use atomic_float::AtomicF32;
+use dywapitchtrack::DywaPitchTracker;
 use ringbuf::{HeapRb, Rb};
 
-use super::{
-    dywapitchtrack::DywaPitchTracker, recorder::MicrophoneOptions,
-    utils::above_noise_supression_threshold,
-};
+use super::{recorder::MicrophoneOptions, utils::above_noise_supression_threshold};
 
 #[derive(Clone)]
 pub struct Processor {
     rb: Arc<Mutex<HeapRb<f32>>>,
     pitchtrack: Arc<Mutex<DywaPitchTracker>>,
-    samples_per_beat: Arc<AtomicI32>,
+    samples_per_beat: Arc<AtomicUsize>,
     gain: Arc<AtomicF32>,
     threshold: Arc<AtomicF32>,
 }
@@ -28,7 +26,7 @@ impl Processor {
         Self {
             rb: Arc::new(Mutex::new(buffer)),
             pitchtrack: Arc::new(Mutex::new(DywaPitchTracker::new())),
-            samples_per_beat: Arc::new(AtomicI32::new(0)),
+            samples_per_beat: Arc::new(AtomicUsize::new(0)),
             gain: Arc::new(AtomicF32::new(1.0)),
             threshold: Arc::new(AtomicF32::new(2.0)),
         }
@@ -39,7 +37,7 @@ impl Processor {
         pitchtrack.sample_rate_hz = sample_rate;
     }
 
-    pub fn set_samples_per_beat(&mut self, samples_per_beat: i32) {
+    pub fn set_samples_per_beat(&mut self, samples_per_beat: usize) {
         self.samples_per_beat
             .store(samples_per_beat, Ordering::Release);
     }
@@ -53,7 +51,7 @@ impl Processor {
         let rb = self.rb.lock().unwrap();
         let slices = rb.as_slices();
         let combined_slice = [slices.0, slices.1].concat();
-        let combined_slice_len = combined_slice.len() as i32;
+        let combined_slice_len = combined_slice.len();
 
         let mut pitchtrack = self.pitchtrack.lock().unwrap();
         let samples_per_beat = self.samples_per_beat.load(Ordering::Acquire);
@@ -80,9 +78,9 @@ impl Processor {
 
         if is_above_threshold {
             pitch = pitchtrack.compute_pitch(
-                combined_slice,
-                combined_slice_len as i32 - samples_per_beat,
-                samples_per_beat,
+                &combined_slice,
+                (combined_slice_len - samples_per_beat) as usize,
+                samples_per_beat as usize,
             );
         }
 

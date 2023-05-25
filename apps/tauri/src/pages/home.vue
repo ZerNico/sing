@@ -176,7 +176,7 @@ const error = ref()
         </div>
       </div>
     </template>
-    <div class="flex flex-col items-center justify-center px-5cqw py-5cqh h-full">
+    <div class="flex flex-col items-center justify-center py-5cqh h-full">
       <div class="w-full h-3/7 flex items-center gap-2cqw">
         <div class="flex-grow flex">
           <div

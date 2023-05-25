@@ -134,7 +134,7 @@ const confirm = useSoundEffect('confirm')
 </script>
 
 <template>
-  <Layout class="gradient-bg-secondary" @back="back">
+  <Layout class="gradient-bg-secondary" :margin="false" @back="back">
     <template #background>
       <SongPlayer ref="songPlayerEl" :volume="volume" :song="song" class="w-full h-full opacity-30" @error="newSong" />
     </template>

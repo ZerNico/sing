@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@unocss/nuxt', '@nuxtjs/i18n', '@zernico/nuxt-logto', '@vue-macros/nuxt'],
+  modules: ['@unocss/nuxt', '@nuxtjs/i18n', '@zernico/nuxt-logto', '@vue-macros/nuxt', '@nuxt/devtools'],
   typescript: {
     tsConfig: {
       compilerOptions: {

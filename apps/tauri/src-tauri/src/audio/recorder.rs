@@ -81,7 +81,7 @@ impl Recorder {
 
                     for (index, mic) in mics_for_device.iter() {
                         processors[*index].set_sample_rate(config.sample_rate().0 as i32);
-                        processors[*index].set_samples_per_beat(samples_per_beat);
+                        processors[*index].set_samples_per_beat(samples_per_beat as usize);
                         processors[*index].set_options(mic);
                     }
 

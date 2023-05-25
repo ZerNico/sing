@@ -61,7 +61,10 @@ defineExpose({
         />
       </div>
     </div>
-    <div class="absolute w-full h-full transition-all duration-300 bg top-0 left-0" :class="!active && 'opacity-0'" />
+    <div
+      class="absolute w-full h-full transition-all duration-300 bg top-0 left-0 rounded-0.45cqw"
+      :class="!active && 'opacity-0'"
+    />
   </div>
 </template>
 
