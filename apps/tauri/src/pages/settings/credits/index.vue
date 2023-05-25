@@ -1,17 +1,16 @@
 <script setup lang="ts">
+import { open } from '@tauri-apps/api/shell'
 import type { MenuNavigationEvent } from '~/composables/useMenuNavigation'
 
 const router = useRouter()
 
 const back = () => {
-  router.push({ name: '/home' })
+  router.push({ name: '/settings/' })
 }
 
 const buttons = [
-  { label: 'Volume', action: () => router.push({ name: '/settings/volume/' }) },
-  { label: 'Microphones', action: () => router.push({ name: '/settings/microphones/' }) },
-  { label: 'Songs', action: () => router.push({ name: '/settings/songs/' }) },
-  { label: 'Credits', action: () => router.push({ name: '/settings/credits/' }) },
+  { label: 'UltraStar Play ', action: () => open('https://github.com/UltraStar-Deluxe/Play/') },
+  { label: 'Karol Szcześniak', action: () => undefined },
 ]
 
 const { position, increment, decrement } = useLoop(buttons.length - 1)
@@ -42,7 +41,7 @@ onBeforeUnmount(() => {
 <template>
   <Layout class="gradient-bg-secondary" @back="back">
     <template #header>
-      <TitleBar title="Settings" @back="back" />
+      <TitleBar title="Settings" description="Credits" @back="back" />
     </template>
     <div>
       <WideButton

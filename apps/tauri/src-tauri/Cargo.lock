@@ -673,6 +673,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0bd4b30a6560bbd9b4620f4de34c3f14f60848e58a9b7216801afcb4c7b31c3c"
 
 [[package]]
+name = "dywapitchtrack"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96b4349366b0b0d2914739b70edfcbca57722d91dd47bae6c9107fd93763374c"
+
+[[package]]
 name = "embed_plist"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2636,6 +2642,7 @@ dependencies = [
  "atomic_float",
  "cpal",
  "desync",
+ "dywapitchtrack",
  "lofty",
  "percent-encoding",
  "rand 0.8.5",

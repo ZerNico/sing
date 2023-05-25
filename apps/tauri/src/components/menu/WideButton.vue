@@ -11,7 +11,10 @@ const props = defineProps<{
     <div class="text-center text-white font-bold relative z-1 text-1.8cqw">
       {{ label }}
     </div>
-    <div class="absolute w-full h-full transition-all duration-300 bg top-0 left-0" :class="!active && 'opacity-0'" />
+    <div
+      class="absolute w-full h-full transition-all duration-300 bg top-0 left-0 rounded-0.45cqw"
+      :class="!active && 'opacity-0'"
+    />
   </div>
 </template>
 

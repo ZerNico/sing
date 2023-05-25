@@ -30,7 +30,8 @@ const micCount = computed(() => {
 const guest: User = {
   username: 'Guest',
   id: 'guest',
-  orgDomain: 'guest',
+  email: null,
+  emailVerified: null,
   createdAt: new Date(),
   updatedAt: new Date(),
   picture: null,

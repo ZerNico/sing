@@ -228,7 +228,7 @@ watch(position, () => select.play())
           </div>
         </div>
       </div>
-      <div v-if="paused" class="flex flex-col justify-center absolute h-full w-full">
+      <div v-if="paused" class="flex flex-col justify-center absolute h-full w-full px-5cqw">
         <WideButton
           v-for="(button, i) in buttons"
           :key="button.label"

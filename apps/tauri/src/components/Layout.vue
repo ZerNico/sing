@@ -1,4 +1,13 @@
 <script setup lang="ts">
+const props = withDefaults(
+  defineProps<{
+    margin?: boolean
+  }>(),
+  {
+    margin: true,
+  }
+)
+
 const emit = defineEmits<{
   (event: 'back'): void
   (event: 'forward'): void
@@ -25,7 +34,10 @@ const onClick = (e: MouseEvent) => {
         <slot name="header" />
       </div>
 
-      <div class="relative overflow-y-auto scrollbar grid place-items-center children:w-full">
+      <div
+        class="relative overflow-y-auto scrollbar grid place-items-center children:w-full"
+        :class="{ 'px-5cqw': props.margin }"
+      >
         <slot />
       </div>
       <div class="px-5cqw pb-7cqh pt-1cqh relative">
