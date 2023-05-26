@@ -231,6 +231,7 @@ declare module 'vue' {
     readonly useOfflineFallbackFn: UnwrapRef<typeof import('./composables/useOfflineFallbackFn')['default']>
     readonly useOffsetPagination: UnwrapRef<typeof import('@vueuse/core')['useOffsetPagination']>
     readonly useOnline: UnwrapRef<typeof import('@vueuse/core')['useOnline']>
+    readonly usePageAnimation: UnwrapRef<typeof import('./composables/usePageAnimation')['usePageAnimation']>
     readonly usePageLeave: UnwrapRef<typeof import('@vueuse/core')['usePageLeave']>
     readonly useParallax: UnwrapRef<typeof import('@vueuse/core')['useParallax']>
     readonly useParentElement: UnwrapRef<typeof import('@vueuse/core')['useParentElement']>
@@ -543,6 +544,7 @@ declare module '@vue/runtime-core' {
     readonly useOfflineFallbackFn: UnwrapRef<typeof import('./composables/useOfflineFallbackFn')['default']>
     readonly useOffsetPagination: UnwrapRef<typeof import('@vueuse/core')['useOffsetPagination']>
     readonly useOnline: UnwrapRef<typeof import('@vueuse/core')['useOnline']>
+    readonly usePageAnimation: UnwrapRef<typeof import('./composables/usePageAnimation')['usePageAnimation']>
     readonly usePageLeave: UnwrapRef<typeof import('@vueuse/core')['usePageLeave']>
     readonly useParallax: UnwrapRef<typeof import('@vueuse/core')['useParallax']>
     readonly useParentElement: UnwrapRef<typeof import('@vueuse/core')['useParentElement']>
@@ -853,6 +855,7 @@ declare module '@vue/runtime-core' {
   const useOfflineFallbackFn: typeof import('./composables/useOfflineFallbackFn')['default']
   const useOffsetPagination: typeof import('@vueuse/core')['useOffsetPagination']
   const useOnline: typeof import('@vueuse/core')['useOnline']
+  const usePageAnimation: typeof import('./composables/usePageAnimation')['usePageAnimation']
   const usePageLeave: typeof import('@vueuse/core')['usePageLeave']
   const useParallax: typeof import('@vueuse/core')['useParallax']
   const useParentElement: typeof import('@vueuse/core')['useParentElement']
@@ -1171,6 +1174,7 @@ declare module 'vue' {
     readonly useOfflineFallbackFn: UnwrapRef<typeof import('./composables/useOfflineFallbackFn')['default']>
     readonly useOffsetPagination: UnwrapRef<typeof import('@vueuse/core')['useOffsetPagination']>
     readonly useOnline: UnwrapRef<typeof import('@vueuse/core')['useOnline']>
+    readonly usePageAnimation: UnwrapRef<typeof import('./composables/usePageAnimation')['usePageAnimation']>
     readonly usePageLeave: UnwrapRef<typeof import('@vueuse/core')['usePageLeave']>
     readonly useParallax: UnwrapRef<typeof import('@vueuse/core')['useParallax']>
     readonly useParentElement: UnwrapRef<typeof import('@vueuse/core')['useParentElement']>
@@ -1483,6 +1487,7 @@ declare module '@vue/runtime-core' {
     readonly useOfflineFallbackFn: UnwrapRef<typeof import('./composables/useOfflineFallbackFn')['default']>
     readonly useOffsetPagination: UnwrapRef<typeof import('@vueuse/core')['useOffsetPagination']>
     readonly useOnline: UnwrapRef<typeof import('@vueuse/core')['useOnline']>
+    readonly usePageAnimation: UnwrapRef<typeof import('./composables/usePageAnimation')['usePageAnimation']>
     readonly usePageLeave: UnwrapRef<typeof import('@vueuse/core')['usePageLeave']>
     readonly useParallax: UnwrapRef<typeof import('@vueuse/core')['useParallax']>
     readonly useParentElement: UnwrapRef<typeof import('@vueuse/core')['useParentElement']>
