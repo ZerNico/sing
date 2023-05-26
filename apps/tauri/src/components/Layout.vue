@@ -2,9 +2,11 @@
 const props = withDefaults(
   defineProps<{
     margin?: boolean
+    scrolling?: boolean
   }>(),
   {
     margin: true,
+    scrolling: true,
   }
 )
 
@@ -35,8 +37,8 @@ const onClick = (e: MouseEvent) => {
       </div>
 
       <div
-        class="relative overflow-y-auto scrollbar grid place-items-center children:w-full"
-        :class="{ 'px-5cqw': props.margin }"
+        class="relative scrollbar grid place-items-center children:w-full"
+        :class="{ 'px-5cqw': props.margin, 'overflow-y-auto': props.scrolling }"
       >
         <slot />
       </div>
