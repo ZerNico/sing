@@ -15,11 +15,11 @@
     "start:prod": "pnpm run db:migrate:deploy && pnpm run start"
   },
   "dependencies": {
-    "@fastify/cors": "^8.2.1",
+    "@fastify/cors": "^8.3.0",
     "@fastify/helmet": "^10.1.1",
     "@fastify/sensible": "^5.2.0",
     "@prisma/client": "latest",
-    "@trpc/server": "^10.27.1",
+    "@trpc/server": "^10.28.0",
     "croner": "^6.0.3",
     "dotenv-cli": "^7.2.1",
     "fastify": "^4.17.0",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.2",
-    "@types/node": "^20.2.3",
+    "@types/node": "^20.2.4",
     "eslint": "^8.41.0",
     "eslint-config-custom": "workspace:*",
     "prisma": "^4.14.1",

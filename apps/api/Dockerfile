@@ -1,7 +1,7 @@
 FROM node:18-alpine AS builder
 
 RUN apk update && apk add --no-cache libc6-compat
-RUN corepack enable && corepack prepare pnpm@7.4.1 --activate 
+RUN corepack enable && corepack prepare pnpm@latest --activate 
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN turbo prune --scope=api --docker
 FROM node:18-alpine AS runner
 
 RUN apk update && apk add --no-cache libc6-compat
-RUN corepack enable && corepack prepare pnpm@7.4.1 --activate 
+RUN corepack enable && corepack prepare pnpm@latest --activate 
 
 WORKDIR /app
 

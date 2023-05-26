@@ -22,5 +22,5 @@
     "node": ">=14.0.0"
   },
   "dependencies": {},
-  "packageManager": "pnpm@7.20.0"
+  "packageManager": "pnpm@7.32.5"
 }
