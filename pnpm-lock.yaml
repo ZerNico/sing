@@ -208,8 +208,8 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       '@nuxtjs/i18n':
-        specifier: npm:@nuxtjs/i18n-edge
-        version: /@nuxtjs/i18n-edge@8.0.0-beta.12-28065601.76e2626(vue@3.3.4)
+        specifier: ^8.0.0-beta.12
+        version: 8.0.0-beta.12(vue@3.3.4)
       '@tanstack/vue-query':
         specifier: ^4.29.11
         version: 4.29.11(vue@3.3.4)
@@ -240,9 +240,6 @@ importers:
       devalue:
         specifier: ^4.3.2
         version: 4.3.2
-      vue-i18n:
-        specifier: ^9.3.0-beta.17
-        version: 9.3.0-beta.17(vue@3.3.4)
     devDependencies:
       '@nuxt/devtools':
         specifier: ^0.5.5
@@ -1057,8 +1054,8 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@intlify/unplugin-vue-i18n@0.10.0(vue-i18n@9.3.0-beta.17):
-    resolution: {integrity: sha512-Sf8fe26/d8rBNcg+zBSb7RA1uyhrG9zhIM+CRX6lqcznMDjLRr/1tuVaJ9E6xqJkzjfPgRzNcCqwMt6rpNkL7Q==}
+  /@intlify/unplugin-vue-i18n@0.10.1(vue-i18n@9.3.0-beta.17):
+    resolution: {integrity: sha512-9ZzE0ddlDO06Xzg25JPiNbx6PJPDho5k/Np+uL9fJRZEKq2TxT3c+ZK+Pec6j0ybhhVXeda8/yE3tPUf4SOXZQ==}
     engines: {node: '>= 14.16'}
     peerDependencies:
       petite-vue-i18n: '*'
@@ -1565,13 +1562,13 @@ packages:
       - vue-tsc
     dev: true
 
-  /@nuxtjs/i18n-edge@8.0.0-beta.12-28065601.76e2626(vue@3.3.4):
-    resolution: {integrity: sha512-I3u30gFMHOKWvj49qFpyuTOeEYis8yM0fwBjpLt5A2FZrKxQy4UNjTLOYScbg+nnqlNCB/6nTv3oqc2khQjeRA==}
+  /@nuxtjs/i18n@8.0.0-beta.12(vue@3.3.4):
+    resolution: {integrity: sha512-f149HXPyk4RJZul3ThWo4YVN7WmL3scge8UZx08cxAiKjhoCIoHySKxX05CwAu0v7sfYxeYeP+qCeQyGaBErpQ==}
     engines: {node: ^14.16.0 || >=16.11.0}
     dependencies:
       '@intlify/bundle-utils': 5.5.0(vue-i18n@9.3.0-beta.17)
       '@intlify/shared': 9.3.0-beta.17
-      '@intlify/unplugin-vue-i18n': 0.10.0(vue-i18n@9.3.0-beta.17)
+      '@intlify/unplugin-vue-i18n': 0.10.1(vue-i18n@9.3.0-beta.17)
       '@mizchi/sucrase': 4.1.0
       '@nuxt/kit': 3.5.1
       '@vue/compiler-sfc': 3.3.4
@@ -3083,7 +3080,7 @@ packages:
   /@vue/compiler-core@3.3.2:
     resolution: {integrity: sha512-CKZWo1dzsQYTNTft7whzjL0HsrEpMfiK7pjZ2WFE3bC1NA7caUjWioHSK+49y/LK7Bsm4poJZzAMnvZMQ7OTeg==}
     dependencies:
-      '@babel/parser': 7.21.8
+      '@babel/parser': 7.21.9
       '@vue/shared': 3.3.2
       estree-walker: 2.0.2
       source-map-js: 1.0.2
@@ -3147,7 +3144,7 @@ packages:
   /@vue/compiler-sfc@3.3.4:
     resolution: {integrity: sha512-6y/d8uw+5TkCuzBkgLS0v3lSM3hJDntFEiUORM11pQ/hKvkhSKZrXW6i69UyXlJQisJxuUEJKAWEqWbWsLeNKQ==}
     dependencies:
-      '@babel/parser': 7.21.8
+      '@babel/parser': 7.21.9
       '@vue/compiler-core': 3.3.4
       '@vue/compiler-dom': 3.3.4
       '@vue/compiler-ssr': 3.3.4

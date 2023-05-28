@@ -24,7 +24,7 @@
     "@headlessui/vue": "^1.7.13",
     "@iconify-json/carbon": "^1.1.16",
     "@iconify-json/svg-spinners": "^1.1.1",
-    "@nuxtjs/i18n": "npm:@nuxtjs/i18n-edge",
+    "@nuxtjs/i18n": "^8.0.0-beta.12",
     "@tanstack/vue-query": "^4.29.11",
     "@trpc/client": "^10.28.0",
     "@trpc/server": "^10.28.0",
@@ -34,7 +34,6 @@
     "@zernico/nuxt-logto": "^0.0.11",
     "api": "workspace:*",
     "browser-image-compression": "^2.0.2",
-    "devalue": "^4.3.2",
-    "vue-i18n": "^9.3.0-beta.17"
+    "devalue": "^4.3.2"
   }
 }
