@@ -21,7 +21,18 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiUrl: process.env.API_URL,
+      apiUrl: '',
+      logto: {
+        appId: '',
+        origin: '',
+      },
+    },
+    logto: {
+      appSecret: '',
+      endpoint: '',
+      cookieSecure: false,
+      cookieSecret: '',
+      resources: '',
     },
   },
   i18n: {
@@ -47,14 +58,5 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
-  },
-  logto: {
-    appId: process.env.LOGTO_APP_ID,
-    appSecret: process.env.LOGTO_APP_SECRET,
-    endpoint: process.env.LOGTO_ENDPOINT,
-    origin: process.env.ORIGIN,
-    cookieSecret: process.env.LOGTO_COOKIE_SECRET,
-    cookieSecure: process.env.NODE_ENV === 'production',
-    resources: [process.env.LOGTO_RESOURCE!],
   },
 })

@@ -23,7 +23,7 @@ COPY --from=builder /app/out/full/ ./
 RUN pnpm install --frozen-lockfile
 RUN pnpm run build --filter="api..."
 
-EXPOSE 5000
+EXPOSE 4000
 
 WORKDIR /app/apps/api
 
