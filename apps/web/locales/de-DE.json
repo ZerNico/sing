@@ -17,7 +17,19 @@
     "edit_username_label": "Benutzername",
     "edit_username_placeholder": "Gib deinen Benutzernamen ein",
     "edit_profile_submit": "Speichern",
-    "edit_profile_success": "Profil erfolgreich aktualisiert"
+    "edit_profile_success": "Profil erfolgreich aktualisiert",
+    "edit_password_title": "Passwort ändern",
+    "edit_password_message": "Gib dein aktuelles und dein neues Passwort ein",
+    "edit_password_button": "Passwort ändern",
+    "edit_password_label": "Passwort",
+    "edit_password_current_label": "Aktuelles Passwort",
+    "edit_password_current_placeholder": "Gib dein aktuelles Passwort ein",
+    "edit_password_new_label": "Neues Passwort",
+    "edit_password_new_placeholder": "Gib dein neues Passwort ein",
+    "edit_password_confirm_label": "Passwort bestätigen",
+    "edit_password_confirm_placeholder": "Bestätige dein neues Passwort",
+    "edit_password_submit": "Passwort ändern",
+    "edit_password_success": "Passwort erfolgreich geändert"
   },
   "error": {
     "username_too_long": "Benutzername ist zu lang",
@@ -27,7 +39,11 @@
     "invalid_input": "Ungültige Eingabe",
     "unknown_error": "Unbekannter Fehler",
     "lobby_not_found": "Lobby nicht gefunden",
-    "page_not_found": "Seite nicht gefunden"
+    "page_not_found": "Seite nicht gefunden",
+    "password_too_short": "Passwort ist zu kurz",
+    "password_too_long": "Passwort ist zu lang",
+    "passwords_do_not_match": "Passwörter stimmen nicht überein",
+    "password_incorrect": "Falsches Passwort"
   },
   "notification": {
     "error_title": "Fehler",

@@ -89,33 +89,42 @@ const { isLoading, mutate } = useMutation({
 
 <template>
   <div class="w-full h-full flex items-center justify-center p-8">
-    <div class="w-full h-full flex items-center justify-center p-8">
-      <input ref="avatarInputEl" type="file" class="hidden" accept="image/*" @input="onAvatarSelected" />
-      <form class="w-full h-full grid place-items-center" @submit="mutate">
-        <UiCard class="w-full max-w-100" :title="t('user.edit_profile_title')">
-          <div class="flex justify-center">
-            <div class="relative">
-              <button type="button" class="rounded-full" @click="onSelectAvatar">
-                <UiAvatar
-                  class="w-30 h-30 hover:opacity-70 text-3xl"
-                  :src="avatarUrl"
-                  :fallback="claims?.username?.at(0)"
-                ></UiAvatar>
-              </button>
-              <div class="absolute bottom-0 right-0 bg-primary rounded-full p-1.5">
-                <div class="i-carbon-edit text-xl text-primary-foreground"></div>
-              </div>
+    <input ref="avatarInputEl" type="file" class="hidden" accept="image/*" @input="onAvatarSelected" />
+    <form class="w-full h-full grid place-items-center" @submit="mutate">
+      <UiCard class="w-full max-w-100" :title="t('user.edit_profile_title')">
+        <div class="flex justify-center">
+          <div class="relative">
+            <button type="button" class="rounded-full" @click="onSelectAvatar">
+              <UiAvatar
+                class="w-30 h-30 hover:opacity-70 text-3xl"
+                :src="avatarUrl"
+                :fallback="claims?.username?.at(0)"
+              ></UiAvatar>
+            </button>
+            <div class="absolute bottom-0 right-0 bg-primary rounded-full p-1.5">
+              <div class="i-carbon-edit text-xl text-primary-foreground"></div>
             </div>
           </div>
-          <div class="flex flex-col gap-2">
-            <UiLabel for="username">{{ t('user.edit_username_label') }}</UiLabel>
-            <UiInput id="username" v-model="username" :placeholder="t('user.edit_username_placeholder')" />
-          </div>
-          <template #footer>
-            <UiButton class="w-full" :loading="isLoading">{{ t('user.edit_profile_submit') }}</UiButton>
-          </template>
-        </UiCard>
-      </form>
-    </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <UiLabel for="username">{{ t('user.edit_username_label') }}</UiLabel>
+          <UiInput id="username" v-model="username" :placeholder="t('user.edit_username_placeholder')" />
+        </div>
+        <div class="flex flex-col gap-2">
+          <UiLabel for="password">{{ t('user.edit_password_label') }}</UiLabel>
+          <NuxtLink id="password" to="/user/edit-profile/password" class="w-full">
+            <UiButton variant="outline" type="button" class="w-full">
+              <div class="inline-flex items-center justify-between w-full">
+                {{ t('user.edit_password_button') }}
+                <div class="i-carbon-arrow-right text-2xl"></div>
+              </div>
+            </UiButton>
+          </NuxtLink>
+        </div>
+        <template #footer>
+          <UiButton class="w-full" :loading="isLoading">{{ t('user.edit_profile_submit') }}</UiButton>
+        </template>
+      </UiCard>
+    </form>
   </div>
 </template>

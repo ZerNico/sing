@@ -64,7 +64,7 @@ export const userRouter = router({
           }
         }
 
-        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', cause: err })
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'error.unknown_error', cause: err })
       })
 
       const user = await ctx.prisma.user.update({
@@ -79,6 +79,38 @@ export const userRouter = router({
 
       return {
         user,
+      }
+    }),
+
+  updatePassword: logtoAuthedProcedure
+    .input(
+      z
+        .object({
+          currentPassword: z.string(),
+          newPassword: z
+            .string()
+            .min(9, { message: 'error.password_too_short' })
+            .max(8196, { message: 'error.password_too_long' }),
+          newPasswordConfirm: z.string(),
+        })
+        .refine((data) => data.newPassword === data.newPasswordConfirm, {
+          message: 'error.passwords_do_not_match',
+          path: ['confirmPassword'],
+        })
+    )
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.mm.verifyPassword(ctx.user.id, input.currentPassword)
+        await ctx.mm.updatePassword(ctx.user.id, input.newPassword)
+      } catch (err) {
+        if (err instanceof LogtoError && err.code === 'session.invalid_credentials') {
+          throw new TRPCError({ code: 'UNAUTHORIZED', message: 'error.password_incorrect' })
+        }
+        throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'error.unknown_error', cause: err })
+      }
+
+      return {
+        success: true,
       }
     }),
 })

@@ -2,15 +2,17 @@ import { TRPCError } from '@trpc/server'
 import { middleware, publicProcedure } from '../trpc'
 import { verifyLogtoJwt } from '../../logto/jwt'
 
+const INVALID_TOKEN_MESSAGE = 'error.invalid_token'
+
 const isLogtoAuthed = middleware(async ({ ctx, next }) => {
   const token = ctx.req.headers.authorization?.split(' ')[1]
 
-  if (!token) throw new TRPCError({ code: 'UNAUTHORIZED' })
+  if (!token) throw new TRPCError({ code: 'UNAUTHORIZED', message: INVALID_TOKEN_MESSAGE })
 
   const payload = await verifyLogtoJwt(token).catch(() => {
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: INVALID_TOKEN_MESSAGE })
   })
-  if (!payload.sub) throw new TRPCError({ code: 'UNAUTHORIZED' })
+  if (!payload.sub) throw new TRPCError({ code: 'UNAUTHORIZED', message: INVALID_TOKEN_MESSAGE })
 
   const user = await ctx.prisma.user.findUnique({
     where: {

@@ -45,4 +45,34 @@ export class ManagementApiClient {
     })
     return response
   }
+
+  public async verifyPassword(userId: string, password: string) {
+    const response = await ofetch<LogtoUser>(joinURL(env.LOGTO_URL, 'api', 'users', userId, 'password', 'verify'), {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${await this.getToken()}`,
+      },
+      body: {
+        password,
+      },
+    }).catch((err) => {
+      throw new LogtoError(err.data)
+    })
+    return response
+  }
+
+  public async updatePassword(userId: string, password: string) {
+    const response = await ofetch<LogtoUser>(joinURL(env.LOGTO_URL, 'api', 'users', userId, 'password'), {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${await this.getToken()}`,
+      },
+      body: {
+        password: password,
+      },
+    }).catch((err) => {
+      throw new LogtoError(err.data)
+    })
+    return response
+  }
 }

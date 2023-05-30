@@ -77,7 +77,7 @@ const menuItems = computed(() => {
 })
 
 const isActive = (to: string) => {
-  return router.currentRoute.value.path === to
+  return router.currentRoute.value.path.startsWith(to)
 }
 
 const leaveLobby = async () => {
