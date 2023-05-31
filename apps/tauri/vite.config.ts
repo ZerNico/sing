@@ -8,6 +8,7 @@ import VueMacros from 'unplugin-vue-macros/vite'
 import svgLoader from 'vite-svg-loader'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
+import pkg from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -15,6 +16,10 @@ export default defineConfig(async () => ({
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
     },
+  },
+
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
   },
 
   optimizeDeps: {

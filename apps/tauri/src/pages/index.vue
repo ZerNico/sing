@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useMutation } from '@tanstack/vue-query'
+import { TRPCClientError } from '@trpc/client'
 import type { MenuNavigationEvent } from '~/composables/useMenuNavigation'
 
 const { client } = useTRPC()
@@ -7,7 +8,7 @@ const { client } = useTRPC()
 const lobbyStore = useLobbyStore()
 const router = useRouter()
 
-const createLobby = () => client.lobby.create.mutate()
+const createLobby = () => client.lobby.create.mutate({ version: __APP_VERSION__ })
 
 const { isLoading, isError, isSuccess, mutate } = useMutation({
   mutationFn: createLobby,
@@ -17,6 +18,11 @@ const { isLoading, isError, isSuccess, mutate } = useMutation({
     lobbyStore.jwt = data.jwt
     lobbyStore.lobby = data.lobby
     router.push({ name: '/home' })
+  },
+  onError: (e) => {
+    if (e instanceof TRPCClientError && e.message === 'error.version_too_old') {
+      router.push({ name: '/update' })
+    }
   },
 })
 mutate()

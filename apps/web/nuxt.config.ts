@@ -1,3 +1,5 @@
+import pkg from './package.json'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@unocss/nuxt', '@nuxtjs/i18n', '@zernico/nuxt-logto', '@vue-macros/nuxt', '@nuxt/devtools'],
@@ -22,6 +24,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: '',
+      appVersion: pkg.version,
       logto: {
         appId: '',
         origin: '',

@@ -58,6 +58,7 @@ declare module 'vue-router/auto/routes' {
     '/settings/songs/[id]': RouteRecordInfo<'/settings/songs/[id]', '/settings/songs/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/settings/volume/': RouteRecordInfo<'/settings/volume/', '/settings/volume', Record<never, never>, Record<never, never>>,
     '/songs': RouteRecordInfo<'/songs', '/songs', Record<never, never>, Record<never, never>>,
+    '/update': RouteRecordInfo<'/update', '/update', Record<never, never>, Record<never, never>>,
   }
 }
 

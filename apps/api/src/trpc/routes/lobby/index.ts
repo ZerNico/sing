@@ -1,15 +1,25 @@
 import { Lobby, Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+import semver from 'semver'
 import { publicProcedure, router } from '../../trpc'
 import { randomReadableString } from '../../../utils/random'
 import { generateLobbyJwt } from '../../../lobby/jwt'
 import { logtoAuthedProcedure } from '../../middlewares/logto'
 import { lobbyAuthedProcedure } from '../../middlewares/lobby'
 
+const MININUM_VERSION = '0.0.2'
+
 export const lobbyRouter = router({
   /* Functions for game client */
-  create: publicProcedure.mutation(async ({ ctx }) => {
+  create: publicProcedure.input(z.object({ version: z.string() })).mutation(async ({ ctx, input }) => {
+    if (!semver.satisfies(input.version, `>=${MININUM_VERSION}`)) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'error.version_too_old',
+      })
+    }
+
     // generate a new lobby code until it is unique
     // after 10 tries, increase the length of the code
     let tries = 0
