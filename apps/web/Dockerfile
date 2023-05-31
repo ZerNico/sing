@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 RUN apk update && apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@latest --activate 
@@ -11,7 +11,7 @@ RUN pnpm install -g turbo
 COPY . .
 RUN turbo prune --scope=web --docker
 
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 
 RUN apk update && apk add --no-cache libc6-compat
 RUN corepack enable && corepack prepare pnpm@latest --activate 
