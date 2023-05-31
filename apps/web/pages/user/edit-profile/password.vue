@@ -7,7 +7,7 @@ definePageMeta({
   layout: 'auth',
 })
 
-const { claims, fetchContext, signIn } = useLogto()
+const { claims, signIn } = useLogto()
 const { client } = useTRPC()
 const { t } = useI18n()
 const { notify } = useNotification()

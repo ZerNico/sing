@@ -47,6 +47,9 @@ export class ManagementApiClient {
   }
 
   public async verifyPassword(userId: string, password: string) {
+    if (password.length === 0)
+      throw new LogtoError({ code: 'session.invalid_credentials', message: 'Invalid credentials.' })
+
     const response = await ofetch<LogtoUser>(joinURL(env.LOGTO_URL, 'api', 'users', userId, 'password', 'verify'), {
       method: 'POST',
       headers: {
@@ -73,6 +76,22 @@ export class ManagementApiClient {
     }).catch((err) => {
       throw new LogtoError(err.data)
     })
+    return response
+  }
+
+  public async hasPassword(userId: string) {
+    const response = await ofetch<{ hasPassword: boolean }>(
+      joinURL(env.LOGTO_URL, 'api', 'users', userId, 'has-password'),
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${await this.getToken()}`,
+        },
+      }
+    ).catch((err) => {
+      throw new LogtoError(err.data)
+    })
+
     return response
   }
 }

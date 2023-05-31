@@ -100,7 +100,17 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        await ctx.mm.verifyPassword(ctx.user.id, input.currentPassword)
+        const [hasPassword, verifyPassword] = await Promise.allSettled([
+          ctx.mm.hasPassword(ctx.user.id),
+          ctx.mm.verifyPassword(ctx.user.id, input.currentPassword),
+        ])
+
+        if (hasPassword.status === 'rejected') {
+          throw hasPassword.reason
+        } else if (verifyPassword.status === 'rejected' && hasPassword.value.hasPassword) {
+          throw verifyPassword.reason
+        }
+
         await ctx.mm.updatePassword(ctx.user.id, input.newPassword)
       } catch (err) {
         if (err instanceof LogtoError && err.code === 'session.invalid_credentials') {
