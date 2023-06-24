@@ -10,11 +10,15 @@ const songsStore = useSongsStore()
 const load = async () => {
   songsStore.clearSongs()
   for (const path of songsStore.paths) {
-    const entries = await readDir(path, { recursive: true })
-    const root: FileEntry = { path, children: entries }
+    try {
+      const entries = await readDir(path, { recursive: true })
+      const root: FileEntry = { path, children: entries }
 
-    const songs = await parseTree(root)
-    songsStore.addSongs(songs)
+      const songs = await parseTree(root)
+      songsStore.addSongs(songs)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   songsStore.needsUpdate = false
