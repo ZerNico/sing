@@ -1,3 +1,7 @@
+import { fileURLToPath } from 'node:url'
+
+import VueI18n from '@intlify/unplugin-vue-i18n/vite'
+import { ValidateEnv } from '@julr/vite-plugin-validate-env'
 import Vue from '@vitejs/plugin-vue'
 import Unocss from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -7,9 +11,21 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 
+import pkg from './package.json'
+
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
+
+  resolve: {
+    alias: [{ find: '~/', replacement: fileURLToPath(new URL('src/', import.meta.url)) }],
+  },
+
   plugins: [
+    ValidateEnv(),
+
     VueRouter({
       routesFolder: 'src/pages',
       dts: 'src/typed-router.d.ts',
@@ -28,6 +44,7 @@ export default defineConfig(async () => ({
       imports: [
         'vue',
         'vue/macros',
+        'vue-i18n',
         VueRouterAutoImports,
         '@vueuse/core',
         'pinia',
@@ -45,6 +62,13 @@ export default defineConfig(async () => ({
     }),
 
     Unocss(),
+
+    VueI18n({
+      runtimeOnly: true,
+      compositionOnly: true,
+      fullInstall: true,
+      include: [fileURLToPath(new URL('locales/**', import.meta.url))],
+    }),
   ],
 
   optimizeDeps: {

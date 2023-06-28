@@ -1,0 +1,22 @@
+{
+  "key_hint": {
+    "navigate": "Navigate",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "error": {
+    "could_not_connect": "Could not connect to the server",
+    "unknown_error": "Unknown error",
+    "access_token_invalid": "Access token invalid"
+  },
+  "index": {
+    "retry": "Retry",
+    "offline": "Offline"
+  },
+  "notification": {
+    "error_title": "Error",
+    "info_title": "Info",
+    "warning_title": "Warning",
+    "success_title": "Success"
+  }
+}

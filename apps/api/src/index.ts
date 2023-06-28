@@ -1,7 +1,7 @@
-export type { AppRouter } from '~/trpc/routes'
+export type { AppRouter } from './trpc/routes'
+export type { Lobby, User } from 'database'
 
-import { env } from '~/config/env'
-
+import { env } from './config/env'
 import { server } from './server'
 
 server.listen({ host: '::', port: env.PORT }, (error) => {

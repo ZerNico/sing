@@ -5,7 +5,11 @@
     "jsx": "preserve",
     "sourceMap": true,
     "lib": ["ESNext", "DOM"],
-    "types": ["unplugin-vue-macros/macros-global"]
+    "types": ["unplugin-vue-macros/macros-global", "@intlify/unplugin-vue-i18n/messages"],
+    "module": "ESNext",
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
   "extends": "tsconfig/base.json",
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

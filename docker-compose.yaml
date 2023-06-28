@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.3-alpine
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: sing
+      POSTGRES_PASSWORD: sing
+      POSTGRES_DB: sing
+    volumes:
+      - ./.tmp/pgdata:/var/lib/postgresql/data

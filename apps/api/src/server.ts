@@ -1,5 +1,3 @@
-export type { AppRouter } from '~/trpc/routes'
-
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import sensible from '@fastify/sensible'
@@ -7,10 +5,9 @@ import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify'
 import { fastify } from 'fastify'
 import { renderTrpcPanel } from 'trpc-panel'
 
-import { env } from '~/config/env'
-import { appRouter } from '~/trpc/routes'
-
+import { env } from './config/env'
 import { createContext } from './trpc/context'
+import { appRouter } from './trpc/routes'
 
 export const server = fastify({
   maxParamLength: 5000,

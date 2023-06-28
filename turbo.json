@@ -1,10 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "globalEnv": ["TAURI_PLATFORM", "TAURI_DEBUG"],
   "pipeline": {
     "build": {
-      "dependsOn": ["^build", "^db:generate"]
+      "dependsOn": ["^build", "^db:generate"],
+      "env": ["TAURI_DIST_DIR", "TAURI_DIST_TARGET", "VITE_API_URL"],
+      "outputs": ["dist/**/*", "src-tauri/target/**/*"]
     },
     "lint": {},
     "dev": {

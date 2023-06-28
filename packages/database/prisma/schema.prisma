@@ -12,6 +12,18 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String
+  id        Int      @id @default(autoincrement())
+  username  String
+  Lobby     Lobby?   @relation(fields: [lobbyId], references: [id])
+  lobbyId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lobby {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -7,8 +7,13 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Greet: typeof import('./components/Greet.vue')['default']
+    Button: typeof import('./components/ui/Button.vue')['default']
+    KeyHints: typeof import('./components/KeyHints.vue')['default']
+    Layout: typeof import('./components/Layout.vue')['default']
+    Notification: typeof import('./components/ui/notification/Notification.vue')['default']
+    NotificationHandler: typeof import('./components/ui/notification/NotificationHandler.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TitleBar: typeof import('./components/TitleBar.vue')['default']
   }
 }
