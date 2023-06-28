@@ -24,5 +24,6 @@ module.exports = {
     'import/no-unresolved': 'off',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+    'unicorn/prevent-abbreviations': 'off',
   },
 }
