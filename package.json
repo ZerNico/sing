@@ -4,7 +4,9 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push"
   },
   "devDependencies": {
     "@turbo/gen": "^1.10.6",
@@ -14,5 +16,8 @@
     "turbo": "latest"
   },
   "packageManager": "pnpm@7.15.0",
-  "name": "sing"
+  "name": "sing",
+  "dependencies": {
+    "@rushstack/eslint-patch": "^1.3.2"
+  }
 }

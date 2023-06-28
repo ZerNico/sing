@@ -1,0 +1,20 @@
+{
+  "name": "database",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push --skip-generate"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "prisma": "^4.16.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.16.1",
+    "@typescript-eslint/eslint-plugin": "^5.60.1"
+  }
+}
