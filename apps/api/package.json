@@ -3,14 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "dotenv -e .env -- node --watch -r ts-node/register -r tsconfig-paths/register src/index.ts",
-    "build": "tsc --build --clean && tsc-alias",
-    "start": "node dist/index.js"
+    "build": "rimraf dist/ && tsc && tsc-alias",
+    "start": "node dist/index.js",
+    "lint": "eslint --ext .ts src"
   },
   "main": "src/index.ts",
   "types": "src/index.ts",
   "devDependencies": {
     "@types/semver": "^7.5.0",
     "eslint-config-custom": "workspace:*",
+    "rimraf": "^5.0.1",
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.8.6",
     "tsconfig": "workspace:*",
