@@ -1,0 +1,19 @@
+{
+  "name": "eslint-config-custom",
+  "version": "0.0.0",
+  "main": "index.cjs",
+  "license": "MIT",
+  "dependencies": {
+    "@tanstack/eslint-plugin-query": "^4.29.9",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@unocss/eslint-config": "^0.53.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-turbo": "^1.10.6",
+    "eslint-plugin-react": "7.28.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-unicorn": "^47.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
