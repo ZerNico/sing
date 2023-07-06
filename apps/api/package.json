@@ -1,0 +1,23 @@
+{
+  "name": "api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --loader ts-node/esm src/index.ts",
+    "build": "rimraf dist/ && tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src/**/*.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.0.1",
+    "hono": "^3.2.7",
+    "rimraf": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-custom": "workspace:*",
+    "ts-node": "^10.9.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.1.6"
+  }
+}
