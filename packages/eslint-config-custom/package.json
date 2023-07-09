@@ -1,7 +1,7 @@
 {
   "name": "eslint-config-custom",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "index.cjs",
   "license": "MIT",
   "dependencies": {
     "@tanstack/eslint-plugin-query": "^4.29.9",

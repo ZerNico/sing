@@ -1,0 +1,23 @@
+{
+  "name": "database",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "db:generate": "drizzle-kit generate:pg"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.27.0",
+    "postgres": "^3.3.5",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.19.3",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.1.6"
+  }
+}

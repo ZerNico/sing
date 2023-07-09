@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: sing
+      POSTGRES_PASSWORD: sing
+      POSTGRES_DB: sing
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.tmp/db:/var/lib/postgresql/data

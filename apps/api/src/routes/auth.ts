@@ -1,3 +1,28 @@
-import { Hono } from "hono";
+import { Hono } from 'hono'
+import { z } from 'zod'
 
-export const authApp = new Hono().get('/', (c) => c.text('Hello Hono!'))
+import { zodMiddleware } from '../middleware/zod.ts'
+import { authService } from '../services/auth.ts'
+
+const authSchema = z.object({
+  username: z.string().min(3, { message: 'username_too_short' }).max(32, { message: 'username_too_long' }),
+  password: z.string().min(6, { message: 'password_too_short' }).max(255, { message: 'password_too_long' }),
+})
+
+export const authApp = new Hono()
+  .post('/register', zodMiddleware('json', authSchema), async (c) => {
+    const { username, password } = c.req.valid('json')
+
+    const user = await authService.createUser(username, password)
+    const session = await authService.createSession(user.userId)
+
+    return c.jsonT({ token: session.sessionId })
+  })
+  .post('/login', zodMiddleware('json', authSchema), async (c) => {
+    const { username, password } = c.req.valid('json')
+
+    const user = await authService.login(username, password)
+    const session = await authService.createSession(user.userId)
+
+    return c.jsonT({ token: session.sessionId })
+  })
