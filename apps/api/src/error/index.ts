@@ -19,4 +19,11 @@ export class HonoError extends Error {
   public cause?: Error
 }
 
-export type ErrorMessage = 'unknown_error' | 'validation_failed' | 'auth_username_taken' | 'auth_invalid_credentials'
+export type ErrorMessage =
+  | 'unknown_error'
+  | 'validation_failed'
+  | 'auth_username_taken'
+  | 'auth_invalid_credentials'
+  | 'client_outdated'
+  | 'failed_to_create_lobby'
+  | 'unauthorized'

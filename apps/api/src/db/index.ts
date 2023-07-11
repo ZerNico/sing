@@ -1,10 +1,10 @@
-import { drizzle, migrate } from 'database'
+import { drizzle, migrate, schema } from 'database'
 import postgres from 'postgres'
 
 import { env } from '../config/env.ts'
 
 export const connection = postgres(env.API_DB_URL)
 
-export const db = drizzle(connection)
+export const db = drizzle(connection, { schema })
 
 await migrate(db, { migrationsFolder: '../../packages/database/drizzle' })

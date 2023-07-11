@@ -43,6 +43,9 @@ importers:
       hono:
         specifier: ^3.2.7
         version: 3.2.7
+      jose:
+        specifier: ^4.14.4
+        version: 4.14.4
       lucia:
         specifier: ^2.0.0-beta.4
         version: 2.0.0-beta.4
@@ -52,32 +55,16 @@ importers:
       rimraf:
         specifier: ^5.0.1
         version: 5.0.1
+      semver:
+        specifier: ^7.5.4
+        version: 7.5.4
       zod:
         specifier: ^3.21.4
         version: 3.21.4
     devDependencies:
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:../../packages/eslint-config-custom
-      ts-node:
-        specifier: ^10.9.1
-        version: 10.9.1(@types/node@17.0.45)(typescript@5.1.6)
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
-      typescript:
-        specifier: ^5.1.6
-        version: 5.1.6
-
-  apps/test:
-    dependencies:
-      api:
-        specifier: workspace:*
-        version: link:../api
-      hono:
-        specifier: ^3.2.7
-        version: 3.2.7
-    devDependencies:
+      '@types/semver':
+        specifier: ^7.5.0
+        version: 7.5.0
       eslint-config-custom:
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
@@ -788,7 +775,7 @@ packages:
       inquirer: 8.2.5
       minimatch: 9.0.0
       node-plop: 0.26.3
-      semver: 7.5.0
+      semver: 7.5.4
       ts-node: 10.9.1(@types/node@17.0.45)(typescript@5.1.6)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
@@ -834,7 +821,6 @@ packages:
 
   /@types/semver@7.5.0:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
-    dev: false
 
   /@types/through@0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
@@ -863,7 +849,7 @@ packages:
       graphemer: 1.4.0
       ignore: 5.2.4
       natural-compare-lite: 1.4.0
-      semver: 7.5.0
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@5.1.6)
       typescript: 5.1.6
     transitivePeerDependencies:
@@ -937,7 +923,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.5.0
+      semver: 7.5.4
       tsutils: 3.21.0(typescript@5.1.6)
       typescript: 5.1.6
     transitivePeerDependencies:
@@ -958,7 +944,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.61.0(typescript@5.1.6)
       eslint: 8.44.0
       eslint-scope: 5.1.1
-      semver: 7.5.0
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -1191,7 +1177,7 @@ packages:
   /builtins@5.0.1:
     resolution: {integrity: sha512-qwVpFEHNfhYJIzNRBvd2C1kyo6jz3ZSMPyyuR47OPdiKWlbYnZNyDWuyR175qDnAJLiCo5fBBqPb3RiXgWlkOQ==}
     dependencies:
-      semver: 7.5.0
+      semver: 7.5.4
     dev: true
 
   /bundle-name@3.0.0:
@@ -1991,7 +1977,7 @@ packages:
       regexp-tree: 0.1.27
       regjsparser: 0.10.0
       safe-regex: 2.1.1
-      semver: 7.5.0
+      semver: 7.5.4
       strip-indent: 3.0.0
     dev: false
 
@@ -2790,6 +2776,10 @@ packages:
     hasBin: true
     dev: false
 
+  /jose@4.14.4:
+    resolution: {integrity: sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==}
+    dev: false
+
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: false
@@ -3557,10 +3547,11 @@ packages:
 
   /semver@6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
+    hasBin: true
     dev: false
 
-  /semver@7.5.0:
-    resolution: {integrity: sha512-+XC0AD/R7Q2mPSRuy2Id0+CGTZ98+8f+KvwirxOKIEyid+XSx6HbC63p+O4IndTHuX5Z+JxQ0TghCkO5Cg/2HA==}
+  /semver@7.5.4:
+    resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:

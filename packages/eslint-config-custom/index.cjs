@@ -26,5 +26,6 @@ module.exports = {
     'simple-import-sort/exports': 'error',
     'unicorn/prevent-abbreviations': 'off',
     'unicorn/prefer-switch': 'off',
+    'import/no-named-as-default-member': 'off',
   },
 }

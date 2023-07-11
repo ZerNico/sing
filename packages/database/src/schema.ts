@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { bigint, boolean, pgTable, varchar } from 'drizzle-orm/pg-core'
+import { bigint, boolean, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core'
 
 export const tables = {
   user: 'auth_user',
@@ -11,11 +11,18 @@ export const user = pgTable(tables.user, {
   id: varchar('id', { length: 15 }).primaryKey(),
   username: varchar('username', { length: 255 }).notNull(),
   disabled: boolean('disabled').notNull().default(false),
+  lobbyCode: varchar('lobby_code').references(() => lobby.code, { onUpdate: 'cascade', onDelete: 'set null' }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
-export const usersRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
   session: many(session),
   key: many(key),
+  lobby: one(lobby, {
+    fields: [user.lobbyCode],
+    references: [lobby.code],
+  }),
 }))
 
 export const session = pgTable(tables.session, {
@@ -27,7 +34,7 @@ export const session = pgTable(tables.session, {
   idleExpires: bigint('idle_expires', { mode: 'number' }).notNull(),
 })
 
-export const sessionsRelations = relations(session, ({ one }) => ({
+export const sessionRelations = relations(session, ({ one }) => ({
   user: one(user, {
     fields: [session.userId],
     references: [user.id],
@@ -42,9 +49,20 @@ export const key = pgTable(tables.key, {
   hashedPassword: varchar('hashed_password', { length: 255 }),
 })
 
-export const keysRelations = relations(key, ({ one }) => ({
+export const keyRelations = relations(key, ({ one }) => ({
   user: one(user, {
     fields: [key.userId],
     references: [user.id],
   }),
+}))
+
+export const lobby = pgTable('game_lobby', {
+  id: uuid('id').defaultRandom().notNull(),
+  code: varchar('code', { length: 32 }).primaryKey(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+})
+
+export const lobbyRelations = relations(lobby, ({ many }) => ({
+  users: many(user),
 }))

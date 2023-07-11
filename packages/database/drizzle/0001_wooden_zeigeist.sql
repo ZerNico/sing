@@ -1,0 +1,1 @@
+ALTER TABLE "game_lobby" ALTER COLUMN "id" SET NOT NULL;

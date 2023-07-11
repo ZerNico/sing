@@ -4,10 +4,12 @@ import { Hono } from 'hono'
 import { env } from './config/env.ts'
 import { HonoError } from './error/index.ts'
 import { authApp } from './routes/auth.ts'
+import { lobbyApp } from './routes/lobby.ts'
 
 const app = new Hono()
   .get('/', (c) => c.text('Hello Hono!'))
   .route('/auth', authApp)
+  .route('/lobby', lobbyApp)
   .onError((error, c) => {
     if (error instanceof HonoError) {
       return c.json(
@@ -19,7 +21,7 @@ const app = new Hono()
     return c.json({ error: 'UNKNOWN_ERROR', cause: error.message }, 500)
   })
 
-serve({ fetch: app.fetch, port: env.PORT }, (info) => {
+serve({ fetch: app.fetch, port: env.API_PORT }, (info) => {
   console.log(`Server is running on port ${info.port}`)
 })
 

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "8a705fc9-c786-426e-aa14-7957507379f5",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "5c8f13bb-22e5-412f-9e39-de1fa07ffeef",
+  "prevId": "8a705fc9-c786-426e-aa14-7957507379f5",
   "tables": {
     "auth_key": {
       "name": "auth_key",
@@ -53,7 +53,7 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "gen_random_uuid()"
         },
         "code": {

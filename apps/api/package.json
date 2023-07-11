@@ -18,12 +18,15 @@
     "database": "workspace:*",
     "dotenv-cli": "^7.2.1",
     "hono": "^3.2.7",
+    "jose": "^4.14.4",
     "lucia": "^2.0.0-beta.4",
     "postgres": "^3.3.5",
     "rimraf": "^5.0.1",
+    "semver": "^7.5.4",
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/semver": "^7.5.0",
     "eslint-config-custom": "workspace:*",
     "ts-node": "^10.9.1",
     "tsconfig": "workspace:*",
