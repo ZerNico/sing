@@ -3,10 +3,10 @@ import { JWTPayload } from 'jose'
 import Postgres from 'postgres'
 import { satisfies } from 'semver'
 
-import { MININUM_VERSION } from '../constants.ts'
-import { db } from '../db/index.ts'
-import { HonoError } from '../error/index.ts'
-import { jwtService } from './jwt.ts'
+import { MININUM_VERSION } from '../constants.js'
+import { db } from '../db/index.js'
+import { HonoError } from '../error/index.js'
+import { jwtService } from './jwt.js'
 
 export interface LobbyJWTPayload extends JWTPayload {
   sub: string

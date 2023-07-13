@@ -1,7 +1,7 @@
 import { Context, MiddlewareHandler } from 'hono'
 
-import { HonoError } from '../error/index.ts'
-import { LobbyJWTPayload, lobbyService } from '../services/lobby.ts'
+import { HonoError } from '../error/index.js'
+import { LobbyJWTPayload, lobbyService } from '../services/lobby.js'
 
 const LOBBY_AUTH_PAYLOAD_KEY = 'lobby-auth-payload-key'
 

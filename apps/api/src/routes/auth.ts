@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { zodMiddleware } from '../middleware/zod.ts'
-import { authService } from '../services/auth.ts'
+import { zodMiddleware } from '../middleware/zod.js'
+import { authService } from '../services/auth.js'
 
 const authSchema = z.object({
   username: z.string().min(3, { message: 'username_too_short' }).max(32, { message: 'username_too_long' }),

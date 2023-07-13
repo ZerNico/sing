@@ -1,6 +1,6 @@
 /// <reference types="lucia" />
 declare namespace Lucia {
-  type Auth = import('./auth/index.ts').Auth
+  type Auth = import('./auth/index.js').Auth
   type DatabaseUserAttributes = {
     username: string
     disabled: boolean

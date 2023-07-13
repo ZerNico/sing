@@ -1,7 +1,7 @@
 import { LuciaError } from 'lucia'
 
-import { auth } from '../auth/index.ts'
-import { HonoError } from '../error/index.ts'
+import { auth } from '../auth/index.js'
+import { HonoError } from '../error/index.js'
 
 class AuthService {
   async createUser(username: string, password: string) {

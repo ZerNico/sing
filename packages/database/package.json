@@ -2,10 +2,22 @@
   "name": "database",
   "version": "0.0.0",
   "private": true,
-  "main": "src/index.ts",
-  "types": "src/index.ts",
   "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
+    "dev": "rollup --watch --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "lint": "eslint src/**/*.ts",
     "db:generate": "drizzle-kit generate:pg"
   },
@@ -15,9 +27,14 @@
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.2",
     "drizzle-kit": "^0.19.3",
     "eslint-config-custom": "workspace:*",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.26.2",
+    "rollup-plugin-ts": "^3.2.0",
     "tsconfig": "workspace:*",
+    "tsup": "^7.1.0",
     "typescript": "^5.1.6"
   }
 }

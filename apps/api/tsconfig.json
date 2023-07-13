@@ -4,9 +4,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
-    "allowImportingTsExtensions": true,
-    "declaration": false,
+    "moduleResolution": "Node",
+    "declaration": true,
+    "declarationMap": true,
     "target": "ES2020"
   }
 }

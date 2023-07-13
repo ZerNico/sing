@@ -1,10 +1,10 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 
-import { env } from './config/env.ts'
-import { HonoError } from './error/index.ts'
-import { authApp } from './routes/auth.ts'
-import { lobbyApp } from './routes/lobby.ts'
+import { env } from './config/env.js'
+import { HonoError } from './error/index.js'
+import { authApp } from './routes/auth.js'
+import { lobbyApp } from './routes/lobby.js'
 
 const app = new Hono()
   .get('/', (c) => c.text('Hello Hono!'))

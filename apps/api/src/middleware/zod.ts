@@ -2,7 +2,7 @@ import { zValidator } from '@hono/zod-validator'
 import { Env, MiddlewareHandler, ValidationTargets } from 'hono'
 import { z, ZodSchema } from 'zod'
 
-import { HonoError } from '../error/index.ts'
+import { HonoError } from '../error/index.js'
 
 export const zodMiddleware = <
   T extends ZodSchema,

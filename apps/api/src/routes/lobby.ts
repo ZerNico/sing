@@ -1,9 +1,9 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { getLobbyAuthPayload, verifyLobbyAuth } from '../middleware/lobby-auth.ts'
-import { zodMiddleware } from '../middleware/zod.ts'
-import { lobbyService } from '../services/lobby.ts'
+import { getLobbyAuthPayload, verifyLobbyAuth } from '../middleware/lobby-auth.js'
+import { zodMiddleware } from '../middleware/zod.js'
+import { lobbyService } from '../services/lobby.js'
 
 export const lobbyApp = new Hono()
   .post(

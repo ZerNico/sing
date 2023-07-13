@@ -7,7 +7,7 @@
   "types": "src/index.ts",
   "scripts": {
     "dev": "dotenv -- node --watch --loader ts-node/esm src/index.ts",
-    "build": "rimraf dist/ && tsc",
+    "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin rollup-plugin-ts",
     "start": "dotenv -- node dist/index.js",
     "lint": "eslint src/**/*.ts"
   },
@@ -26,8 +26,12 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.2",
+    "@rollup/plugin-node-resolve": "^15.1.0",
     "@types/semver": "^7.5.0",
     "eslint-config-custom": "workspace:*",
+    "rollup": "^3.26.2",
+    "rollup-plugin-ts": "^3.2.0",
     "ts-node": "^10.9.1",
     "tsconfig": "workspace:*",
     "typescript": "^5.1.6"

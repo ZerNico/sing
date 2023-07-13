@@ -1,6 +1,6 @@
 import { JWTPayload, jwtVerify, SignJWT } from 'jose'
 
-import { env } from '../config/env.ts'
+import { env } from '../config/env.js'
 
 class JwtService {
   private readonly secret = new TextEncoder().encode(env.API_JWT_SECRET)

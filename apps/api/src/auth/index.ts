@@ -3,7 +3,7 @@ import { schema } from 'database'
 import { lucia } from 'lucia'
 import { web } from 'lucia/middleware'
 
-import { connection } from '../db/index.ts'
+import { connection } from '../db/index.js'
 
 export const auth = lucia({
   adapter: postgres(connection, schema.tables),
