@@ -1,4 +1,28 @@
 <script setup lang="ts">
+import { appWindow } from '@tauri-apps/api/window'
+
+useEventListener('keydown', async (e: KeyboardEvent) => {
+  // prevent tab button from focusing on the next element
+  if (e.key === 'Tab') {
+    e.preventDefault()
+  }
+  // prevent arrow keys from scrolling the page
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    e.preventDefault()
+  }
+
+  // full screen on alt or command + enter
+  if (e.key === 'Enter' && (e.altKey || e.metaKey)) {
+    e.preventDefault()
+    const isFullscreen = await appWindow.isFullscreen()
+    if (isFullscreen) {
+      appWindow.setFullscreen(false)
+    } else {
+      appWindow.setFullscreen(true)
+    }
+  }
+})
+
 const mouseHidden = ref(false)
 const hideMouseFn = useDebounceFn(() => {
   mouseHidden.value = true
