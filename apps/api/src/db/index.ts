@@ -8,3 +8,5 @@ export const connection = postgres(env.API_DB_URL)
 export const db: PostgresJsDatabase<typeof schema> = drizzle(connection, { schema })
 
 await migrate(db, { migrationsFolder: '../../packages/database/drizzle' })
+
+export { type InferModel, schema } from 'database'

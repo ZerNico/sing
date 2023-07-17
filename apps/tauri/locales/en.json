@@ -1,0 +1,23 @@
+{
+  "key_hint": {
+    "navigate": "Navigate",
+    "confirm": "Confirm",
+    "back": "Back"
+  },
+  "index": {
+    "retry": "Retry",
+    "offline": "Offline"
+  },
+  "notification": {
+    "error_title": "Error",
+    "info_title": "Info",
+    "warning_title": "Warning",
+    "success_title": "Success"
+  },
+  "error": {
+    "unknown_error": "Unknown error",
+    "could_not_connect": "Could not connect to server",
+    "client_outdated": "Client is outdated",
+    "failed_to_create_lobby": "Failed to create lobby"
+  }
+}

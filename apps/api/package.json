@@ -5,6 +5,21 @@
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "src": "src",
+  "exports": {
+    "./error": "./src/error/index.ts",
+    "./db": "./src/db/index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "error": [
+        "./src/error/index.ts"
+      ],
+      "db": [
+        "./src/db/index.ts"
+      ]
+    }
+  },
   "scripts": {
     "dev": "dotenv -- node --watch --loader ts-node/esm src/index.ts",
     "build": "rimraf dist && rollup --config rollup.config.ts --configPlugin rollup-plugin-ts",

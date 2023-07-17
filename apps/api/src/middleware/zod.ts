@@ -22,7 +22,7 @@ export const zodMiddleware = <
 ): MiddlewareHandler<E, P, V> => {
   return zValidator(target, schema, (result) => {
     if (!result.success) {
-      const zodErrors = result.error.flatten().fieldErrors
+      const zodErrors = result.error.flatten().fieldErrors as Record<string, string[]>
       throw new HonoError({ message: 'validation_failed', status: 403, validationErrors: zodErrors })
     }
   })

@@ -1,7 +1,7 @@
 {
   "name": "tauri",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "tauri dev",
@@ -23,6 +23,7 @@
     "@vueuse/core": "^10.2.1",
     "@vueuse/sound": "^2.0.1",
     "api": "workspace:*",
+    "hono": "^3.2.7",
     "pinia": "^2.1.4",
     "pinia-plugin-persistedstate": "^3.1.0",
     "sass": "^1.63.6",

@@ -122,6 +122,9 @@ importers:
       api:
         specifier: workspace:*
         version: link:../api
+      hono:
+        specifier: ^3.2.7
+        version: 3.2.7
       pinia:
         specifier: ^2.1.4
         version: 2.1.4(typescript@5.1.6)(vue@3.3.4)
