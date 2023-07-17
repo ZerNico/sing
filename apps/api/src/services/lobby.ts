@@ -1,4 +1,4 @@
-import { eq, schema } from 'database'
+import { and, eq, schema } from 'database'
 import { JWTPayload } from 'jose'
 import Postgres from 'postgres'
 import { satisfies } from 'semver'
@@ -10,7 +10,7 @@ import { jwtService } from './jwt.js'
 
 export interface LobbyJWTPayload extends JWTPayload {
   sub: string
-  id: string
+  code: string
 }
 
 class LobbyService {
@@ -55,12 +55,25 @@ class LobbyService {
     } while (true)
   }
 
-  async findOne(code: string) {
-    return await db.query.lobby.findFirst({ with: { users: true }, where: eq(schema.lobby.code, code) })
+  async getOne(id: string) {
+    return await db.query.lobby.findFirst({ where: eq(schema.lobby.id, id) })
+  }
+
+  async getOneByCode(code: string) {
+    return await db.query.lobby.findFirst({ where: eq(schema.lobby.code, code) })
+  }
+
+  async getOneWithUsers(id: string) {
+    return await db.query.lobby.findFirst({ with: { users: true }, where: eq(schema.lobby.id, id) })
+  }
+
+  async remove(id: string) {
+    const lobby = await db.delete(schema.lobby).where(eq(schema.lobby.id, id)).returning()
+    return lobby.at(0)
   }
 
   async generateToken(id: string, code: string) {
-    return await jwtService.sign<LobbyJWTPayload>({ id, sub: code })
+    return await jwtService.sign<LobbyJWTPayload>({ sub: id, code })
   }
 
   async verifyToken(token: string) {
@@ -69,6 +82,17 @@ class LobbyService {
     } catch {
       throw new HonoError({ message: 'unauthorized', status: 401 })
     }
+  }
+
+  async removeUser(lobbyId: string, userId: string) {
+    await db
+      .update(schema.user)
+      .set({ lobbyId: null })
+      .where(and(eq(schema.user.id, userId), eq(schema.user.lobbyId, lobbyId)))
+  }
+
+  async addUser(lobbyId: string, userId: string) {
+    await db.update(schema.user).set({ lobbyId }).where(eq(schema.user.id, userId)).returning()
   }
 }
 

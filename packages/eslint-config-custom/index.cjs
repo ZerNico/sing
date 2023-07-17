@@ -27,5 +27,6 @@ module.exports = {
     'unicorn/prevent-abbreviations': 'off',
     'unicorn/prefer-switch': 'off',
     'import/no-named-as-default-member': 'off',
+    'unicorn/no-null': 'off',
   },
 }

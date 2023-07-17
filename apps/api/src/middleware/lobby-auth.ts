@@ -8,7 +8,6 @@ const LOBBY_AUTH_PAYLOAD_KEY = 'lobby-auth-payload-key'
 export const verifyLobbyAuth = (): MiddlewareHandler => {
   return async (c, next) => {
     const authHeader = c.req.header('authorization')
-
     const token = authHeader?.split(' ').at(1)
 
     if (!token) {

@@ -9,9 +9,9 @@ export const tables = {
 
 export const user = pgTable(tables.user, {
   id: varchar('id', { length: 15 }).primaryKey(),
-  username: varchar('username', { length: 255 }).notNull(),
+  username: varchar('username', { length: 255 }).notNull().unique(),
   disabled: boolean('disabled').notNull().default(false),
-  lobbyCode: varchar('lobby_code').references(() => lobby.code, { onUpdate: 'cascade', onDelete: 'set null' }),
+  lobbyId: uuid('lobby_id').references(() => lobby.id, { onUpdate: 'cascade', onDelete: 'set null' }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
@@ -20,8 +20,8 @@ export const userRelations = relations(user, ({ many, one }) => ({
   session: many(session),
   key: many(key),
   lobby: one(lobby, {
-    fields: [user.lobbyCode],
-    references: [lobby.code],
+    fields: [user.lobbyId],
+    references: [lobby.id],
   }),
 }))
 
@@ -57,8 +57,8 @@ export const keyRelations = relations(key, ({ one }) => ({
 }))
 
 export const lobby = pgTable('game_lobby', {
-  id: uuid('id').defaultRandom().notNull(),
-  code: varchar('code', { length: 32 }).primaryKey(),
+  id: uuid('id').defaultRandom().notNull().primaryKey(),
+  code: varchar('code', { length: 32 }).notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })

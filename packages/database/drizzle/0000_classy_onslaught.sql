@@ -5,10 +5,11 @@ CREATE TABLE IF NOT EXISTS "auth_key" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "game_lobby" (
-	"id" uuid DEFAULT gen_random_uuid(),
-	"code" varchar(32) PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"code" varchar(32) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "game_lobby_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "auth_session" (
@@ -22,9 +23,10 @@ CREATE TABLE IF NOT EXISTS "auth_user" (
 	"id" varchar(15) PRIMARY KEY NOT NULL,
 	"username" varchar(255) NOT NULL,
 	"disabled" boolean DEFAULT false NOT NULL,
-	"lobby_code" varchar,
+	"lobby_id" uuid,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "auth_user_username_unique" UNIQUE("username")
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -40,7 +42,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "auth_user" ADD CONSTRAINT "auth_user_lobby_code_game_lobby_code_fk" FOREIGN KEY ("lobby_code") REFERENCES "game_lobby"("code") ON DELETE set null ON UPDATE cascade;
+ ALTER TABLE "auth_user" ADD CONSTRAINT "auth_user_lobby_id_game_lobby_id_fk" FOREIGN KEY ("lobby_id") REFERENCES "game_lobby"("id") ON DELETE set null ON UPDATE cascade;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

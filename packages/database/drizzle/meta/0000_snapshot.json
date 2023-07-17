@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "8a705fc9-c786-426e-aa14-7957507379f5",
+  "id": "7e0199c7-6140-417f-9c84-6be72d8d9f7b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "auth_key": {
@@ -43,7 +43,8 @@
           "onUpdate": "cascade"
         }
       },
-      "compositePrimaryKeys": {}
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "game_lobby": {
       "name": "game_lobby",
@@ -52,14 +53,14 @@
         "id": {
           "name": "id",
           "type": "uuid",
-          "primaryKey": false,
-          "notNull": false,
+          "primaryKey": true,
+          "notNull": true,
           "default": "gen_random_uuid()"
         },
         "code": {
           "name": "code",
           "type": "varchar(32)",
-          "primaryKey": true,
+          "primaryKey": false,
           "notNull": true
         },
         "created_at": {
@@ -79,7 +80,16 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {}
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "game_lobby_code_unique": {
+          "name": "game_lobby_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
+          ]
+        }
+      }
     },
     "auth_session": {
       "name": "auth_session",
@@ -126,7 +136,8 @@
           "onUpdate": "cascade"
         }
       },
-      "compositePrimaryKeys": {}
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
     },
     "auth_user": {
       "name": "auth_user",
@@ -151,9 +162,9 @@
           "notNull": true,
           "default": false
         },
-        "lobby_code": {
-          "name": "lobby_code",
-          "type": "varchar",
+        "lobby_id": {
+          "name": "lobby_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -174,21 +185,30 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "auth_user_lobby_code_game_lobby_code_fk": {
-          "name": "auth_user_lobby_code_game_lobby_code_fk",
+        "auth_user_lobby_id_game_lobby_id_fk": {
+          "name": "auth_user_lobby_id_game_lobby_id_fk",
           "tableFrom": "auth_user",
           "tableTo": "game_lobby",
           "columnsFrom": [
-            "lobby_code"
+            "lobby_id"
           ],
           "columnsTo": [
-            "code"
+            "id"
           ],
           "onDelete": "set null",
           "onUpdate": "cascade"
         }
       },
-      "compositePrimaryKeys": {}
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "auth_user_username_unique": {
+          "name": "auth_user_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        }
+      }
     }
   },
   "enums": {},

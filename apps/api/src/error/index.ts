@@ -26,4 +26,5 @@ export type ErrorMessage =
   | 'auth_invalid_credentials'
   | 'client_outdated'
   | 'failed_to_create_lobby'
+  | 'lobby_not_found'
   | 'unauthorized'

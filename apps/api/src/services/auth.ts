@@ -48,6 +48,17 @@ class AuthService {
     })
     return session
   }
+
+  async verifySession(req: Request) {
+    const authRequest = auth.handleRequest(req)
+    const session = await authRequest.validateBearerToken()
+
+    return session
+  }
+
+  async invalidateSession(sessionId: string) {
+    await auth.invalidateSession(sessionId)
+  }
 }
 
 export const authService = new AuthService()
