@@ -1,7 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const mouseHidden = ref(false)
+const hideMouseFn = useDebounceFn(() => {
+  mouseHidden.value = true
+}, 1000)
+
+useEventListener('mousemove', () => {
+  mouseHidden.value = false
+  hideMouseFn()
+})
+</script>
 
 <template>
-  <main class="font-primary font-primary h-screen w-screen text-1cqw text-white">
+  <main
+    class="font-primary font-primary h-screen w-screen text-1cqw text-white"
+    :class="{ 'cursor-none': mouseHidden }"
+  >
     <RouterView v-slot="{ Component }">
       <transition name="fade">
         <component :is="Component" />
