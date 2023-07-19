@@ -1,3 +1,4 @@
 {
-  "eslint.workingDirectories": ["packages/database", "apps/api", "apps/tauri"]
+  "eslint.workingDirectories": ["packages/database", "apps/api", "apps/tauri"],
+  "rust-analyzer.linkedProjects": ["apps/tauri/src-tauri/Cargo.toml"]
 }

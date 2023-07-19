@@ -2,7 +2,7 @@ import type { MaybeRef } from '@vueuse/core'
 
 import { loop } from '~/lib/utils/math'
 
-export default function useLoop(max: MaybeRef<number>, options?: { initial?: number }) {
+export const useLoop = (max: MaybeRef<number>, options?: { initial?: number }) => {
   const maxNumber = ref(max)
   const position = ref(options?.initial ?? 0)
 

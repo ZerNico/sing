@@ -1,15 +1,18 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
+mod api;
+mod protocol;
 
 fn main() {
+    let rt = tokio::runtime::Runtime::new().unwrap();
+    let _guard = rt.enter();
+
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .plugin(rspc::integrations::tauri::plugin(api::router(), || {
+            api::Context
+        }))
+        .register_uri_scheme_protocol("stream", protocol::stream_protocol_handler)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

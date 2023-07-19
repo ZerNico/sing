@@ -24,10 +24,10 @@ export interface MenuNavigationEvent {
     | 'joker2'
 }
 
-export default function useMenuNavigation(
+export const useMenuNavigation = (
   callback: MaybeRef<(event: MenuNavigationEvent) => void>,
   options: { immediate?: boolean; delay?: 150 } = {}
-) {
+) => {
   const { immediate, delay } = { immediate: true, delay: 150, ...options }
   const refCallback = ref(callback)
   const throttleCallback = useRepeatThrottleFn(refCallback, delay)

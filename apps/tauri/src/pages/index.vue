@@ -44,7 +44,7 @@ const buttons = [
     text: t('index.offline'),
     action: () => {
       lobbyStore.mode = 'offline'
-      router.push({ name: '/loading' })
+      router.push({ name: '/home' })
     },
   },
 ]

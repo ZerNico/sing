@@ -205,14 +205,14 @@ declare global {
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
   const useLobbyStore: typeof import('./stores/lobby')['useLobbyStore']
   const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
-  const useLoop: typeof import('./composables/useLoop')['default']
+  const useLoop: typeof import('./composables/useLoop')['useLoop']
   const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
   const useManualRefHistory: typeof import('@vueuse/core')['useManualRefHistory']
   const useMediaControls: typeof import('@vueuse/core')['useMediaControls']
   const useMediaQuery: typeof import('@vueuse/core')['useMediaQuery']
   const useMemoize: typeof import('@vueuse/core')['useMemoize']
   const useMemory: typeof import('@vueuse/core')['useMemory']
-  const useMenuNavigation: typeof import('./composables/useMenuNavigation')['default']
+  const useMenuNavigation: typeof import('./composables/useMenuNavigation')['useMenuNavigation']
   const useMounted: typeof import('@vueuse/core')['useMounted']
   const useMouse: typeof import('@vueuse/core')['useMouse']
   const useMouseInElement: typeof import('@vueuse/core')['useMouseInElement']
@@ -242,9 +242,10 @@ declare global {
   const usePreferredReducedMotion: typeof import('@vueuse/core')['usePreferredReducedMotion']
   const usePrevious: typeof import('@vueuse/core')['usePrevious']
   const useQuery: typeof import('@tanstack/vue-query')['useQuery']
+  const useRSPC: typeof import('./composables/useRSPC')['useRSPC']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
-  const useRepeatThrottleFn: typeof import('./composables/useRepeatThrottleFn')['default']
+  const useRepeatThrottleFn: typeof import('./composables/useRepeatThrottleFn')['useRepeatThrottleFn']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
@@ -257,6 +258,7 @@ declare global {
   const useSettingsStore: typeof import('./stores/settings')['useSettingsStore']
   const useShare: typeof import('@vueuse/core')['useShare']
   const useSlots: typeof import('vue')['useSlots']
+  const useSongsStore: typeof import('./stores/songs')['useSongsStore']
   const useSorted: typeof import('@vueuse/core')['useSorted']
   const useSoundEffect: typeof import('./composables/useSoundEffect')['useSoundEffect']
   const useSpeechRecognition: typeof import('@vueuse/core')['useSpeechRecognition']
@@ -526,14 +528,14 @@ declare module 'vue' {
     readonly useLastChanged: UnwrapRef<typeof import('@vueuse/core')['useLastChanged']>
     readonly useLobbyStore: UnwrapRef<typeof import('./stores/lobby')['useLobbyStore']>
     readonly useLocalStorage: UnwrapRef<typeof import('@vueuse/core')['useLocalStorage']>
-    readonly useLoop: UnwrapRef<typeof import('./composables/useLoop')['default']>
+    readonly useLoop: UnwrapRef<typeof import('./composables/useLoop')['useLoop']>
     readonly useMagicKeys: UnwrapRef<typeof import('@vueuse/core')['useMagicKeys']>
     readonly useManualRefHistory: UnwrapRef<typeof import('@vueuse/core')['useManualRefHistory']>
     readonly useMediaControls: UnwrapRef<typeof import('@vueuse/core')['useMediaControls']>
     readonly useMediaQuery: UnwrapRef<typeof import('@vueuse/core')['useMediaQuery']>
     readonly useMemoize: UnwrapRef<typeof import('@vueuse/core')['useMemoize']>
     readonly useMemory: UnwrapRef<typeof import('@vueuse/core')['useMemory']>
-    readonly useMenuNavigation: UnwrapRef<typeof import('./composables/useMenuNavigation')['default']>
+    readonly useMenuNavigation: UnwrapRef<typeof import('./composables/useMenuNavigation')['useMenuNavigation']>
     readonly useMounted: UnwrapRef<typeof import('@vueuse/core')['useMounted']>
     readonly useMouse: UnwrapRef<typeof import('@vueuse/core')['useMouse']>
     readonly useMouseInElement: UnwrapRef<typeof import('@vueuse/core')['useMouseInElement']>
@@ -563,9 +565,10 @@ declare module 'vue' {
     readonly usePreferredReducedMotion: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedMotion']>
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useQuery']>
+    readonly useRSPC: UnwrapRef<typeof import('./composables/useRSPC')['useRSPC']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
-    readonly useRepeatThrottleFn: UnwrapRef<typeof import('./composables/useRepeatThrottleFn')['default']>
+    readonly useRepeatThrottleFn: UnwrapRef<typeof import('./composables/useRepeatThrottleFn')['useRepeatThrottleFn']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
@@ -578,6 +581,7 @@ declare module 'vue' {
     readonly useSettingsStore: UnwrapRef<typeof import('./stores/settings')['useSettingsStore']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useSongsStore: UnwrapRef<typeof import('./stores/songs')['useSongsStore']>
     readonly useSorted: UnwrapRef<typeof import('@vueuse/core')['useSorted']>
     readonly useSoundEffect: UnwrapRef<typeof import('./composables/useSoundEffect')['useSoundEffect']>
     readonly useSpeechRecognition: UnwrapRef<typeof import('@vueuse/core')['useSpeechRecognition']>
@@ -840,14 +844,14 @@ declare module '@vue/runtime-core' {
     readonly useLastChanged: UnwrapRef<typeof import('@vueuse/core')['useLastChanged']>
     readonly useLobbyStore: UnwrapRef<typeof import('./stores/lobby')['useLobbyStore']>
     readonly useLocalStorage: UnwrapRef<typeof import('@vueuse/core')['useLocalStorage']>
-    readonly useLoop: UnwrapRef<typeof import('./composables/useLoop')['default']>
+    readonly useLoop: UnwrapRef<typeof import('./composables/useLoop')['useLoop']>
     readonly useMagicKeys: UnwrapRef<typeof import('@vueuse/core')['useMagicKeys']>
     readonly useManualRefHistory: UnwrapRef<typeof import('@vueuse/core')['useManualRefHistory']>
     readonly useMediaControls: UnwrapRef<typeof import('@vueuse/core')['useMediaControls']>
     readonly useMediaQuery: UnwrapRef<typeof import('@vueuse/core')['useMediaQuery']>
     readonly useMemoize: UnwrapRef<typeof import('@vueuse/core')['useMemoize']>
     readonly useMemory: UnwrapRef<typeof import('@vueuse/core')['useMemory']>
-    readonly useMenuNavigation: UnwrapRef<typeof import('./composables/useMenuNavigation')['default']>
+    readonly useMenuNavigation: UnwrapRef<typeof import('./composables/useMenuNavigation')['useMenuNavigation']>
     readonly useMounted: UnwrapRef<typeof import('@vueuse/core')['useMounted']>
     readonly useMouse: UnwrapRef<typeof import('@vueuse/core')['useMouse']>
     readonly useMouseInElement: UnwrapRef<typeof import('@vueuse/core')['useMouseInElement']>
@@ -877,9 +881,10 @@ declare module '@vue/runtime-core' {
     readonly usePreferredReducedMotion: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedMotion']>
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useQuery']>
+    readonly useRSPC: UnwrapRef<typeof import('./composables/useRSPC')['useRSPC']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
-    readonly useRepeatThrottleFn: UnwrapRef<typeof import('./composables/useRepeatThrottleFn')['default']>
+    readonly useRepeatThrottleFn: UnwrapRef<typeof import('./composables/useRepeatThrottleFn')['useRepeatThrottleFn']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
@@ -892,6 +897,7 @@ declare module '@vue/runtime-core' {
     readonly useSettingsStore: UnwrapRef<typeof import('./stores/settings')['useSettingsStore']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useSongsStore: UnwrapRef<typeof import('./stores/songs')['useSongsStore']>
     readonly useSorted: UnwrapRef<typeof import('@vueuse/core')['useSorted']>
     readonly useSoundEffect: UnwrapRef<typeof import('./composables/useSoundEffect')['useSoundEffect']>
     readonly useSpeechRecognition: UnwrapRef<typeof import('@vueuse/core')['useSpeechRecognition']>
