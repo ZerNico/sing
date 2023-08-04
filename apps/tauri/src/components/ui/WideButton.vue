@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="transition-outline-color grid grid-cols-[1fr] overflow-hidden rounded-lg text-1.8cqw font-bold">
+  <button class="grid grid-cols-[1fr] overflow-hidden rounded-lg text-1.8cqw font-bold">
     <div
       class="col-start-1 row-start-1 h-full bg-gradient-to-r transition-opacity"
       :class="{ 'opacity-0': !props.active }"

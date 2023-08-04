@@ -10,6 +10,7 @@ import VueMacros from 'unplugin-vue-macros/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 import pkg from './package.json'
 
@@ -25,6 +26,8 @@ export default defineConfig(async () => ({
 
   plugins: [
     ValidateEnv(),
+
+    VueDevTools(),
 
     VueRouter({
       routesFolder: 'src/pages',

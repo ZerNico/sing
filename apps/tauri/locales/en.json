@@ -35,6 +35,11 @@
   },
   "settings": {
     "title": "Settings",
-    "description": "Add songs, microphones and manage the different options."
+    "description": "Add songs, microphones and manage the different options.",
+    "songs": {
+      "title": "Songs",
+      "add": "Add",
+      "remove": "Remove"
+    }
   }
 }

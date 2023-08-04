@@ -17,6 +17,13 @@
         "all": false,
         "open": true
       },
+      "fs": {
+        "readFile": true,
+        "readDir": true
+      },
+      "dialog": {
+        "open": true
+      },
       "window": {
         "setFullscreen": true
       }

@@ -48,6 +48,7 @@ declare module 'vue-router/auto/routes' {
     '/settings/credits/': RouteRecordInfo<'/settings/credits/', '/settings/credits', Record<never, never>, Record<never, never>>,
     '/settings/microphones/': RouteRecordInfo<'/settings/microphones/', '/settings/microphones', Record<never, never>, Record<never, never>>,
     '/settings/songs/': RouteRecordInfo<'/settings/songs/', '/settings/songs', Record<never, never>, Record<never, never>>,
+    '/settings/songs/local/[path]': RouteRecordInfo<'/settings/songs/local/[path]', '/settings/songs/local/:path', { path: ParamValue<true> }, { path: ParamValue<false> }>,
     '/settings/volume/': RouteRecordInfo<'/settings/volume/', '/settings/volume', Record<never, never>, Record<never, never>>,
     '/sing/songs': RouteRecordInfo<'/sing/songs', '/sing/songs', Record<never, never>, Record<never, never>>,
     '/update': RouteRecordInfo<'/update', '/update', Record<never, never>, Record<never, never>>,

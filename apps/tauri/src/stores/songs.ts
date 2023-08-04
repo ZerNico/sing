@@ -8,12 +8,24 @@ type SongStorage = Map<string, { needsUpdate: boolean; songs: Song[] }>
 export const useSongsStore = defineStore(
   'songs',
   () => {
-    const localPaths = ref([])
+    const { client } = useRSPC()
+    const localPaths = ref<string[]>([])
     const localSongStorage = ref<SongStorage>(new Map([]))
 
-    for (const path of localPaths.value) {
-      localSongStorage.value.set(path, { needsUpdate: true, songs: [] })
-    }
+    watch(localPaths, (value) => {
+      // add new paths to storage
+      for (const path of value) {
+        if (!localSongStorage.value.has(path)) {
+          localSongStorage.value.set(path, { needsUpdate: true, songs: [] })
+        }
+      }
+      // remove old paths from storage
+      for (const path of localSongStorage.value.keys()) {
+        if (!value.includes(path)) {
+          localSongStorage.value.delete(path)
+        }
+      }
+    })
 
     const needsUpdate = computed(() => [...localSongStorage.value.values()].some((storage) => storage.needsUpdate))
 
@@ -24,7 +36,7 @@ export const useSongsStore = defineStore(
         try {
           const entries = await readDir(path, { recursive: true })
           const root: FileEntry = { path, children: entries }
-          const songs = await parseLocalTree(root)
+          const songs = await parseLocalTree(root, client)
           localSongStorage.value.set(path, { needsUpdate: false, songs })
         } catch (error) {
           console.error(error)
@@ -44,7 +56,18 @@ export const useSongsStore = defineStore(
       return [...songs.values()]
     })
 
-    return { localPaths, updateLocal, needsUpdate, songs }
+    const addLocalPath = (path: string) => {
+      localPaths.value.push(path)
+    }
+
+    const removeLocalPath = (path: string) => {
+      const index = localPaths.value.indexOf(path)
+      if (index !== -1) {
+        localPaths.value.splice(index, 1)
+      }
+    }
+
+    return { localPaths, updateLocal, needsUpdate, songs, addLocalPath, removeLocalPath }
   },
   {
     persist: {

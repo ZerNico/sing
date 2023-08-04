@@ -12,6 +12,7 @@ fn main() {
         .plugin(rspc::integrations::tauri::plugin(api::router(), || {
             api::Context
         }))
+        .plugin(tauri_plugin_persisted_scope::init())
         .register_uri_scheme_protocol("stream", protocol::stream_protocol_handler)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

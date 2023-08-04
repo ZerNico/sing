@@ -1,12 +1,15 @@
+import { Client } from '@rspc/client'
 import { FileEntry } from '@tauri-apps/api/fs'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { ofetch } from 'ofetch'
+
+import { Procedures } from '~/rspc-bindings'
 
 import { FileUrls, LocalSong } from '../song'
 import { ParseError } from './error'
 import { parseUSTxt } from './us-txt'
 
-export const parseLocalTree = async (tree: FileEntry) => {
+export const parseLocalTree = async (tree: FileEntry, client: Client<Procedures>) => {
   if (!tree?.children) return []
 
   const txts: { file: FileEntry; parent: FileEntry }[] = []
@@ -25,7 +28,7 @@ export const parseLocalTree = async (tree: FileEntry) => {
   }
   findTxts(tree)
 
-  const results = await Promise.allSettled(txts.map(({ file, parent }) => parseLocalSong(file, parent)))
+  const results = await Promise.allSettled(txts.map(({ file, parent }) => parseLocalSong(file, parent, client)))
   const fulfilled = results.filter((result) => result.status === 'fulfilled') as PromiseFulfilledResult<LocalSong>[]
   const rejected = results.filter((result) => result.status === 'rejected') as PromiseRejectedResult[]
 
@@ -38,7 +41,7 @@ export const parseLocalTree = async (tree: FileEntry) => {
   return songs
 }
 
-const parseLocalSong = async (file: FileEntry, parent: FileEntry) => {
+const parseLocalSong = async (file: FileEntry, parent: FileEntry, client: Client<Procedures>) => {
   try {
     const assetUrl = convertFileSrc(file.path, 'stream')
 
@@ -46,6 +49,7 @@ const parseLocalSong = async (file: FileEntry, parent: FileEntry) => {
     const { meta, fileNames, voices } = parseUSTxt(song)
 
     const fileUrls: Partial<FileUrls> = {}
+    const filePaths: Partial<FileUrls> = {}
 
     const findFile = (name: string) => {
       const file = parent.children?.find((file) => file.name?.toLowerCase() === name.toLowerCase())
@@ -60,14 +64,18 @@ const parseLocalSong = async (file: FileEntry, parent: FileEntry) => {
         const path = findFile(fileName)
 
         if (path) {
+          filePaths[k] = path
           fileUrls[k] = convertFileSrc(path, 'stream')
         }
       }
     }
 
-    if (!isValidFileUrls(fileUrls)) throw new ParseError('Required files could not be found in song folder')
+    if (!isValidFileUrls(fileUrls) || !isValidFileUrls(filePaths))
+      throw new ParseError('Required files could not be found in song folder')
 
-    const localSong = new LocalSong(voices, meta, fileUrls, {})
+    const replayGain = await client.query(['replaygain', filePaths.audio])
+
+    const localSong = new LocalSong(voices, meta, fileUrls, { replayGain })
     return localSong
   } catch (error) {
     const message = error instanceof Error ? `: ${error.message}` : ''

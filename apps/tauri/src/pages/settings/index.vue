@@ -2,6 +2,7 @@
 const router = useRouter()
 const select = useSoundEffect('select')
 const confirm = useSoundEffect('confirm')
+const { t } = useI18n()
 
 const back = () => {
   router.push({ name: '/home' })
@@ -38,19 +39,19 @@ onBeforeUnmount(() => {
 <template>
   <Layout class="gradient-bg-secondary" @back="back">
     <template #header>
-      <TitleBar title="Settings" @back="back" />
+      <TitleBar :title="t('settings.title')" @back="back" />
     </template>
     <div class="flex flex-col gap-0.5cqh">
       <WideButton
         v-for="(button, i) in buttons"
         :key="button.label"
         class="from-settings-start to-settings-end"
-        :gradient="{ start: '#36D1DC', end: '#5B86E5' }"
         :active="position === i"
         @mouseenter="() => (position = i)"
         @click="button.action"
-        >{{ button.label }}</WideButton
       >
+        {{ button.label }}
+      </WideButton>
     </div>
     <template #footer>
       <KeyHints :hints="['back', 'navigate', 'confirm']" />
