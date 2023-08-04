@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { getAuthSession, verifyAuth } from '../middleware/auth.js'
+import { auth, getAuthSession } from '../middleware/auth.js'
 import { zodMiddleware } from '../middleware/zod.js'
 import { authService } from '../services/auth.js'
 
@@ -11,7 +11,6 @@ const authSchema = z.object({
 })
 
 export const authApp = new Hono()
-  .get('/register', (c) => c.text('Hello Hono!'))
   .post('/register', zodMiddleware('json', authSchema), async (c) => {
     const { username, password } = c.req.valid('json')
 
@@ -28,7 +27,7 @@ export const authApp = new Hono()
 
     return c.jsonT({ token: session.sessionId })
   })
-  .post('/logout', verifyAuth(), async (c) => {
+  .post('/logout', auth(), async (c) => {
     const session = getAuthSession(c)
     await authService.invalidateSession(session.sessionId)
 

@@ -1,14 +1,14 @@
-import { Context, MiddlewareHandler } from 'hono'
+import { Context, Next } from 'hono'
 
-import { getAuthSession, verifyAuth } from './auth.js'
-import { getLobbyAuthPayload, verifyLobbyAuth } from './lobby-auth.js'
+import { auth, getAuthSession } from './auth.js'
+import { getLobbyAuthPayload, lobbyAuth } from './lobby-auth.js'
 
-export const verifyCombinedAuth = (): MiddlewareHandler => {
-  return async (c, next) => {
+export const combinedAuth = () => {
+  return async (c: Context, next: Next) => {
     try {
-      await verifyAuth()(c, next)
+      await auth()(c, next)
     } catch {
-      await verifyLobbyAuth()(c, next)
+      await lobbyAuth()(c, next)
     }
   }
 }

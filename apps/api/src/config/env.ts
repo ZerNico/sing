@@ -1,5 +1,3 @@
-// check env with zod
-
 import { z } from 'zod'
 
 const envSchema = z.object({

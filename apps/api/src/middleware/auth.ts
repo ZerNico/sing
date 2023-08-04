@@ -6,7 +6,7 @@ import { authService } from '../services/auth.js'
 
 const AUTH_SESSION_KEY = 'auth-session-key'
 
-export const verifyAuth = (): MiddlewareHandler => {
+export const auth = (): MiddlewareHandler => {
   return async (c, next) => {
     const session = await authService.verifySession(c.req.raw)
 

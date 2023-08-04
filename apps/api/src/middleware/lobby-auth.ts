@@ -5,7 +5,7 @@ import { LobbyJWTPayload, lobbyService } from '../services/lobby.js'
 
 const LOBBY_AUTH_PAYLOAD_KEY = 'lobby-auth-payload-key'
 
-export const verifyLobbyAuth = (): MiddlewareHandler => {
+export const lobbyAuth = (): MiddlewareHandler => {
   return async (c, next) => {
     const authHeader = c.req.header('authorization')
     const token = authHeader?.split(' ').at(1)

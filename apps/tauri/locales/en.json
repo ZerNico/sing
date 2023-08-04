@@ -19,5 +19,22 @@
     "could_not_connect": "Could not connect to server",
     "client_outdated": "Client is outdated",
     "failed_to_create_lobby": "Failed to create lobby"
+  },
+  "sing": {
+    "title": "Sing",
+    "description": "Sing your favorite songs, alone or with your friends!",
+    "song_select": {}
+  },
+  "party": {
+    "title": "Party",
+    "description": "Play fun game modes with your friends!"
+  },
+  "lobby": {
+    "title": "Lobby",
+    "description": "Manage the players in the current lobby."
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Add songs, microphones and manage the different options."
   }
 }

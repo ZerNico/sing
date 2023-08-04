@@ -26,10 +26,17 @@ export default defineConfig({
     colors: {
       singStart: '#11998e',
       singEnd: '#38ef7d',
+      partyStart: '#7420FB',
+      partyEnd: '#CF56E3',
+      lobbyStart: '#c94b4b',
+      lobbyEnd: '#ffc0cb',
+      settingsStart: '#36D1DC',
+      settingsEnd: '#5B86E5',
       info: '#297fb8',
       success: '#27ae60',
       warning: '#d4b611',
       error: '#c0392b',
+      neutral: '#a3a3a3',
     },
     borderRadius: {
       md: '0.4cqw',

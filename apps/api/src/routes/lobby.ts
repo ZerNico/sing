@@ -2,9 +2,9 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import { HonoError } from '../error/index.js'
-import { getAuthSession, verifyAuth } from '../middleware/auth.js'
-import { getCombinedAuth, verifyCombinedAuth } from '../middleware/combined-auth.js'
-import { getLobbyAuthPayload, verifyLobbyAuth } from '../middleware/lobby-auth.js'
+import { auth, getAuthSession } from '../middleware/auth.js'
+import { combinedAuth, getCombinedAuth } from '../middleware/combined-auth.js'
+import { getLobbyAuthPayload, lobbyAuth } from '../middleware/lobby-auth.js'
 import { zodMiddleware } from '../middleware/zod.js'
 import { lobbyService } from '../services/lobby.js'
 import { userService } from '../services/user.js'
@@ -27,7 +27,7 @@ export const lobbyApp = new Hono()
       return c.jsonT({ lobby, token })
     }
   )
-  .get('/current', verifyCombinedAuth(), async (c) => {
+  .get('/current', combinedAuth(), async (c) => {
     const auth = getCombinedAuth(c)
 
     if (auth.type === 'lobby') {
@@ -43,7 +43,7 @@ export const lobbyApp = new Hono()
       return c.jsonT({ lobby: user.lobby })
     }
   })
-  .delete('/current', verifyLobbyAuth(), async (c) => {
+  .delete('/current', lobbyAuth(), async (c) => {
     const payload = getLobbyAuthPayload(c)
 
     const lobby = await lobbyService.remove(payload.sub)
@@ -52,7 +52,7 @@ export const lobbyApp = new Hono()
 
     return c.jsonT({ success: true })
   })
-  .delete('/current/users/:userId', verifyLobbyAuth(), async (c) => {
+  .delete('/current/users/:userId', lobbyAuth(), async (c) => {
     const payload = getLobbyAuthPayload(c)
     const userId = c.req.param('userId')
 
@@ -60,7 +60,7 @@ export const lobbyApp = new Hono()
 
     return c.jsonT({ success: true })
   })
-  .post('/:lobbyCode/join', verifyAuth(), async (c) => {
+  .post('/:lobbyCode/join', auth(), async (c) => {
     const lobbyCode = c.req.param('lobbyCode')
     const session = getAuthSession(c)
 
@@ -71,7 +71,7 @@ export const lobbyApp = new Hono()
 
     return c.jsonT({ success: true })
   })
-  .delete('/current/users/leave', verifyAuth(), async (c) => {
+  .delete('/current/users/leave', auth(), async (c) => {
     const session = getAuthSession(c)
     const user = await userService.getOne(session.user.userId)
 

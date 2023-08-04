@@ -19,7 +19,7 @@ const createLobby = async () => {
   const response = await client.lobby.$post({ json: { version: __APP_VERSION__ } })
   const body = await response.json()
   lobbyStore.lobby = body.lobby
-  lobbyStore.jwt = body.token
+  lobbyStore.token = body.token
   lobbyStore.mode = 'online'
 }
 

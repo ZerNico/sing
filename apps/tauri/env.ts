@@ -5,5 +5,6 @@ export default defineConfig({
   validator: 'zod',
   schema: {
     VITE_API_URL: z.string(),
+    VITE_WEB_URL: z.string(),
   },
 })
