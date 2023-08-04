@@ -36,7 +36,7 @@ useEventListener('mousemove', () => {
 
 <template>
   <main
-    class="font-primary font-primary h-screen w-screen text-1cqw text-white"
+    class="h-screen w-screen text-1cqw font-primary font-primary text-white"
     :class="{ 'cursor-none': mouseHidden }"
   >
     <RouterView v-slot="{ Component }">
