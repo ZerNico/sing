@@ -40,6 +40,13 @@
       "title": "Songs",
       "add": "Add",
       "remove": "Remove"
+    },
+    "volume": {
+      "title": "Volume",
+      "master": "Master Volume",
+      "game": "Game Volume",
+      "menu": "Menu Volume",
+      "preview": "Preview Volume"
     }
   }
 }

@@ -21,5 +21,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TitleBar: typeof import('./components/TitleBar.vue')['default']
     WideButton: typeof import('./components/ui/WideButton.vue')['default']
+    WideSlider: typeof import('./components/ui/WideSlider.vue')['default']
   }
 }

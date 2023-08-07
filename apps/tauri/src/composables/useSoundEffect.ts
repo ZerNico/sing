@@ -8,6 +8,7 @@ type Sound = 'select' | 'confirm'
 
 export const useSoundEffect = (sound: MaybeRef<Sound>) => {
   const soundRef = ref(sound)
+  const settingsStore = useSettingsStore()
 
   const sfx = computed(() => {
     switch (soundRef.value) {
@@ -21,7 +22,7 @@ export const useSoundEffect = (sound: MaybeRef<Sound>) => {
   })
 
   const volume = computed(() => {
-    return 0.5
+    return settingsStore.relativeVolume.menu / 100
   })
 
   const s = useSound(sfx, { volume })
