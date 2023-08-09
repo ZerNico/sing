@@ -38,7 +38,7 @@ importers:
       '@fastify/cors': 8.3.0
       '@fastify/helmet': 10.1.1
       '@fastify/sensible': 5.2.0
-      '@prisma/client': 4.16.1_prisma@4.16.1
+      '@prisma/client': 5.1.1_prisma@4.16.1
       '@trpc/server': 10.32.0
       croner: 6.0.5
       dotenv-cli: 7.2.1
@@ -153,7 +153,7 @@ importers:
       '@unocss/nuxt': ^0.52.4
       '@unocss/preset-icons': ^0.52.4
       '@unocss/reset': ^0.52.4
-      '@unocss/transformer-directives': ^0.52.4
+      '@unocss/transformer-directives': ^0.55.0
       '@vue-macros/nuxt': ^1.3.11
       '@zernico/nuxt-logto': ^0.0.11
       api: workspace:*
@@ -173,7 +173,7 @@ importers:
       '@trpc/server': 10.32.0
       '@unocss/preset-icons': 0.52.7
       '@unocss/reset': 0.52.7
-      '@unocss/transformer-directives': 0.52.7
+      '@unocss/transformer-directives': 0.55.0
       '@zernico/nuxt-logto': 0.0.11
       api: link:../api
       browser-image-compression: 2.0.2
@@ -1130,8 +1130,8 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@intlify/shared/9.3.0-beta.19:
-    resolution: {integrity: sha512-+lhQggrLvlQ/O5OmIYAc9gadcYXMoaDi0Doef+X/f6TLZFr9PTMjOpBWmpwNNHi026e54jckntUn6GzqDtIN4w==}
+  /@intlify/shared/9.3.0-beta.25:
+    resolution: {integrity: sha512-Zg+ECV9RPdp227tCJOgvPb+S3i651nf4kKHsMojSyWCppVK/4NFuDrBG2lIQSQL6Iq5LKVr5MkezHCW2NBTQRg==}
     engines: {node: '>= 16'}
     dev: false
 
@@ -1726,9 +1726,9 @@ packages:
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
 
-  /@prisma/client/4.16.1_prisma@4.16.1:
-    resolution: {integrity: sha512-CoDHu7Bt+NuDo40ijoeHP79EHtECsPBTy3yte5Yo3op8TqXt/kV0OT5OrsWewKvQGKFMHhYQ+ePed3zzjYdGAw==}
-    engines: {node: '>=14.17'}
+  /@prisma/client/5.1.1_prisma@4.16.1:
+    resolution: {integrity: sha512-fxcCeK5pMQGcgCqCrWsi+I2rpIbk0rAhdrN+ke7f34tIrgPwA68ensrpin+9+fZvuV2OtzHmuipwduSY6HswdA==}
+    engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
       prisma: '*'
@@ -1736,12 +1736,12 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 4.16.0-66.b20ead4d3ab9e78ac112966e242ded703f4a052c
+      '@prisma/engines-version': 5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e
       prisma: 4.16.1
     dev: false
 
-  /@prisma/engines-version/4.16.0-66.b20ead4d3ab9e78ac112966e242ded703f4a052c:
-    resolution: {integrity: sha512-tMWAF/qF00fbUH1HB4Yjmz6bjh7fzkb7Y3NRoUfMlHu6V+O45MGvqwYxqwBjn1BIUXkl3r04W351D4qdJjrgvA==}
+  /@prisma/engines-version/5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e:
+    resolution: {integrity: sha512-owZqbY/wucbr65bXJ/ljrHPgQU5xXTSkmcE/JcbqE1kusuAXV/TLN3/exmz21SZ5rJ7WDkyk70J2G/n68iogbQ==}
     dev: false
 
   /@prisma/engines/4.16.1:
@@ -2555,6 +2555,10 @@ packages:
   /@unocss/core/0.52.7:
     resolution: {integrity: sha512-dZonrlfu33SkUMsZXlsyYSM79tr2nLer/hBEU2ZaemRik2KchxIUNlZV6kX1f1k3m+gEtVQOyx1MImpgLS8PWg==}
 
+  /@unocss/core/0.55.0:
+    resolution: {integrity: sha512-TcTugpuhsv6OwMsP3iFIG8FVc9N5JzkojIGNAKF8I2WBftZ//3QcpEHiHc1mH3MlPYfJgUvCcT6/Gad55qmHzg==}
+    dev: false
+
   /@unocss/extractor-arbitrary-variants/0.52.7:
     resolution: {integrity: sha512-nJ4iE7nIRpoOIQfD8S58yG4qJd6AhVPEfEOf7ksX1u8xLf71rrBIojwraRXvv7aPqNdZiWvXdh/znpA/QC5b9w==}
     dependencies:
@@ -2677,6 +2681,13 @@ packages:
     dependencies:
       '@unocss/core': 0.52.7
       css-tree: 2.3.1
+
+  /@unocss/transformer-directives/0.55.0:
+    resolution: {integrity: sha512-bWfAOqQxzy5vIul/jgXN2b0APAk9tWKeTN9Rh4FWvz+dI0P7cBc3rHVEC5qM3i9xwYObtjQcNZjEfJpyeapnzg==}
+    dependencies:
+      '@unocss/core': 0.55.0
+      css-tree: 2.3.1
+    dev: false
 
   /@unocss/transformer-variant-group/0.52.7:
     resolution: {integrity: sha512-pGqTfT1hax3F+yjs6n6r5loSIP/Dsm/NuEA5nwazTu4gmubiIBi11UjoK/pE/cFg9Z3yp6n9Lspo71yALJbpVg==}
@@ -10479,7 +10490,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      '@intlify/shared': 9.3.0-beta.19
+      '@intlify/shared': 9.3.0-beta.25
       '@intlify/vue-i18n-bridge': 0.8.0_vue-i18n@9.3.0-beta.17
       '@intlify/vue-router-bridge': 0.8.0
       ufo: 1.1.2

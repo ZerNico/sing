@@ -31,7 +31,7 @@
     "@trpc/server": "^10.28.0",
     "@unocss/preset-icons": "^0.52.4",
     "@unocss/reset": "^0.52.4",
-    "@unocss/transformer-directives": "^0.52.4",
+    "@unocss/transformer-directives": "^0.55.0",
     "@zernico/nuxt-logto": "^0.0.11",
     "api": "workspace:*",
     "browser-image-compression": "^2.0.2",
