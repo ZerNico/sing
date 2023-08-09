@@ -38,7 +38,7 @@ importers:
       '@fastify/cors': 8.3.0
       '@fastify/helmet': 10.1.1
       '@fastify/sensible': 5.2.0
-      '@prisma/client': 4.16.1_prisma@4.16.1
+      '@prisma/client': 5.1.1_prisma@4.16.1
       '@trpc/server': 10.32.0
       croner: 6.0.5
       dotenv-cli: 7.2.1
@@ -152,7 +152,7 @@ importers:
       '@types/node': ^20.2.5
       '@unocss/nuxt': ^0.52.4
       '@unocss/preset-icons': ^0.52.4
-      '@unocss/reset': ^0.52.4
+      '@unocss/reset': ^0.55.0
       '@unocss/transformer-directives': ^0.52.4
       '@vue-macros/nuxt': ^1.3.11
       '@zernico/nuxt-logto': ^0.0.11
@@ -172,7 +172,7 @@ importers:
       '@trpc/client': 10.32.0_@trpc+server@10.32.0
       '@trpc/server': 10.32.0
       '@unocss/preset-icons': 0.52.7
-      '@unocss/reset': 0.52.7
+      '@unocss/reset': 0.55.0
       '@unocss/transformer-directives': 0.52.7
       '@zernico/nuxt-logto': 0.0.11
       api: link:../api
@@ -1130,8 +1130,8 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@intlify/shared/9.3.0-beta.19:
-    resolution: {integrity: sha512-+lhQggrLvlQ/O5OmIYAc9gadcYXMoaDi0Doef+X/f6TLZFr9PTMjOpBWmpwNNHi026e54jckntUn6GzqDtIN4w==}
+  /@intlify/shared/9.3.0-beta.25:
+    resolution: {integrity: sha512-Zg+ECV9RPdp227tCJOgvPb+S3i651nf4kKHsMojSyWCppVK/4NFuDrBG2lIQSQL6Iq5LKVr5MkezHCW2NBTQRg==}
     engines: {node: '>= 16'}
     dev: false
 
@@ -1726,9 +1726,9 @@ packages:
   /@polka/url/1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
 
-  /@prisma/client/4.16.1_prisma@4.16.1:
-    resolution: {integrity: sha512-CoDHu7Bt+NuDo40ijoeHP79EHtECsPBTy3yte5Yo3op8TqXt/kV0OT5OrsWewKvQGKFMHhYQ+ePed3zzjYdGAw==}
-    engines: {node: '>=14.17'}
+  /@prisma/client/5.1.1_prisma@4.16.1:
+    resolution: {integrity: sha512-fxcCeK5pMQGcgCqCrWsi+I2rpIbk0rAhdrN+ke7f34tIrgPwA68ensrpin+9+fZvuV2OtzHmuipwduSY6HswdA==}
+    engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
       prisma: '*'
@@ -1736,12 +1736,12 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 4.16.0-66.b20ead4d3ab9e78ac112966e242ded703f4a052c
+      '@prisma/engines-version': 5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e
       prisma: 4.16.1
     dev: false
 
-  /@prisma/engines-version/4.16.0-66.b20ead4d3ab9e78ac112966e242ded703f4a052c:
-    resolution: {integrity: sha512-tMWAF/qF00fbUH1HB4Yjmz6bjh7fzkb7Y3NRoUfMlHu6V+O45MGvqwYxqwBjn1BIUXkl3r04W351D4qdJjrgvA==}
+  /@prisma/engines-version/5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e:
+    resolution: {integrity: sha512-owZqbY/wucbr65bXJ/ljrHPgQU5xXTSkmcE/JcbqE1kusuAXV/TLN3/exmz21SZ5rJ7WDkyk70J2G/n68iogbQ==}
     dev: false
 
   /@prisma/engines/4.16.1:
@@ -2653,6 +2653,10 @@ packages:
 
   /@unocss/reset/0.52.7:
     resolution: {integrity: sha512-TJW2BaGGQoh0OSDd22Ti8bZ/Ds3YMGT8aBxNPkcyhesH4fCJeWK+rwsAc5g8CS/wp9OdLS8P4Jy9k2Yg/GfrVQ==}
+
+  /@unocss/reset/0.55.0:
+    resolution: {integrity: sha512-TzpcOCIr16IbFxQ4vrSfEV+A8k0N4mJkhl7J3SZfAxBpNDBKAWDB6VBW9iEQY5aBYDLN3wRx1LskgEoubqBCPQ==}
+    dev: false
 
   /@unocss/scope/0.52.7:
     resolution: {integrity: sha512-J8QMwfbm+lCt3Lpt52NllnXbuICvH8+Njl/L65wN9TfE6gHk0StA5nrEOlOB79R1aOhnRaoqG4MkAvFXK/1dcQ==}
@@ -10479,7 +10483,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      '@intlify/shared': 9.3.0-beta.19
+      '@intlify/shared': 9.3.0-beta.25
       '@intlify/vue-i18n-bridge': 0.8.0_vue-i18n@9.3.0-beta.17
       '@intlify/vue-router-bridge': 0.8.0
       ufo: 1.1.2
