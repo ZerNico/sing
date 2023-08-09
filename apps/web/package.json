@@ -29,7 +29,7 @@
     "@tanstack/vue-query": "^4.29.11",
     "@trpc/client": "^10.28.0",
     "@trpc/server": "^10.28.0",
-    "@unocss/preset-icons": "^0.52.4",
+    "@unocss/preset-icons": "^0.55.0",
     "@unocss/reset": "^0.52.4",
     "@unocss/transformer-directives": "^0.52.4",
     "@zernico/nuxt-logto": "^0.0.11",
