@@ -1,3 +1,13 @@
+export interface Microphone {
+  name: string
+  color: string
+  channel: number
+  gain: number
+  delay: number
+  threshold: number
+  sampleRate: number
+}
+
 export const useSettingsStore = defineStore(
   'settings',
   () => {
@@ -12,10 +22,6 @@ export const useSettingsStore = defineStore(
       menu: 50,
     })
 
-    watch(volume, () => {
-      console.log('volume changed', volume.value)
-    })
-
     const relativeVolume = computed(() => {
       return {
         master: volume.value.master,
@@ -25,7 +31,9 @@ export const useSettingsStore = defineStore(
       }
     })
 
-    return { general, volume, relativeVolume }
+    const microphones = ref<Microphone[]>([])
+
+    return { general, volume, relativeVolume, microphones }
   },
   {
     persist: {

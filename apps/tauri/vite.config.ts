@@ -38,7 +38,9 @@ export default defineConfig(async () => ({
     VueMacros({
       plugins: {
         vue: Vue({
-          reactivityTransform: true,
+          script: {
+            defineModel: true,
+          },
         }),
       },
     }),

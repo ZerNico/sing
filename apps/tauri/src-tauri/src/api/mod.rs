@@ -1,4 +1,5 @@
 use std::sync::Arc;
+mod audio;
 mod metadata;
 use rspc::{Error, ErrorCode, Router};
 
@@ -20,6 +21,13 @@ pub(crate) fn router() -> Arc<Router<Context>> {
                     ErrorCode::BadRequest,
                     "could_not_get_replaygain".into(),
                 ))
+            })
+        })
+        .query("microphones", |t| {
+            t(|_, _: ()| async move {
+                let microphones = audio::devices::get_microphones();
+
+                Ok(microphones)
             })
         })
         .build();

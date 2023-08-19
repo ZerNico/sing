@@ -3,7 +3,7 @@ const props = defineProps<{
   active: boolean
   icon: string
   label: string
-  loading: boolean
+  loading?: boolean
 }>()
 
 const icon = computed(() => {

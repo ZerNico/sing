@@ -2,7 +2,10 @@
 
 export type Procedures = {
     queries: 
+        { key: "microphones", input: never, result: Microphone[] } | 
         { key: "replaygain", input: string, result: number },
     mutations: never,
     subscriptions: never
 };
+
+export type Microphone = { name: string; channels: number; sample_rates: number[] }

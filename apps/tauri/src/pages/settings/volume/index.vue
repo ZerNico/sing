@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { clamp } from '~/lib/utils/math'
+
 const router = useRouter()
 const { t } = useI18n()
 const settingsStore = useSettingsStore()
@@ -12,23 +14,47 @@ const back = () => {
 const sliders = [
   {
     label: t('settings.volume.master'),
-    value: settingsStore.volume.master,
-    setter: (value: number) => (settingsStore.volume.master = value),
+    ref: computed({
+      get() {
+        return settingsStore.volume.master
+      },
+      set(newValue: number) {
+        settingsStore.volume.master = clamp(newValue, 0, 100)
+      },
+    }),
   },
   {
     label: t('settings.volume.game'),
-    value: settingsStore.volume.game,
-    setter: (value: number) => (settingsStore.volume.game = value),
+    ref: computed({
+      get() {
+        return settingsStore.volume.game
+      },
+      set(newValue: number) {
+        settingsStore.volume.game = clamp(newValue, 0, 100)
+      },
+    }),
   },
   {
     label: t('settings.volume.preview'),
-    value: settingsStore.volume.preview,
-    setter: (value: number) => (settingsStore.volume.preview = value),
+    ref: computed({
+      get() {
+        return settingsStore.volume.preview
+      },
+      set(newValue: number) {
+        settingsStore.volume.preview = clamp(newValue, 0, 100)
+      },
+    }),
   },
   {
     label: t('settings.volume.menu'),
-    value: settingsStore.volume.menu,
-    setter: (value: number) => (settingsStore.volume.menu = value),
+    ref: computed({
+      get() {
+        return settingsStore.volume.menu
+      },
+      set(newValue: number) {
+        settingsStore.volume.menu = clamp(newValue, 0, 100)
+      },
+    }),
   },
 ]
 
@@ -41,6 +67,16 @@ useMenuNavigation((e) => {
     decrement()
   } else if (e.action === 'back') {
     back()
+  } else if (e.action === 'left') {
+    const slider = sliders.at(position.value)
+    if (slider) {
+      slider.ref.value -= 5
+    }
+  } else if (e.action === 'right') {
+    const slider = sliders.at(position.value)
+    if (slider) {
+      slider.ref.value += 5
+    }
   }
 })
 
@@ -60,12 +96,12 @@ onBeforeUnmount(() => {
       <WideSlider
         v-for="(slider, i) in sliders"
         :key="slider.label"
-        :model-value="slider.value"
+        v-model="slider.ref.value"
         :label="slider.label"
         class="from-settings-start to-settings-end"
         :active="position === i"
+        :click-step="5"
         @mouseenter="() => (position = i)"
-        @update:model-value="slider.setter"
       ></WideSlider>
     </div>
     <template #footer>

@@ -47,6 +47,19 @@
       "game": "Game Volume",
       "menu": "Menu Volume",
       "preview": "Preview Volume"
+    },
+    "microphones": {
+      "title": "Microphones",
+      "add": "Add",
+      "remove": "Remove",
+      "microphone": "Microphone",
+      "color": "Color",
+      "channel": "Channel",
+      "delay": "Delay",
+      "gain": "Gain",
+      "threshold": "Threshold",
+      "sample_rate": "Sample Rate",
+      "save": "Save"
     }
   }
 }
