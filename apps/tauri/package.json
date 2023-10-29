@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tauri dev",
-    "build": "tauri build --debug",
+    "build": "tauri build",
     "lint": "eslint --ext .js,.ts,.vue .",
     "dev:vite": "vite",
     "build:vite": "vue-tsc --noEmit && vite build",
