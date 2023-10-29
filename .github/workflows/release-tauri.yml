@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'apps/tauri/**'
+      - '.github/workflows/release-tauri.yml'
 
 jobs:
   publish-tauri:
@@ -20,11 +21,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: install dependencies (ubuntu only)
+      - name: Install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-20.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev alsa
+
+      - name: Install rust apple arm target (macos only)
+        if: matrix.platform == 'macos-latest'
+        run: rustup target add aarch64-apple-darwin
 
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
@@ -40,7 +45,7 @@ jobs:
         with:
           version: 7
           run_install: false
-      
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
@@ -73,3 +78,4 @@ jobs:
           releaseDraft: true
           prerelease: false
           projectPath: ./apps/tauri
+          args: ${{ matrix.platform == 'macos-latest' && '--target universal-apple-darwin' || '' }}
