@@ -11,13 +11,15 @@ pub fn get_replaygain(path: String) -> Result<f32, Box<dyn std::error::Error>> {
 
     let tag = match tagged_file.primary_tag() {
         Some(primary_tag) => primary_tag,
-        None => tagged_file.first_tag().expect("ERROR: No tags found!"),
+        None => return Ok(0.0), // Return 0.0 when no tags are found
     };
 
-    let replaygain = tag.get_string(&lofty::ItemKey::ReplayGainTrackGain).unwrap_or("0.0");
+    let replaygain = tag
+        .get_string(&lofty::ItemKey::ReplayGainTrackGain)
+        .unwrap_or("0.0");
 
-    // remove dB from string and convert to f32
+    // Remove dB from string and convert to f32
     let replaygain = replaygain.replace(" dB", "").parse::<f32>()?;
 
-    return Ok(replaygain);
+    Ok(replaygain)
 }
