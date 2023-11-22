@@ -22,7 +22,7 @@ desync = "0.8.2"
 tokio = { version = "1", features = [ "rt", "rt-multi-thread", "sync", "fs", "io-util" ] }
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 tauri-plugin-persisted-scope = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-percent-encoding = "2.2.0"
+percent-encoding = "2.3.1"
 url = "2.3.1"
 rand = "0.8.5"
 atomic_float = "0.1.0"
