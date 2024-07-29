@@ -638,6 +638,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "data-encoding"
+version = "2.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8566979429cf69b49a5c740c60791108e86440e8be149bbea4fe54d2c32d6e2"
+
+[[package]]
 name = "deranged"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -824,9 +830,9 @@ dependencies = [
 
 [[package]]
 name = "flate2"
-version = "1.0.28"
+version = "1.0.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46303f565772937ffe1d394a4fac6f411c6013172fadde9dcdb1e147a086940e"
+checksum = "5f54427cfd1c7829e2a139fcefea601bf088ebca651d2bf53ebc600eac295dae"
 dependencies = [
  "crc32fast",
  "miniz_oxide",
@@ -1649,36 +1655,35 @@ dependencies = [
 
 [[package]]
 name = "lofty"
-version = "0.12.1"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd1b8e18439c8fabf316e0a87e9cdca9667e90bcf5a080946a264fd60bbed5e8"
+checksum = "c780f414cc123090cf47ee43a58c3a8ef941a4ea66ce262cb5958a844e909523"
 dependencies = [
- "base64 0.21.5",
  "byteorder",
+ "data-encoding",
  "flate2",
  "lofty_attr",
  "log",
  "ogg_pager",
- "once_cell",
  "paste",
 ]
 
 [[package]]
 name = "lofty_attr"
-version = "0.6.0"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "336dfabb2fdfd932cebfcaa5d0fc57abac0d49f6ae9ddaa7c47a51bf9f74f966"
+checksum = "28bd4b9d8a5af74808932492521cdd272019b056f75fcc70056bd2c09fceb550"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 1.0.109",
+ "syn 2.0.38",
 ]
 
 [[package]]
 name = "log"
-version = "0.4.20"
+version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
+checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 
 [[package]]
 name = "loom"
@@ -2043,9 +2048,9 @@ dependencies = [
 
 [[package]]
 name = "ogg_pager"
-version = "0.5.0"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d218a406e5de88e1c492d0162d569916f7436efe851ba5cc40a4bf4fa97cb40"
+checksum = "87b0bef808533c5890ab77279538212efdbbbd9aa4ef1ccdfcfbf77a42f7e6fa"
 dependencies = [
  "byteorder",
 ]
@@ -2122,9 +2127,9 @@ dependencies = [
 
 [[package]]
 name = "paste"
-version = "1.0.14"
+version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "pathdiff"
