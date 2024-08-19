@@ -1,0 +1,19 @@
+{
+  "name": "api",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch --hot src/index.ts"
+  },
+  "dependencies": {
+    "@nokijs/server": "0.0.1-alpha.5",
+    "database": "workspace:*",
+    "drizzle-orm": "^0.31.0",
+    "i18next": "^23.11.5",
+    "postgres": "^3.4.4",
+    "valibot": "0.31.0-rc.10"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.3"
+  }
+}

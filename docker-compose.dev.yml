@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sing
+      POSTGRES_PASSWORD: sing
+      POSTGRES_DB: sing
+    ports:
+      - 5432:5432
+    volumes:
+      - .tmp/db:/var/lib/postgresql/data

@@ -1,0 +1,12 @@
+{
+  "name": "sing-next",
+  "scripts": {
+    "dev": "turbo run dev --parallel --force"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.3"
+  },
+  "dependencies": {
+    "@biomejs/biome": "^1.7.3"
+  }
+}
