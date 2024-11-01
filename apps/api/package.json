@@ -6,12 +6,12 @@
     "dev": "bun --watch --hot src/index.ts"
   },
   "dependencies": {
-    "@nokijs/server": "0.0.1-alpha.5",
+    "@nokijs/server": "0.0.1-alpha.16",
     "database": "workspace:*",
-    "drizzle-orm": "^0.31.0",
-    "i18next": "^23.11.5",
+    "drizzle-orm": "^0.33.0",
+    "jose": "^5.7.0",
     "postgres": "^3.4.4",
-    "valibot": "0.31.0-rc.10"
+    "valibot": "1.0.0-beta.1"
   },
   "devDependencies": {
     "@types/bun": "^1.1.3"

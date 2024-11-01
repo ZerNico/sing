@@ -10,3 +10,9 @@ services:
       - 5432:5432
     volumes:
       - .tmp/db:/var/lib/postgresql/data
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile.dev
+    command: python manage.py runserver
