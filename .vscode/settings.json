@@ -17,5 +17,8 @@
   "i18n-ally.enabledFrameworks": [
     "i18next"
   ],
-  "terminal.integrated.env.osx": {}
+  "terminal.integrated.env.osx": {},
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  }
 }
