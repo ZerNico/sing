@@ -1,25 +1,22 @@
-import "./styles.css";
-import "virtual:uno.css";
 import "@unocss/reset/tailwind.css";
-import "@fontsource-variable/inter";
-import { commands } from "./bindings";
+import "virtual:uno.css";
+import "./styles.scss";
+import '@fontsource-variable/inter';
 
-function App() {
+import { Router } from "@solidjs/router";
+import { FileRoutes } from "@solidjs/start/router";
+import { Suspense } from "solid-js";
+
+export default function App() {
   return (
-    <main class="font-primary h-full bg-gray-200">
-      <button
-        type="button"
-        class="btn btn-primary"
-        onClick={async () => {
-          const test = await commands.helloWorld("World");
-          console.log(test);
-          
-        }}
-      >
-        Primary Button
-      </button>
-    </main>
+    <Router
+      root={(props) => (
+        <>
+          <Suspense>{props.children}</Suspense>
+        </>
+      )}
+    >
+      <FileRoutes />
+    </Router>
   );
 }
-
-export default App;

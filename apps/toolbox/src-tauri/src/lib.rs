@@ -1,18 +1,18 @@
-use serde::{Deserialize, Serialize};
+mod commands;
+mod error;
+mod search;
+
 use specta_typescript::Typescript;
 use tauri_specta::{collect_commands, Builder};
 
-#[tauri::command]
-#[specta::specta]
-fn hello_world(my_name: String) -> String {
-    format!("Hello, {my_name}! You've been greeted from Rust!")
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let mut builder = Builder::<tauri::Wry>::new().commands(collect_commands![hello_world,]);
+    let builder = Builder::<tauri::Wry>::new().commands(collect_commands![
+        commands::search_youtube,
+        commands::search_image,
+    ]);
 
-    #[cfg(debug_assertions)] // <- Only export on non-release builds
+    #[cfg(debug_assertions)]
     builder
         .export(Typescript::default(), "../src/bindings.ts")
         .expect("Failed to export typescript bindings");

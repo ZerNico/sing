@@ -1,32 +1,30 @@
 {
-  "name": "toolbox",
-  "version": "0.1.0",
-  "description": "",
+  "name": "example-with-unocss",
   "type": "module",
   "scripts": {
     "dev": "tauri dev",
     "build": "tauri build",
-    "dev:vite": "vite",
-    "build:vite": "vite build",
-    "serve": "vite preview",
-    "tauri": "tauri"
+    "dev:vinxi": "vinxi dev --port 1420",
+    "build:vinxi": "vinxi build",
+    "start": "vinxi start"
   },
-  "license": "MIT",
   "dependencies": {
     "@fontsource-variable/inter": "^5.1.0",
-    "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-shell": "^2",
-    "solid-js": "^1.7.8"
+    "@solidjs/router": "^0.15.0",
+    "@solidjs/start": "^1.0.10",
+    "@tauri-apps/api": "^2.0.3",
+    "@tauri-apps/plugin-shell": "^2.0.1",
+    "solid-js": "^1.9.2",
+    "vinxi": "^0.4.3"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.11",
-    "@tauri-apps/cli": "^2",
+    "@tauri-apps/cli": "^2.0.4",
     "@unocss/preset-icons": "^0.63.6",
-    "@unocss/preset-uno": "^0.63.6",
     "@unocss/reset": "^0.59.4",
-    "typescript": "^5.2.2",
-    "unocss": "^0.59.2",
-    "vite": "^5.3.1",
-    "vite-plugin-solid": "^2.8.0"
+    "unocss": "^0.59.4"
   }
 }

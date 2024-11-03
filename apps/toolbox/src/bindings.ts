@@ -5,8 +5,21 @@
 
 
 export const commands = {
-async helloWorld(myName: string) : Promise<string> {
-    return await TAURI_INVOKE("hello_world", { myName });
+async searchYoutube(query: string) : Promise<Result<YoutubeSearchResult[], AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("search_youtube", { query }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async searchImage(query: string) : Promise<Result<ImageSearchResult[], AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("search_image", { query }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -20,7 +33,9 @@ async helloWorld(myName: string) : Promise<string> {
 
 /** user-defined types **/
 
-
+export type AppError = { type: "InitializationError" } | { type: "SearchError"; data: string }
+export type ImageSearchResult = { url: string }
+export type YoutubeSearchResult = { title: string; url: string; thumbnail: string }
 
 /** tauri-specta globals **/
 
