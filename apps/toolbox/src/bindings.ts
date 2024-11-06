@@ -20,6 +20,14 @@ async searchImage(query: string) : Promise<Result<ImageSearchResult[], AppError>
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async downloadSong(songName: string, outputPath: string, lyrics: string, youtubeUrl: string, coverUrl: string) : Promise<Result<null, AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("download_song", { songName, outputPath, lyrics, youtubeUrl, coverUrl }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -33,7 +41,7 @@ async searchImage(query: string) : Promise<Result<ImageSearchResult[], AppError>
 
 /** user-defined types **/
 
-export type AppError = { type: "InitializationError" } | { type: "SearchError"; data: string }
+export type AppError = { type: "IoError"; data: string } | { type: "PathExistsError"; data: string } | { type: "RequestError"; data: string } | { type: "YoutubeDlError"; data: string } | { type: "ImageSearchError"; data: string } | { type: "YoutubeSearchError"; data: string }
 export type ImageSearchResult = { url: string }
 export type YoutubeSearchResult = { title: string; url: string; thumbnail: string }
 

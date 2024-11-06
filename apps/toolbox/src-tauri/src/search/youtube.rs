@@ -10,9 +10,9 @@ pub struct YoutubeSearchResult {
 }
 
 pub async fn search_youtube(query: String) -> Result<Vec<YoutubeSearchResult>, AppError> {
-  let youtube = YouTube::new().map_err(|_| AppError::InitializationError)?;
+  let youtube = YouTube::new()?;
 
-  let res = youtube.search(query, None).await.map_err(|e| AppError::SearchError(e.to_string()))?;
+  let res = youtube.search(query, None).await?;
 
   let results = res.into_iter().filter_map(|item| {
     if let SearchResult::Video(video) = item {

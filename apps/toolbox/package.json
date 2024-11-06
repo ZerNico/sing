@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.1.0",
+    "@kobalte/core": "^0.13.7",
+    "@solid-primitives/map": "^0.4.13",
     "@solidjs/router": "^0.15.0",
     "@solidjs/start": "^1.0.10",
     "@tauri-apps/api": "^2.0.3",
+    "@tauri-apps/plugin-dialog": "^2.0.1",
     "@tauri-apps/plugin-shell": "^2.0.1",
     "solid-js": "^1.9.2",
     "vinxi": "^0.4.3"

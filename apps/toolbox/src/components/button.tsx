@@ -14,7 +14,9 @@ export function Button(props: ButtonProps) {
     <button
       type={props.type || "button"}
       onClick={props.onClick}
-      class={`relative inline-flex h-10 items-center rounded-md bg-gray-800 px-3 py-2 text-sm text-white ${props.class || ""}`}
+      class={`relative inline-flex h-10 items-center justify-center rounded-md bg-gray-800 px-3 py-2 text-sm text-white disabled:opacity-80 ${
+        props.class || ""
+      }`}
       disabled={props.disabled || props.loading}
     >
       <span classList={{ invisible: props.loading }}>{props.children}</span>

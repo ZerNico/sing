@@ -4,12 +4,13 @@ import { Button } from "./button";
 import { Input } from "./input";
 
 interface YouTubeSearchProps {
-  onSelected: (url?: string) => void;
+  onSelected: (video: { title: string; url: string }) => void;
   selected?: string;
+  onSearchTermChange?: (searchTerm: string) => void;
+  searchTerm?: string;
 }
 
-export function YouTubeSearch(props: YouTubeSearchProps) {
-  const [searchTerm, setSearchTerm] = createSignal("");
+export default function YouTubeSearch(props: YouTubeSearchProps) {
   const [searchResults, setSearchResults] = createSignal<YoutubeSearchResult[]>();
   const [loading, setLoading] = createSignal(false);
 
@@ -17,7 +18,13 @@ export function YouTubeSearch(props: YouTubeSearchProps) {
     e.preventDefault();
     setLoading(true);
 
-    const response = await commands.searchYoutube(searchTerm());
+    if (!props.searchTerm) {
+      setSearchResults([]);
+      setLoading(false);
+      return;
+    }
+
+    const response = await commands.searchYoutube(props.searchTerm);
 
     if (response.status === "error") {
       console.error(response.error);
@@ -34,7 +41,7 @@ export function YouTubeSearch(props: YouTubeSearchProps) {
     <div class="flex h-full flex-col gap-2">
       <h2>YouTube</h2>
       <form onSubmit={search} class="flex gap-2">
-        <Input value={searchTerm()} onInput={setSearchTerm} class="flex-grow" />
+        <Input value={props.searchTerm || ""} onInput={props.onSearchTermChange} class="flex-grow" />
         <Button loading={loading()} type="submit">
           <div class="i-lucide-search" />
         </Button>
@@ -48,7 +55,7 @@ export function YouTubeSearch(props: YouTubeSearchProps) {
                 <div class="flex-grow">
                   <div class="font-semibold">{result.title}</div>
                 </div>
-                <Button onClick={() => props.onSelected(result.url)} disabled={props.selected === result.url}>
+                <Button onClick={() => props.onSelected({ title: result.title, url: result.url })} disabled={props.selected === result.url}>
                   <Show when={props.selected === result.url} fallback={<div class="i-lucide-plus" />}>
                     <div class="i-lucide-check" />
                   </Show>
