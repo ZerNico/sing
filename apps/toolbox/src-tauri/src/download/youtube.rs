@@ -3,10 +3,6 @@ use std::path::Path;
 use youtube_dl::YoutubeDl;
 
 pub async fn download_youtube(url: &str, path: &Path, song_name: &str) -> Result<(), AppError> {
-    println!("Downloading youtube video");
-    println!("{:?}", path);
-
-    // Download video
     YoutubeDl::new(url)
         .format("bestvideo[height<=1080][vcodec^=avc]")
         .extra_arg("-o")
