@@ -39,21 +39,29 @@ pub async fn download_song(
 
     std::fs::create_dir_all(&output_dir)?;
 
-    let (youtube_result, image_result) = tokio::join!(
-        download::youtube::download_youtube(&youtube_url, &output_dir, &song_name),
-        download::image::download_image(&cover_url, &output_dir, &song_name)
-    );
+    let result = async {
+        let (youtube_result, image_result) = tokio::join!(
+            download::youtube::download_youtube(&youtube_url, &output_dir, &song_name),
+            download::image::download_image(&cover_url, &output_dir, &song_name)
+        );
 
-    youtube_result?;
-    image_result?;
+        youtube_result?;
+        image_result?;
 
-    let lyrics = lyrics::convert_lyrics(&lyrics, &song_name);
-    let lyrics_path = output_dir.join(format!("{}.txt", song_name));
-    
-    let mut content = Vec::new();
-    content.extend_from_slice(&[0xEF, 0xBB, 0xBF]);
-    content.extend_from_slice(lyrics.as_bytes());
-    std::fs::write(&lyrics_path, content)?;
-    
-    Ok(())
+        let lyrics = lyrics::convert_lyrics(&lyrics, &song_name);
+        let lyrics_path = output_dir.join(format!("{}.txt", song_name));
+        
+        let mut content = Vec::new();
+        content.extend_from_slice(&[0xEF, 0xBB, 0xBF]);
+        content.extend_from_slice(lyrics.as_bytes());
+        std::fs::write(&lyrics_path, content)?;
+        
+        Ok(())
+    }.await;
+
+    if let Err(_) = &result {
+        let _ = std::fs::remove_dir_all(&output_dir);
+    }
+
+    result
 }
