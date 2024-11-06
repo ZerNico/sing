@@ -6180,6 +6180,7 @@ dependencies = [
  "tauri-specta",
  "thiserror",
  "tokio 1.41.0",
+ "urlencoding",
  "youtube_dl",
 ]
 

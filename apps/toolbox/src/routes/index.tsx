@@ -72,7 +72,7 @@ export default function Home() {
 
     if (artist && title) {
       setYoutubeSearchTerm(`${songName()}`);
-      setImageSearchTerm(`${songName()} album cover`);
+      setImageSearchTerm(`${songName()}`);
     }
   });
 
