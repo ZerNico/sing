@@ -31,7 +31,7 @@ rusty_ytdl = "0.7.4"
 thiserror = "1.0.66"
 image_search = "0.4.5"
 tauri-plugin-dialog = "2"
-youtube_dl = { version = "0.10.0", features = ["tokio"] }
+youtube_dl = { git = "https://github.com/ZerNico/youtube-dl-rs", features = ["tokio"] }
 chardetng = "0.1.17"
 encoding_rs = "0.8"
 urlencoding = "2.1.3"
