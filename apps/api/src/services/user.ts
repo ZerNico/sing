@@ -1,5 +1,5 @@
-import { users } from "database";
 import { eq } from "drizzle-orm";
+import { users } from "../db/schema";
 import { db } from "./db";
 
 class UserService {

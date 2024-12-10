@@ -1,13 +1,9 @@
 import { groupRoutes } from "@nokijs/server";
-import { baseRoute } from "../base";
-import { verifyAuth } from "../middlewares/auth";
+import { authRoute } from "../base";
+
 import { userService } from "../services/user";
 
-const me = baseRoute.derive(verifyAuth()).get("/me", async ({ res, payload }) => {
-  if (!payload) {
-    return res.json({ code: "UNAUTHORIZED", message: "Unauthorized" }, { status: 401 });
-  }
-
+const me = authRoute.get("/me", async ({ res, payload }) => {
   const user = await userService.getById(payload.sub);
 
   if (!user) {
@@ -15,7 +11,6 @@ const me = baseRoute.derive(verifyAuth()).get("/me", async ({ res, payload }) =>
   }
 
   const { password, ...userWithoutPassword } = user;
-
   return res.json(userWithoutPassword);
 });
 

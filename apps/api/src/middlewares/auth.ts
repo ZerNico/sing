@@ -1,23 +1,24 @@
+import type { BaseContext } from "@nokijs/server";
 import { authService } from "../services/auth";
 
-export function verifyAuth() {
-  return async ({ headers }: { headers: Record<string, string> }) => {
-    if (!headers.authorization) {
-      return {
-        payload: null,
-      };
+export function withUser() {
+  return async ({ getCookie }: BaseContext) => {
+    const accessToken = getCookie("access_token");
+
+    if (!accessToken) {
+      return;
     }
 
-    const [type, token] = headers.authorization.split(" ");
+    const payload = await authService.verifyAccessToken(accessToken);
 
-    if (type?.toLowerCase() !== "bearer" || !token) {
-      return {
-        payload: null,
-      };
+    return { payload };
+  };
+}
+
+export function requireUser() {
+  return async ({ payload, res }: BaseContext & { payload: unknown }) => {
+    if (!payload) {
+      return res.json({ code: "UNAUTHORIZED", message: "Unauthorized" }, { status: 401 });
     }
-
-    const payload = await authService.verifyJwt(token);
-
-    return { payload: payload };
   };
 }

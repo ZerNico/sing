@@ -1,5 +1,6 @@
 import { RouteBuilder } from "@nokijs/server";
 import * as v from "valibot";
+import { withUser } from "./middlewares/auth";
 import { authService } from "./services/auth";
 import { db } from "./services/db";
 
@@ -10,7 +11,12 @@ export const baseRoute = new RouteBuilder()
       authService,
     };
   })
-
+  .before(({ res }) => {
+    res.headers.set("Access-Control-Allow-Origin", "https://app.tuneperfect.localhost");
+    res.headers.set("Access-Control-Allow-Credentials", "true");
+    res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  })
   .error((error, { res }) => {
     if (error instanceof v.ValiError) {
       const flattened = v.flatten(error.issues);
@@ -33,3 +39,21 @@ export const baseRoute = new RouteBuilder()
       error: errorMessage,
     });
   });
+
+export const authRoute = baseRoute
+  .derive(withUser())
+  .before(({ payload, res }) => {
+    if (!payload) {
+      return res.json({ code: "UNAUTHORIZED", message: "Unauthorized" }, { status: 401 });
+    }
+  })
+  .derive(({ payload }) => {
+    return {
+      // biome-ignore lint/style/noNonNullAssertion: Payload is guaranteed to be defined
+      payload: payload!,
+    };
+  });
+
+export const corsRoute = baseRoute.options("*", ({ res }) => {
+  return res.text("");
+});
