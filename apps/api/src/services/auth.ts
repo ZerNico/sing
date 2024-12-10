@@ -1,25 +1,17 @@
-import { type InferSelectModel, eq } from "drizzle-orm";
-import { SignJWT, jwtVerify } from "jose";
-import * as v from "valibot";
-import { config } from "../config";
+import { eq } from "drizzle-orm";
 import { refreshTokens, users } from "../db/schema";
+import type { User } from "../types";
 import { db } from "./db";
-
-type TokenType = "access" | "refresh";
+import { jwtService } from "./jwt";
+import { userService } from "./user";
 
 class AuthService {
-  private secret = new TextEncoder().encode(config.JWT_SECRET);
-
   async register({ username, password }: { username: string; password: string }) {
     try {
       const hashedPassword = await Bun.password.hash(password);
       const [user] = await db.insert(users).values({ username, password: hashedPassword }).returning();
 
-      if (!user) {
-        throw new Error("Failed to register user");
-      }
-
-      return user;
+      return user ?? null;
     } catch (error) {
       return null;
     }
@@ -27,38 +19,31 @@ class AuthService {
 
   async login({ username, password }: { username: string; password: string }) {
     const user = (await db.select().from(users).where(eq(users.username, username)))[0];
-
-    if (!user) {
-      return null;
-    }
+    if (!user) return null;
 
     const isValid = await Bun.password.verify(password, user.password);
-
-    if (!isValid) {
-      return null;
-    }
-
-    return user;
-  }
-  async createAccessToken(user: InferSelectModel<typeof users>) {
-    return this.createToken(user, "access");
+    return isValid ? user : null;
   }
 
-  async createRefreshToken(user: InferSelectModel<typeof users>) {
-    const refreshToken = await this.createToken(user, "refresh");
-    await this.storeRefreshToken(user, refreshToken.token, refreshToken.expiresAt);
+  async createAccessToken(user: User) {
+    return jwtService.createToken(user.id, "access");
+  }
 
+  async createRefreshToken(user: User) {
+    const refreshToken = await jwtService.createToken(user.id, "refresh");
+    await db
+      .insert(refreshTokens)
+      .values({ token: refreshToken.token, userId: user.id, expiresAt: refreshToken.expiresAt })
+      .execute();
     return refreshToken;
   }
 
-  async storeRefreshToken(user: InferSelectModel<typeof users>, refreshToken: string, expiresAt: Date) {
-    await db.insert(refreshTokens).values({ token: refreshToken, userId: user.id, expiresAt }).execute();
+  async verifyAccessToken(jwt: string) {
+    return jwtService.verifyToken(jwt, "access");
   }
 
-  async findRefreshToken(token: string) {
-    const refreshToken = (await db.select().from(refreshTokens).where(eq(refreshTokens.token, token)))[0];
-
-    return refreshToken;
+  async verifyRefreshToken(jwt: string) {
+    return jwtService.verifyToken(jwt, "refresh");
   }
 
   async updateRefreshToken(oldToken: string, newToken: string, expiresAt: Date) {
@@ -69,63 +54,25 @@ class AuthService {
       .execute();
   }
 
-  async verifyAccessToken(jwt: string) {
-    try {
-      const { payload } = await jwtVerify(jwt, this.secret, { issuer: "api", audience: "api" });
+  async rotateTokens(refreshToken: string) {
+    const payload = await this.verifyRefreshToken(refreshToken);
+    if (!payload) return null;
 
-      return v.parse(accessTokenSchema, payload);
-    } catch (error) {
-      return null;
-    }
-  }
+    const oldRefreshToken = (await db.select().from(refreshTokens).where(eq(refreshTokens.token, refreshToken)))[0];
+    if (!oldRefreshToken) return null;
 
-  async verifyRefreshToken(jwt: string) {
-    try {
-      const { payload } = await jwtVerify(jwt, this.secret, { issuer: "api", audience: "api" });
+    const user = await userService.getById(payload.sub);
+    if (!user) return null;
 
-      return v.parse(refreshTokenSchema, payload);
-    } catch (error) {
-      return null;
-    }
-  }
+    const [accessToken, newRefreshToken] = await Promise.all([
+      this.createAccessToken(user),
+      this.createRefreshToken(user),
+    ]);
 
-  private async createToken(user: InferSelectModel<typeof users>, type: TokenType) {
-    const expirationSeconds =
-      type === "access"
-        ? 60 * 60 // 1 hour
-        : 30 * 24 * 60 * 60; // 30 days
-    const expiresAt = new Date(Date.now() + expirationSeconds * 1000);
+    await this.updateRefreshToken(oldRefreshToken.token, newRefreshToken.token, newRefreshToken.expiresAt);
 
-    return {
-      token: await new SignJWT({ type })
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setIssuer("api")
-        .setAudience("api")
-        .setExpirationTime(expiresAt)
-        .setSubject(user.id.toString())
-        .sign(this.secret),
-      expiresAt,
-    };
+    return { accessToken, refreshToken: newRefreshToken, user };
   }
 }
-
-const baseJwtSchema = v.object({
-  sub: v.pipe(v.string(), v.transform(Number), v.number()),
-  iat: v.number(),
-  exp: v.number(),
-  iss: v.literal("api"),
-  aud: v.literal("api"),
-});
-
-const accessTokenSchema = v.object({
-  ...baseJwtSchema.entries,
-  type: v.literal("access"),
-});
-
-const refreshTokenSchema = v.object({
-  ...baseJwtSchema.entries,
-  type: v.literal("refresh"),
-});
 
 export const authService = new AuthService();

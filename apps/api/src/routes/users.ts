@@ -1,13 +1,13 @@
 import { groupRoutes } from "@nokijs/server";
 import { authRoute } from "../base";
-
 import { userService } from "../services/user";
+import { sendError } from "../utils/errors";
 
 const me = authRoute.get("/me", async ({ res, payload }) => {
   const user = await userService.getById(payload.sub);
 
   if (!user) {
-    return res.json({ code: "NOT_FOUND", message: "User not found" }, { status: 404 });
+    return sendError(res, "USER_NOT_FOUND");
   }
 
   const { password, ...userWithoutPassword } = user;
