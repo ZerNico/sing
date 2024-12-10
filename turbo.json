@@ -20,5 +20,5 @@
       "dependsOn": ["^build"]
     }
   },
-  "ui": "tui"
+  "ui": "stream"
 }

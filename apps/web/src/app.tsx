@@ -1,6 +1,6 @@
 import "@unocss/reset/tailwind.css";
 import "virtual:uno.css";
-import "@fontsource-variable/open-sans";
+import "@fontsource-variable/inter";
 import "./assets/styles.scss";
 
 import { Router } from "@solidjs/router";
@@ -21,8 +21,6 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SolidQueryDevtools />
-
       <Router
         root={(props) => (
           <>

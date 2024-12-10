@@ -1,11 +1,10 @@
 import { defineConfig, presetIcons, presetUno } from "unocss";
-import { colors } from "unocss/preset-mini";
 
 export default defineConfig({
   presets: [presetUno(), presetIcons()],
   theme: {
     fontFamily: {
-      primary: `"Open Sans Variable",${presetUno()?.theme?.fontFamily?.sans}`,
+      primary: `"Inter Variable",${presetUno()?.theme?.fontFamily?.sans}`,
     },
     colors: {
       spearmint: {

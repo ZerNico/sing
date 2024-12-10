@@ -3,6 +3,16 @@ import UnoCSS from "unocss/vite";
 
 export default defineConfig({
   vite: {
-    plugins: [UnoCSS({})]
-  }
+    plugins: [UnoCSS({})],
+    server: {
+      hmr: {
+        host: "localhost",
+        protocol: "ws",
+      },
+    },
+  },
+  ssr: true,
+  server: {
+    preset: "bun",
+  },
 });

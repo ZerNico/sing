@@ -1,0 +1,11 @@
+https://tuneperfect.localhost {
+	reverse_proxy http://localhost:3000
+}
+
+https://app.tuneperfect.localhost {
+	reverse_proxy http://localhost:3001
+}
+
+https://api.tuneperfect.localhost {
+	reverse_proxy http://localhost:3002
+}

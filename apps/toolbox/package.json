@@ -1,5 +1,5 @@
 {
-  "name": "example-with-unocss",
+  "name": "toolbox",
   "type": "module",
   "scripts": {
     "dev": "tauri dev",

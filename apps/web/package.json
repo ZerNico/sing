@@ -7,22 +7,19 @@
     "start": "vinxi start"
   },
   "dependencies": {
-    "@fontsource-variable/open-sans": "^5.0.30",
-    "@iconify-json/carbon": "^1.2.1",
-    "@nokijs/client": "0.0.1-alpha.16",
-    "@solidjs/router": "^0.14.1",
-    "@solidjs/start": "^1.0.6",
-    "@tanstack/solid-query": "^5.55.4",
-    "@tanstack/solid-query-devtools": "^5.55.4",
-    "@unocss/reset": "^0.59.4",
-    "api": "workspace:*",
-    "class-variance-authority": "^0.7.0",
-    "sass-embedded": "^1.78.0",
-    "solid-js": "^1.8.18",
-    "unocss": "^0.59.2",
-    "vinxi": "^0.4.1"
+    "@fontsource-variable/open-sans": "^5.1.0",
+    "@iconify-json/lucide": "^1.2.18",
+    "@solidjs/router": "^0.15.1",
+    "@solidjs/start": "^1.0.10",
+    "@unocss/reset": "^0.65.1",
+    "class-variance-authority": "^0.7.1",
+    "sass-embedded": "^1.82.0",
+    "solid-js": "^1.9.3",
+    "unocss": "^0.65.1",
+    "valibot": "1.0.0-beta.9",
+    "vinxi": "^0.5.1"
   },
   "engines": {
-    "node": ">=18"
+    "bun": ">=1.1"
   }
 }
