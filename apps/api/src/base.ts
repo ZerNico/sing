@@ -28,16 +28,21 @@ export const baseRoute = new RouteBuilder()
         },
         {
           status: 400,
-        },
+        } as const,
       );
     }
 
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
 
-    return res.json({
-      type: "error",
-      error: errorMessage,
-    });
+    return res.json(
+      {
+        type: "error",
+        error: errorMessage,
+      },
+      {
+        status: 500,
+      },
+    );
   });
 
 export const authRoute = baseRoute

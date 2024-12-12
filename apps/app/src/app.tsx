@@ -8,6 +8,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { Suspense } from "solid-js";
+import Header from "./components/header";
 
 export default function App() {
   const queryClient = new QueryClient({
@@ -26,7 +27,9 @@ export default function App() {
       <Router
         root={(props) => (
           <>
-            <Suspense>{props.children}</Suspense>
+            <Suspense>
+              <div class="min-h-100dvh bg-night-950 font-primary text-white">{props.children}</div>
+            </Suspense>
           </>
         )}
       >

@@ -1,21 +1,30 @@
 {
   "name": "api",
   "type": "module",
-  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts"
+  },
   "scripts": {
     "dev": "bun --watch --hot src/index.ts",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@nokijs/server": "0.0.1-alpha.20",
-    "drizzle-orm": "^0.37.0",
+    "@nokijs/server": "0.0.1-alpha.23",
+    "@sing/email": "*",
+    "arctic": "^2.3.0",
+    "drizzle-orm": "^0.38.0",
     "jose": "^5.9.6",
+    "nodemailer": "^6.9.16",
     "pg": "^8.13.1",
     "postgres": "^3.4.5",
+    "ufo": "^1.5.4",
     "valibot": "1.0.0-beta.1"
   },
   "devDependencies": {
     "@types/bun": "^1.1.14",
+    "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.29.1"
   }

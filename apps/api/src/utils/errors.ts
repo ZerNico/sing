@@ -12,9 +12,9 @@ export const errors = {
     message: "User not found",
     status: 404,
   },
-  USER_ALREADY_EXISTS: {
-    code: "USER_ALREADY_EXISTS",
-    message: "User already exists",
+  USER_OR_EMAIL_ALREADY_EXISTS: {
+    code: "USER_OR_EMAIL_ALREADY_EXISTS",
+    message: "User or email already exists",
     status: 400,
   },
   INVALID_CREDENTIALS: {
@@ -30,6 +30,16 @@ export const errors = {
   REFRESH_TOKEN_INVALID: {
     code: "REFRESH_TOKEN_INVALID",
     message: "Refresh token is not valid",
+    status: 400,
+  },
+  CODE_VERIFIER_INVALID: {
+    code: "CODE_VERIFIER_INVALID",
+    message: "Code verifier is not valid",
+    status: 400,
+  },
+  GOOGLE_AUTH_FAILED: {
+    code: "GOOGLE_AUTH_FAILED",
+    message: "Google authentication failed",
     status: 400,
   },
 } as const satisfies Record<string, APIError>;

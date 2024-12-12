@@ -11,8 +11,8 @@ export default createHandler(() => (
           <link rel="icon" href="/favicon.ico" />
           {assets}
         </head>
-        <body class="min-h-screen font-primary">
-          <div id="app" class="min-h-screen">{children}</div>
+        <body>
+          <div id="app">{children}</div>
           {scripts}
         </body>
       </html>

@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:17-alpine
-    restart: unless-stopped
     environment:
       POSTGRES_USER: sing
       POSTGRES_PASSWORD: sing
@@ -10,3 +9,13 @@ services:
       - 5432:5432
     volumes:
       - .tmp/db:/var/lib/postgresql/data
+
+  mailpit:
+    image: axllent/mailpit
+    environment:
+      MP_DATABASE: /data/mailpit.db
+    ports:
+      - 1025:1025
+      - 8025:8025
+    volumes:
+      - .tmp/mailpit:/data

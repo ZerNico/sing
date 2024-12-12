@@ -1,7 +1,7 @@
-
 import { SignJWT, jwtVerify } from "jose";
 import * as v from "valibot";
 import { config } from "../config";
+import type { User } from "../types";
 
 export type TokenType = "access" | "refresh";
 
@@ -26,18 +26,18 @@ const refreshTokenSchema = v.object({
 export class JWTService {
   private secret = new TextEncoder().encode(config.JWT_SECRET);
 
-  async createToken(userId: number, type: TokenType) {
+  async createToken(user: User, type: TokenType) {
     const expirationSeconds = type === "access" ? 60 * 60 : 30 * 24 * 60 * 60;
     const expiresAt = new Date(Date.now() + expirationSeconds * 1000);
 
     return {
-      token: await new SignJWT({ type })
+      token: await new SignJWT({ type, emailVerified: user.emailVerified })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
         .setIssuer("api")
         .setAudience("api")
         .setExpirationTime(expiresAt)
-        .setSubject(userId.toString())
+        .setSubject(user.id.toString())
         .sign(this.secret),
       expiresAt,
     };

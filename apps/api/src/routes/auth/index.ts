@@ -1,9 +1,10 @@
 import { groupRoutes } from "@nokijs/server";
 import * as v from "valibot";
-import { baseRoute } from "../base";
-import { authService } from "../services/auth";
-import { setAuthCookies } from "../utils/cookies";
-import { sendError } from "../utils/errors";
+import { baseRoute } from "../../base";
+import { authService } from "../../services/auth";
+import { setAuthCookies } from "../../utils/cookies";
+import { sendError } from "../../utils/errors";
+import { googleAuthRoutes } from "./google";
 
 const credentialsSchema = v.object({
   username: v.pipe(v.string(), v.minLength(3), v.maxLength(20)),
@@ -11,27 +12,19 @@ const credentialsSchema = v.object({
 });
 
 const register = baseRoute
-  .body(credentialsSchema)
+  .body(
+    v.object({
+      ...credentialsSchema.entries,
+      email: v.pipe(v.string(), v.email()),
+    }),
+  )
   .post("/register", async ({ res, body }) => {
     const user = await authService.register(body);
     if (!user) {
-      return sendError(res, "USER_ALREADY_EXISTS");
+      return sendError(res, "USER_OR_EMAIL_ALREADY_EXISTS");
     }
 
-    const accessToken = await authService.createAccessToken(user);
-    const refreshToken = await authService.createRefreshToken(user);
-    
-    setAuthCookies(res, accessToken, refreshToken);
-    return res.text("", { status: 201 });
-  });
-
-const login = baseRoute
-  .body(credentialsSchema)
-  .post("/login", async ({ res, body }) => {
-    const user = await authService.login(body);
-    if (!user) {
-      return sendError(res, "INVALID_CREDENTIALS");
-    }
+    await authService.sendVerifyEmail(user);
 
     const accessToken = await authService.createAccessToken(user);
     const refreshToken = await authService.createRefreshToken(user);
@@ -39,6 +32,19 @@ const login = baseRoute
     setAuthCookies(res, accessToken, refreshToken);
     return res.text("", { status: 201 });
   });
+
+const login = baseRoute.body(credentialsSchema).post("/login", async ({ res, body }) => {
+  const user = await authService.login(body);
+  if (!user) {
+    return sendError(res, "INVALID_CREDENTIALS");
+  }
+
+  const accessToken = await authService.createAccessToken(user);
+  const refreshToken = await authService.createRefreshToken(user);
+
+  setAuthCookies(res, accessToken, refreshToken);
+  return res.text("", { status: 200 });
+});
 
 const refresh = baseRoute.post("/refresh", async ({ res, getCookie }) => {
   const refreshToken = getCookie("refresh_token");
@@ -52,7 +58,7 @@ const refresh = baseRoute.post("/refresh", async ({ res, getCookie }) => {
   }
 
   setAuthCookies(res, tokens.accessToken, tokens.refreshToken);
-  return res.text("", { status: 201 });
+  return res.text("", { status: 200 });
 });
 
-export const authRoutes = groupRoutes([register, login, refresh], { prefix: "/auth" });
+export const authRoutes = groupRoutes([register, login, refresh, ...googleAuthRoutes], { prefix: "/auth" });
