@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <header class="">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
         <div>
           <span class="font-bold text-lg">Tune Perfect</span>
         </div>

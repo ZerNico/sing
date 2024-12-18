@@ -1,4 +1,4 @@
-import { useNavigate } from "@solidjs/router";
+import { revalidate, useNavigate } from "@solidjs/router";
 import { createResource } from "solid-js";
 import { v1 } from "~/lib/api";
 import { getMe } from "~/lib/auth";
@@ -16,6 +16,7 @@ export function useAuth() {
 
   const logout = async () => {
     await v1.auth.logout.post({ credentials: "include" });
+    await revalidate("api/v1.0/users/me");
     navigate("/sign-in");
   };
 

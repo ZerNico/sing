@@ -22,6 +22,7 @@
     "@unocss/reset": "^0.65.1",
     "api": "*",
     "class-variance-authority": "^0.7.1",
+    "js-cookie": "^3.0.5",
     "sass-embedded": "^1.82.0",
     "solid-js": "^1.9.3",
     "unocss": "^0.65.1",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@iconify-json/logos": "^1.2.4",
+    "@types/js-cookie": "^3.0.6",
     "unplugin-icons": "^0.22.0"
   }
 }

@@ -4,7 +4,6 @@ import Toast from "~/components/ui/toast";
 
 
 interface NotifyOptions {
-  title?: string;
   message?: string;
   intent?: "success" | "error" | "info" | "warning";
 }

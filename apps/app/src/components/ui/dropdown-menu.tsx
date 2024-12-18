@@ -7,7 +7,7 @@ interface DropdownProps {
 }
 
 function Root(props: DropdownProps) {
-  return <KDropdownMenu gutter={4}>{props.children}</KDropdownMenu>;
+  return <KDropdownMenu gutter={4} placement="bottom-end">{props.children}</KDropdownMenu>;
 }
 
 interface DropdownMenuContentProps {

@@ -1,6 +1,7 @@
 import { type SubmitHandler, createForm, valiField } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
 import * as v from "valibot";
+import GoogleLogin from "~/components/google-login";
 import Button from "~/components/ui/button";
 import Card from "~/components/ui/card";
 import Input from "~/components/ui/input";
@@ -34,7 +35,6 @@ export default function Login() {
 
     if (response.status === 400) {
       notify({
-        title: "Error",
         message: t("login.invalid_username_or_password"),
         intent: "error",
       });
@@ -42,7 +42,6 @@ export default function Login() {
     }
 
     notify({
-      title: "Error",
       message: t("error.unknown"),
       intent: "error",
     });
@@ -84,9 +83,7 @@ export default function Login() {
         </div>
 
         <div class="flex gap-4">
-          <Button class="flex-1">
-            <GoogleIcon class="text-sm" /> Google
-          </Button>
+          <GoogleLogin />
           <Button class="flex-1">
             <DiscordIcon class="text-sm" />
             Discord

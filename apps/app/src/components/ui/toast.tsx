@@ -64,7 +64,7 @@ export default function Toast(props: ToastProps) {
 export function ToastRegion() {
   return (
     <Portal>
-      <KToast.Region  swipeDirection="right" duration={50000} limit={5}>
+      <KToast.Region  swipeDirection="right" limit={5}>
         <KToast.List class="fixed top-0 right-0 flex w-90 max-w-screen flex-col gap-2 p-8" />
       </KToast.Region>
     </Portal>
