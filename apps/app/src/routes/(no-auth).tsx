@@ -1,10 +1,24 @@
 import { query, redirect } from "@solidjs/router";
 import type { JSX } from "solid-js";
 import Header from "~/components/header";
-import { requireNoAuth } from "~/lib/auth";
+import { getMe, requireNoAuth } from "~/lib/auth";
+
+const checkNoAuth = query(async () => {
+  const response = await getMe();
+
+  if (response.ok) {
+    throw redirect("/");
+  }
+
+  if (response.status === 403) {
+    if (response.data.code === "EMAIL_NOT_VERIFIED") {
+      throw redirect("/verify-email");
+    }
+  }
+}, "check-no-auth");
 
 export const route = {
-  preload: requireNoAuth,
+  preload: checkNoAuth,
 };
 
 interface NoAuthLayoutProps {
@@ -15,7 +29,7 @@ export default function NoAuthLayout(props: NoAuthLayoutProps) {
   return (
     <>
       <Header />
-      <main class="mx-auto max-w-6xl px-4">{props.children}</main>
+      <main class="flex flex-grow flex-col">{props.children}</main>
     </>
   );
 }

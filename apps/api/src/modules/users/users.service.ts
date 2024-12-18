@@ -1,10 +1,11 @@
 import { type InferInsertModel, eq } from "drizzle-orm";
-import { users } from "../db/schema";
-import type { User } from "../types";
-import { lower } from "../utils/db";
-import { db } from "./db";
+import type { PostgresJsTransaction } from "drizzle-orm/postgres-js";
+import { type Transaction, db } from "../../db/connection";
+import { users } from "../../db/schema";
+import { lower } from "../../utils/db";
+import type { User } from "./users.models";
 
-class UserService {
+class UsersService {
   async getById(id: number) {
     const [user] = await db.select().from(users).where(eq(users.id, id));
 
@@ -35,10 +36,11 @@ class UserService {
     return user;
   }
 
-  async update(id: number, user: Partial<User>) {
+  async update(id: number, user: Partial<User>, { tx }: { tx?: Transaction } = {}) {
+    const connection = tx ?? db;
     const { id: _, ...userWithoutId } = user;
 
-    const [updatedUser] = await db.update(users).set(userWithoutId).where(eq(users.id, id)).returning();
+    const [updatedUser] = await connection.update(users).set(userWithoutId).where(eq(users.id, id)).returning();
 
     return updatedUser;
   }
@@ -50,4 +52,6 @@ class UserService {
   }
 }
 
-export const userService = new UserService();
+export const usersService = new UsersService();
+
+

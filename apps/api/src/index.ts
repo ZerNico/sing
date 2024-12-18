@@ -1,9 +1,10 @@
 import { Noki, groupRoutes } from "@nokijs/server";
-import { corsRoute } from "./base";
-import { authRoutes } from "./routes/auth";
-import { usersRoutes } from "./routes/users";
 
-const routes = groupRoutes([...authRoutes, ...usersRoutes, corsRoute], { prefix: "/v1.0" });
+import { preflightRoute } from "./base";
+import { authRoutes } from "./modules/auth/auth.controller";
+import { usersRoutes } from "./modules/users/users.controller";
+
+const routes = groupRoutes([...authRoutes, ...usersRoutes, preflightRoute], { prefix: "/v1.0" });
 
 const noki = new Noki(routes);
 

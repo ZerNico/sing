@@ -1,9 +1,10 @@
 import { defineConfig } from "@solidjs/start/config";
 import UnoCSS from "unocss/vite";
+import Icons from "unplugin-icons/vite";
 
 export default defineConfig({
   vite: {
-    plugins: [UnoCSS({})],
+    plugins: [UnoCSS({}), Icons({ compiler: "solid" })],
     server: {
       hmr: {
         host: "localhost",

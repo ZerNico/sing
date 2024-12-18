@@ -1,6 +1,5 @@
-
 import type { ResponseBuilder } from "@nokijs/server";
-import { config } from "../config";
+import { config } from "../../config";
 
 type TokenInfo = {
   token: string;
@@ -10,7 +9,7 @@ type TokenInfo = {
 export function setAuthCookies(res: ResponseBuilder, accessToken: TokenInfo, refreshToken: TokenInfo) {
   const baseCookieOptions = {
     secure: true,
-    sameSite: "strict" as const,
+    sameSite: "lax" as const,
     httpOnly: true,
     domain: `.${config.BASE_DOMAIN}`,
   };
@@ -25,5 +24,17 @@ export function setAuthCookies(res: ResponseBuilder, accessToken: TokenInfo, ref
     ...baseCookieOptions,
     path: "/",
     expires: accessToken.expiresAt,
+  });
+}
+
+export function clearAuthCookies(res: ResponseBuilder) {
+  res.deleteCookie("refresh_token", {
+    domain: `.${config.BASE_DOMAIN}`,
+    path: "/v1.0/auth/refresh",
+  });
+
+  res.deleteCookie("access_token", {
+    domain: `.${config.BASE_DOMAIN}`,
+    path: "/",
   });
 }

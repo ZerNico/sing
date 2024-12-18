@@ -4,6 +4,7 @@ import { fallback } from "valibot";
 interface AvatarProps {
   src?: string;
   fallback?: string;
+  class?: string;
 }
 
 export default function Avatar(props: AvatarProps) {
@@ -21,8 +22,15 @@ export default function Avatar(props: AvatarProps) {
   const fallback = () => props.fallback?.at(0) || "?";
 
   return (
-    <div class="grid h-10 w-10">
-      <div class="col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-night-500">{fallback()}</div>
+    <div
+      class="grid h-10 w-10"
+      classList={{
+        [props.class || ""]: !!props.class,
+      }}
+    >
+      <div class="col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-rt from-blue-start to-blue-end">
+        {fallback()}
+      </div>
       <Show when={!error()}>
         <img
           onError={() => setError(true)}

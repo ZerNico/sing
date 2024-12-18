@@ -8,7 +8,7 @@ import { FileRoutes } from "@solidjs/start/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { Suspense } from "solid-js";
-import Header from "./components/header";
+import { ToastRegion } from "./components/ui/toast";
 
 export default function App() {
   const queryClient = new QueryClient({
@@ -28,7 +28,9 @@ export default function App() {
         root={(props) => (
           <>
             <Suspense>
-              <div class="min-h-100dvh bg-night-950 font-primary text-white">{props.children}</div>
+              <div class="gradient-bg-secondary flex min-h-100dvh flex-col font-primary text-white">{props.children}</div>
+
+              <ToastRegion />
             </Suspense>
           </>
         )}

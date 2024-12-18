@@ -7,18 +7,24 @@ export default defineConfig({
       primary: `"Inter Variable",${presetUno()?.theme?.fontFamily?.sans}`,
     },
     colors: {
-      night: {
-        "50": "#f0f4fd",
-        "100": "#e3ebfc",
-        "200": "#ccd8f9",
-        "300": "#adbdf4",
-        "400": "#8c9bed",
-        "500": "#7079e4",
-        "600": "#5556d6",
-        "700": "#4645bd",
-        "800": "#3b3c98",
-        "900": "#363879",
-        "950": "#101024",
+      blue: {
+        start: "#36D1DC",
+        end: "#5B86E5",
+        center: "#49ACE1",
+      },
+      red: {
+        start: "#F3696E",
+        end: "#F78102",
+        center: "#FF7373",
+      },
+      error: "#F3696E",
+      success: "#4ade80",
+      warning: "#fbbf24",
+      info: "#60a5fa",
+    },
+    animation: {
+      keyframes: {
+        slideIn: "{from{transform:translateX(calc(100%))}to{transform:translateX(0)}}",
       },
     },
   },

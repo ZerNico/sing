@@ -1,16 +1,14 @@
 import { query, redirect } from "@solidjs/router";
 import { v1 } from "./api";
 
-export const getUser = query(async () => {
+export const getMe = query(async () => {
   const response = await v1.users.me.get({ credentials: "include" });
 
-  if (response.ok) {
-    return response.data;
-  }
+  return response;
 }, "api/v1.0/users/me");
 
 export const requireAuth = query(async () => {
-  const user = await getUser();
+  const user = await getMe();
 
   if (!user) {
     throw redirect("/login");
@@ -19,10 +17,7 @@ export const requireAuth = query(async () => {
 }, "require-auth");
 
 export const requireNoAuth = query(async () => {
-  const user = await getUser();
-
-  console.log(user);
-  
+  const user = await getMe();
 
   if (user) {
     throw redirect("/");

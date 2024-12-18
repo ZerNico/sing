@@ -36,7 +36,7 @@ const tailwindConfig: TailwindConfig = {
 };
 
 export interface VerifyEmailProps {
-  code: number;
+  code: string;
   url: string;
   supportUrl: string;
 };
@@ -83,7 +83,7 @@ export function VerifyEmail(props: VerifyEmailProps) {
 }
 
 VerifyEmail.PreviewProps = {
-  code: 123456,
+  code: "D4F8H3J2",
   url: "https://tuneperfect.localhost",
   supportUrl: "mailto:support@tuneperfect.localhost",
 } satisfies VerifyEmailProps;

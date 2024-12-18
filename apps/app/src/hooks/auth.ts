@@ -1,28 +1,27 @@
-import { createAsync, query, redirect } from "@solidjs/router";
-import type { User } from "api/types";
-import { createResource, createSignal } from "solid-js";
+import { useNavigate } from "@solidjs/router";
+import { createResource } from "solid-js";
 import { v1 } from "~/lib/api";
-import { getUser } from "~/lib/auth";
-
-export function useGoogleOAuth() {
-  const signIn = async (redirect?: string) => {
-    const response = await v1.auth.google.get({ credentials: "include", query: { redirect } });
-
-    if (response.ok) {
-      window.location.href = response.data.url;
-    }
-  };
-
-  return {
-    signIn,
-  };
-}
+import { getMe } from "~/lib/auth";
 
 export function useAuth() {
-  const [user, { refetch }] = createResource(() => getUser());
+  const navigate = useNavigate();
+
+  const [user, { refetch }] = createResource(async () => {
+    const response = await getMe();
+
+    if (response.ok) {
+      return response.data;
+    }
+  });
+
+  const logout = async () => {
+    await v1.auth.logout.post({ credentials: "include" });
+    navigate("/sign-in");
+  };
 
   return {
     user,
     refetch,
+    logout,
   };
 }

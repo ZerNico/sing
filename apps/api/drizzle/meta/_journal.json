@@ -8,6 +8,13 @@
       "when": 1734013185579,
       "tag": "0000_silly_whirlwind",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734457933986,
+      "tag": "0001_powerful_blue_blade",
+      "breakpoints": true
     }
   ]
 }

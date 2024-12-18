@@ -34,7 +34,7 @@ export const refreshTokens = pgTable("refresh_tokens", {
 });
 
 export const verificationTokens = pgTable("verification_tokens", {
-  token: integer().notNull(),
+  token: varchar({ length: 255 }).notNull(),
   userId: integer("user_id")
     .notNull()
     .references(() => users.id, {
