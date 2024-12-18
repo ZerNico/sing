@@ -3,7 +3,7 @@ import * as v from "valibot";
 import { config } from "../../config";
 import type { User } from "../users/users.models";
 import { usersService } from "../users/users.service";
-import { type DiscordProfile, type GoogleProfile, discordProfileSchema, googleProfileSchema } from "./auth.models";
+import { type DiscordProfile, type GoogleProfile, discordProfileSchema, googleProfileSchema } from "./oauth.models";
 
 class OAuthService {
   private google = new Google(config.GOOGLE_CLIENT_ID, config.GOOGLE_CLIENT_SECRET, config.GOOGLE_REDIRECT_URI);
