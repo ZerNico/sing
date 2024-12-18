@@ -13,6 +13,7 @@ export const users = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     picture: varchar({ length: 255 }),
     googleId: varchar("google_id", { length: 255 }).unique(),
+    discordId: varchar("discord_id", { length: 255 }).unique(),
   },
   (table) => [uniqueIndex("email_unique_index").on(lower(table.email))],
 );

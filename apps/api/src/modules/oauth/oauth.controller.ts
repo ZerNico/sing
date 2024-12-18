@@ -7,6 +7,7 @@ import { authService } from "../auth/auth.service";
 import { setAuthCookies } from "../auth/auth.utils";
 import { usersService } from "../users/users.service";
 import { oAuthService } from "./oauth.service";
+
 const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
   const auth = oAuthService.getGoogleAuthUrl();
   const url = withQuery(auth.url.href, query);
@@ -54,12 +55,12 @@ const googleCallback = baseRoute
 
     const tokens = await oAuthService.verifyGoogleCallback(body.code, codeVerifier);
     if (!tokens) {
-      return res.json({ code: "INVALID_CODE_VERIFIER", message: "Invalid code verifier" }, { status: 400 });
+      return res.json({ code: "INVALID_CODE", message: "Invalid code" }, { status: 400 });
     }
 
     const profile = await oAuthService.getGoogleProfile(tokens.accessToken());
     if (!profile) {
-      return res.json({ code: "INVALID_CODE_VERIFIER", message: "Invalid code verifier" }, { status: 400 });
+      return res.json({ code: "GOOGLE_PROFILE_NOT_FOUND", message: "Google profile not found" }, { status: 400 });
     }
 
     if (!profile.email_verified) {
@@ -86,9 +87,76 @@ const googleCallback = baseRoute
     }
 
     const { accessToken, refreshToken } = await authService.createTokens(user);
-
     setAuthCookies(res, accessToken, refreshToken);
     return res.text("", { status: 200 });
   });
 
-export const oauthRoutes = groupRoutes([googleAuthUrl, googleCallback], { prefix: "/oauth" });
+const discordAuthUrl = baseRoute.get("/discord/url", async ({ res, query }) => {
+  const auth = oAuthService.getDiscordAuthUrl();
+  const url = withQuery(auth.url.href, query);
+
+  res.setCookie("discord_state", auth.state, {
+    secure: true,
+    httpOnly: true,
+    sameSite: "lax",
+    domain: config.BASE_DOMAIN,
+    path: "/v1.0/oauth/discord/callback",
+  });
+
+  return res.json({ url });
+});
+
+const discordCallback = baseRoute
+  .body(v.object({ code: v.string(), state: v.string() }))
+  .post("/discord/callback", async ({ res, getCookie, body }) => {
+    const state = getCookie("discord_state");
+    res.deleteCookie("discord_state", {
+      domain: `.${config.BASE_DOMAIN}`,
+      path: "/v1.0/oauth/discord/callback",
+    });
+
+    if (!state || body.state !== state) {
+      return res.json({ code: "INVALID_OR_MISSING_STATE", message: "Invalid or missing state" }, { status: 400 });
+    }
+
+    const tokens = await oAuthService.verifyDiscordCallback(body.code);
+    if (!tokens) {
+      return res.json({ code: "INVALID_CODE_VERIFIER", message: "Invalid code verifier" }, { status: 400 });
+    }
+
+    const profile = await oAuthService.getDiscordProfile(tokens.accessToken());
+    if (!profile) {
+      return res.json({ code: "DISCORD_PROFILE_NOT_FOUND", message: "Discord profile not found" }, { status: 400 });
+    }
+
+    if (!profile.verified) {
+      return res.json({ code: "DISCORD_EMAIL_NOT_VERIFIED", message: "Discord Email not verified" }, { status: 400 });
+    }
+
+    let user = await usersService.getByDiscordId(profile.id);
+
+    if (!user) {
+      user = await usersService.getByEmail(profile.email);
+      if (user) {
+        if (!user.emailVerified) {
+          return res.json({ code: "EMAIL_NOT_VERIFIED", message: "Email not verified" }, { status: 400 });
+        }
+
+        user = await oAuthService.mergeDiscordProfile(user, profile);
+      } else {
+        user = await oAuthService.createUserFromDiscordProfile(profile);
+      }
+    }
+
+    if (!user) {
+      return res.json({ code: "DISCORD_USER_NOT_CREATED", message: "Discord user not created" }, { status: 400 });
+    }
+
+    const { accessToken, refreshToken } = await authService.createTokens(user);
+    setAuthCookies(res, accessToken, refreshToken);
+    return res.text("", { status: 200 });
+  });
+
+export const oauthRoutes = groupRoutes([googleAuthUrl, googleCallback, discordAuthUrl, discordCallback], {
+  prefix: "/oauth",
+});

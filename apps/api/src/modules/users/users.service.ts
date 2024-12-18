@@ -27,6 +27,12 @@ class UsersService {
     return user;
   }
 
+  async getByDiscordId(discordId: string) {
+    const [user] = await db.select().from(users).where(eq(users.discordId, discordId));
+
+    return user;
+  }
+
   async getByEmail(email: string) {
     const [user] = await db
       .select()

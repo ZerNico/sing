@@ -8,3 +8,15 @@ export const googleProfileSchema = v.object({
 });
 
 export type GoogleProfile = v.InferOutput<typeof googleProfileSchema>;
+
+export const discordProfileSchema = v.object({
+  id: v.string(),
+  username: v.string(),
+  discriminator: v.string(),
+  global_name: v.nullable(v.string()),
+  avatar: v.nullable(v.string()),
+  email: v.string(),
+  verified: v.boolean(),
+});
+
+export type DiscordProfile = v.InferOutput<typeof discordProfileSchema>;

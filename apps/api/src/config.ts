@@ -10,6 +10,9 @@ const ConfigSchema = v.object({
   EMAIL_SMTP_URI: v.string(),
   EMAIL_FROM_MAIL: v.string(),
   SUPPORT_EMAIL: v.string(),
+  DISCORD_CLIENT_ID: v.string(),
+  DISCORD_CLIENT_SECRET: v.string(),
+  DISCORD_REDIRECT_URI: v.string(),
 });
 
 export const config = v.parse(ConfigSchema, process.env);

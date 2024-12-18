@@ -1,6 +1,7 @@
 import { type SubmitHandler, createForm, valiField } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
 import * as v from "valibot";
+import DiscordLogin from "~/components/discord-login";
 import GoogleLogin from "~/components/google-login";
 import Button from "~/components/ui/button";
 import Card from "~/components/ui/card";
@@ -84,10 +85,7 @@ export default function Login() {
 
         <div class="flex gap-4">
           <GoogleLogin />
-          <Button class="flex-1">
-            <DiscordIcon class="text-sm" />
-            Discord
-          </Button>
+          <DiscordLogin />
         </div>
 
         <p class="text-slate-500 text-sm">

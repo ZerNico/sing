@@ -15,6 +15,13 @@
       "when": 1734457933986,
       "tag": "0001_powerful_blue_blade",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734528009620,
+      "tag": "0002_early_vargas",
+      "breakpoints": true
     }
   ]
 }
