@@ -2,6 +2,7 @@ import { revalidate, useNavigate, useSearchParams } from "@solidjs/router";
 import { v1 } from "~/lib/api";
 import { t } from "~/lib/i18n";
 import { notify } from "~/lib/toast";
+import LoaderCircle from "~icons/lucide/loader-circle";
 
 export default function GoogleCallback() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function GoogleCallback() {
 
     if (response.ok) {
       await revalidate("api/v1.0/users/me");
-      navigate("/");
+      navigate("/", { replace: true });
       return;
     }
 
@@ -36,5 +37,9 @@ export default function GoogleCallback() {
 
   sendCallback();
 
-  return <div />;
+  return (
+    <div class="flex flex-grow items-center justify-center">
+      <LoaderCircle class="animate-spin text-4xl" />
+    </div>
+  );
 }

@@ -1,5 +1,5 @@
 import { type SubmitHandler, createForm, valiField } from "@modular-forms/solid";
-import { useNavigate } from "@solidjs/router";
+import { revalidate, useNavigate } from "@solidjs/router";
 import * as v from "valibot";
 import Button from "~/components/ui/button";
 import Card from "~/components/ui/card";
@@ -22,6 +22,7 @@ export default function Login() {
 
   const handleSubmit: SubmitHandler<CompleteProfileForm> = async (values, event) => {
     const response = await v1.users.me.patch({ body: values, credentials: "include" });
+    await revalidate("api/v1.0/users/me");
 
     if (response.ok) {
       navigate("/");

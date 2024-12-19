@@ -17,7 +17,7 @@ interface DropdownMenuContentProps {
 export function DropdownMenuContent(props: DropdownMenuContentProps) {
   return (
     <KDropdownMenu.Portal>
-      <KDropdownMenu.Content class="min-w-36 rounded-md border border-gray-200 bg-white p-1 shadow-lg">
+      <KDropdownMenu.Content class="min-w-36 rounded-md border border-gray-200 bg-white p-1 shadow-lg data-[closed]:animate-[fadeOut_100ms_ease-out] data-[expanded]:animate-[fadeIn_100ms_ease-out]">
         {props.children}
       </KDropdownMenu.Content>
     </KDropdownMenu.Portal>
@@ -34,7 +34,7 @@ export function DropdownMenuItem<T extends ValidComponent = "div">(props: Polymo
   return (
     <KDropdownMenu.Item
       as="div"
-      class="block flex w-full items-center gap-2 rounded px-4 py-2 text-gray-700 text-sm hover:bg-gray-100"
+      class="block flex w-full items-center gap-2 rounded px-4 py-2 text-sm transition-colors hover:bg-slate-200"
       classList={{
         [local.class || ""]: !!local.class,
       }}

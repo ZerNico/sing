@@ -40,7 +40,7 @@ export default function Toast(props: ToastProps) {
   return (
     <KToast
       toastId={props.toastId}
-      class="flex w-full transform items-start justify-between rounded-lg p-3 data-[swipe=move]:translate-x-[var(--kb-toast-swipe-move-x)] data-[closed]:animate-[hide_2000ms_ease-out] data-[opened]:animate-[slideIn_300ms_ease-in-out] data-[swipe=end]:animate-[swipeOut_200ms_ease-out]"
+      class="flex w-full transform items-start justify-between rounded-lg p-3 data-[swipe=move]:translate-x-[var(--kb-toast-swipe-move-x)] data-[closed]:animate-[fadeOut_2000ms_ease-out] data-[opened]:animate-[slideIn_300ms_ease-in-out] data-[swipe=end]:animate-[swipeOut_200ms_ease-out]"
       classList={{
         [bgColor() || ""]: true,
       }}

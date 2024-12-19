@@ -28,7 +28,7 @@ export default function Avatar(props: AvatarProps) {
         [props.class || ""]: !!props.class,
       }}
     >
-      <div class="col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-rt from-blue-start to-blue-end">
+      <div class="col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-rt from-cyan-400 to-blue-500">
         {fallback()}
       </div>
       <Show when={!error()}>

@@ -18,11 +18,11 @@ interface BaseProps extends VariantProps<typeof button> {
   loading?: boolean;
 }
 
-const button = cva("inline-grid h-10 items-center gap-4 rounded-lg px-6 font-semibold shadow-md focus:outline-slate-800", {
+const button = cva("inline-grid h-10 transform items-center gap-4 rounded-lg px-6 font-semibold shadow-md transition-all ease-in-out focus:outline-slate-800 active:scale-95", {
   variants: {
     intent: {
-      primary: "bg-slate-800 text-white",
-      gradient: "bg-gradient-to-r from-blue-start to-blue-end text-white",
+      primary: "bg-slate-800 text-white hover:bg-slate-700",
+      gradient: "bg-gradient-to-r from-cyan-400 to-blue-500 text-white hover:opacity-90",
     },
   },
   defaultVariants: {
