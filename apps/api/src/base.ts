@@ -5,7 +5,7 @@ export const baseRoute = new RouteBuilder()
   .before(({ res }) => {
     res.headers.set("Access-Control-Allow-Origin", "https://app.tuneperfect.localhost");
     res.headers.set("Access-Control-Allow-Credentials", "true");
-    res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
     res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   })
   .error((error, { res }) => {

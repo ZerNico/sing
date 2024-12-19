@@ -24,13 +24,14 @@ function getDefaultLocale() {
 
 const getDictionary = (locale: Locale): Dictionary => i18n.flatten(dictionaries[locale]) as Dictionary;
 
-const [locale, internalSetLocale] = makePersisted(createSignal<Locale>(getDefaultLocale()));
+const [locale, internalSetLocale] = makePersisted(createSignal<Locale>(getDefaultLocale()), {
+  name: "locale",
+});
 const dict = createMemo(() => getDictionary(locale()));
 const t = i18n.translator(dict, i18n.resolveTemplate);
 
 const setLocale = (lang: Locale) => {
   internalSetLocale(lang);
-}
-
+};
 
 export { t, setLocale, locale, dict };

@@ -61,7 +61,7 @@ const logout = baseRoute.use(authenticated).post("/logout", async ({ res, getCoo
   return res.text("", { status: 200 });
 });
 
-const refresh = baseRoute.post("/refresh", async ({ res, getCookie }) => {
+const refresh = baseRoute.post("/refresh", async ({ res, getCookie, raw }) => {
   const oldRefreshToken = getCookie("refreshToken");
 
   if (!oldRefreshToken) {

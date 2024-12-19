@@ -24,6 +24,12 @@ const en = {
     not_received: "Did not receive the email or the code expired?",
     invalid_code: "Code is invalid or expired",
   },
+  complete_profile: {
+    title: "Complete Profile",
+    description: "Please complete your profile",
+    username: "Username",
+    save: "Save",
+  },
   form: {
     username: "Username",
     password: "Password",

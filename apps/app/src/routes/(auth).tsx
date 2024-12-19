@@ -7,6 +7,10 @@ const checkAuth = query(async () => {
   const response = await getMe();
 
   if (response.ok) {
+    if (!response.data.username) {
+      throw redirect("/complete-profile");
+    }
+
     return;
   }
 
