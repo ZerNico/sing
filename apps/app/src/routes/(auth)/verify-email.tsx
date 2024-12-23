@@ -31,7 +31,33 @@ export default function Login() {
       notify({
         message: t("verify_email.invalid_code"),
         intent: "error",
-      })
+      });
+      return;
+    }
+
+    notify({
+      message: t("error.unknown"),
+      intent: "error",
+    });
+  };
+
+  const handleResend = async () => {
+    const response = await v1.auth.resend.post({ credentials: "include" });
+
+    if (response.ok) {
+      notify({
+        message: t("verify_email.email_sent"),
+        intent: "success",
+      });
+      return;
+    }
+
+    if (response.status === 429 && response.data.code === "RESEND_RATE_LIMITED") {
+      const seconds = Math.ceil((new Date(response.data.retryAt).getTime() - Date.now()) / 1000);
+      notify({
+        message: t("verify_email.wait_before_resend", { seconds }),
+        intent: "info",
+      });
       return;
     }
 
@@ -56,9 +82,9 @@ export default function Login() {
         </Form>
         <p class="text-slate-500 text-sm">
           {t("verify_email.not_received")}{" "}
-          <a href="/sign-up" class="text-slate-800">
+          <button onClick={handleResend} class="bg-none text-slate-800" type="button">
             {t("verify_email.resend")}
-          </a>
+          </button>
         </p>
       </Card>
     </div>

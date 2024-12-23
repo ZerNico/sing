@@ -157,6 +157,21 @@ class AuthService {
   }
 
   async sendVerificationEmail(user: User) {
+    const [existingToken] = await db
+      .select()
+      .from(verificationTokens)
+      .where(eq(verificationTokens.userId, user.id));
+
+    if (existingToken) {
+      const timeSinceLastToken = Date.now() - existingToken.createdAt.getTime();
+      const fiveMinutes = 5 * 60 * 1000;
+      
+      if (timeSinceLastToken < fiveMinutes) {
+        const expiresAt = new Date(existingToken.createdAt.getTime() + fiveMinutes);
+        return { rateLimited: true, expiresAt };
+      }
+    }
+
     const code = randomReadableCode(6);
     const verificationData = {
       token: code,

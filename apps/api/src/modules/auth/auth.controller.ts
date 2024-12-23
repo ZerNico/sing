@@ -112,7 +112,18 @@ const resend = baseRoute.use(authenticated).post("/resend", async ({ res, payloa
     );
   }
 
-  await authService.sendVerificationEmail(user);
+  const result = await authService.sendVerificationEmail(user);
+
+  if (result?.rateLimited) {
+    return res.json(
+      {
+        code: "RESEND_RATE_LIMITED",
+        message: "Too many requests",
+        retryAt: result.expiresAt.toISOString(),
+      } as const,
+      { status: 429 },
+    );
+  }
 
   return res.text("", { status: 200 });
 });
@@ -131,7 +142,7 @@ const verify = baseRoute
       );
     }
 
-    const oldRefreshToken = getCookie("refreshToken");
+    const oldRefreshToken = getCookie("refresh_token");    
 
     if (!oldRefreshToken) {
       return res.json(

@@ -22,7 +22,7 @@ export function setAuthCookies(res: ResponseBuilder, accessToken: TokenInfo, ref
   res.setCookie(REFRESH_COOKIE, refreshToken.token, {
     ...baseCookieOptions,
     httpOnly: true,
-    path: "/v1.0/auth/refresh",
+    path: "/",
     expires: refreshToken.expiresAt,
   });
 
@@ -54,7 +54,7 @@ export function clearAuthCookies(res: ResponseBuilder) {
 
   res.deleteCookie(REFRESH_COOKIE, {
     ...baseCookieOptions,
-    path: "/v1.0/auth/refresh",
+    path: "/",
   });
 
   res.deleteCookie(ACCESS_COOKIE, {

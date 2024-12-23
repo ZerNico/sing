@@ -1,5 +1,5 @@
 import { type SubmitHandler, createForm, valiField } from "@modular-forms/solid";
-import { useNavigate } from "@solidjs/router";
+import { revalidate, useNavigate } from "@solidjs/router";
 import * as v from "valibot";
 import DiscordLogin from "~/components/discord-login";
 import GoogleLogin from "~/components/google-login";
@@ -30,6 +30,7 @@ export default function Login() {
     const response = await v1.auth.login.post({ body: values, credentials: "include" });
 
     if (response.ok) {
+      await revalidate("api/v1.0/users/me");
       navigate("/");
       return;
     }
