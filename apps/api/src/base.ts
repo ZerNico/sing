@@ -1,13 +1,18 @@
 import { RouteBuilder } from "@nokijs/server";
 import * as v from "valibot";
+import { config } from "./config";
+import { cors } from "./utils/cors";
+import { rateLimit } from "./utils/rate-limit";
 
 export const baseRoute = new RouteBuilder()
-  .before(({ res }) => {
-    res.headers.set("Access-Control-Allow-Origin", "https://app.tuneperfect.localhost");
-    res.headers.set("Access-Control-Allow-Credentials", "true");
-    res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-    res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  })
+  .use(
+    cors({
+      origin: `https://app.${config.BASE_DOMAIN}`,
+      credentials: true,
+      allowHeaders: ["Content-Type", "Authorization"],
+    }),
+  )
+  .use(rateLimit({ max: 100, window: 60, generateKey: (ctx) => ctx.raw.headers.get("x-forwarded-for") ?? "anonymous" }))
   .error((error, { res }) => {
     if (error instanceof v.ValiError) {
       const flattened = v.flatten(error.issues);
