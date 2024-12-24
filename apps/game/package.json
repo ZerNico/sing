@@ -1,0 +1,37 @@
+{
+  "name": "game",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "dev:vinxi": "vinxi dev --port 1420",
+    "build:vinxi": "vinxi build",
+    "tauri": "tauri"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.1.0",
+    "@solid-primitives/event-listener": "^2.3.3",
+    "@solid-primitives/map": "^0.4.13",
+    "@solid-primitives/utils": "^6.2.3",
+    "@solidjs/router": "^0.15.2",
+    "@solidjs/start": "^1.0.10",
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-opener": "^2.2.2",
+    "mitt": "^3.0.1",
+    "solid-js": "^1.9.3",
+    "solid-transition-group": "^0.2.3"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.20",
+    "@tauri-apps/cli": "^2.1.0",
+    "@unocss/reset": "^0.65.2",
+    "typescript": "~5.7.2",
+    "unocss": "^0.65.2",
+    "unplugin-icons": "^0.22.0",
+    "vite": "^6.0.5",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}
