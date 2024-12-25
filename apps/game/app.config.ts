@@ -1,5 +1,6 @@
 import { defineConfig } from "@solidjs/start/config";
 import UnoCSS from "unocss/vite";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
 import Icons from "unplugin-icons/vite";
 
 const host = process.env.TAURI_DEV_HOST;
@@ -10,7 +11,15 @@ export default defineConfig({
     preset: "static",
   },
   vite: {
-    plugins: [UnoCSS(), Icons({ compiler: "solid" })],
+    plugins: [
+      UnoCSS(),
+      Icons({
+        customCollections: {
+          sing: FileSystemIconLoader("./src/assets/icons"),
+        },
+        compiler: "solid",
+      }),
+    ],
     server: {
       port: 1420,
       strictPort: true,

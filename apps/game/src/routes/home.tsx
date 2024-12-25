@@ -1,25 +1,18 @@
-import { type Component, For, createEffect } from "solid-js";
+import { useNavigate } from "@solidjs/router";
+import { type Component, For, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import KeyHints from "~/components/key-hints";
+import Layout from "~/components/layout";
+import { createLoop } from "~/hooks/loop";
+import { useNavigation } from "~/hooks/navigation";
 import IconMicVocal from "~icons/lucide/mic-vocal";
 import IconPartyPopper from "~icons/lucide/party-popper";
 import IconSettings from "~icons/lucide/settings";
 import IconUsers from "~icons/lucide/users";
-import Layout from "../components/layout";
-import { createLoop } from "../hooks/loop";
-import { useNavigation } from "../hooks/navigation";
 
 export default function Home() {
-  const { position, increment, decrement, set } = createLoop(4);
-  useNavigation({
-    layer: 0,
-    onKeydown(event) {
-      if (event.action === "left") {
-        decrement();
-      } else if (event.action === "right") {
-        increment();
-      }
-    },
-  });
+  const navigate = useNavigate();
+  const [pressed, setPressed] = createSignal(false);
 
   const cards = [
     {
@@ -27,6 +20,7 @@ export default function Home() {
       gradient: "gradient-sing",
       icon: IconMicVocal,
       description: "Sing your favorite songs, alone or with your friends!",
+      action: () => navigate("/sing"),
     },
     {
       label: "Party",
@@ -45,23 +39,48 @@ export default function Home() {
       gradient: "gradient-settings",
       icon: IconSettings,
       description: "Change your settings or add your songs and microphones.",
+      action: () => navigate("/settings"),
     },
   ];
 
+  const { position, increment, decrement, set } = createLoop(4);
+
+  useNavigation(() => ({
+    layer: 0,
+    onKeydown(event) {
+      if (event.action === "left") {
+        decrement();
+      } else if (event.action === "right") {
+        increment();
+      } else if (event.action === "confirm") {
+        setPressed(true);
+      }
+    },
+    onKeyup(event) {
+      if (event.action === "confirm") {
+        setPressed(false);
+        const card = cards[position()];
+        card?.action?.();
+      }
+    },
+  }));
+
   return (
-    <Layout>
-      <div class="flex-grow">123</div>
+    <Layout footer={<KeyHints hints={["navigate", "confirm"]} />}>
+      <div class="flex-grow">Home</div>
       <div class="flex gap-1cqw">
         <For each={cards}>
           {(card, index) => (
             <ModeCard
-              active={position() === index()}
+              selected={position() === index()}
+              active={pressed() && position() === index()}
               class="flex-1"
               label={card.label}
               gradient={card.gradient}
               icon={card.icon}
               description={card.description}
               onMouseEnter={() => set(index())}
+              onClick={card.action}
             />
           )}
         </For>
@@ -71,6 +90,7 @@ export default function Home() {
 }
 
 interface ModeCardProps {
+  selected?: boolean;
   active?: boolean;
   label: string;
   class?: string;
@@ -78,32 +98,34 @@ interface ModeCardProps {
   icon?: Component<{ class?: string }>;
   description?: string;
   onMouseEnter?: () => void;
+  onClick?: () => void;
 }
 function ModeCard(props: ModeCardProps) {
   return (
     <button
-      class="flex transform flex-col gap-0.3cqw p-1 transition-all"
+      class="flex transform flex-col gap-0.3cqw p-1 transition-all ease-in-out active:scale-95"
       type="button"
       classList={{
         [props.class || ""]: true,
-        "bg-white": props.active,
-        "opacity-50": !props.active,
+        "bg-white": props.selected,
+        "opacity-50": !props.selected,
+        "scale-95": props.active,
       }}
       onMouseEnter={props.onMouseEnter}
-      
+      onClick={props.onClick}
     >
       <div class="font-semibold text-sm uppercase">{props.label}</div>
       <div
         class="flex w-full flex-grow flex-col shadow-xl"
         classList={{
-          "overflow-hidden rounded-lg": props.active,
+          "overflow-hidden rounded-lg": props.selected,
         }}
       >
         <div
           class="flex items-center justify-center rounded-t-lg bg-gradient-to-b px-3cqw py-4cqw transition-all"
           classList={{
             [props.gradient || ""]: true,
-            "rounded-b-lg": !props.active,
+            "rounded-b-lg": !props.selected,
           }}
         >
           <Dynamic class="text-6xl" component={props.icon} />
@@ -111,7 +133,7 @@ function ModeCard(props: ModeCardProps) {
         <div
           class="flex-grow rounded-b-md bg-white px-2cqw py-1cqw text-left font-semibold text-base text-black transition-all"
           classList={{
-            "opacity-0": !props.active,
+            "opacity-0": !props.selected,
           }}
         >
           {props.description}

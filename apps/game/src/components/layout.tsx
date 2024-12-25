@@ -20,7 +20,7 @@ export default function Layout(props: LayoutProps) {
       >
         <div class="layout flex">
           <div class="@container flex flex-grow">
-            <div class="grid flex-grow grid-rows-[min-content_1fr_min-content] p-4cqw">
+            <div class="grid flex-grow grid-rows-[min-content_1fr_min-content] gap-1.5cqw p-4cqw">
               <div>{props.header}</div>
               <div class="flex flex-col">{props.children}</div>
               <div>{props.footer}</div>
