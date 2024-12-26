@@ -2,6 +2,7 @@ import { RouteBuilder } from "@nokijs/server";
 import * as v from "valibot";
 import { config } from "./config";
 import { cors } from "./utils/cors";
+import { csrf } from "./utils/csrf";
 import { rateLimit } from "./utils/rate-limit";
 
 export const baseRoute = new RouteBuilder()
@@ -13,6 +14,7 @@ export const baseRoute = new RouteBuilder()
     }),
   )
   .use(rateLimit({ max: 100, window: 60, generateKey: (ctx) => ctx.raw.headers.get("x-forwarded-for") ?? "anonymous" }))
+  .use(csrf({ allowedOrigins: [`https://app.${config.BASE_DOMAIN}`] }))
   .error((error, { res }) => {
     if (error instanceof v.ValiError) {
       const flattened = v.flatten(error.issues);

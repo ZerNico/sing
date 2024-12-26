@@ -10,7 +10,7 @@
     "@fontsource-variable/open-sans": "^5.1.0",
     "@iconify-json/lucide": "^1.2.20",
     "@modular-forms/solid": "^0.25.0",
-    "@nokijs/client": "0.0.1-alpha.28",
+    "@nokijs/client": "0.0.1-alpha.30",
     "@sing/email": "*",
     "@solid-primitives/i18n": "^2.1.1",
     "@solid-primitives/mutable": "^1.0.2",
