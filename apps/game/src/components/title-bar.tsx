@@ -1,0 +1,26 @@
+import { Show } from "solid-js";
+import IconChevronLeft from "~icons/lucide/chevron-left";
+
+interface TitleBarProps {
+  title: string;
+  description?: string;
+  onBack?: () => void;
+}
+
+export default function TitleBar(props: TitleBarProps) {
+  return (
+    <div class="flex items-center gap-0.5cqw font-semibold text-base uppercase">
+      <Show when={props.onBack}>
+        <button class="flex items-center gap-0.5cqw" onClick={props.onBack} type="button">
+          <IconChevronLeft />
+        </button>
+      </Show>
+      <div>
+        {props.title}
+        <Show when={props.description}>
+          <span class="pl-2 text-xs">/ {props.description}</span>
+        </Show>
+      </div>
+    </div>
+  );
+}
