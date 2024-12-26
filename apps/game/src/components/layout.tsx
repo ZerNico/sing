@@ -5,6 +5,7 @@ interface LayoutProps {
   intent?: "primary" | "secondary";
   header?: JSX.Element;
   footer?: JSX.Element;
+  background?: JSX.Element;
 }
 
 export default function Layout(props: LayoutProps) {
@@ -19,8 +20,9 @@ export default function Layout(props: LayoutProps) {
         }}
       >
         <div class="layout flex">
-          <div class="@container flex flex-grow">
-            <div class="grid flex-grow grid-rows-[min-content_1fr_min-content] gap-1.5cqw p-4cqw">
+          <div class="@container relative flex flex-grow">
+            <div class="absolute inset-0 h-full w-full">{props.background}</div>
+            <div class="relative z-1 grid flex-grow grid-rows-[min-content_1fr_min-content] gap-1.5cqw p-4cqw">
               <div>{props.header}</div>
               <div class="flex flex-col">{props.children}</div>
               <div>{props.footer}</div>

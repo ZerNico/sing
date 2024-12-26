@@ -51,7 +51,9 @@ export async function parseLocalTxtFile(txt: DirEntryWithChildren, files: DirEnt
       if (!file) {
         throw new ParseError(`File for ${song[type]} not found`);
       }
-      localSong[type] = convertFileSrc(file.path);
+
+      const urlKey: `${typeof type}Url` = `${type}Url`;
+      localSong[urlKey] = convertFileSrc(file.path);
     }
 
     return localSong;

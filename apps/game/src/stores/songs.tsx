@@ -1,6 +1,6 @@
 import { makePersisted } from "@solid-primitives/storage";
 import { createStore } from "solid-js/store";
-import { parseLocalFileTree } from "~/lib/ultrastar/parser/local";
+import { type LocalSong, parseLocalFileTree } from "~/lib/ultrastar/parser/local";
 import { readFileTree } from "~/lib/utils/fs";
 
 interface SongsSettings {
@@ -18,7 +18,7 @@ const [songsSettings, setSongsSettings] = makePersisted(
   }
 );
 
-const [localSongs, setLocalSongs] = createStore();
+const [localSongs, setLocalSongs] = createStore<LocalSong[]>([]);
 
 export function addSongPath(path: string) {
   if (songsSettings.paths.includes(path)) {
@@ -42,11 +42,16 @@ export function removeSongPath(path: string) {
 }
 
 export async function loadSongPaths() {
-  for (const path of songsSettings.paths) {
-    const root = await readFileTree(path);
-    const songs = await parseLocalFileTree(root);
-    setLocalSongs(songs);
-    setSongsSettings("dirty", false);
+  try {
+    for (const path of songsSettings.paths) {      
+      const root = await readFileTree(path);
+      const songs = await parseLocalFileTree(root);
+      
+      setLocalSongs(songs);
+      setSongsSettings("dirty", false);
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
 

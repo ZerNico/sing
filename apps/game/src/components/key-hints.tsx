@@ -15,7 +15,7 @@ interface KeyHintsProps {
 
 export default function KeyHints(props: KeyHintsProps) {
   return (
-    <div class="flex items-center gap-8">
+    <div class="flex items-center gap-2cqw text-base">
       <For each={props.hints}>
         {(hint) => (
           <Switch>

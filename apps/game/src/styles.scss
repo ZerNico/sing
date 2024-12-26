@@ -30,11 +30,11 @@ body {
   background: radial-gradient(at top, #2d3438 0%, #203141 100%);
 }
 
+.fade-enter-active,
 .fade-exit-active {
-  transition: opacity 0.3s ease-out;
-  position: absolute;
-  top: 0;
-  left: 0;
+  transition: opacity 0.3s;
+}
+.fade-enter,
+.fade-exit-to {
   opacity: 0;
-  z-index: 999;
 }

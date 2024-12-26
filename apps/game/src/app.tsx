@@ -13,7 +13,21 @@ export default function App() {
       root={(props) => (
         <>
           <Suspense>
-            <Transition name="fade">{props.children}</Transition>
+            <Transition
+              onExit={(el, done) => {
+                const element = el as HTMLElement;
+                element.style.position = "absolute";
+                element.style.top = "0";
+                element.style.left = "0";
+
+                const a = el.animate([{ opacity: 1 }, { opacity: 0 }], {
+                  duration: 300,
+                });
+                a.finished.then(done);
+              }}
+            >
+              {props.children}
+            </Transition>
           </Suspense>
         </>
       )}

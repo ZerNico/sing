@@ -3,10 +3,5 @@
   "identifier": "default",
   "description": "Capability for the main window",
   "windows": ["main"],
-  "permissions": [
-    "core:default",
-    "opener:default",
-    "dialog:allow-open",
-    "fs:allow-app-read-recursive"
-  ]
+  "permissions": ["core:default", "opener:default", "dialog:allow-open", "fs:read-dirs", "fs:read-files", "fs:read-meta"]
 }
