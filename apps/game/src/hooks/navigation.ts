@@ -14,7 +14,6 @@ type NavigationEvent = {
   origin: "gamepad" | "keyboard";
   originalKey: string;
   action: "left" | "right" | "up" | "down" | "back" | "confirm";
-  repeat: boolean;
 };
 
 const KEY_MAPPINGS: Record<string, NavigationEvent["action"]> = {
@@ -39,25 +38,33 @@ type Events = {
 const emitter = mitt<Events>();
 
 makeEventListener(window, "keydown", (event) => {
-  if (event.key in KEY_MAPPINGS) {
+  if (event.repeat) {
+    return;
+  }
+
+  const action = KEY_MAPPINGS[event.key];
+  if (action) {
     event.preventDefault();
     emitter.emit("keydown", {
       origin: "keyboard",
       originalKey: event.key,
-      action: KEY_MAPPINGS[event.key],
-      repeat: event.repeat,
+      action: action,
     });
   }
 });
 
 makeEventListener(window, "keyup", (event) => {
-  if (event.key in KEY_MAPPINGS) {
+  if (event.repeat) {
+    return;
+  }
+
+  const action = KEY_MAPPINGS[event.key];
+  if (action) {
     event.preventDefault();
     emitter.emit("keyup", {
       origin: "keyboard",
       originalKey: event.key,
-      action: KEY_MAPPINGS[event.key],
-      repeat: event.repeat,
+      action: action,
     });
   }
 });
