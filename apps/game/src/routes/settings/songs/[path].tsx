@@ -5,7 +5,7 @@ import Layout from "~/components/layout";
 import TitleBar from "~/components/title-bar";
 import Button from "~/components/ui/button";
 import { useNavigation } from "~/hooks/navigation";
-import { removeSongPath } from "~/stores/songs";
+import { songsStore } from "~/stores/songs";
 
 export default function SongPathSettings() {
   const navigate = useNavigate();
@@ -15,6 +15,9 @@ export default function SongPathSettings() {
 
   const params = useParams<{ path: string }>();
   const path = () => decodeURIComponent(params.path);
+
+  console.log(songsStore.localSongs, songsStore.paths());
+  
 
   useNavigation(() => ({
     layer: 0,
@@ -28,11 +31,18 @@ export default function SongPathSettings() {
     onKeyup(event) {
       if (event.action === "confirm") {
         setPressed(false);
-        removeSongPath(path());
+        songsStore.removeSongPath(path());
         onBack();
       }
     },
   }));
+
+  const onRemove = () => {
+    songsStore.removeSongPath(path());
+    onBack();
+    console.log(songsStore.localSongs);
+    
+  };
 
   return (
     <Layout
@@ -45,7 +55,7 @@ export default function SongPathSettings() {
           selected
           gradient="gradient-settings"
           onClick={() => {
-            removeSongPath(path());
+            onRemove();
             onBack();
           }}
           active={pressed()}

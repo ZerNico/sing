@@ -8,7 +8,7 @@ import TitleBar from "~/components/title-bar";
 import IconButton from "~/components/ui/icon-button";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
-import { addSongPath, songsSettings } from "~/stores/songs";
+import { songsStore } from "~/stores/songs";
 import IconFolder from "~icons/lucide/folder";
 import IconPlus from "~icons/lucide/plus";
 
@@ -17,7 +17,8 @@ export default function SongsSettings() {
   const [loading, setLoading] = createSignal(false);
   const navigate = useNavigate();
   const onBack = () => {
-    if (songsSettings.dirty) {
+    
+    if (songsStore.needsUpdate()) {
       navigate(withQuery("/loading", { redirect: "/settings" }));
       return;
     }
@@ -34,7 +35,7 @@ export default function SongsSettings() {
     });
 
     if (path) {
-      addSongPath(path);
+      songsStore.addSongPath(path);
     }
 
     setLoading(false);
@@ -53,7 +54,7 @@ export default function SongsSettings() {
       action?: () => void;
       loading?: boolean;
     }[] = [];
-    for (const path of songsSettings.paths) {
+    for (const path of songsStore.paths()) {
       buttons.push({ label: folderName(path), icon: IconFolder, action: () => navigate(`/settings/songs/${encodeURIComponent(path)}`) });
     }
     buttons.push({ label: "Add", icon: IconPlus, action: pickFolder, loading: loading() });

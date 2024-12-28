@@ -8,6 +8,7 @@ interface UseNavigationOptions {
   layer: number;
   onKeydown?: (event: NavigationEvent) => void;
   onKeyup?: (event: NavigationEvent) => void;
+  onHold?: (event: NavigationEvent) => void;
 }
 
 type NavigationEvent = {
@@ -33,9 +34,12 @@ const KEY_MAPPINGS: Record<string, NavigationEvent["action"]> = {
 type Events = {
   keydown: NavigationEvent;
   keyup: NavigationEvent;
+  hold: NavigationEvent;
 };
 
 const emitter = mitt<Events>();
+const pressedKeys = new Map<string, number>();
+const HOLD_DELAY = 500;
 
 makeEventListener(window, "keydown", (event) => {
   if (event.repeat) {
@@ -50,6 +54,15 @@ makeEventListener(window, "keydown", (event) => {
       originalKey: event.key,
       action: action,
     });
+
+    const timeout = window.setTimeout(() => {
+      emitter.emit("hold", {
+        origin: "keyboard",
+        originalKey: event.key,
+        action: action,
+      });
+    }, HOLD_DELAY);
+    pressedKeys.set(event.key, timeout);
   }
 });
 
@@ -61,6 +74,12 @@ makeEventListener(window, "keyup", (event) => {
   const action = KEY_MAPPINGS[event.key];
   if (action) {
     event.preventDefault();
+    const timeout = pressedKeys.get(event.key);
+    if (timeout) {
+      clearTimeout(timeout);
+      pressedKeys.delete(event.key);
+    }
+
     emitter.emit("keyup", {
       origin: "keyboard",
       originalKey: event.key,
@@ -101,13 +120,16 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
     const opts = access(options);
     const handleKeydown = (e: NavigationEvent) => opts?.onKeydown?.(e);
     const handleKeyup = (e: NavigationEvent) => opts?.onKeyup?.(e);
+    const handleHold = (e: NavigationEvent) => opts?.onHold?.(e);
 
     emitter.on("keydown", handleKeydown);
     emitter.on("keyup", handleKeyup);
+    emitter.on("hold", handleHold);
 
     onCleanup(() => {
       emitter.off("keydown", handleKeydown);
       emitter.off("keyup", handleKeyup);
+      emitter.off("hold", handleHold);
     });
   });
 

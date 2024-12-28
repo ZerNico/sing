@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "@solidjs/router";
 import { onMount } from "solid-js";
 import Layout from "~/components/layout";
-import { loadSongPaths } from "~/stores/songs";
+import { songsStore } from "~/stores/songs";
 import IconLoaderCircle from "~icons/lucide/loader-circle";
 
 export default function Loading() {
@@ -11,7 +11,7 @@ export default function Loading() {
   }>();
 
   onMount(async () => {
-    await loadSongPaths();
+    await songsStore.updateLocalSongs();
 
     if (searchParams.redirect) {
       navigate(searchParams.redirect);

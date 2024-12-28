@@ -1,58 +1,61 @@
+import { ReactiveMap } from "@solid-primitives/map";
 import { makePersisted } from "@solid-primitives/storage";
-import { createStore } from "solid-js/store";
+import { createMemo, createSignal } from "solid-js";
 import { type LocalSong, parseLocalFileTree } from "~/lib/ultrastar/parser/local";
 import { readFileTree } from "~/lib/utils/fs";
 
-interface SongsSettings {
-  paths: string[];
-  dirty: boolean;
-}
+function createSongsStore() {
+  const [paths, setPaths] = makePersisted(createSignal<string[]>([]), { name: "songsStore.paths" });
+  const localSongs = new ReactiveMap<string, LocalSong[]>();
 
-const [songsSettings, setSongsSettings] = makePersisted(
-  createStore<SongsSettings>({
-    paths: [],
-    dirty: false,
-  }),
-  {
-    name: "songsSettings",
-  }
-);
+  const addSongPath = (path: string) => {
+    setPaths((prev) => [...prev, path]);
+  };
 
-const [localSongs, setLocalSongs] = createStore<LocalSong[]>([]);
+  const removeSongPath = (path: string) => {
+    setPaths((prev) => prev.filter((p) => p !== path));
 
-export function addSongPath(path: string) {
-  if (songsSettings.paths.includes(path)) {
-    return;
-  }
+    localSongs.delete(path);
+  };
 
-  setSongsSettings("paths", [...songsSettings.paths, path]);
-  setSongsSettings("dirty", true);
-}
+  const updateLocalSongs = async () => {
+    try {
+      for (const path of paths()) {
+        if (!localSongs.has(path)) {
+          const root = await readFileTree(path);
+          const songs = await parseLocalFileTree(root);
+          localSongs.set(path, songs);
+        }
+      }
+    } catch (error) {}
+  };
 
-export function removeSongPath(path: string) {
-  if (!songsSettings.paths.includes(path)) {
-    return;
-  }
+  const needsUpdate = createMemo(() => {
+    const hasMissingPaths = paths().some((path) => !localSongs.has(path));
 
-  setSongsSettings(
-    "paths",
-    songsSettings.paths.filter((p) => p !== path)
-  );
-  setSongsSettings("dirty", true);
-}
+    return hasMissingPaths;
+  });
 
-export async function loadSongPaths() {
-  try {
-    for (const path of songsSettings.paths) {      
-      const root = await readFileTree(path);
-      const songs = await parseLocalFileTree(root);
-      
-      setLocalSongs(songs);
-      setSongsSettings("dirty", false);
+  const songs = createMemo(() => {
+    const songs = new Map<string, LocalSong>();
+    for (const [_, s] of localSongs.entries()) {
+      for (const song of s) {
+        songs.set(song.hash, song);
+      }
     }
-  } catch (error) {
-    console.error(error);
-  }
+
+    return Array.from(songs.values());
+  });
+
+  return {
+    paths,
+    localSongs,
+    addSongPath,
+    removeSongPath,
+    updateLocalSongs,
+    needsUpdate,
+    songs,
+  };
 }
 
-export { songsSettings, localSongs };
+export const songsStore = createSongsStore();
