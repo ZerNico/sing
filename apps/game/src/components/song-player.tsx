@@ -1,10 +1,10 @@
 import { type Ref, mergeRefs } from "@solid-primitives/refs";
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 
 interface SongPlayerProps {
   song: LocalSong;
-  playing?: boolean;
+  autoplay?: boolean;
   audioRef?: Ref<HTMLAudioElement>;
   videoRef?: Ref<HTMLVideoElement>;
   class?: string;
@@ -16,19 +16,12 @@ export default function SongPlayer(props: SongPlayerProps) {
   let audioRef: HTMLAudioElement | undefined;
   let videoRef: HTMLVideoElement | undefined;
 
-  onMount(() => {
-    console.log("song player mounted");
-  });
-
   const onAudioReady = () => {
-    console.log("audio ready");
-
     setAudioReady(true);
     handleMediaReady();
   };
 
   const onVideoReady = () => {
-    console.log("video ready");
     setVideoReady(true);
     handleMediaReady();
   };
@@ -44,7 +37,7 @@ export default function SongPlayer(props: SongPlayerProps) {
   const handleMediaReady = () => {
     if (!props.song.audioUrl || audioReady()) {
       if (!props.song.videoUrl || videoReady()) {
-        if (props.playing) {
+        if (props.autoplay) {
           audioRef?.play();
           videoRef?.play();
         }
@@ -53,7 +46,7 @@ export default function SongPlayer(props: SongPlayerProps) {
   };
 
   createEffect(() => {
-    if (props.playing) {
+    if (props.autoplay) {
       handleMediaReady();
     } else {
       audioRef?.pause();

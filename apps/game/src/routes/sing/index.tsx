@@ -1,13 +1,12 @@
 import { useNavigate } from "@solidjs/router";
 import { For, Show, createMemo, createSignal, onMount } from "solid-js";
-import { Transition } from "solid-transition-group";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import SongPlayer from "~/components/song-player";
 import TitleBar from "~/components/title-bar";
 import { useNavigation } from "~/hooks/navigation";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
-import { localSongs } from "~/stores/songs";
+import { songsStore } from "~/stores/songs";
 
 export default function Sing() {
   const navigate = useNavigate();
@@ -30,40 +29,24 @@ export default function Sing() {
       footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
       header={<TitleBar title="Songs" onBack={onBack} />}
       background={
-        <Transition
-          onExit={(el, done) => {
-            const element = el as HTMLElement;
-            element.style.position = "absolute";
-            element.style.top = "0";
-            element.style.left = "0";
-
-            const a = el.animate([{ opacity: 1 }, { opacity: 0 }], {
-              duration: 250,
-            });
-            a.finished.then(done);
-          }}
-          onEnter={(el) => {
-            const element = el as HTMLElement;
-
-            element.animate([{ opacity: 0 }, { opacity: 1 }], {
-              duration: 250,
-            });
-          }}
-        >
-          <Show when={currentSong()} keyed>
-            {(currentSong) => (
-              <div class="relative h-full w-full">
-                <SongPlayer class="h-full w-full opacity-40" playing song={currentSong} />
-              </div>
-            )}
-          </Show>
-        </Transition>
+        <Show when={currentSong()}>
+          {(currentSong) => (
+            <div class="relative h-full w-full">
+              <SongPlayer class="h-full w-full opacity-40" autoplay song={currentSong()} />
+            </div>
+          )}
+        </Show>
       }
     >
       <div class="flex flex-grow flex-col">
-        <div class="flex-grow">213</div>
+        <div class="flex flex-grow flex-col justify-center">
+          <p class="text-xl">{currentSong()?.artist}</p>
+          <div class="max-w-50cqw">
+            <span class="gradient-sing bg-gradient-to-b bg-clip-text font-semibold text-6xl text-transparent ">{currentSong()?.title}</span>
+          </div>
+        </div>
         <div>
-          <SongScroller onSongChange={setCurrentSong} songs={localSongs} />
+          <SongScroller onSongChange={setCurrentSong} songs={songsStore.songs()} />
         </div>
       </div>
     </Layout>
@@ -79,6 +62,9 @@ const DISPLAYED_SONGS = 11;
 const MIDDLE_SONG_INDEX = Math.floor(DISPLAYED_SONGS / 2);
 
 function SongScroller(props: SongScrollerProps) {
+  const [isPressed, setIsPressed] = createSignal(false);
+  const [isHeld, setIsHeld] = createSignal(false);
+  const [isFastScrolling, setIsFastScrolling] = createSignal(false);
   const [currentIndex, setCurrentIndex] = createSignal(0);
   const [animating, setAnimating] = createSignal<null | "left" | "right">(null);
 
@@ -111,6 +97,26 @@ function SongScroller(props: SongScrollerProps) {
         animateTo("left");
       } else if (event.action === "right") {
         animateTo("right");
+      } else if (event.action === "confirm") {
+        setIsPressed(true);
+      }
+    },
+
+    onKeyup(event) {
+      if (event.action === "confirm") {
+        setIsPressed(false);
+      } else if (event.action === "left" || event.action === "right") {
+        setIsHeld(false);
+      }
+    },
+
+    onHold(event) {
+      if (event.action === "left") {
+        setIsHeld(true);
+        animateTo("left");
+      } else if (event.action === "right") {
+        setIsHeld(true);
+        animateTo("right");
       }
     },
   }));
@@ -120,13 +126,23 @@ function SongScroller(props: SongScrollerProps) {
       return;
     }
 
+    if (isHeld()) {
+      setIsFastScrolling(true);
+    }
+
     setAnimating(direction);
   };
 
   const onTransitionEnd = () => {
-    if (animating() === "left") {
+    const direction = animating();
+
+    if (!direction) {
+      return;
+    }
+
+    if (direction === "left") {
       setCurrentIndex(currentIndex() - 1);
-    } else if (animating() === "right") {
+    } else if (direction === "right") {
       setCurrentIndex(currentIndex() + 1);
     }
 
@@ -134,6 +150,13 @@ function SongScroller(props: SongScrollerProps) {
     const currentSong = props.songs.at(currentIndex() % props.songs.length);
     if (currentSong) {
       props.onSongChange?.(currentSong);
+    }
+
+    if (isHeld()) {
+      setIsFastScrolling(true);
+      setTimeout(() => animateTo(direction), 0);
+    } else {
+      setIsFastScrolling(false);
     }
   };
 
@@ -171,24 +194,27 @@ function SongScroller(props: SongScrollerProps) {
   return (
     <div class="flex w-full flex-col items-center justify-center">
       <div
-        class="flex w-11/7 transform-gpu ease-in-out"
+        class="flex w-11/7 transform-gpu ease-in-out will-change-transform"
         classList={{
           "translate-x-0": animating() === null,
           "translate-x-1/11 transition-transform duration-250": animating() === "left",
           "translate-x--1/11 transition-transform duration-250": animating() === "right",
+          "duration-150! ease-linear!": isFastScrolling() && !!animating(),
         }}
         onTransitionEnd={onTransitionEnd}
       >
         <For each={displayedSongs()}>
           {(song, index) => (
             <div
-              class="w-1/7 transform-gpu p-0.5cqw transition-transform duration-250"
+              class="w-1/7 transform-gpu p-0.5cqw transition-transform duration-250 will-change-transform"
               classList={{
                 [getSongTransform(index(), animating())]: true,
+                "scale-90": isActive(index(), animating()) && isPressed(),
+                "duration-150! ease-linear!": isFastScrolling() && !!animating(),
               }}
               onTransitionEnd={(e) => e.stopPropagation()}
             >
-              <SongCard song={song} active={isActive(index(), animating())} />
+              <SongCard fastScrolling={isFastScrolling() && !!animating()} song={song} active={isActive(index(), animating())} />
             </div>
           )}
         </For>
@@ -202,21 +228,24 @@ interface SongCardProps {
   class?: string;
   classList?: Record<string, boolean>;
   active?: boolean;
+  fastScrolling?: boolean;
 }
 function SongCard(props: SongCardProps) {
   return (
     <div
-      class="relative aspect-square transform-gpu overflow-hidden rounded-lg shadow-xl transition-transform duration-250"
+      class="relative aspect-square transform-gpu overflow-hidden rounded-lg shadow-xl transition-transform duration-250 will-change-transform"
       classList={{
         [props.class || ""]: true,
         "scale-130": props.active,
+        "duration-150! ease-linear!": props.fastScrolling,
       }}
     >
       <img
-        class="relative z-1 h-full w-full object-cover transition-opacity duration-250"
+        class="relative z-1 h-full w-full object-cover transition-opacity duration-250 will-change-opacity"
         classList={{
           "opacity-60": !props.active,
           "opacity-100": props.active,
+          "duration-150! ease-linear!": props.fastScrolling,
         }}
         src={props.song.coverUrl}
         alt={props.song.title}
