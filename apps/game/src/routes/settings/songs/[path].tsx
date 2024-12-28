@@ -16,8 +16,10 @@ export default function SongPathSettings() {
   const params = useParams<{ path: string }>();
   const path = () => decodeURIComponent(params.path);
 
-  console.log(songsStore.localSongs, songsStore.paths());
-  
+  const removePath = () => {
+    songsStore.removeSongPath(path());
+    onBack();
+  };
 
   useNavigation(() => ({
     layer: 0,
@@ -31,18 +33,10 @@ export default function SongPathSettings() {
     onKeyup(event) {
       if (event.action === "confirm") {
         setPressed(false);
-        songsStore.removeSongPath(path());
-        onBack();
+        removePath();
       }
     },
   }));
-
-  const onRemove = () => {
-    songsStore.removeSongPath(path());
-    onBack();
-    console.log(songsStore.localSongs);
-    
-  };
 
   return (
     <Layout
@@ -55,7 +49,7 @@ export default function SongPathSettings() {
           selected
           gradient="gradient-settings"
           onClick={() => {
-            onRemove();
+            removePath();
             onBack();
           }}
           active={pressed()}

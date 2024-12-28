@@ -1,12 +1,19 @@
-import { type Ref, mergeRefs } from "@solid-primitives/refs";
-import { createEffect, createSignal, onCleanup } from "solid-js";
+import type { Ref } from "@solid-primitives/refs";
+import { createEffect, createSignal } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
+import { createRefContent } from "~/lib/utils/ref";
+
+export interface SongPlayerRef {
+  play: () => void;
+  pause: () => void;
+  getCurrentTime: () => number;
+  getDuration: () => number;
+}
 
 interface SongPlayerProps {
   song: LocalSong;
   autoplay?: boolean;
-  audioRef?: Ref<HTMLAudioElement>;
-  videoRef?: Ref<HTMLVideoElement>;
+  playerRef?: Ref<SongPlayerRef>;
   class?: string;
 }
 
@@ -32,6 +39,7 @@ export default function SongPlayer(props: SongPlayerProps) {
     setVideoReady(false);
     audioRef?.load();
     videoRef?.load();
+    videoRef?.currentTime;
   });
 
   const handleMediaReady = () => {
@@ -45,6 +53,26 @@ export default function SongPlayer(props: SongPlayerProps) {
     }
   };
 
+  const play = () => {
+    audioRef?.play();
+    videoRef?.play();
+  };
+
+  const pause = () => {
+    audioRef?.pause();
+    videoRef?.pause();
+  };
+
+  createRefContent(
+    () => props.playerRef,
+    () => ({
+      play,
+      pause,
+      getCurrentTime: () => audioRef?.currentTime || videoRef?.currentTime || 0,
+      getDuration: () => audioRef?.duration || videoRef?.duration || 0,
+    })
+  );
+
   createEffect(() => {
     if (props.autoplay) {
       handleMediaReady();
@@ -52,11 +80,6 @@ export default function SongPlayer(props: SongPlayerProps) {
       audioRef?.pause();
       videoRef?.pause();
     }
-  });
-
-  onCleanup(() => {
-    audioRef?.pause();
-    videoRef?.pause();
   });
 
   return (
@@ -69,9 +92,7 @@ export default function SongPlayer(props: SongPlayerProps) {
       {props.song.audioUrl && (
         // biome-ignore lint/a11y/useMediaCaption: Is not necessary for this use case
         <audio
-          ref={mergeRefs(props.audioRef, (el) => {
-            audioRef = el;
-          })}
+          ref={audioRef}
           src={props.song.audioUrl}
           onCanPlayThrough={onAudioReady}
           preload="auto"
@@ -79,9 +100,7 @@ export default function SongPlayer(props: SongPlayerProps) {
       )}
       {props.song.videoUrl ? (
         <video
-          ref={mergeRefs(props.videoRef, (el) => {
-            videoRef = el;
-          })}
+          ref={videoRef}
           src={props.song.videoUrl}
           onCanPlayThrough={onVideoReady}
           muted={!!props.song.audioUrl}

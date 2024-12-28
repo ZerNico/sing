@@ -1,6 +1,5 @@
 export type NoteType = 'Normal' | 'Golden' | 'Freestyle' | 'Rap' | 'RapGolden'
 
-
 export interface Note {
   type: NoteType
   startBeat: number

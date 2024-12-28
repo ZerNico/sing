@@ -59,7 +59,6 @@ export async function parseLocalTxtFile(txt: DirEntryWithChildren, files: DirEnt
 
     if (song.audio) {
       const file = files.find((f) => f.name === song.audio);
-      console.log(file);
 
       if (file) {
         const result = await commands.getReplayGain(file.path);

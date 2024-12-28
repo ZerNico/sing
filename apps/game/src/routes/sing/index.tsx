@@ -6,12 +6,14 @@ import SongPlayer from "~/components/song-player";
 import TitleBar from "~/components/title-bar";
 import { useNavigation } from "~/hooks/navigation";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
+import { useRoundStore } from "~/stores/round";
 import { songsStore } from "~/stores/songs";
 
 export default function Sing() {
   const navigate = useNavigate();
   const onBack = () => navigate("/home");
   const [currentSong, setCurrentSong] = createSignal<LocalSong | null>(null);
+  const roundStore = useRoundStore();
 
   useNavigation(() => ({
     layer: 0,
@@ -20,7 +22,14 @@ export default function Sing() {
         onBack();
       }
     },
-    onKeyup(event) {},
+    onKeyup(event) {
+      if (event.action === "confirm") {
+        const song = currentSong();
+        if (song) {
+          roundStore.startRound({ song });
+        }
+      }
+    },
   }));
 
   return (
