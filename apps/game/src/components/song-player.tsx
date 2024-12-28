@@ -1,5 +1,4 @@
-import type { Ref } from "@solid-primitives/refs";
-import { createEffect, createSignal } from "solid-js";
+import { Match, type Ref, Show, Switch, createSignal } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { createRefContent } from "~/lib/utils/ref";
 
@@ -18,49 +17,50 @@ interface SongPlayerProps {
 }
 
 export default function SongPlayer(props: SongPlayerProps) {
-  const [audioReady, setAudioReady] = createSignal(false);
-  const [videoReady, setVideoReady] = createSignal(false);
+  const [playing, setPlaying] = createSignal(props.autoplay ?? false);
   let audioRef: HTMLAudioElement | undefined;
   let videoRef: HTMLVideoElement | undefined;
 
   const onAudioReady = () => {
-    setAudioReady(true);
-    handleMediaReady();
+    updatePlaybackState();
   };
 
   const onVideoReady = () => {
-    setVideoReady(true);
-    handleMediaReady();
+    updatePlaybackState();
   };
 
-  createEffect(() => {
-    props.song;
-    setAudioReady(false);
-    setVideoReady(false);
-    audioRef?.load();
-    videoRef?.load();
-    videoRef?.currentTime;
-  });
+  const updatePlaybackState = () => {
+    const isMediaReady = (element: HTMLMediaElement | undefined, url?: string) => {
+      if (!element) return false;
+      if (url && element.readyState < 3) return false;
+      return document.body.contains(element);
+    };
 
-  const handleMediaReady = () => {
-    if (!props.song.audioUrl || audioReady()) {
-      if (!props.song.videoUrl || videoReady()) {
-        if (props.autoplay) {
-          audioRef?.play();
-          videoRef?.play();
-        }
-      }
+    if (!isMediaReady(audioRef, props.song.audioUrl)) {
+      return;
+    }
+
+    if (!isMediaReady(videoRef, props.song.videoUrl)) {
+      return;
+    }
+
+    if (playing()) {
+      audioRef?.play();
+      videoRef?.play();
+    } else {
+      audioRef?.pause();
+      videoRef?.pause();
     }
   };
 
   const play = () => {
-    audioRef?.play();
-    videoRef?.play();
+    setPlaying(true);
+    updatePlaybackState();
   };
 
   const pause = () => {
-    audioRef?.pause();
-    videoRef?.pause();
+    setPlaying(false);
+    updatePlaybackState();
   };
 
   createRefContent(
@@ -73,15 +73,6 @@ export default function SongPlayer(props: SongPlayerProps) {
     })
   );
 
-  createEffect(() => {
-    if (props.autoplay) {
-      handleMediaReady();
-    } else {
-      audioRef?.pause();
-      videoRef?.pause();
-    }
-  });
-
   return (
     <div
       class="relative h-full w-full bg-black"
@@ -89,27 +80,28 @@ export default function SongPlayer(props: SongPlayerProps) {
         [props.class || ""]: true,
       }}
     >
-      {props.song.audioUrl && (
-        // biome-ignore lint/a11y/useMediaCaption: Is not necessary for this use case
-        <audio
-          ref={audioRef}
-          src={props.song.audioUrl}
-          onCanPlayThrough={onAudioReady}
-          preload="auto"
-        />
-      )}
-      {props.song.videoUrl ? (
-        <video
-          ref={videoRef}
-          src={props.song.videoUrl}
-          onCanPlayThrough={onVideoReady}
-          muted={!!props.song.audioUrl}
-          preload="auto"
-          class="h-full w-full object-cover"
-        />
-      ) : (
-        props.song.backgroundUrl && <img src={props.song.backgroundUrl} alt="Song background" class="h-full w-full object-contain" />
-      )}
+      <Switch>
+        <Match when={props.song.videoUrl}>
+          {(videoUrl) => (
+            <video
+              muted={!!props.song.audioUrl}
+              class="h-full w-full object-cover"
+              ref={videoRef}
+              preload="auto"
+              on:canplaythrough={onVideoReady}
+              src={videoUrl()}
+            />
+          )}
+        </Match>
+        <Match when={props.song.backgroundUrl}>
+          {(backgroundUrl) => <img alt="" class="h-full w-full object-contain" src={backgroundUrl()} />}
+        </Match>
+      </Switch>
+
+      <Show when={props.song.audioUrl}>
+        {/* biome-ignore lint/a11y/useMediaCaption: Not needed for this game */}
+        {(audioUrl) => <audio ref={audioRef} preload="auto" on:canplaythrough={onAudioReady} src={audioUrl()} />}
+      </Show>
     </div>
   );
 }
