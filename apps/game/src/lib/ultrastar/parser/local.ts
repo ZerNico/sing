@@ -1,6 +1,7 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import pLimit from "p-limit";
+import { commands } from "~/bindings";
 import type { DirEntryWithChildren } from "~/lib/utils/fs";
 import type { Song } from "../song";
 import { ParseError } from "./error";
@@ -52,8 +53,21 @@ export async function parseLocalTxtFile(txt: DirEntryWithChildren, files: DirEnt
         throw new ParseError(`File for ${song[type]} not found`);
       }
 
-      const urlKey: `${typeof type}Url` = `${type}Url`;
-      localSong[urlKey] = convertFileSrc(file.path);
+      const keyUrl: `${typeof type}Url` = `${type}Url`;
+      localSong[keyUrl] = convertFileSrc(file.path);
+    }
+
+    if (song.audio) {
+      const file = files.find((f) => f.name === song.audio);
+      console.log(file);
+
+      if (file) {
+        const result = await commands.getReplayGain(file.path);
+        if (result.status === "ok") {
+          localSong.replayGainTrackGain = result.data.track_gain || 0;
+          localSong.replayGainTrackPeak = result.data.track_peak || 0;
+        }
+      }
     }
 
     return localSong;
@@ -68,4 +82,6 @@ export interface LocalSong extends Song {
   videoUrl?: string;
   coverUrl?: string;
   backgroundUrl?: string;
+  replayGainTrackGain?: number;
+  replayGainTrackPeak?: number;
 }
