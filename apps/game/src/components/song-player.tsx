@@ -1,4 +1,4 @@
-import { Match, type Ref, Show, Switch, createSignal } from "solid-js";
+import { type Accessor, Match, type Ref, Show, Switch, createSignal } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { createRefContent } from "~/lib/utils/ref";
 
@@ -7,6 +7,8 @@ export interface SongPlayerRef {
   pause: () => void;
   getCurrentTime: () => number;
   getDuration: () => number;
+  playing: Accessor<boolean>;
+  ready: Accessor<boolean>;
 }
 
 interface SongPlayerProps {
@@ -18,6 +20,7 @@ interface SongPlayerProps {
 
 export default function SongPlayer(props: SongPlayerProps) {
   const [playing, setPlaying] = createSignal(props.autoplay ?? false);
+  const [ready, setReady] = createSignal(false);
   let audioRef: HTMLAudioElement | undefined;
   let videoRef: HTMLVideoElement | undefined;
 
@@ -37,12 +40,16 @@ export default function SongPlayer(props: SongPlayerProps) {
     };
 
     if (!isMediaReady(audioRef, props.song.audioUrl)) {
+      setReady(false);
       return;
     }
 
     if (!isMediaReady(videoRef, props.song.videoUrl)) {
+      setReady(false);
       return;
     }
+
+    setReady(true);
 
     if (playing()) {
       audioRef?.play();
@@ -66,6 +73,8 @@ export default function SongPlayer(props: SongPlayerProps) {
   createRefContent(
     () => props.playerRef,
     () => ({
+      playing,
+      ready,
       play,
       pause,
       getCurrentTime: () => audioRef?.currentTime || videoRef?.currentTime || 0,

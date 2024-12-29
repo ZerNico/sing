@@ -1,6 +1,6 @@
 import { type Accessor, type JSX, createContext, createEffect, createMemo, createSignal, useContext } from "solid-js";
 import type { Phrase } from "~/lib/ultrastar/phrase";
-import { type GameContextValue, useGame } from "./game";
+import { useGame } from "./game";
 
 interface CreatePlayerOptions {
   index: number;

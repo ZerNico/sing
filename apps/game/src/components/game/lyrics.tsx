@@ -12,7 +12,7 @@ export default function Lyrics() {
   const leadInPercentage = createMemo(() => {
     const phrase = player.phrase();
     const song = game.song();
-    if (!phrase || !song) {
+    if (!phrase || !song || !game.started()) {
       return;
     }
 
@@ -35,8 +35,8 @@ export default function Lyrics() {
     <div
       class="w-full bg-black/70"
       classList={{
-        "pt-1.2cqh pb-0.8cqh": player.index() === 0,
-        "pb-1.8cqh": player.index() === 1,
+        "rounded-b-xl pt-1.2cqh pb-0.8cqh": player.index() === 0,
+        "rounded-t-xl pb-1.8cqh": player.index() === 1,
       }}
     >
       <div class="grid grid-cols-[1fr_min-content_1fr]">

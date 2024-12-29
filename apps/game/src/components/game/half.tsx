@@ -1,22 +1,27 @@
-import { useGame } from "~/lib/game/game";
 import { createPlayer } from "~/lib/game/player";
 import Lyrics from "./lyrics";
+import Pitch from "./pitch";
 
 interface HalfProps {
   index: number;
 }
 
 export default function Half(props: HalfProps) {
-  const game = useGame();
-  const { PlayerProvider, phrase, nextPhrase, phraseIndex } = createPlayer(() => ({
+  const { PlayerProvider } = createPlayer(() => ({
     index: props.index,
   }));
 
   return (
-    <div>
-      <PlayerProvider>
+    <PlayerProvider>
+      <div class="flex"
+        classList={{
+          "flex-col": props.index === 0,
+          "flex-col-reverse": props.index === 1,
+        }}
+      >
         <Lyrics />
-      </PlayerProvider>
-    </div>
+        <Pitch />
+      </div>
+    </PlayerProvider>
   );
 }
