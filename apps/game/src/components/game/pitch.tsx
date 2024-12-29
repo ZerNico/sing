@@ -7,9 +7,6 @@ const ROW_COUNT = 16;
 export default function Pitch() {
   const player = usePlayer();
 
-  console.log("player");
-  
-
   const averageNote = createMemo(() => {
     const phrase = player.phrase();
     if (!phrase) {
@@ -58,7 +55,6 @@ export default function Pitch() {
   const notes = createMemo(() => {
     const phrase = player.phrase();
     console.log(phrase);
-    
 
     if (!phrase) {
       return [];
@@ -69,13 +65,15 @@ export default function Pitch() {
       return [];
     }
 
-    return phrase.notes.map((note) => {
-      return {
-        note,
-        row: getNoteRow(note.midiNote),
-        column: note.startBeat - firstBeat,
-      };
-    });
+    return phrase.notes
+      .filter((note) => note.type !== "Freestyle")
+      .map((note) => {
+        return {
+          note,
+          row: getNoteRow(note.midiNote),
+          column: note.startBeat - firstBeat,
+        };
+      });
   });
 
   return (
@@ -120,9 +118,7 @@ export function PitchNote(props: PitchNoteProps) {
           "border-yellow-400 bg-yellow-400/20": props.note.type === "Golden",
           "border-white bg-black/20": props.note.type !== "Golden",
         }}
-      >
-
-      </div>
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { For, Show, createMemo } from "solid-js";
+import { For, Show, createEffect, createMemo } from "solid-js";
 import { useGame } from "~/lib/game/game";
 import { usePlayer } from "~/lib/game/player";
 import { msToBeatWithoutGap } from "~/lib/ultrastar/bpm";
@@ -33,8 +33,9 @@ export default function Lyrics() {
 
   return (
     <div
-      class="w-full bg-black/70"
+      class="w-full bg-black/70 transition-opacity duration-500"
       classList={{
+        "opacity-0": !player.phrase(),
         "rounded-b-xl pt-1.2cqh pb-0.8cqh": player.index() === 0,
         "rounded-t-xl pb-1.8cqh": player.index() === 1,
       }}

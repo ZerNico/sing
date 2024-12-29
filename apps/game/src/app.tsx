@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { createSignal, type JSX } from "solid-js";
+import { type JSX, createSignal } from "solid-js";
 
 interface AppProps {
   children: JSX.Element;

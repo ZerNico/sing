@@ -1,4 +1,4 @@
-import { type Accessor, Match, type Ref, Show, Switch, createSignal } from "solid-js";
+import { type Accessor, Match, type Ref, Show, Switch, createEffect, createSignal, on } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { createRefContent } from "~/lib/utils/ref";
 
@@ -21,6 +21,8 @@ interface SongPlayerProps {
 export default function SongPlayer(props: SongPlayerProps) {
   const [playing, setPlaying] = createSignal(props.autoplay ?? false);
   const [ready, setReady] = createSignal(false);
+  const [synced, setSynced] = createSignal(false);
+  const [videoGapTimer, setVideoGapTimer] = createSignal<number | undefined>(undefined);
   let audioRef: HTMLAudioElement | undefined;
   let videoRef: HTMLVideoElement | undefined;
 
@@ -52,11 +54,50 @@ export default function SongPlayer(props: SongPlayerProps) {
     setReady(true);
 
     if (playing()) {
-      audioRef?.play();
-      videoRef?.play();
+      startPlayback();
     } else {
       audioRef?.pause();
       videoRef?.pause();
+    }
+  };
+
+  const startPlayback = () => {
+    if (!playing()) {
+      return;
+    }
+
+    if (props.song.videoGap > 0 && !synced()) {
+      videoRef?.play();
+
+      let waitTime = props.song.videoGap * 1000;
+      if (videoRef && videoRef?.currentTime > 0) {
+        waitTime -= videoRef.currentTime * 1000;
+      }
+
+      setVideoGapTimer(
+        setTimeout(() => {
+          setSynced(true);
+          audioRef?.play();
+        }, waitTime)
+      );
+    } else if (props.song.videoGap < 0 && !synced()) {
+      audioRef?.play();
+
+      let waitTime = Math.abs(props.song?.videoGap || 0) * 1000;
+
+      if (audioRef && audioRef.currentTime > 0) {
+        waitTime -= audioRef.currentTime * 1000;
+      }
+
+      setVideoGapTimer(
+        setTimeout(() => {
+          setSynced(true);
+          videoRef?.play();
+        }, waitTime)
+      );
+    } else {
+      audioRef?.play();
+      videoRef?.play();
     }
   };
 
@@ -69,6 +110,21 @@ export default function SongPlayer(props: SongPlayerProps) {
     setPlaying(false);
     updatePlaybackState();
   };
+
+  createEffect(
+    on([() => props.song.videoUrl, () => props.song.audioUrl], () => {
+      setReady(false);
+      setSynced(false);
+      if (videoRef) {
+        videoRef.currentTime = 0;
+      }
+      if (audioRef) {
+        audioRef.currentTime = 0;
+      }
+
+      clearTimeout(videoGapTimer());
+    })
+  );
 
   createRefContent(
     () => props.playerRef,
