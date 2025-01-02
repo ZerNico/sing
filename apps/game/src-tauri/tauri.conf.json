@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "sing",
   "build": {
-    "beforeDevCommand": "bun run dev:vinxi",
+    "beforeDevCommand": "bun run dev:vite",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "bun run build",
     "frontendDist": "../dist"

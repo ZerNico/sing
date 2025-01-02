@@ -65,7 +65,7 @@ export default function Lyrics() {
         <For fallback={<span class="text-transparent">{"\u00A0"}</span>} each={player.nextPhrase()?.notes}>
           {(note) => (
             <span
-              class="whitespace-pre"
+              class="whitespace-nowrap"
               classList={{
                 italic: note.type === "Freestyle",
               }}
@@ -100,7 +100,7 @@ function LyricsNote(props: LyricsNoteProps) {
       style={{
         "background-image": `linear-gradient(to right, #ff0000 ${percentage()}%, white ${percentage()}%)`,
       }}
-      class="whitespace-pre bg-clip-text text-4xl text-transparent leading-relaxed"
+      class="whitespace-nowrap bg-clip-text text-4xl text-transparent leading-relaxed"
       classList={{
         italic: props.note.type === "Freestyle",
       }}

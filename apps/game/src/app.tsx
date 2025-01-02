@@ -1,38 +1,20 @@
-import { HashRouter } from "@solidjs/router";
-import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
-import "uno.css";
-import "@fontsource-variable/inter";
-import "@unocss/reset/tailwind.css";
-import "./styles.scss";
-import { Transition } from "solid-transition-group";
+import { useNavigate } from "@solidjs/router";
+import { createSignal, type JSX } from "solid-js";
 
-export default function App() {
-  return (
-    <HashRouter
-      root={(props) => (
-        <>
-          <Suspense>
-            <Transition
-              onExit={(el, done) => {
-                const element = el as HTMLElement;
-                element.style.position = "absolute";
-                element.style.top = "0";
-                element.style.left = "0";
+interface AppProps {
+  children: JSX.Element;
+}
 
-                const a = el.animate([{ opacity: 1 }, { opacity: 0 }], {
-                  duration: 300,
-                });
-                a.finished.then(done);
-              }}
-            >
-              {props.children}
-            </Transition>
-          </Suspense>
-        </>
-      )}
-    >
-      <FileRoutes />
-    </HashRouter>
-  );
+
+const [initialized, setInitialized] = createSignal(false);
+
+export default function App(props: AppProps) {
+  const navigate = useNavigate();
+
+  if (!initialized()) {
+    setInitialized(true);
+    navigate("/loading");
+  }
+
+  return <div class="font-primary text-base text-white">{props.children}</div>;
 }

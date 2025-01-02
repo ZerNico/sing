@@ -10,7 +10,7 @@ export default defineConfig({
   },
   theme: {
     fontFamily: {
-      primary: `"Inter Variable",${presetUno()?.theme?.fontFamily?.sans}`,
+      primary: `"Lato",${presetUno()?.theme?.fontFamily?.sans}`,
     },
     fontSize: {
       xs: ["0.67cqw", "1"],

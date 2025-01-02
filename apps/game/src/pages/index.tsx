@@ -1,9 +1,9 @@
 import { A, useNavigate } from "@solidjs/router";
 import { onMount } from "solid-js";
 import { withQuery } from "ufo";
-import Layout from "../components/layout";
+import Layout from "~/components/layout";
 
-export default function Initial() {
+export default function Index() {
   const navigate = useNavigate();
 
   onMount(() => {
