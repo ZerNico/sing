@@ -54,7 +54,7 @@ export default function Menu(props: MenuProps) {
       <For each={buttons}>
         {(button, index) => (
           <Button
-            gradient="gradient-settings"
+            gradient="gradient-sing"
             selected={position() === index()}
             active={pressed() && position() === index()}
             onClick={button.action}

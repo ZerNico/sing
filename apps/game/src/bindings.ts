@@ -12,6 +12,14 @@ async getReplayGain(path: string) : Promise<Result<ReplayGainInfo, AppError>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async getMicrophones() : Promise<Result<Microphone[], AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_microphones") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -26,6 +34,7 @@ async getReplayGain(path: string) : Promise<Result<ReplayGainInfo, AppError>> {
 /** user-defined types **/
 
 export type AppError = { type: "IoError"; data: string } | { type: "LoftyError"; data: string }
+export type Microphone = { name: string; channels: number }
 export type ReplayGainInfo = { track_gain: number | null; track_peak: number | null; album_gain: number | null; album_peak: number | null }
 
 /** tauri-specta globals **/

@@ -1,4 +1,4 @@
-import { type Accessor, Match, type Ref, Show, Switch, createEffect, createSignal, on } from "solid-js";
+import { type Accessor, Match, type Ref, Show, Switch, createEffect, createSignal, on, onCleanup } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { createRefContent } from "~/lib/utils/ref";
 
@@ -133,10 +133,24 @@ export default function SongPlayer(props: SongPlayerProps) {
       ready,
       play,
       pause,
-      getCurrentTime: () => audioRef?.currentTime || videoRef?.currentTime || 0,
+      getCurrentTime: () => {
+        if (audioRef) {
+          return audioRef.currentTime;
+        }
+        if (videoRef) {
+          return videoRef.currentTime;
+        }
+        return 0;
+      },
       getDuration: () => audioRef?.duration || videoRef?.duration || 0,
     })
   );
+
+  onCleanup(() => {
+    audioRef?.pause();
+    videoRef?.pause();
+    clearTimeout(videoGapTimer());
+  });
 
   return (
     <div

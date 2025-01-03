@@ -30,3 +30,4 @@ specta-typescript = "0.0.7"
 tauri-specta = { version = "=2.0.0-rc.20", features = ["derive", "typescript"] }
 thiserror = "2.0.9"
 lofty = "0.21.1"
+cpal = { git = "https://github.com/RustAudio/cpal.git", rev = "582e93c41d6073df5d5da871989c5fd581ea04b8" }

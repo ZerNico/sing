@@ -6,6 +6,7 @@ import { createEffect, createMemo, on, onCleanup } from "solid-js";
 
 interface UseNavigationOptions {
   layer: number;
+  enabled?: boolean;
   onKeydown?: (event: NavigationEvent) => void;
   onKeyup?: (event: NavigationEvent) => void;
   onHold?: (event: NavigationEvent) => void;
@@ -110,14 +111,17 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
   );
 
   const isActive = createMemo(() => {
+    const opts = access(options);
     const highestLayer = Math.max(...layerInstances.keys());
-    return access(options)?.layer === highestLayer;
+    return (opts?.enabled ?? true) && opts?.layer === highestLayer;
   });
 
   createEffect(() => {
     if (!isActive()) return;
 
     const opts = access(options);
+    if (opts?.enabled === false) return;
+
     const handleKeydown = (e: NavigationEvent) => opts?.onKeydown?.(e);
     const handleKeyup = (e: NavigationEvent) => opts?.onKeyup?.(e);
     const handleHold = (e: NavigationEvent) => opts?.onHold?.(e);

@@ -1,5 +1,6 @@
 import { type Accessor, type JSX, createContext, createEffect, createMemo, createSignal, useContext } from "solid-js";
 import type { Phrase } from "~/lib/ultrastar/phrase";
+import { type Microphone, settingsStore } from "~/stores/settings";
 import { useGame } from "./game";
 
 interface CreatePlayerOptions {
@@ -11,6 +12,7 @@ interface PlayerContextValue {
   phraseIndex: Accessor<number>;
   phrase: Accessor<Phrase | undefined>;
   nextPhrase: Accessor<Phrase | undefined>;
+  microphone: Accessor<Microphone>;
 }
 
 const PlayerContext = createContext<PlayerContextValue>();
@@ -41,25 +43,33 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
     }
   });
 
+  const microphone = createMemo(() => {
+    const mic = settingsStore.microphones()[options().index];
+    if (!mic) {
+      throw new Error("Microphone not found");
+    }
+    return mic;
+  });
+
+  const values = {
+    index: () => options().index,
+    phraseIndex,
+    phrase,
+    nextPhrase,
+    microphone
+  }
+
   const PlayerProvider = (props: { children: JSX.Element }) => (
     <PlayerContext.Provider
-      value={{
-        index: () => options().index,
-        phraseIndex,
-        phrase,
-        nextPhrase,
-      }}
+      value={values}
     >
       {props.children}
     </PlayerContext.Provider>
   );
 
   return {
-    index: () => options().index,
-    PlayerProvider,
-    phrase,
-    nextPhrase,
-    phraseIndex,
+    ...values,
+    PlayerProvider
   };
 }
 

@@ -13,7 +13,7 @@ interface ButtonProps {
 export default function Button(props: ButtonProps) {
   return (
     <button
-      class="grid overflow-hidden rounded-lg transition-all ease-in-out active:scale-95"
+      class="grid h-6.5cqh items-center overflow-hidden rounded-lg transition-all ease-in-out active:scale-95"
       classList={{
         [props.class || ""]: true,
         "scale-95": props.active,
@@ -22,7 +22,7 @@ export default function Button(props: ButtonProps) {
       onClick={props.onClick}
       onMouseEnter={props.onMouseEnter}
     >
-      <div class="z-2 col-start-1 row-start-1 py-1.4cqw text-center font-bold text-xl">{props.children}</div>
+      <div class="z-2 col-start-1 row-start-1 text-center font-bold text-xl">{props.children}</div>
       <div
         class="col-start-1 row-start-1 h-full w-full bg-gradient-to-r transition-all"
         classList={{

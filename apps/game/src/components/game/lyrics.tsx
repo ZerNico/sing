@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createMemo } from "solid-js";
+import { For, Show, createMemo } from "solid-js";
 import { useGame } from "~/lib/game/game";
 import { usePlayer } from "~/lib/game/player";
 import { msToBeatWithoutGap } from "~/lib/ultrastar/bpm";
@@ -30,6 +30,8 @@ export default function Lyrics() {
       start: percentage + 30,
     };
   });
+  
+  const micColor = () => `rgb(var(--${player.microphone().color}-500))`;
 
   return (
     <div
@@ -46,7 +48,7 @@ export default function Lyrics() {
             {(percentage) => (
               <div
                 style={{
-                  "background-image": `linear-gradient(270deg, transparent ${percentage().end}%, #ff0000 ${
+                  "background-image": `linear-gradient(270deg, transparent ${percentage().end}%, ${micColor()} ${
                     percentage().end
                   }%, transparent ${percentage().start}%`,
                 }}
@@ -57,7 +59,7 @@ export default function Lyrics() {
         </div>
         <div>
           <For fallback={<span class="text-4xl text-transparent leading-relaxed">{"\u00A0"}</span>} each={player.phrase()?.notes}>
-            {(note) => <LyricsNote note={note} />}
+            {(note) => <LyricsNote note={note} micColor={micColor()} />}
           </For>
         </div>
         <div />
@@ -82,6 +84,7 @@ export default function Lyrics() {
 
 interface LyricsNoteProps {
   note: Note;
+  micColor: string;
 }
 function LyricsNote(props: LyricsNoteProps) {
   const game = useGame();
@@ -99,7 +102,7 @@ function LyricsNote(props: LyricsNoteProps) {
   return (
     <span
       style={{
-        "background-image": `linear-gradient(to right, #ff0000 ${percentage()}%, white ${percentage()}%)`,
+        "background-image": `linear-gradient(to right, ${props.micColor} ${percentage()}%, white ${percentage()}%)`,
       }}
       class="whitespace-nowrap bg-clip-text text-4xl text-transparent leading-relaxed"
       classList={{

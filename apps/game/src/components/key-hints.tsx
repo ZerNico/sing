@@ -29,9 +29,9 @@ export default function KeyHints(props: KeyHintsProps) {
               <KeyHint
                 label="Navigate"
                 icon={
-                  <div class="flex flex-col items-center text-0.6cqw">
+                  <div class="flex flex-col items-center gap-0.1cqw text-0.6cqw">
                     <IconUpArrowKey />
-                    <div class="flex">
+                    <div class="flex gap-0.1cqw">
                       <IconLeftArrowKey />
                       <IconDownArrowKey />
                       <IconRightArrowKey />

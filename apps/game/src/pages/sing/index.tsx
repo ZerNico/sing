@@ -51,7 +51,7 @@ export default function Sing() {
         <div class="flex flex-grow flex-col justify-center">
           <p class="text-xl">{currentSong()?.artist}</p>
           <div class="max-w-50cqw">
-            <span class="gradient-sing bg-gradient-to-b bg-clip-text font-semibold text-6xl text-transparent ">{currentSong()?.title}</span>
+            <span class="gradient-sing bg-gradient-to-b bg-clip-text font-bold text-6xl text-transparent ">{currentSong()?.title}</span>
           </div>
         </div>
         <div>

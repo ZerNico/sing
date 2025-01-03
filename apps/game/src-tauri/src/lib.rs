@@ -8,7 +8,8 @@ use commands::*;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = Builder::<tauri::Wry>::new().commands(collect_commands![
-        meta::get_replay_gain
+        meta::get_replay_gain,
+        microphones::get_microphones
     ]);
 
     #[cfg(debug_assertions)]

@@ -1,14 +1,14 @@
 import "uno.css";
-import "./styles.scss";
+import "./assets/scss/styles.scss";
 import "@unocss/reset/tailwind.css";
 import '@fontsource/lato/300.css';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/700.css';
-import { render, Suspense } from "solid-js/web";
 import { Router } from "@solidjs/router";
+import { Suspense, render } from "solid-js/web";
+import { Transition } from "solid-transition-group";
 import routes from "~solid-pages";
 import App from "./app";
-import { Transition } from "solid-transition-group";
 
 const root = document.getElementById("root");
 
