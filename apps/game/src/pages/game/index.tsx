@@ -1,4 +1,4 @@
-import { Show, createSignal, onMount } from "solid-js";
+import { Show, createSignal, on, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
 import Menu from "~/components/game/menu";
@@ -13,7 +13,7 @@ export default function Game() {
 
   const isPaused = () => !playing() && started();
 
-  const { GameProvider, play, pause, playing, start, started } = createGame(() => ({
+  const { GameProvider, play, pause, playing, start, started, stop } = createGame(() => ({
     songPlayerRef: songPlayerRef(),
     song: roundStore.settings()?.song,
   }));
@@ -27,8 +27,8 @@ export default function Game() {
     },
   }));
 
-  const waitForStart = () => {
-    const started = start();
+  const waitForStart = async () => {
+    const started = await start();
     if (!started) {
       setTimeout(waitForStart, 500);
     }
@@ -38,6 +38,10 @@ export default function Game() {
     setTimeout(() => {
       waitForStart();
     }, 3000);
+  });
+
+  onCleanup(async () => {
+    await stop();
   });
 
   return (

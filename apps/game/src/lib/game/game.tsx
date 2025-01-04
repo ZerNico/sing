@@ -1,8 +1,10 @@
 import createRAF from "@solid-primitives/raf";
 import { type Accessor, type JSX, batch, createContext, createSignal, useContext } from "solid-js";
+import { commands } from "~/bindings";
 import type { SongPlayerRef } from "~/components/song-player";
 import { msToBeat } from "~/lib/ultrastar/bpm";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
+import { settingsStore } from "~/stores/settings";
 
 export interface CreateGameOptions {
   songPlayerRef?: SongPlayerRef;
@@ -12,7 +14,8 @@ export interface CreateGameOptions {
 export interface GameContextValue {
   play: () => void;
   pause: () => void;
-  start: () => boolean;
+  start: () => Promise<boolean>;
+  stop: () => Promise<void>;
   playing: Accessor<boolean>;
   ms: Accessor<number>;
   beat: Accessor<number>;
@@ -27,18 +30,26 @@ export function createGame(options: Accessor<CreateGameOptions>) {
   const [beat, setBeat] = createSignal(0);
   const [started, setStarted] = createSignal(false);
 
-  const start = () => {
+  const start = async () => {
     const opts = options();
 
     if (!opts.songPlayerRef?.ready()) {
       return false;
     }
 
+    settingsStore.microphones();
+    const micOptions = settingsStore.microphones().map((mic) => ({ name: mic.name, channel: mic.channel }));
+    await commands.startRecording(micOptions);
+
     opts.songPlayerRef.play();
     setStarted(true);
     startLoop();
 
     return true;
+  };
+
+  const stop = async () => {
+    await commands.stopRecording();
   };
 
   const play = () => {
@@ -89,6 +100,7 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     start,
     playing,
     started,
+    stop,
     ms,
     beat,
     song: () => options().song,

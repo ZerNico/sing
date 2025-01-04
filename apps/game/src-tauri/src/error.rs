@@ -9,16 +9,33 @@ pub enum AppError {
 
     #[error("lofty error: {0}")]
     LoftyError(String),
+
+    #[error("recorder error: {0}")]
+    RecorderError(String),
+
+    #[error("cpal error: {0}")]
+    CpalError(String),
 }
 
-impl From<std::io::Error> for AppError {
-    fn from(e: std::io::Error) -> Self {
-        AppError::IoError(e.to_string())
-    }
+macro_rules! impl_from_errors {
+    ($(($error:ty, $variant:ident)),*) => {
+        $(
+            impl From<$error> for AppError {
+                fn from(e: $error) -> Self {
+                    AppError::$variant(e.to_string())
+                }
+            }
+        )*
+    };
 }
 
-impl From<lofty::error::LoftyError> for AppError {
-    fn from(e: lofty::error::LoftyError) -> Self {
-        AppError::LoftyError(e.to_string())
-    }
-}
+impl_from_errors!(
+    (std::io::Error, IoError),
+    (lofty::error::LoftyError, LoftyError),
+    (cpal::StreamError, CpalError),
+    (cpal::DefaultStreamConfigError, CpalError),
+    (cpal::DevicesError, CpalError),
+    (cpal::DeviceNameError, CpalError),
+    (cpal::BuildStreamError, CpalError),
+    (cpal::PlayStreamError, CpalError)
+);
