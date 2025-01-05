@@ -6,6 +6,7 @@ import Layout from "~/components/layout";
 import TitleBar from "~/components/title-bar";
 import Button from "~/components/ui/button";
 import Select from "~/components/ui/select";
+import Slider from "~/components/ui/slider";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { type Microphone, settingsStore } from "~/stores/settings";
@@ -48,7 +49,7 @@ export default function MicrophoneSettings() {
         <Show when={microphones()}>
           {(microphones) => {
             const [microphone, setMicrophone] = createSignal(
-              settingsStore.microphones()[index()] || { name: microphones()[0]?.name || null, channel: 1, color: "sky" }
+              settingsStore.microphones()[index()] || { name: microphones()[0]?.name || null, channel: 1, color: "sky", delay: 200 }
             );
 
             const deleteMicrophone = () => {
@@ -99,6 +100,17 @@ export default function MicrophoneSettings() {
                       style={{ background: color ? `rgb(var(--${color}-500))` : "transparent" }}
                     />
                   ),
+                },
+                {
+                  type: "slider",
+                  label: "Delay",
+                  value: microphone().delay,
+                  min: 0,
+                  max: 500,
+                  step: 250,
+                  onChange: (delay: number) => {
+                    setMicrophone((prev) => ({ ...prev, delay }));
+                  }
                 },
                 {
                   type: "button",
@@ -170,6 +182,20 @@ export default function MicrophoneSettings() {
                           />
                         )}
                       </Match>
+                      <Match when={button.type === "slider" && button}>
+                        {(button) => (
+                          <Slider
+                            selected={position() === index()}
+                            gradient="gradient-settings"
+                            label={button().label}
+                            value={button().value}
+                            min={button().min}
+                            max={button().max}
+                            onChange={button().onChange}
+                            onMouseEnter={() => set(index())}
+                          />
+                        )}
+                      </Match>
                       <Match when={button.type === "button" && button}>
                         {(button) => (
                           <Button
@@ -215,6 +241,15 @@ type Input =
       value: number | null;
       onChange: (value: number) => void;
       options: number[];
+    }
+  | {
+      type: "slider";
+      label: string;
+      value: number;
+      min: number;
+      max: number;
+      step: number;
+      onChange: (value: number) => void;
     }
   | {
       type: "button";

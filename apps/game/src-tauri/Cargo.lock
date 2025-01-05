@@ -1065,6 +1065,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d6ef0072f8a535281e4876be788938b528e9a1d43900b82c2569af7da799125"
 
 [[package]]
+name = "dywapitchtrack"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1bf82758a73e182bce0c9afebb454ea2912de32ed14a695b10d2a755482b743"
+
+[[package]]
 name = "either"
 version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1351,6 +1357,7 @@ version = "0.1.0"
 dependencies = [
  "cpal",
  "crossbeam",
+ "dywapitchtrack",
  "lofty",
  "ringbuf",
  "serde",

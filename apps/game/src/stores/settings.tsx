@@ -5,6 +5,7 @@ export interface Microphone {
   name: string;
   channel: number;
   color: string;
+  delay: number;
 }
 
 function createSettingsStore() {

@@ -21,9 +21,9 @@ async getMicrophones() : Promise<Result<Microphone[], AppError>> {
     else return { status: "error", error: e  as any };
 }
 },
-async startRecording(options: MicrophoneOptions[]) : Promise<Result<null, AppError>> {
+async startRecording(options: MicrophoneOptions[], samplesPerBeat: number) : Promise<Result<null, AppError>> {
     try {
-    return { status: "ok", data: await TAURI_INVOKE("start_recording", { options }) };
+    return { status: "ok", data: await TAURI_INVOKE("start_recording", { options, samplesPerBeat }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
@@ -32,6 +32,14 @@ async startRecording(options: MicrophoneOptions[]) : Promise<Result<null, AppErr
 async stopRecording() : Promise<Result<null, AppError>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("stop_recording") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async getPitch(index: number) : Promise<Result<number, AppError>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_pitch", { index }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };

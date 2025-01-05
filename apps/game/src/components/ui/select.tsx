@@ -56,7 +56,7 @@ export default function Select<T extends string | number>(props: SelectProps<T>)
       />
       <div class="z-2 col-start-1 row-start-1 mx-auto grid w-full max-w-80cqw grid-cols-[1fr_3fr] items-center">
         <div class="text-center font-bold text-xl">{props.label}</div>
-        <div class="flex items-center">
+        <div class="flex items-center gap-2cqw">
           <button type="button" onClick={() => changeOptions("left")}>
             <IconTriangleLeft />
           </button>

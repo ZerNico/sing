@@ -2,7 +2,7 @@ mod commands;
 mod error;
 mod audio;
 
-use std::sync::Mutex;
+use std::sync::RwLock;
 
 use audio::recorder::Recorder;
 use commands::*;
@@ -11,13 +11,13 @@ use tauri::Manager;
 use tauri_specta::{collect_commands, Builder};
 
 pub struct AppState {
-    recorder: Option<Recorder>,
+    recorder: RwLock<Option<Recorder>>,
 }
 
 impl Default for AppState {
     fn default() -> Self {
         Self {
-            recorder: None,
+            recorder: RwLock::new(None),
         }
     }
 }
@@ -29,6 +29,7 @@ pub fn run() {
         microphones::get_microphones,
         pitch::start_recording,
         pitch::stop_recording,
+        pitch::get_pitch,
     ]);
 
     #[cfg(debug_assertions)]
@@ -38,7 +39,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .setup(|app| {
-            app.manage(Mutex::new(AppState::default()));
+            app.manage(AppState::default());
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())

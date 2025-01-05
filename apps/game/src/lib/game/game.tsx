@@ -2,7 +2,7 @@ import createRAF from "@solid-primitives/raf";
 import { type Accessor, type JSX, batch, createContext, createSignal, useContext } from "solid-js";
 import { commands } from "~/bindings";
 import type { SongPlayerRef } from "~/components/song-player";
-import { msToBeat } from "~/lib/ultrastar/bpm";
+import { beatToMsWithoutGap, msToBeat } from "~/lib/ultrastar/bpm";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { settingsStore } from "~/stores/settings";
 
@@ -37,9 +37,14 @@ export function createGame(options: Accessor<CreateGameOptions>) {
       return false;
     }
 
+    if (!opts.song) {
+      throw new Error("No song provided");
+    }
+
     settingsStore.microphones();
     const micOptions = settingsStore.microphones().map((mic) => ({ name: mic.name, channel: mic.channel }));
-    await commands.startRecording(micOptions);
+    const samplesPerBeat = Math.floor((48000 * beatToMsWithoutGap(opts.song, 1)) / 1000);
+    await commands.startRecording(micOptions, samplesPerBeat);
 
     opts.songPlayerRef.play();
     setStarted(true);
