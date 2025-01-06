@@ -1,5 +1,4 @@
 use tauri::{AppHandle, Manager, State};
-
 use crate::{
     audio::recorder::{MicrophoneOptions, Recorder},
     error::AppError,
@@ -39,6 +38,9 @@ pub fn stop_recording(state: State<'_, AppState>) -> Result<(), AppError> {
         return Err(AppError::RecorderError("recorder not started".to_string()));
     }
 
+    let mut processors = state.processors.write().unwrap();
+    processors.clear();
+
     recorder.take();
     Ok(())
 }
@@ -47,9 +49,12 @@ pub fn stop_recording(state: State<'_, AppState>) -> Result<(), AppError> {
 #[specta::specta]
 pub async fn get_pitch(state: State<'_, AppState>, index: i32) -> Result<f32, AppError> {
     let processors = state.processors.read().unwrap();
+
     let processor = processors
         .get(&(index as usize))
         .ok_or(AppError::ProcessorError("processor not found".to_string()))?;
     let mut processor = processor.lock().unwrap();
-    Ok(processor.get_pitch())
+    let pitch = processor.get_pitch();
+
+    Ok(pitch)
 }

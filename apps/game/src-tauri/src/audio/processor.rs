@@ -1,5 +1,5 @@
 use dywapitchtrack::DywaPitchTracker;
-use ringbuf::{traits::{Consumer, Producer}, HeapRb};
+use ringbuf::{traits::{Consumer, Producer, RingBuffer}, HeapRb};
 
 use super::recorder::MicrophoneOptions;
 
@@ -25,7 +25,7 @@ impl Processor {
     }
 
     pub fn push_audio_data(&mut self, data: &[f32]) {
-        self.audio_buffer.push_slice(data);
+        self.audio_buffer.push_slice_overwrite(data);
     }
 
     pub fn get_pitch(&mut self) -> f32 {
