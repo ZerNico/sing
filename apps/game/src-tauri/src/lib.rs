@@ -1,10 +1,13 @@
+mod audio;
 mod commands;
 mod error;
-mod audio;
 
-use std::sync::RwLock;
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex, RwLock},
+};
 
-use audio::recorder::Recorder;
+use audio::{processor::Processor, recorder::Recorder};
 use commands::*;
 use specta_typescript::Typescript;
 use tauri::Manager;
@@ -12,12 +15,14 @@ use tauri_specta::{collect_commands, Builder};
 
 pub struct AppState {
     recorder: RwLock<Option<Recorder>>,
+    processors: RwLock<HashMap<usize, Arc<Mutex<Processor>>>>,
 }
 
 impl Default for AppState {
     fn default() -> Self {
         Self {
             recorder: RwLock::new(None),
+            processors: RwLock::new(HashMap::new()),
         }
     }
 }

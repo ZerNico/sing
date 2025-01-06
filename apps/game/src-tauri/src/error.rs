@@ -13,6 +13,9 @@ pub enum AppError {
     #[error("recorder error: {0}")]
     RecorderError(String),
 
+    #[error("processor error: {0}")]
+    ProcessorError(String),
+
     #[error("cpal error: {0}")]
     CpalError(String),
 }

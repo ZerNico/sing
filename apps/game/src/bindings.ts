@@ -57,7 +57,7 @@ async getPitch(index: number) : Promise<Result<number, AppError>> {
 
 /** user-defined types **/
 
-export type AppError = { type: "IoError"; data: string } | { type: "LoftyError"; data: string } | { type: "RecorderError"; data: string } | { type: "CpalError"; data: string }
+export type AppError = { type: "IoError"; data: string } | { type: "LoftyError"; data: string } | { type: "RecorderError"; data: string } | { type: "ProcessorError"; data: string } | { type: "CpalError"; data: string }
 export type Microphone = { name: string; channels: number }
 export type MicrophoneOptions = { name: string; channel: number }
 export type ReplayGainInfo = { track_gain: number | null; track_peak: number | null; album_gain: number | null; album_peak: number | null }
