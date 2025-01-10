@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { For, type JSX, Match, Show, Suspense, Switch, createResource, createSignal } from "solid-js";
+import { type Accessor, For, type JSX, Match, Show, Suspense, Switch, createResource, createSignal } from "solid-js";
 import { commands } from "~/bindings";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
@@ -27,10 +27,10 @@ export default function MicrophoneSettings() {
     return [];
   });
 
-  const params = useParams<{ index: string }>();
-  const index = () => {
-    const index = Number.parseInt(params.index, 10);
-    return Number.isNaN(index) ? -1 : index;
+  const params = useParams<{ id: string }>();
+  const id = () => {
+    const id = Number.parseInt(params.id, 10);
+    return Number.isNaN(id) ? -1 : id;
   };
 
   return (
@@ -49,11 +49,18 @@ export default function MicrophoneSettings() {
         <Show when={microphones()}>
           {(microphones) => {
             const [microphone, setMicrophone] = createSignal(
-              settingsStore.microphones()[index()] || { name: microphones()[0]?.name || null, channel: 1, color: "sky", delay: 200 }
+              settingsStore.microphones()[id()] || {
+                name: microphones()[0]?.name || null,
+                channel: 1,
+                color: "sky",
+                delay: 200,
+                gain: 1,
+                threshold: 2,
+              }
             );
 
             const deleteMicrophone = () => {
-              settingsStore.deleteMicrophone(index());
+              settingsStore.deleteMicrophone(id());
               onBack();
             };
 
@@ -62,69 +69,90 @@ export default function MicrophoneSettings() {
               if (!isValidMicrophone(mic)) {
                 return;
               }
-              settingsStore.saveMicrophone(index(), mic);
+              settingsStore.saveMicrophone(id(), mic);
               onBack();
             };
 
-            const inputs = (): Input[] =>
-              [
-                {
-                  type: "select-string",
-                  label: "Microphone",
-                  value: microphone().name,
-                  onChange: (name: string) => {
-                    setMicrophone((prev) => ({ ...prev, name }));
-                  },
-                  options: microphones().map((microphone) => microphone.name),
+            const inputs: Input[] = [
+              {
+                type: "select-string",
+                label: "Microphone",
+                value: () => microphone().name,
+                onChange: (name: string) => {
+                  setMicrophone((prev) => ({ ...prev, name }));
                 },
-                {
-                  type: "select-number",
-                  label: "Channel",
-                  value: microphone().channel,
-                  onChange: (channel: number) => {
-                    setMicrophone((prev) => ({ ...prev, channel }));
-                  },
-                  options: [1, 2, 3, 4, 5, 6, 7, 8],
+                options: microphones().map((microphone) => microphone.name),
+              },
+              {
+                type: "select-number",
+                label: "Channel",
+                value: () => microphone().channel,
+                onChange: (channel: number) => {
+                  setMicrophone((prev) => ({ ...prev, channel }));
                 },
-                {
-                  type: "select-string",
-                  label: "Color",
-                  value: microphone().color,
-                  onChange: (color: string) => {
-                    setMicrophone((prev) => ({ ...prev, color }));
-                  },
-                  options: ["sky", "red", "blue", "green", "pink", "purple", "yellow", "orange"],
-                  renderValue: (color: string | null) => (
-                    <div
-                      class="h-2cqw w-2cqw rounded-full border border-0.2cqw border-white"
-                      style={{ background: color ? `rgb(var(--${color}-500))` : "transparent" }}
-                    />
-                  ),
+                options: [1, 2, 3, 4, 5, 6, 7, 8],
+              },
+              {
+                type: "select-string",
+                label: "Color",
+                value: () => microphone().color,
+                onChange: (color: string) => {
+                  setMicrophone((prev) => ({ ...prev, color }));
                 },
-                {
-                  type: "slider",
-                  label: "Delay",
-                  value: microphone().delay,
-                  min: 0,
-                  max: 500,
-                  step: 250,
-                  onChange: (delay: number) => {
-                    setMicrophone((prev) => ({ ...prev, delay }));
-                  }
+                options: ["sky", "red", "blue", "green", "pink", "purple", "yellow", "orange"],
+                renderValue: (color: string | null) => (
+                  <div
+                    class="h-2cqw w-2cqw rounded-full border border-0.2cqw border-white"
+                    style={{ background: color ? `rgb(var(--${color}-500))` : "transparent" }}
+                  />
+                ),
+              },
+              {
+                type: "slider",
+                label: "Delay",
+                value: () => microphone().delay,
+                min: 0,
+                max: 500,
+                step: 10,
+                onInput: (delay: number) => {
+                  setMicrophone((prev) => ({ ...prev, delay }));
                 },
-                {
-                  type: "button",
-                  label: "Delete",
-                  action: deleteMicrophone,
+              },
+              {
+                type: "slider",
+                label: "Gain",
+                value: () => microphone().gain,
+                min: 0,
+                max: 3,
+                step: 0.1,
+                onInput: (gain: number) => {
+                  setMicrophone((prev) => ({ ...prev, gain }));
                 },
-                {
-                  type: "button",
-                  label: "Save",
-                  action: saveMicrophone,
+              },
+              {
+                type: "slider",
+                label: "Threshold",
+                value: () => microphone().threshold,
+                min: 0,
+                max: 5,
+                step: 0.1,
+                onInput: (threshold: number) => {
+                  setMicrophone((prev) => ({ ...prev, threshold }));
                 },
-              ] as const;
+              },
+              {
+                type: "button",
+                label: "Delete",
+                action: deleteMicrophone,
+              },
+              {
+                type: "button",
+                label: "Save",
+                action: saveMicrophone,
+              },
+            ];
 
-            const { position, increment, decrement, set } = createLoop(() => inputs().length);
+            const { position, increment, decrement, set } = createLoop(() => inputs.length);
 
             useNavigation(() => ({
               layer: 0,
@@ -142,7 +170,7 @@ export default function MicrophoneSettings() {
               onKeyup(event) {
                 if (event.action === "confirm") {
                   setPressed(false);
-                  const button = inputs()[position()];
+                  const button = inputs[position()];
                   if (button?.type === "button") {
                     button.action();
                   }
@@ -152,7 +180,7 @@ export default function MicrophoneSettings() {
 
             return (
               <div class="flex w-full flex-grow flex-col justify-center">
-                <For each={inputs()}>
+                <For each={inputs}>
                   {(button, index) => (
                     <Switch>
                       <Match when={button.type === "select-string" && button}>
@@ -161,7 +189,7 @@ export default function MicrophoneSettings() {
                             selected={position() === index()}
                             gradient="gradient-settings"
                             label={button().label}
-                            value={button().value}
+                            value={button().value()}
                             options={button().options}
                             onChange={button().onChange}
                             renderValue={button().renderValue}
@@ -175,7 +203,7 @@ export default function MicrophoneSettings() {
                             selected={position() === index()}
                             gradient="gradient-settings"
                             label={button().label}
-                            value={button().value}
+                            value={button().value()}
                             options={button().options}
                             onChange={button().onChange}
                             onMouseEnter={() => set(index())}
@@ -187,12 +215,9 @@ export default function MicrophoneSettings() {
                           <Slider
                             selected={position() === index()}
                             gradient="gradient-settings"
-                            label={button().label}
-                            value={button().value}
-                            min={button().min}
-                            max={button().max}
-                            onChange={button().onChange}
                             onMouseEnter={() => set(index())}
+                            {...button()}
+                            value={button().value()}
                           />
                         )}
                       </Match>
@@ -230,7 +255,7 @@ type Input =
   | {
       type: "select-string";
       label: string;
-      value: string | null;
+      value: Accessor<string | null>;
       onChange: (value: string) => void;
       options: string[];
       renderValue?: (value: string | null) => JSX.Element;
@@ -238,18 +263,18 @@ type Input =
   | {
       type: "select-number";
       label: string;
-      value: number | null;
+      value: Accessor<number | null>;
       onChange: (value: number) => void;
       options: number[];
     }
   | {
       type: "slider";
       label: string;
-      value: number;
+      value: Accessor<number>;
       min: number;
       max: number;
       step: number;
-      onChange: (value: number) => void;
+      onInput: (value: number) => void;
     }
   | {
       type: "button";

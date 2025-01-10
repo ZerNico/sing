@@ -6,6 +6,8 @@ export interface Microphone {
   channel: number;
   color: string;
   delay: number;
+  gain: number;
+  threshold: number;
 }
 
 function createSettingsStore() {

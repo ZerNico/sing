@@ -11,8 +11,10 @@ use tauri::{AppHandle, Manager};
 
 #[derive(Debug, Serialize, Deserialize, specta::Type, Clone)]
 pub struct MicrophoneOptions {
-    name: String,
-    channel: i32,
+    pub name: String,
+    pub channel: i32,
+    pub gain: f32,
+    pub threshold: f32,
 }
 
 pub struct Recorder {

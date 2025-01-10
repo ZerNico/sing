@@ -41,10 +41,8 @@ export function createGame(options: Accessor<CreateGameOptions>) {
       throw new Error("No song provided");
     }
 
-    settingsStore.microphones();
-    const micOptions = settingsStore.microphones().map((mic) => ({ name: mic.name, channel: mic.channel }));
     const samplesPerBeat = Math.floor((48000 * beatToMsWithoutGap(opts.song, 1)) / 1000);
-    await commands.startRecording(micOptions, samplesPerBeat);
+    await commands.startRecording(settingsStore.microphones(), samplesPerBeat);
 
     opts.songPlayerRef.play();
     setStarted(true);

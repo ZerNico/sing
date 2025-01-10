@@ -1,4 +1,4 @@
-import { Show, createSignal, on, onCleanup, onMount } from "solid-js";
+import { Show, createSignal, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
 import Menu from "~/components/game/menu";

@@ -1,5 +1,8 @@
 use dywapitchtrack::DywaPitchTracker;
-use ringbuf::{traits::{Consumer, Producer, RingBuffer}, HeapRb};
+use ringbuf::{
+    traits::{Consumer, RingBuffer},
+    HeapRb,
+};
 
 use super::recorder::MicrophoneOptions;
 
@@ -25,7 +28,8 @@ impl Processor {
     }
 
     pub fn push_audio_data(&mut self, data: &[f32]) {
-        self.audio_buffer.push_slice_overwrite(data);
+        let gained_data: Vec<f32> = data.iter().map(|&sample| self.apply_gain(sample)).collect();
+        self.audio_buffer.push_slice_overwrite(&gained_data);
     }
 
     pub fn get_pitch(&mut self) -> f32 {
@@ -35,14 +39,29 @@ impl Processor {
 
         let mut pitch = -1.0;
 
-        pitch = self
-            .pitchtracker
-            .compute_pitch(&samples, start_sample, self.samples_per_beat);
+        if self.above_noise_threshold(&samples, start_sample) {
+            pitch = self
+                .pitchtracker
+                .compute_pitch(&samples, start_sample, self.samples_per_beat);
+        }
 
         if pitch <= 0.0 {
             self.pitchtracker.clear_pitch_history();
         }
 
         pitch
+    }
+
+    fn apply_gain(&self, sample: f32) -> f32 {
+        (sample * self.options.gain).clamp(-1.0, 1.0)
+    }
+
+    fn above_noise_threshold(&self, data: &[f32], start_sample: usize) -> bool {
+        let min_threshold = self.options.threshold / 100.0;
+        let end_sample = start_sample + self.samples_per_beat;
+
+        data[start_sample..end_sample]
+            .iter()
+            .any(|&sample| sample > min_threshold)
     }
 }
