@@ -32,7 +32,7 @@ export default function Pitch() {
     // biome-ignore lint/style/noNonNullAssertion: Checked above
     const lastNote = notes.at(-1)!;
 
-    return lastNote.startBeat + lastNote.length - firstNote.startBeat - 1;
+    return lastNote.startBeat + lastNote.length - firstNote.startBeat;
   });
 
   const getNoteRow = (note: number) => {
@@ -71,7 +71,7 @@ export default function Pitch() {
         return {
           note,
           row: getNoteRow(note.midiNote),
-          column: note.startBeat - firstBeat,
+          column: note.startBeat - firstBeat + 1,
         };
       });
   });
@@ -104,6 +104,7 @@ interface PitchNoteProps {
 }
 
 export function PitchNote(props: PitchNoteProps) {
+  
   return (
     <div
       class=""
