@@ -30,7 +30,7 @@ export default function Lyrics() {
       start: percentage + 30,
     };
   });
-  
+
   const micColor = () => `rgb(var(--${player.microphone().color}-500))`;
 
   return (
@@ -42,7 +42,7 @@ export default function Lyrics() {
         "rounded-t-xl pb-1.8cqh": player.index() === 1,
       }}
     >
-      <div class="grid grid-cols-[1fr_min-content_1fr]">
+      <div class="grid grid-cols-[1fr_max-content_1fr]">
         <div class="pt-0.8cqw pr-0.3cqw pb-0.6cqw">
           <Show when={leadInPercentage()}>
             {(percentage) => (
@@ -104,9 +104,9 @@ function LyricsNote(props: LyricsNoteProps) {
       style={{
         "background-image": `linear-gradient(to right, ${props.micColor} ${percentage()}%, white ${percentage()}%)`,
       }}
-      class="whitespace-nowrap bg-clip-text text-4xl text-transparent leading-relaxed"
+      class="inline-block whitespace-pre bg-clip-text text-4xl text-transparent leading-relaxed"
       classList={{
-        italic: props.note.type === "Freestyle",
+        "-m-0.15cqw p-0.15cqw italic": props.note.type === "Freestyle",
       }}
     >
       {props.note.text}
