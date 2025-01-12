@@ -68,6 +68,27 @@ export default function Game() {
           <Show when={isPaused()}>
             <Menu class="absolute inset-0" onClose={play} />
           </Show>
+
+          <div
+            class="absolute inset-0 z-2 bg-black transition-opacity duration-1000"
+            classList={{
+              "pointer-events-none opacity-0": started(),
+            }}
+          >
+            <img
+              class="absolute inset-0 block h-full w-full scale-110 transform object-cover opacity-60 blur-xl"
+              src={roundStore.settings()?.song.coverUrl || roundStore.settings()?.song.backgroundUrl}
+              alt=""
+            />
+            <div class="relative flex h-full w-full flex-col items-center justify-center gap-2">
+              <p class="text-3xl">{roundStore.settings()?.song.artist}</p>
+              <div class="max-w-50cqw">
+                <span class="gradient-sing bg-gradient-to-b bg-clip-text font-bold text-7xl text-transparent ">
+                  {roundStore.settings()?.song.title}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </GameProvider>
     </GameLayout>
