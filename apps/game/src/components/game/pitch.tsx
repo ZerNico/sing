@@ -56,6 +56,26 @@ export default function Pitch() {
     return noteRow;
   };
 
+  const getProcessedBeatRow = (beat: ProcessedBeat) => {
+    if (beat.midiNote === beat.note.midiNote) {
+      return getNoteRow(beat.midiNote);
+    }
+
+    const noteRow = getNoteRow(beat.midiNote);
+    const alternativeNoteRow = noteRow - 12;
+
+    if (alternativeNoteRow >= 0 && alternativeNoteRow < ROW_COUNT) {
+      const correctNoteRow = getNoteRow(beat.note.midiNote);
+
+      if (Math.abs(correctNoteRow - noteRow) < Math.abs(correctNoteRow - alternativeNoteRow)) {
+        return noteRow;
+      }
+      return alternativeNoteRow;
+    }
+
+    return getNoteRow(beat.midiNote);
+  };
+
   const notes = createMemo(() => {
     const phrase = player.phrase();
 
@@ -86,14 +106,14 @@ export default function Pitch() {
     }
     const firstNote = phrase.notes[0];
     const lastNote = phrase.notes.at(-1);
-
     if (!firstNote || !lastNote) {
       return [];
     }
+
     const startBeat = firstNote.startBeat;
     const endBeat = lastNote.startBeat + lastNote.length;
 
-    const currentProcessedBeats: { beat: number; note: Note; midiNote: number }[] = [];
+    const currentProcessedBeats: ProcessedBeat[] = [];
 
     for (let i = startBeat; i < endBeat; i++) {
       const beat = player.processedBeats.get(i);
@@ -119,8 +139,8 @@ export default function Pitch() {
     }
     const startBeat = firstNote.startBeat;
 
-    const grouped: { beat: number; note: Note; midiNote: number; length: number; row: number; column: number }[] = [];
-    let currentGroup: { beat: number; note: Note; midiNote: number; length: number; row: number; column: number } | undefined = undefined;
+    const grouped: DisplayedProcessedBeat[] = [];
+    let currentGroup: DisplayedProcessedBeat | undefined = undefined;
 
     for (const beat of current) {
       if (!currentGroup) {
@@ -137,7 +157,7 @@ export default function Pitch() {
         currentGroup = {
           ...beat,
           length: 1,
-          row: getNoteRow(beat.midiNote),
+          row: getProcessedBeatRow(beat),
           column: beat.beat - startBeat + 1,
         };
         continue;
@@ -273,4 +293,16 @@ function ProcessedBeat(props: ProcessedBeatProps) {
       </div>
     </div>
   );
+}
+
+interface ProcessedBeat {
+  beat: number;
+  note: Note;
+  midiNote: number;
+}
+
+interface DisplayedProcessedBeat extends ProcessedBeat {
+  length: number;
+  row: number;
+  column: number;
 }
