@@ -26,6 +26,7 @@
   "dependencies": {
     "@fontsource/lato": "^5.1.1",
     "@solid-primitives/event-listener": "^2.3.3",
+    "@solid-primitives/keyed": "^1.4.0",
     "@solid-primitives/map": "^0.4.13",
     "@solid-primitives/raf": "^2.2.0",
     "@solid-primitives/storage": "^4.2.1",
