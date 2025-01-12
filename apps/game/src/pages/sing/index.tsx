@@ -69,12 +69,13 @@ interface SongScrollerProps {
 
 const DISPLAYED_SONGS = 11;
 const MIDDLE_SONG_INDEX = Math.floor(DISPLAYED_SONGS / 2);
+const [currentIndex, setCurrentIndex] = createSignal(0);
 
 function SongScroller(props: SongScrollerProps) {
   const [isPressed, setIsPressed] = createSignal(false);
   const [isHeld, setIsHeld] = createSignal(false);
   const [isFastScrolling, setIsFastScrolling] = createSignal(false);
-  const [currentIndex, setCurrentIndex] = createSignal(0);
+
   const [animating, setAnimating] = createSignal<null | "left" | "right">(null);
 
   onMount(() => {
