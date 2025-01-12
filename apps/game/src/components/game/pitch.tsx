@@ -1,6 +1,5 @@
 import { Key } from "@solid-primitives/keyed";
 import { For, createMemo, createSignal } from "solid-js";
-import { useGame } from "~/lib/game/game";
 import { usePlayer } from "~/lib/game/player";
 import type { Note } from "~/lib/ultrastar/note";
 import { clamp } from "~/lib/utils/math";
@@ -9,7 +8,6 @@ const ROW_COUNT = 16;
 
 export default function Pitch() {
   const player = usePlayer();
-  const game = useGame();
 
   const averageNote = createMemo(() => {
     const phrase = player.phrase();
@@ -253,7 +251,7 @@ interface ProcessedBeatProps {
 }
 
 function ProcessedBeat(props: ProcessedBeatProps) {
-  const [firstBeat, setFirstBeat] = createSignal(props.delayedBeat);
+  const [firstBeat] = createSignal(props.delayedBeat);
 
   const fill = createMemo(() => {
     const delayedBeat = props.delayedBeat;
@@ -275,13 +273,13 @@ function ProcessedBeat(props: ProcessedBeatProps) {
 
   return (
     <div
-      class="w"
+      class="relative min-w-0"
       style={{
         "grid-row": props.row,
         "grid-column": `${props.column} / span ${props.length}`,
       }}
     >
-      <div class="h-2/1 w-full translate-y--1/4 transform p-0.35cqw">
+      <div class="absolute h-2/1 w-full translate-y--1/4 transform p-0.35cqw">
         <div
           style={{
             "clip-path": `inset(0 ${fill()["clip-percentage"]}% 0 0)`,
