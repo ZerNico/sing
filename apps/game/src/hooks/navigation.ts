@@ -3,6 +3,7 @@ import { ReactiveMap } from "@solid-primitives/map";
 import { type MaybeAccessor, access } from "@solid-primitives/utils";
 import mitt from "mitt";
 import { createEffect, createMemo, on, onCleanup } from "solid-js";
+import { type GamepadButton, createGamepad } from "./gamepad";
 
 interface UseNavigationOptions {
   layer: number;
@@ -18,18 +19,38 @@ type NavigationEvent = {
   action: "left" | "right" | "up" | "down" | "back" | "confirm";
 };
 
-const KEY_MAPPINGS: Record<string, NavigationEvent["action"]> = {
-  ArrowLeft: "left",
-  ArrowRight: "right",
-  ArrowUp: "up",
-  ArrowDown: "down",
-  Escape: "back",
-  Enter: "confirm",
-  a: "left",
-  d: "right",
-  w: "up",
-  s: "down",
-  " ": "confirm",
+const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
+  ["ArrowLeft", "left"],
+  ["ArrowRight", "right"],
+  ["ArrowUp", "up"],
+  ["ArrowDown", "down"],
+  ["Escape", "back"],
+  ["Enter", "confirm"],
+  ["a", "left"],
+  ["d", "right"],
+  ["w", "up"],
+  ["s", "down"],
+  [" ", "confirm"],
+]);
+
+const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
+  ["DPAD_LEFT", "left"],
+  ["DPAD_RIGHT", "right"],
+  ["DPAD_UP", "up"],
+  ["DPAD_DOWN", "down"],
+  ["B", "back"],
+  ["A", "confirm"],
+]);
+
+const getAxisAction = (button: GamepadButton, direction: number): NavigationEvent["action"] | undefined => {
+  switch (button) {
+    case "L_AXIS_X":
+      return direction > 0 ? "right" : "left";
+    case "L_AXIS_Y":
+      return direction > 0 ? "down" : "up";
+    default:
+      return undefined;
+  }
 };
 
 type Events = {
@@ -43,11 +64,9 @@ const pressedKeys = new Map<string, number>();
 const HOLD_DELAY = 500;
 
 makeEventListener(window, "keydown", (event) => {
-  if (event.repeat) {
-    return;
-  }
+  if (event.repeat) return;
 
-  const action = KEY_MAPPINGS[event.key];
+  const action = KEY_MAPPINGS.get(event.key);
   if (action) {
     event.preventDefault();
     emitter.emit("keydown", {
@@ -68,11 +87,9 @@ makeEventListener(window, "keydown", (event) => {
 });
 
 makeEventListener(window, "keyup", (event) => {
-  if (event.repeat) {
-    return;
-  }
+  if (event.repeat) return;
 
-  const action = KEY_MAPPINGS[event.key];
+  const action = KEY_MAPPINGS.get(event.key);
   if (action) {
     event.preventDefault();
     const timeout = pressedKeys.get(event.key);
@@ -87,6 +104,50 @@ makeEventListener(window, "keyup", (event) => {
       action: action,
     });
   }
+});
+
+createGamepad({
+  onButtonDown: (event) => {
+    const action = GAMEPAD_MAPPINGS.get(event.button);
+    if (action) {
+      emitter.emit("keydown", {
+        origin: "gamepad",
+        originalKey: event.button,
+        action,
+      });
+      return;
+    }
+
+    const axisAction = getAxisAction(event.button, event.direction);
+    if (axisAction) {
+      emitter.emit("keydown", {
+        origin: "gamepad",
+        originalKey: event.button,
+        action: axisAction,
+      });
+    }
+  },
+  onButtonUp: (event) => {
+    const action = GAMEPAD_MAPPINGS.get(event.button);
+    if (action) {
+      emitter.emit("keyup", {
+        origin: "gamepad",
+        originalKey: event.button,
+        action,
+      });
+      return;
+    }
+
+    // Handle axes
+    const axisAction = getAxisAction(event.button, event.direction);
+    if (axisAction) {
+      emitter.emit("keyup", {
+        origin: "gamepad",
+        originalKey: event.button,
+        action: axisAction,
+      });
+    }
+  },
 });
 
 const layerInstances = new ReactiveMap<number, number>();
