@@ -1,7 +1,6 @@
-import { createEventListener } from "@solid-primitives/event-listener";
-import createRAF, { targetFPS } from "@solid-primitives/raf";
+import { makeEventListener } from "@solid-primitives/event-listener";
+import { createRAF } from "@solid-primitives/raf";
 import { type MaybeAccessor, access } from "@solid-primitives/utils";
-import { onMount } from "solid-js";
 
 export type GamepadButton =
   | "A"
@@ -31,7 +30,7 @@ interface GamepadButtonEvent {
   button: GamepadButton;
   repeat: boolean;
   gamepadId: number;
-  direction: number;
+  direction?: number;
 }
 
 interface CreateGamepadOptions {
@@ -40,99 +39,6 @@ interface CreateGamepadOptions {
 }
 
 const AXIS_THRESHOLD = 0.5;
-
-export const createGamepad = (options: MaybeAccessor<CreateGamepadOptions>) => {
-  const buttonHistories = new Map<number, Map<number, number>>();
-  const axesHistories = new Map<number, Map<number, number>>();
-
-  createEventListener(window, "gamepadconnected", (event) => {
-    buttonHistories.set(event.gamepad.index, new Map());
-    axesHistories.set(event.gamepad.index, new Map());
-  });
-
-  createEventListener(window, "gamepaddisconnected", (event) => {
-    buttonHistories.delete(event.gamepad.index);
-    axesHistories.delete(event.gamepad.index);
-  });
-
-  const [_running, start, _stop] = createRAF(
-    targetFPS(() => {
-      const gamepads = navigator.getGamepads();
-      const opts = access(options);
-
-      for (const gamepad of gamepads) {
-        if (!gamepad) continue;
-
-        const buttonHistory = buttonHistories.get(gamepad.index);
-        const axesHistory = axesHistories.get(gamepad.index);
-        if (!buttonHistory || !axesHistory) continue;
-
-        for (const [index, button] of gamepad.buttons.entries()) {
-          const isPressed = button.pressed || button.value > 0.5;
-          const wasPressed = buttonHistory.get(index) || 0;
-
-          if (isPressed && !wasPressed) {
-            buttonHistory.set(index, 1);
-            opts?.onButtonDown?.({
-              button: BUTTON_MAPPINGS.get(index) || "UNKNOWN",
-              repeat: false,
-              gamepadId: gamepad.index,
-              direction: button.value,
-            });
-          } else if (!isPressed && wasPressed) {
-            buttonHistory.set(index, 0);
-            opts?.onButtonUp?.({
-              button: BUTTON_MAPPINGS.get(index) || "UNKNOWN",
-              repeat: false,
-              gamepadId: gamepad.index,
-              direction: 0,
-            });
-          }
-        }
-
-        for (const [index, axis] of gamepad.axes.entries()) {
-          const prevValue = axesHistory.get(index) || 0;
-          const isActive = Math.abs(axis) > AXIS_THRESHOLD;
-          const wasActive = Math.abs(prevValue) > AXIS_THRESHOLD;
-
-          if (isActive !== wasActive) {
-            axesHistory.set(index, axis);
-            const axisButton = AXIS_MAPPINGS.get(index) || "UNKNOWN";
-
-            if (isActive) {
-              opts?.onButtonDown?.({
-                button: axisButton,
-                repeat: false,
-                gamepadId: gamepad.index,
-                direction: axis,
-              });
-            } else {
-              opts?.onButtonUp?.({
-                button: axisButton,
-                repeat: false,
-                gamepadId: gamepad.index,
-                direction: 0,
-              });
-            }
-          }
-        }
-      }
-    }, 60),
-  );
-
-  onMount(() => {
-    const gamepads = navigator.getGamepads();
-
-    for (const gamepad of gamepads) {
-      if (gamepad) {
-        buttonHistories.set(gamepad.index, new Map());
-        axesHistories.set(gamepad.index, new Map());
-      }
-    }
-
-    start();
-  });
-};
 
 const BUTTON_MAPPINGS = new Map<number, GamepadButton>([
   [0, "A"],
@@ -160,3 +66,98 @@ const AXIS_MAPPINGS = new Map<number, GamepadButton>([
   [2, "R_AXIS_X"],
   [3, "R_AXIS_Y"],
 ]);
+
+export function createGamepad(options: MaybeAccessor<CreateGamepadOptions>) {
+  const buttonStates = new Map<number, Map<number, boolean>>();
+  const axisStates = new Map<number, Map<number, number>>();
+
+  const currentGamepads = navigator.getGamepads();
+  for (const gamepad of currentGamepads) {
+    if (!gamepad) continue;
+    buttonStates.set(gamepad.index, new Map());
+    axisStates.set(gamepad.index, new Map());
+  }
+
+  const handleGamepadConnected = (e: GamepadEvent) => {
+    const gamepad = e.gamepad;
+    buttonStates.set(gamepad.index, new Map());
+    axisStates.set(gamepad.index, new Map());
+  };
+
+  const handleGamepadDisconnected = (e: GamepadEvent) => {
+    const gamepad = e.gamepad;
+    buttonStates.delete(gamepad.index);
+    axisStates.delete(gamepad.index);
+  };
+
+  const updateGamepadState = () => {
+    const currentGamepads = navigator.getGamepads();
+    const opts = access(options);
+
+    for (const gamepad of currentGamepads) {
+      if (!gamepad) continue;
+
+      const gamepadButtonStates = buttonStates.get(gamepad.index);
+      const gamepadAxisStates = axisStates.get(gamepad.index);
+
+      if (!gamepadButtonStates || !gamepadAxisStates) continue;
+
+      for (const [index, button] of gamepad.buttons.entries()) {
+        const prevState = gamepadButtonStates.get(index) || false;
+        const currentState = button.pressed;
+
+        if (currentState !== prevState) {
+          const buttonName = BUTTON_MAPPINGS.get(index) || "UNKNOWN";
+          const event: GamepadButtonEvent = {
+            button: buttonName,
+            repeat: false,
+            gamepadId: gamepad.index,
+          };
+
+          if (currentState && opts.onButtonDown) {
+            opts.onButtonDown(event);
+          } else if (!currentState && opts.onButtonUp) {
+            opts.onButtonUp(event);
+          }
+
+          gamepadButtonStates.set(index, currentState);
+        }
+      }
+
+      for (const [index, value] of gamepad.axes.entries()) {
+        const prevValue = gamepadAxisStates.get(index) || 0;
+
+        const prevCrossedThreshold = Math.abs(prevValue) > AXIS_THRESHOLD;
+        const currentCrossesThreshold = Math.abs(value) > AXIS_THRESHOLD;
+
+        if (
+          currentCrossesThreshold !== prevCrossedThreshold ||
+          (currentCrossesThreshold && Math.sign(value) !== Math.sign(prevValue))
+        ) {
+          const axisName = AXIS_MAPPINGS.get(index);
+          if (!axisName) continue;
+
+          const event: GamepadButtonEvent = {
+            button: axisName,
+            repeat: false,
+            gamepadId: gamepad.index,
+            direction: currentCrossesThreshold ? value : 0,
+          };
+
+          if (currentCrossesThreshold && opts.onButtonDown) {
+            opts.onButtonDown(event);
+          } else if (!currentCrossesThreshold && opts.onButtonUp) {
+            opts.onButtonUp(event);
+          }
+        }
+
+        gamepadAxisStates.set(index, value);
+      }
+    }
+  };
+
+  makeEventListener(window, "gamepadconnected", handleGamepadConnected);
+  makeEventListener(window, "gamepaddisconnected", handleGamepadDisconnected);
+  const [_running, start] = createRAF(updateGamepadState);
+  start();
+}

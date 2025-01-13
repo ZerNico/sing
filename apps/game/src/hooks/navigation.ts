@@ -128,6 +128,8 @@ createGamepad({
       return;
     }
 
+    if (!event.direction) return;
+
     const axisAction = getAxisAction(event.button, event.direction);
     if (axisAction) {
       emitter.emit("keydown", {
@@ -163,8 +165,8 @@ createGamepad({
       return;
     }
 
-    // Handle axes
-    const axisAction = getAxisAction(event.button, event.direction);
+
+    const axisAction = getAxisAction(event.button, event.direction ?? 0);
     if (axisAction) {
       emitter.emit("keyup", {
         origin: "gamepad",
