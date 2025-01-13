@@ -20,7 +20,7 @@ export default function Layout(props: LayoutProps) {
         }}
       >
         <div class="layout flex">
-          <div class="@container relative flex flex-grow">
+          <div class="@container relative flex flex-grow overflow-hidden">
             <div class="absolute inset-0 h-full w-full">{props.background}</div>
             <div class="relative z-1 grid flex-grow grid-rows-[min-content_1fr_min-content] gap-1.5cqw p-4cqw">
               <div>{props.header}</div>

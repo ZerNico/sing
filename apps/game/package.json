@@ -6,7 +6,8 @@
     "dev": "tauri dev",
     "build": "tauri build",
     "dev:vite": "vite",
-    "build:vite": "vite build"
+    "build:vite": "vite build",
+    "tauri": "tauri"
   },
   "license": "MIT",
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@tauri-apps/plugin-dialog": "^2.2.0",
     "@tauri-apps/plugin-fs": "^2.2.0",
     "@tauri-apps/plugin-opener": "^2.2.2",
+    "@tauri-apps/plugin-window-state": "^2.2.0",
     "mitt": "^3.0.1",
     "p-limit": "^6.2.0",
     "solid-js": "^1.9.3",

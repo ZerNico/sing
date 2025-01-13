@@ -30,8 +30,9 @@ impl Recorder {
     ) -> Result<Self, AppError> {
         let (stop_tx, stop_rx) = mpsc::channel();
 
-        let thread_handle =
-            thread::spawn(move || Self::run_recording_loop(app_handle, options, stop_rx, samples_per_beat));
+        let thread_handle = thread::spawn(move || {
+            Self::run_recording_loop(app_handle, options, stop_rx, samples_per_beat)
+        });
 
         Ok(Self {
             stop_tx,
