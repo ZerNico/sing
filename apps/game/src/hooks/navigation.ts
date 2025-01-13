@@ -61,6 +61,7 @@ type Events = {
 
 const emitter = mitt<Events>();
 const pressedKeys = new Map<string, number>();
+const pressedGamepadButtons = new Map<string, number>();
 const HOLD_DELAY = 500;
 
 makeEventListener(window, "keydown", (event) => {
@@ -115,6 +116,15 @@ createGamepad({
         originalKey: event.button,
         action,
       });
+
+      const timeout = window.setTimeout(() => {
+        emitter.emit("hold", {
+          origin: "gamepad",
+          originalKey: event.button,
+          action,
+        });
+      }, HOLD_DELAY);
+      pressedGamepadButtons.set(event.button, timeout);
       return;
     }
 
@@ -125,9 +135,24 @@ createGamepad({
         originalKey: event.button,
         action: axisAction,
       });
+
+      const timeout = window.setTimeout(() => {
+        emitter.emit("hold", {
+          origin: "gamepad",
+          originalKey: event.button,
+          action: axisAction,
+        });
+      }, HOLD_DELAY);
+      pressedGamepadButtons.set(event.button, timeout);
     }
   },
   onButtonUp: (event) => {
+    const timeout = pressedGamepadButtons.get(event.button);
+    if (timeout) {
+      clearTimeout(timeout);
+      pressedGamepadButtons.delete(event.button);
+    }
+
     const action = GAMEPAD_MAPPINGS.get(event.button);
     if (action) {
       emitter.emit("keyup", {
