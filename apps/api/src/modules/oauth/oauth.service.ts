@@ -67,15 +67,16 @@ class OAuthService {
 
   public getDiscordAuthUrl() {
     const state = generateState();
+    const codeVerifier = generateCodeVerifier();
     const scopes = ["identify", "email"];
-    const url = this.discord.createAuthorizationURL(state, scopes);
+    const url = this.discord.createAuthorizationURL(state, codeVerifier, scopes);
 
-    return { url, state };
+    return { url, state, codeVerifier };
   }
 
-  public async verifyDiscordCallback(code: string) {
+  public async verifyDiscordCallback(code: string, codeVerifier: string) {
     try {
-      const tokens = await this.discord.validateAuthorizationCode(code);
+      const tokens = await this.discord.validateAuthorizationCode(code, codeVerifier);
       return tokens;
     } catch (error) {}
   }

@@ -14,8 +14,8 @@
     "@kobalte/core": "^0.13.7",
     "@nokijs/server": "0.0.1-alpha.30",
     "@sing/email": "*",
-    "arctic": "^2.3.3",
-    "drizzle-orm": "^0.38.2",
+    "arctic": "^3.1.1",
+    "drizzle-orm": "^0.38.3",
     "jose": "^5.9.6",
     "nodemailer": "^6.9.16",
     "pg": "^8.13.1",
@@ -24,9 +24,9 @@
     "valibot": "1.0.0-beta.9"
   },
   "devDependencies": {
-    "@types/bun": "^1.1.14",
+    "@types/bun": "^1.1.16",
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.11.10",
-    "drizzle-kit": "^0.29.1"
+    "drizzle-kit": "^0.30.1"
   }
 }

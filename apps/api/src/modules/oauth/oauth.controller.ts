@@ -95,6 +95,14 @@ const discordAuthUrl = baseRoute.get("/discord/url", async ({ res, query }) => {
   const auth = oAuthService.getDiscordAuthUrl();
   const url = withQuery(auth.url.href, query);
 
+  res.setCookie("discord_code_verifier", auth.codeVerifier, {
+    secure: true,
+    httpOnly: true,
+    sameSite: "lax",
+    domain: config.BASE_DOMAIN,
+    path: "/v1.0/oauth/discord/callback",
+  });
+
   res.setCookie("discord_state", auth.state, {
     secure: true,
     httpOnly: true,
@@ -109,17 +117,27 @@ const discordAuthUrl = baseRoute.get("/discord/url", async ({ res, query }) => {
 const discordCallback = baseRoute
   .body(v.object({ code: v.string(), state: v.string() }))
   .post("/discord/callback", async ({ res, getCookie, body }) => {
+    const codeVerifier = getCookie("discord_code_verifier");
+    res.deleteCookie("discord_code_verifier", {
+      domain: `.${config.BASE_DOMAIN}`,
+      path: "/v1.0/oauth/discord/callback",
+    });
+
     const state = getCookie("discord_state");
     res.deleteCookie("discord_state", {
       domain: `.${config.BASE_DOMAIN}`,
       path: "/v1.0/oauth/discord/callback",
     });
 
+    if (!codeVerifier) {
+      return res.json({ code: "INVALID_CODE_VERIFIER", message: "Invalid code verifier" }, { status: 400 });
+    }
+
     if (!state || body.state !== state) {
       return res.json({ code: "INVALID_OR_MISSING_STATE", message: "Invalid or missing state" }, { status: 400 });
     }
 
-    const tokens = await oAuthService.verifyDiscordCallback(body.code);
+    const tokens = await oAuthService.verifyDiscordCallback(body.code, codeVerifier);
     if (!tokens) {
       return res.json({ code: "INVALID_CODE_VERIFIER", message: "Invalid code verifier" }, { status: 400 });
     }

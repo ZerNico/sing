@@ -5,5 +5,13 @@
   "private": true,
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.32",
+    "@react-email/render": "^1.0.4",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.6"
   }
 }
