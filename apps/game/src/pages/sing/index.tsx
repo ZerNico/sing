@@ -215,17 +215,19 @@ function SongScroller(props: SongScrollerProps) {
       >
         <For each={displayedSongs()}>
           {(song, index) => (
-            <div
-              class="w-1/7 transform-gpu p-0.5cqw transition-transform duration-250 will-change-transform"
+            <button
+              type="button"
+              class="w-1/7 transform-gpu p-0.5cqw transition-all duration-250 will-change-transform"
               classList={{
                 [getSongTransform(index(), animating())]: true,
+                "hover:opacity-50 active:scale-90": isActive(index(), animating()),
                 "scale-90": isActive(index(), animating()) && isPressed(),
                 "duration-150! ease-linear!": isFastScrolling() && !!animating(),
               }}
               onTransitionEnd={(e) => e.stopPropagation()}
             >
               <SongCard fastScrolling={isFastScrolling() && !!animating()} song={song} active={isActive(index(), animating())} />
-            </div>
+            </button>
           )}
         </For>
       </div>
