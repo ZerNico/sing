@@ -6,16 +6,16 @@ type TokenInfo = {
   expiresAt: Date;
 };
 
-const ACCESS_COOKIE = 'access_token';
-const REFRESH_COOKIE = 'refresh_token';
-const ACCESS_STATE_COOKIE = 'auth_token_state';
-const REFRESH_STATE_COOKIE = 'refresh_token_state';
+const ACCESS_COOKIE = "access_token";
+const REFRESH_COOKIE = "refresh_token";
+const ACCESS_STATE_COOKIE = "auth_token_state";
+const REFRESH_STATE_COOKIE = "refresh_token_state";
 
 export function setAuthCookies(res: ResponseBuilder, accessToken: TokenInfo, refreshToken: TokenInfo) {
   const baseCookieOptions = {
     secure: true,
     sameSite: "lax" as const,
-    domain: `.${config.BASE_DOMAIN}`,
+    domain: config.COOKIE_DOMAIN,
   };
 
   // Set httpOnly token cookies
@@ -34,13 +34,13 @@ export function setAuthCookies(res: ResponseBuilder, accessToken: TokenInfo, ref
   });
 
   // Set frontend-readable state cookies
-  res.setCookie(REFRESH_STATE_COOKIE, 'true', {
+  res.setCookie(REFRESH_STATE_COOKIE, "true", {
     ...baseCookieOptions,
     path: "/",
     expires: refreshToken.expiresAt,
   });
 
-  res.setCookie(ACCESS_STATE_COOKIE, 'true', {
+  res.setCookie(ACCESS_STATE_COOKIE, "true", {
     ...baseCookieOptions,
     path: "/",
     expires: accessToken.expiresAt,
@@ -49,7 +49,7 @@ export function setAuthCookies(res: ResponseBuilder, accessToken: TokenInfo, ref
 
 export function clearAuthCookies(res: ResponseBuilder) {
   const baseCookieOptions = {
-    domain: `.${config.BASE_DOMAIN}`,
+    domain: config.COOKIE_DOMAIN,
   };
 
   res.deleteCookie(REFRESH_COOKIE, {

@@ -16,7 +16,7 @@ const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
     secure: true,
     httpOnly: true,
     sameSite: "lax",
-    domain: config.BASE_DOMAIN,
+    domain: config.COOKIE_DOMAIN,
     path: "/v1.0/oauth/google/callback",
   });
 
@@ -24,7 +24,7 @@ const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
     secure: true,
     httpOnly: true,
     sameSite: "lax",
-    domain: config.BASE_DOMAIN,
+    domain: config.COOKIE_DOMAIN,
     path: "/v1.0/oauth/google/callback",
   });
 
@@ -36,12 +36,12 @@ const googleCallback = baseRoute
   .post("/google/callback", async ({ res, getCookie, body }) => {
     const codeVerifier = getCookie("google_code_verifier");
     res.deleteCookie("google_code_verifier", {
-      domain: `.${config.BASE_DOMAIN}`,
+      domain: config.COOKIE_DOMAIN,
       path: "/v1.0/oauth/google/callback",
     });
     const state = getCookie("google_state");
     res.deleteCookie("google_state", {
-      domain: `.${config.BASE_DOMAIN}`,
+      domain: config.COOKIE_DOMAIN,
       path: "/v1.0/oauth/google/callback",
     });
 
@@ -99,7 +99,7 @@ const discordAuthUrl = baseRoute.get("/discord/url", async ({ res, query }) => {
     secure: true,
     httpOnly: true,
     sameSite: "lax",
-    domain: config.BASE_DOMAIN,
+    domain: config.COOKIE_DOMAIN,
     path: "/v1.0/oauth/discord/callback",
   });
 
@@ -107,7 +107,7 @@ const discordAuthUrl = baseRoute.get("/discord/url", async ({ res, query }) => {
     secure: true,
     httpOnly: true,
     sameSite: "lax",
-    domain: config.BASE_DOMAIN,
+    domain: config.COOKIE_DOMAIN,
     path: "/v1.0/oauth/discord/callback",
   });
 
@@ -119,13 +119,13 @@ const discordCallback = baseRoute
   .post("/discord/callback", async ({ res, getCookie, body }) => {
     const codeVerifier = getCookie("discord_code_verifier");
     res.deleteCookie("discord_code_verifier", {
-      domain: `.${config.BASE_DOMAIN}`,
+      domain: config.COOKIE_DOMAIN,
       path: "/v1.0/oauth/discord/callback",
     });
 
     const state = getCookie("discord_state");
     res.deleteCookie("discord_state", {
-      domain: `.${config.BASE_DOMAIN}`,
+      domain: config.COOKIE_DOMAIN,
       path: "/v1.0/oauth/discord/callback",
     });
 
