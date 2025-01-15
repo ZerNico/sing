@@ -10,10 +10,11 @@ export const users = pgTable(
     username: varchar({ length: 255 }).unique(),
     email: varchar({ length: 255 }).notNull().unique(),
     emailVerified: boolean("email_verified").notNull().default(false),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
     picture: varchar({ length: 255 }),
     googleId: varchar("google_id", { length: 255 }).unique(),
     discordId: varchar("discord_id", { length: 255 }).unique(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    lobbyId: varchar("lobby_id", { length: 8 }).references(() => lobbies.id, { onDelete: "cascade" }),
   },
   (table) => [
     uniqueIndex("email_unique_index").on(lower(table.email)),
@@ -22,7 +23,14 @@ export const users = pgTable(
 );
 
 export const usersRelations = relations(users, ({ one }) => ({
-  verificationTokens: one(verificationTokens),
+  verificationTokens: one(verificationTokens, {
+    fields: [users.id],
+    references: [verificationTokens.userId],
+  }),
+  refreshTokens: one(refreshTokens, {
+    fields: [users.id],
+    references: [refreshTokens.userId],
+  }),
 }));
 
 export const refreshTokens = pgTable("refresh_tokens", {
@@ -56,4 +64,13 @@ export const verificationTokensRelations = relations(verificationTokens, ({ one 
     fields: [verificationTokens.userId],
     references: [users.id],
   }),
+}));
+
+export const lobbies = pgTable("lobbies", {
+  id: varchar({ length: 8 }).primaryKey(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const lobbiesRelations = relations(lobbies, ({ many }) => ({
+  users: many(users),
 }));

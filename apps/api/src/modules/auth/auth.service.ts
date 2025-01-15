@@ -124,15 +124,13 @@ class AuthService {
   }
 
   private async createToken(user: User, { expiresAt, type }: { expiresAt: Date; type: "access" | "refresh" }) {
-    const unixExpiresAt = Math.floor(expiresAt.getTime() / 1000);
-
     return {
       token: await new SignJWT({ type, emailVerified: user.emailVerified })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
         .setIssuer("api")
         .setAudience("api")
-        .setExpirationTime(unixExpiresAt)
+        .setExpirationTime(expiresAt)
         .setSubject(user.id.toString())
         .sign(this.jwtSecret),
       expiresAt,
