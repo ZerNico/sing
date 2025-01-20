@@ -11,9 +11,6 @@ export default function Settings() {
   const navigate = useNavigate();
   const [pressed, setPressed] = createSignal(false);
 
-  console.log("Setting6");
-  
-
   const onBack = () => navigate("/home");
   const buttons = [
     {

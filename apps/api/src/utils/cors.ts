@@ -1,7 +1,7 @@
 import { type BaseContext, RouteBuilder } from "@nokijs/server";
 
 export interface CorsOptions {
-  origin?: string | string[] | ((origin: string, context: BaseContext) => string | undefined | null);
+  origin: string | string[];
   allowMethods?: string[];
   allowHeaders?: string[];
   maxAge?: number;
@@ -16,36 +16,44 @@ const defaultOptions = {
   exposeHeaders: [],
 };
 
+function isOriginAllowed(allowedOrigins: string | string[], requestOrigin: string): boolean {
+  if (allowedOrigins === "*") return true;
+  if (Array.isArray(allowedOrigins)) {
+    return allowedOrigins.includes(requestOrigin);
+  }
+  return allowedOrigins === requestOrigin;
+}
+
 export function cors(options: CorsOptions): RouteBuilder {
   const opts = { ...defaultOptions, ...options };
 
   return new RouteBuilder().before((context) => {
-    const headers = context.res.headers;
+    const requestOrigin = context.headers.origin ?? "";
 
-    const origin = typeof opts.origin === "function" ? opts.origin(headers.get("origin") || "", context) : opts.origin;
-
-    if (origin) {
-      headers.set("access-control-allow-origin", typeof origin === "string" ? origin : origin.join(", "));
+    if (isOriginAllowed(opts.origin, requestOrigin)) {
+      console.log("Origin allowed", requestOrigin);
+      
+      context.res.headers.set("access-control-allow-origin", requestOrigin);
     }
 
     if (options.credentials) {
-      headers.set("access-control-allow-credentials", "true");
+      context.res.headers.set("access-control-allow-credentials", "true");
     }
 
     if (options.maxAge) {
-      headers.set("access-control-max-age", String(options.maxAge));
+      context.res.headers.set("access-control-max-age", String(options.maxAge));
     }
 
     if (opts.allowMethods) {
-      headers.set("access-control-allow-methods", opts.allowMethods.join(", "));
+      context.res.headers.set("access-control-allow-methods", opts.allowMethods.join(", "));
     }
 
     if (opts.allowHeaders) {
-      headers.set("access-control-allow-headers", opts.allowHeaders.join(", "));
+      context.res.headers.set("access-control-allow-headers", opts.allowHeaders.join(", "));
     }
 
     if (opts.exposeHeaders) {
-      headers.set("access-control-expose-headers", opts.exposeHeaders.join(", "));
+      context.res.headers.set("access-control-expose-headers", opts.exposeHeaders.join(", "));
     }
   });
 }

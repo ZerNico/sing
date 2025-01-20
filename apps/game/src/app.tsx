@@ -1,9 +1,9 @@
 import { makeEventListener } from "@solid-primitives/event-listener";
 import { debounce } from "@solid-primitives/scheduled";
 import { useNavigate } from "@solidjs/router";
+import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { type JSX, createSignal } from "solid-js";
-
 interface AppProps {
   children: JSX.Element;
 }
@@ -11,6 +11,8 @@ interface AppProps {
 const [initialized, setInitialized] = createSignal(false);
 
 export default function App(props: AppProps) {
+  const queryClient = new QueryClient();
+
   const toggleFullscreen = async () => {
     const window = getCurrentWindow();
     const isFullscreen = await window.isFullscreen();
@@ -40,7 +42,7 @@ export default function App(props: AppProps) {
 
   if (!initialized()) {
     setInitialized(true);
-    navigate("/loading");
+    navigate("/");
   }
 
   return (
@@ -50,7 +52,7 @@ export default function App(props: AppProps) {
         "cursor-none": mouseHidden(),
       }}
     >
-      {props.children}
+      <QueryClientProvider client={queryClient}>{props.children}</QueryClientProvider>
     </div>
   );
 }

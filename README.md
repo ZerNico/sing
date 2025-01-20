@@ -7,6 +7,13 @@
 
 ## Development
 
+On MacOS add this to your `/etc/hosts`:
+```bash
+127.0.0.1 tuneperfect.local
+127.0.0.1 api.tuneperfect.local
+127.0.0.1 app.tuneperfect.local
+```
+
 ```bash
 bun install
 docker compose -f docker-compose.dev.yml up -d
