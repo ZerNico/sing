@@ -1,10 +1,13 @@
 import { useNavigate } from "@solidjs/router";
-import { type Component, For, createSignal } from "solid-js";
+import { type Component, For, Show, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
+
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
+import { createQRCode } from "~/hooks/qrcode";
+import { useLobbyStore } from "~/stores/lobby";
 import IconMicVocal from "~icons/lucide/mic-vocal";
 import IconPartyPopper from "~icons/lucide/party-popper";
 import IconSettings from "~icons/lucide/settings";
@@ -12,6 +15,7 @@ import IconUsers from "~icons/lucide/users";
 
 export default function Home() {
   const navigate = useNavigate();
+  const lobbyStore = useLobbyStore();
   const [pressed, setPressed] = createSignal(false);
 
   const cards = [
@@ -65,9 +69,17 @@ export default function Home() {
     },
   }));
 
+  const qrcode = createQRCode(() => `${import.meta.env.VITE_APP_URL}/join/${lobbyStore.lobby()?.lobby.id}`, {
+    type: "image/webp",
+    width: 1024,
+  });
+
   return (
     <Layout footer={<KeyHints hints={["navigate", "confirm"]} />}>
-      <div class="flex-grow">Home</div>
+      <div class="flex flex-grow">
+        <div class="flex-grow" />
+        <Show when={qrcode()}>{(qrcode) => <img src={qrcode()} alt="" class="h-25cqh rounded-lg" />}</Show>
+      </div>
       <div class="flex gap-1cqw">
         <For each={cards}>
           {(card, index) => (
