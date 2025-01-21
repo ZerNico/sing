@@ -31,8 +31,6 @@ export function cors(options: CorsOptions): RouteBuilder {
     const requestOrigin = context.headers.origin ?? "";
 
     if (isOriginAllowed(opts.origin, requestOrigin)) {
-      console.log("Origin allowed", requestOrigin);
-      
       context.res.headers.set("access-control-allow-origin", requestOrigin);
     }
 
