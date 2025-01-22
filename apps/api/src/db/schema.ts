@@ -14,7 +14,10 @@ export const users = pgTable(
     googleId: varchar("google_id", { length: 255 }).unique(),
     discordId: varchar("discord_id", { length: 255 }).unique(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
-    lobbyId: varchar("lobby_id", { length: 8 }).references(() => lobbies.id, { onDelete: "cascade" }),
+    lobbyId: varchar("lobby_id", { length: 8 }).references(() => lobbies.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
   },
   (table) => [
     uniqueIndex("email_unique_index").on(lower(table.email)),
@@ -23,6 +26,10 @@ export const users = pgTable(
 );
 
 export const usersRelations = relations(users, ({ one }) => ({
+  lobby: one(lobbies, {
+    fields: [users.lobbyId],
+    references: [lobbies.id],
+  }),
   verificationTokens: one(verificationTokens, {
     fields: [users.id],
     references: [verificationTokens.userId],

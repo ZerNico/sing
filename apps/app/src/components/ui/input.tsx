@@ -5,6 +5,7 @@ import EyeOff from "~icons/lucide/eye-off";
 
 interface InputProps {
   class?: string;
+  inputClass?: string;
   label?: string;
   type?: string;
   onInput?: JSX.EventHandler<HTMLInputElement, InputEvent>;
@@ -18,7 +19,7 @@ export default function Input(props: InputProps) {
   const type = () => (props.type === "password" ? (showPassword() ? "text" : "password") : props.type);
 
   return (
-    <TextField validationState={props.errorMessage ? "invalid" : "valid"}>
+    <TextField validationState={props.errorMessage ? "invalid" : "valid"} class={props.class}>
       <Show when={props.label}>{(label) => <TextField.Label class="block text-slate-500 text-sm">{label()}</TextField.Label>}</Show>
       <div class="flex items-center gap-1 pb-1">
         <TextField.Input
@@ -26,6 +27,9 @@ export default function Input(props: InputProps) {
           type={type()}
           onInput={props.onInput}
           class="block w-full flex-grow rounded focus:outline-none"
+          classList={{
+            [props.inputClass || ""]: true,
+          }}
         />
         <Show when={props.type === "password"}>
           <button

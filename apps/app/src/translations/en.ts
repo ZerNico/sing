@@ -14,6 +14,7 @@ const en = {
     already_have_an_account: "Already have an account?",
     sign_in: "Sign in",
     user_or_email_already_exists: "User or email already exists",
+    user_already_exists: "User already exists",
   },
   verify_email: {
     title: "Verify Email",
@@ -32,6 +33,12 @@ const en = {
     username: "Username",
     save: "Save",
   },
+  join_lobby: {
+    title: "Join Lobby",
+    description: "Please enter the lobby code",
+    join: "Join",
+    lobby_not_found: "Lobby not found",
+  },
   form: {
     username: "Username",
     password: "Password",
@@ -43,7 +50,8 @@ const en = {
     email_max_length: "Email must be at most {{ length }} characters long",
     password_required: "Password is required",
     password_max_length: "Password must be at most {{ length }} characters long",
-    code_length: "Code must be {{ length }} characters long",
+    lobby_code: "Lobby Code",
+    lobby_code_length: "Code must be {{ length }} characters long",
   },
   toast: {
     success: "Success",

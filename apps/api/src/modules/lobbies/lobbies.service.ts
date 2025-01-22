@@ -1,7 +1,8 @@
+import { eq } from "drizzle-orm";
 import { SignJWT } from "jose";
 import { config } from "../../config";
 import { db } from "../../db/connection";
-import { lobbies } from "../../db/schema";
+import { lobbies, users } from "../../db/schema";
 
 class LobbiesService {
   private jwtSecret = new TextEncoder().encode(config.JWT_SECRET);
@@ -40,6 +41,16 @@ class LobbiesService {
         .sign(this.jwtSecret),
       expiresAt,
     };
+  }
+
+  async getById(id: string) {
+    const [lobby] = await db.select().from(lobbies).where(eq(lobbies.id, id));
+
+    return lobby;
+  }
+
+  async joinLobby(lobbyId: string, userId: number) {
+    await db.update(users).set({ lobbyId }).where(eq(users.id, userId));
   }
 }
 

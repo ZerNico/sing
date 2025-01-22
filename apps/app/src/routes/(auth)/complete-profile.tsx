@@ -31,7 +31,7 @@ export default function Login() {
 
     if (response.status === 400 && response.data.code === "USER_OR_EMAIL_ALREADY_EXISTS") {
       notify({
-        message: t("register.user_or_email_already_exists"),
+        message: t("register.user_already_exists"),
         intent: "error",
       });
       return;
