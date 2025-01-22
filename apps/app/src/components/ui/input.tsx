@@ -11,6 +11,7 @@ interface InputProps {
   onInput?: JSX.EventHandler<HTMLInputElement, InputEvent>;
   errorMessage?: string;
   maxLength?: number;
+  autocomplete?: string;
 }
 
 export default function Input(props: InputProps) {
@@ -20,9 +21,10 @@ export default function Input(props: InputProps) {
 
   return (
     <TextField validationState={props.errorMessage ? "invalid" : "valid"} class={props.class}>
-      <Show when={props.label}>{(label) => <TextField.Label class="block text-slate-500 text-sm">{label()}</TextField.Label>}</Show>
+      <Show when={props.label}>{(label) => <TextField.Label class="block text-slate-800 text-sm">{label()}</TextField.Label>}</Show>
       <div class="flex items-center gap-1 pb-1">
         <TextField.Input
+          autocomplete={props.autocomplete}
           maxLength={props.maxLength}
           type={type()}
           onInput={props.onInput}
@@ -33,7 +35,7 @@ export default function Input(props: InputProps) {
         />
         <Show when={props.type === "password"}>
           <button
-            class="rounded-full p-1 transition-colors hover:bg-slate-200"
+            class="cursor-pointer rounded-full p-1 transition-colors hover:bg-slate-200"
             type="button"
             onClick={() => setShowPassword(!showPassword())}
           >
@@ -44,7 +46,7 @@ export default function Input(props: InputProps) {
         </Show>
       </div>
       <div class="h-0.5 rounded-full bg-slate-800" />
-      <TextField.ErrorMessage class="mt-1 text-red-start text-sm">{props.errorMessage}</TextField.ErrorMessage>
+      <TextField.ErrorMessage class="mt-1 text-red-600 text-sm">{props.errorMessage}</TextField.ErrorMessage>
     </TextField>
   );
 }

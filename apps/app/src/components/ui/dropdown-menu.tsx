@@ -34,7 +34,7 @@ export function DropdownMenuItem<T extends ValidComponent = "div">(props: Polymo
   return (
     <KDropdownMenu.Item
       as="div"
-      class="block flex w-full items-center gap-2 rounded px-4 py-2 text-sm transition-colors hover:bg-slate-200"
+      class="flex w-full items-center gap-2 rounded px-4 py-2 text-sm transition-colors hover:bg-slate-200"
       classList={{
         [local.class || ""]: !!local.class,
       }}

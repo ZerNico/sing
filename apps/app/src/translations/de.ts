@@ -49,6 +49,7 @@ const de = {
     email_invalid: "E-Mail ist ungültig",
     email_max_length: "E-Mail darf maximal {{ length }} Zeichen lang sein",
     password_required: "Passwort wird benötigt",
+    password_min_length: "Passwort muss mindestens {{ length }} Zeichen lang sein",
     password_max_length: "Passwort darf maximal {{ length }} Zeichen lang sein",
     code_length: "Code muss {{ length }} Zeichen lang sein",
   },

@@ -1,7 +1,5 @@
-
 import { toaster } from "@kobalte/core/toast";
 import Toast from "~/components/ui/toast";
-
 
 interface NotifyOptions {
   message?: string;
@@ -9,11 +7,5 @@ interface NotifyOptions {
 }
 
 export function notify(options: NotifyOptions = {}) {
-  return toaster.show((props)=> (
-    <Toast
-      toastId={props.toastId}
-      message={options.message || ""}
-      intent={options.intent || "info"}
-    />
-  ))
+  return toaster.show((props) => <Toast toastId={props.toastId} message={options.message || ""} intent={options.intent || "info"} />);
 }

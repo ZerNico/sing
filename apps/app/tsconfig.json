@@ -1,20 +1,30 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js",
-    "allowJs": true,
-    "noEmit": true,
-    "strict": true,
-    "types": ["vinxi/types/client", "unplugin-icons/types/solid"],
-    "isolatedModules": true,
-
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "DOM.AsyncIterable"],
+    "skipLibCheck": true,
+    "types": ["unplugin-icons/types/solid"],
     "paths": {
       "~/*": ["./src/*"]
-    }
-  }
+    },
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["src"]
 }

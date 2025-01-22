@@ -49,9 +49,11 @@ const en = {
     email_invalid: "Email is invalid",
     email_max_length: "Email must be at most {{ length }} characters long",
     password_required: "Password is required",
+    password_min_length: "Password must be at least {{ length }} characters long",
     password_max_length: "Password must be at most {{ length }} characters long",
     lobby_code: "Lobby Code",
     lobby_code_length: "Code must be {{ length }} characters long",
+    code_length: "Code must be {{ length }} characters long",
   },
   toast: {
     success: "Success",

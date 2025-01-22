@@ -1,25 +1,21 @@
-import { query, redirect } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
+import { createQuery, useQueryClient } from "@tanstack/solid-query";
 import { v1 } from "./api";
+import { profileQueryOptions } from "./queries";
 
-export const getMe = query(async () => {
-  const response = await v1.users.me.get({ credentials: "include" });
+export function useAuth() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const profileQuery = createQuery(() => profileQueryOptions());
 
-  return response;
-}, "api/v1.0/users/me");
+  const logout = async () => {
+    await v1.auth.logout.post({ credentials: "include" });
+    queryClient.resetQueries();
+    navigate("/sign-in");
+  };
 
-export const requireAuth = query(async () => {
-  const user = await getMe();
-
-  if (!user) {
-    throw redirect("/login");
-  }
-  return user;
-}, "require-auth");
-
-export const requireNoAuth = query(async () => {
-  const user = await getMe();
-
-  if (user) {
-    throw redirect("/");
-  }
-}, "require-no-auth");
+  return {
+    profile: profileQuery.data,
+    logout,
+  };
+}

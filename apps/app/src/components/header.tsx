@@ -1,11 +1,11 @@
 import { Show } from "solid-js";
-import { useAuth } from "~/hooks/auth";
+import { useAuth } from "~/lib/auth";
 import LogOut from "~icons/lucide/log-out";
 import Avatar from "./ui/avatar";
 import DropdownMenu from "./ui/dropdown-menu";
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { profile, logout } = useAuth();
 
   return (
     <header class="">
@@ -13,16 +13,15 @@ export default function Header() {
         <div>
           <span class="font-bold text-lg">Tune Perfect</span>
         </div>
-
         <div>
-          <Show when={user()}>
-            {(user) => (
+          <Show when={profile}>
+            {(profile) => (
               <DropdownMenu>
                 <DropdownMenu.Trigger>
                   <Avatar
                     class="transition-opacity hover:opacity-75"
-                    src={user().picture || undefined}
-                    fallback={user().username || undefined}
+                    src={profile().picture || undefined}
+                    fallback={profile().username || undefined}
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>

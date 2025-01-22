@@ -16,10 +16,10 @@ const TOAST_ICONS = new Map([
 ]);
 
 const TOAST_COLORS = new Map([
-  ["success", "bg-success"],
-  ["error", "bg-error"],
-  ["info", "bg-info"],
-  ["warning", "bg-warning"],
+  ["success", "bg-green-400"],
+  ["error", "bg-red-400"],
+  ["info", "bg-blue-400"],
+  ["warning", "bg-yellow-400"],
 ]);
 
 interface ToastProps {
@@ -33,14 +33,10 @@ export default function Toast(props: ToastProps) {
   const bgColor = () => TOAST_COLORS.get(props.intent);
   const title = () => t(`toast.${props.intent}`);
 
-  const handleClose = () => {
-    toaster.dismiss(props.toastId);
-  };
-
   return (
     <KToast
       toastId={props.toastId}
-      class="flex w-full transform items-start justify-between rounded-lg p-3 data-[swipe=move]:translate-x-[var(--kb-toast-swipe-move-x)] data-[closed]:animate-[fadeOut_2000ms_ease-out] data-[opened]:animate-[slideIn_300ms_ease-in-out] data-[swipe=end]:animate-[swipeOut_200ms_ease-out]"
+      class="flex w-full transform items-start justify-between rounded-lg p-3 data-[swipe=move]:translate-x-[var(--kb-toast-swipe-move-x)] data-[closed]:animate-hide data-[opened]:animate-slide-in data-[swipe=end]:animate-swipe-out"
       classList={{
         [bgColor() || ""]: true,
       }}
@@ -54,7 +50,7 @@ export default function Toast(props: ToastProps) {
           <KToast.Description>{props.message}</KToast.Description>
         </div>
       </div>
-      <KToast.CloseButton onClick={handleClose}>
+      <KToast.CloseButton  class="cursor-pointer">
         <X />
       </KToast.CloseButton>
     </KToast>
@@ -64,7 +60,7 @@ export default function Toast(props: ToastProps) {
 export function ToastRegion() {
   return (
     <Portal>
-      <KToast.Region  swipeDirection="right" limit={5}>
+      <KToast.Region swipeDirection="right" limit={5}>
         <KToast.List class="fixed top-0 right-0 flex w-90 max-w-screen flex-col gap-2 p-8" />
       </KToast.Region>
     </Portal>

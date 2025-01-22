@@ -18,7 +18,7 @@ interface BaseProps extends VariantProps<typeof button> {
   loading?: boolean;
 }
 
-const button = cva("inline-grid h-10 transform items-center gap-4 rounded-lg px-6 font-semibold shadow-md transition-all ease-in-out focus:outline-slate-800 active:scale-95", {
+const button = cva("inline-grid h-10 transform cursor-pointer items-center gap-4 rounded-lg px-6 font-semibold shadow-md transition-all ease-in-out focus:outline-slate-800 active:scale-95", {
   variants: {
     intent: {
       primary: "bg-slate-800 text-white hover:bg-slate-700",

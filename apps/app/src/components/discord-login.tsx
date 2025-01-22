@@ -12,6 +12,7 @@ export default function DiscordLogin() {
     setLoading(true);
     const response = await v1.oauth.discord.url.get({
       credentials: "include",
+      query: {}
     });
 
     if (response.ok) {

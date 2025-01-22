@@ -1,3 +1,4 @@
+import { useSearchParams } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import { v1 } from "~/lib/api";
 import { t } from "~/lib/i18n";
@@ -7,11 +8,17 @@ import Button from "./ui/button";
 
 export default function GoogleLogin() {
   const [loading, setLoading] = createSignal(false);
+  const [searchParams] = useSearchParams<{
+    redirect?: string;
+  }>();
 
   const login = async () => {
     setLoading(true);
     const response = await v1.oauth.google.url.get({
       credentials: "include",
+      query: {
+        redirect: searchParams.redirect,
+      },
     });
 
     if (response.ok) {

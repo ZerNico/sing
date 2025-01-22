@@ -1,11 +1,11 @@
 import { groupRoutes } from "@nokijs/server";
 import postgres from "postgres";
 import { baseRoute } from "../../base";
-import { verified } from "../auth/auth.middlewares";
+import { authenticated, verified } from "../auth/auth.middlewares";
 import { patchMeSchema } from "./users.models";
 import { usersService } from "./users.service";
 
-const getMe = baseRoute.use(verified).get("/me", async ({ res, payload }) => {
+const getMe = baseRoute.use(authenticated).get("/me", async ({ res, payload }) => {
   const user = await usersService.getById(payload.sub);
 
   if (!user) {

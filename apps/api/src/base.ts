@@ -34,8 +34,8 @@ export const baseRoute = new RouteBuilder()
 
     return res.json(
       {
-        type: "error",
         error: errorMessage,
+        code: "UNKNOWN_ERROR",
       },
       {
         status: 500,
