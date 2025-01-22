@@ -7,6 +7,8 @@ import AuthLayout from "./layouts/auth";
 import NoAuthLayout from "./layouts/no-auth";
 import IndexPage from "./routes/auth";
 import CompleteProfilePage from "./routes/auth/complete-profile";
+import JoinPage from "./routes/auth/join/index";
+import JoinDirectPage from "./routes/auth/join/[code]";
 import DiscordCallbackPage from "./routes/no-auth/auth/discord-callback";
 import GoogleCallbackPage from "./routes/no-auth/auth/google-callback";
 import LoginPage from "./routes/no-auth/sign-in";
@@ -24,6 +26,8 @@ render(
       <Route path="/" component={AuthLayout}>
         <Route path="/" component={IndexPage} />
         <Route path="/complete-profile" component={CompleteProfilePage} />
+        <Route path="/join" component={JoinPage} />
+        <Route path="/join/:code" component={JoinDirectPage} />
       </Route>
 
       <Route path="/" component={NoAuthLayout}>
