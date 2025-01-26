@@ -41,7 +41,7 @@ export default function Sing() {
         <Show when={currentSong()}>
           {(currentSong) => (
             <div class="relative h-full w-full">
-              <SongPlayer class="h-full w-full opacity-40" autoplay song={currentSong()} />
+              <SongPlayer volume={0.5} class="h-full w-full opacity-40" playing song={currentSong()} />
             </div>
           )}
         </Show>

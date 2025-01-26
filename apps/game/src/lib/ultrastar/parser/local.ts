@@ -63,8 +63,8 @@ export async function parseLocalTxtFile(txt: DirEntryWithChildren, files: DirEnt
       if (file) {
         const result = await commands.getReplayGain(file.path);
         if (result.status === "ok") {
-          localSong.replayGainTrackGain = result.data.track_gain || 0;
-          localSong.replayGainTrackPeak = result.data.track_peak || 0;
+          localSong.replayGainTrackGain = result.data.track_gain || undefined;
+          localSong.replayGainTrackPeak = result.data.track_peak || undefined;
         }
       }
     }

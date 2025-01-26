@@ -1,5 +1,5 @@
 import createRAF from "@solid-primitives/raf";
-import { type Accessor, type JSX, batch, createContext, createSignal, useContext } from "solid-js";
+import { type Accessor, type JSX, batch, createContext, createEffect, createSignal, useContext } from "solid-js";
 import { commands } from "~/bindings";
 import type { SongPlayerRef } from "~/components/song-player";
 import { beatToMsWithoutGap, msToBeat } from "~/lib/ultrastar/bpm";
@@ -12,15 +12,15 @@ export interface CreateGameOptions {
 }
 
 export interface GameContextValue {
-  play: () => void;
+  start: () => void;
+  stop: () => void;
   pause: () => void;
-  start: () => Promise<boolean>;
-  stop: () => Promise<void>;
+  resume: () => void;
+  started: Accessor<boolean>;
   playing: Accessor<boolean>;
   ms: Accessor<number>;
   beat: Accessor<number>;
   song: Accessor<LocalSong | undefined>;
-  started: Accessor<boolean>;
 }
 
 const GameContext = createContext<GameContextValue>();
@@ -29,13 +29,10 @@ export function createGame(options: Accessor<CreateGameOptions>) {
   const [ms, setMs] = createSignal(0);
   const [beat, setBeat] = createSignal(0);
   const [started, setStarted] = createSignal(false);
+  const [playing, setPlaying] = createSignal(false);
 
   const start = async () => {
     const opts = options();
-
-    if (!opts.songPlayerRef?.ready()) {
-      return false;
-    }
 
     if (!opts.song) {
       throw new Error("No song provided");
@@ -44,9 +41,8 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     const samplesPerBeat = Math.floor((48000 * beatToMsWithoutGap(opts.song, 1)) / 1000);
     await commands.startRecording(settingsStore.microphones(), samplesPerBeat);
 
-    opts.songPlayerRef.play();
     setStarted(true);
-    startLoop();
+    setPlaying(true);
 
     return true;
   };
@@ -55,34 +51,15 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     await commands.stopRecording();
   };
 
-  const play = () => {
-    if (!started()) {
-      return;
-    }
-
-    const opts = options();
-    if (!opts.songPlayerRef) {
-      return;
-    }
-
-    opts.songPlayerRef.play();
-    startLoop();
-  };
   const pause = () => {
-    if (!started()) {
-      return;
-    }
-
-    const opts = options();
-    if (!opts.songPlayerRef) {
-      return;
-    }
-
-    opts.songPlayerRef.pause();
-    stopLoop();
+    setPlaying(false);
   };
 
-  const [playing, startLoop, stopLoop] = createRAF(() => {
+  const resume = () => {
+    setPlaying(true);
+  };
+
+  const [_, startLoop, stopLoop] = createRAF(() => {
     const opts = options();
     if (!opts.songPlayerRef || !opts.song) {
       return;
@@ -97,13 +74,25 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     });
   });
 
+  createEffect(() => {
+    if (!started()) {
+      return;
+    }
+
+    if (playing()) {
+      startLoop();
+    } else {
+      stopLoop();
+    }
+  });
+
   const values = {
-    play,
-    pause,
     start,
-    playing,
-    started,
     stop,
+    pause,
+    resume,
+    started,
+    playing,
     ms,
     beat,
     song: () => options().song,

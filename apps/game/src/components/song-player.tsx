@@ -1,155 +1,216 @@
-import { type Accessor, Match, type Ref, Show, Switch, createEffect, createSignal, on, onCleanup } from "solid-js";
+import { Match, type Ref, Show, Switch, createEffect, createSignal, on, onCleanup, onMount } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { createRefContent } from "~/lib/utils/ref";
 
 export interface SongPlayerRef {
-  play: () => void;
-  pause: () => void;
   getCurrentTime: () => number;
   getDuration: () => number;
-  playing: Accessor<boolean>;
-  ready: Accessor<boolean>;
 }
 
 interface SongPlayerProps {
+  ref?: Ref<SongPlayerRef>;
   song: LocalSong;
-  autoplay?: boolean;
-  playerRef?: Ref<SongPlayerRef>;
+  volume?: number;
+  playing?: boolean;
   class?: string;
+  onCanPlayThrough?: () => void;
 }
 
 export default function SongPlayer(props: SongPlayerProps) {
-  const [playing, setPlaying] = createSignal(props.autoplay ?? false);
-  const [ready, setReady] = createSignal(false);
-  const [synced, setSynced] = createSignal(false);
-  const [videoGapTimer, setVideoGapTimer] = createSignal<number | NodeJS.Timeout | undefined>(undefined);
-  let audioRef: HTMLAudioElement | undefined;
-  let videoRef: HTMLVideoElement | undefined;
+  const [audioElement, setAudioElement] = createSignal<HTMLAudioElement | undefined>();
+  const [videoElement, setVideoElement] = createSignal<HTMLVideoElement | undefined>();
+  const [audioGainNode, setAudioGainNode] = createSignal<GainNode>();
+  const [videoGainNode, setVideoGainNode] = createSignal<GainNode>();
+  let syncTimeout: NodeJS.Timeout | undefined = undefined;
+  const audioContext = new AudioContext();
 
-  const onAudioReady = () => {
-    updatePlaybackState();
+  createEffect(() => {
+    const audio = audioElement();
+    if (audio) {
+      const gainNode = audioContext.createGain();
+      const source = audioContext.createMediaElementSource(audio);
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      gainNode.gain.value = props.volume ?? 1;
+      setAudioGainNode(gainNode);
+
+      onCleanup(() => {
+        gainNode.disconnect();
+        source.disconnect();
+      });
+    }
+  });
+
+  createEffect(() => {
+    const video = videoElement();
+    if (video) {
+      const gainNode = audioContext.createGain();
+      const source = audioContext.createMediaElementSource(video);
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      gainNode.gain.value = props.volume ?? 1;
+      setVideoGainNode(gainNode);
+
+      onCleanup(() => {
+        gainNode.disconnect();
+        source.disconnect();
+      });
+    }
+  });
+
+  createEffect(() => {
+    const volume = props.volume ?? 1;
+    audioGainNode()?.gain.setValueAtTime(volume, audioContext.currentTime);
+    videoGainNode()?.gain.setValueAtTime(volume, audioContext.currentTime);
+  });
+
+  const canPlayThrough = () => {
+    const audio = audioElement();
+    const video = videoElement();
+
+    if (!audio && !video) {
+      return false;
+    }
+
+    if (audio && audio.readyState < HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      return false;
+    }
+
+    if (video && video.readyState < HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      return false;
+    }
+
+    return true;
   };
 
-  const onVideoReady = () => {
-    updatePlaybackState();
-  };
-
-  const updatePlaybackState = () => {
-    const isMediaReady = (element: HTMLMediaElement | undefined, url?: string) => {
-      if (!element) return false;
-      if (url && element.readyState < 3) return false;
-      return document.body.contains(element);
-    };
-
-    if (!isMediaReady(audioRef, props.song.audioUrl)) {
-      setReady(false);
+  const onCanPlayThrough = () => {
+    if (!canPlayThrough()) {
       return;
     }
 
-    if (!isMediaReady(videoRef, props.song.videoUrl)) {
-      setReady(false);
-      return;
-    }
+    props.onCanPlayThrough?.();
 
-    setReady(true);
-
-    if (playing()) {
+    if (props.playing) {
       startPlayback();
-    } else {
-      audioRef?.pause();
-      videoRef?.pause();
     }
   };
 
   const startPlayback = () => {
-    if (!playing()) {
+    const audio = audioElement();
+    const video = videoElement();
+
+    if ((audio && !document.body.contains(audio)) || (video && !document.body.contains(video))) {
       return;
     }
 
-    if (props.song.videoGap > 0 && !synced()) {
-      videoRef?.play();
+    if (!audio) {
+      video?.play();
+      return;
+    }
 
-      let waitTime = props.song.videoGap * 1000;
-      if (videoRef && videoRef?.currentTime > 0) {
-        waitTime -= videoRef.currentTime * 1000;
-      }
+    if (!video) {
+      audio.play();
+      return;
+    }
 
-      setVideoGapTimer(
-        setTimeout(() => {
-          setSynced(true);
-          audioRef?.play();
-        }, waitTime)
-      );
-    } else if (props.song.videoGap < 0 && !synced()) {
-      audioRef?.play();
+    const videoGap = props.song.videoGap ?? 0;
 
-      let waitTime = Math.abs(props.song?.videoGap || 0) * 1000;
+    const videoCurrentTime = video.currentTime;
+    const audioCurrentTime = audio.currentTime;
 
-      if (audioRef && audioRef.currentTime > 0) {
-        waitTime -= audioRef.currentTime * 1000;
-      }
+    const gap = videoCurrentTime - audioCurrentTime - videoGap;
 
-      setVideoGapTimer(
-        setTimeout(() => {
-          setSynced(true);
-          videoRef?.play();
-        }, waitTime)
+    clearTimeout(syncTimeout);
+
+    if (gap > 0) {
+      audio.play();
+      syncTimeout = setTimeout(() => {
+        video.play();
+      }, gap * 1000);
+    } else if (gap < 0) {
+      video.play();
+      syncTimeout = setTimeout(
+        () => {
+          audio.play();
+        },
+        gap * 1000 * -1
       );
     } else {
-      audioRef?.play();
-      videoRef?.play();
+      audio.play();
+      video.play();
     }
   };
 
-  const play = () => {
-    setPlaying(true);
-    updatePlaybackState();
-  };
-
-  const pause = () => {
-    setPlaying(false);
-    updatePlaybackState();
+  const stopPlayback = () => {
+    audioElement()?.pause();
+    videoElement()?.pause();
+    clearTimeout(syncTimeout);
   };
 
   createEffect(
-    on([() => props.song.videoUrl, () => props.song.audioUrl], () => {
-      setReady(false);
-      setSynced(false);
-      if (videoRef) {
-        videoRef.currentTime = 0;
+    on(
+      () => props.playing,
+      (playing) => {
+        if (playing && canPlayThrough()) {
+          startPlayback();
+        } else if (!playing) {
+          stopPlayback();
+        }
       }
-      if (audioRef) {
-        audioRef.currentTime = 0;
-      }
+    )
+  );
 
-      clearTimeout(videoGapTimer());
-    })
+  createEffect(
+    on(
+      () => props.song,
+      () => {
+        clearTimeout(syncTimeout);
+        stopPlayback();
+
+        if (canPlayThrough()) {
+          startPlayback();
+        }
+      }
+    )
   );
 
   createRefContent(
-    () => props.playerRef,
+    () => props.ref,
     () => ({
-      playing,
-      ready,
-      play,
-      pause,
       getCurrentTime: () => {
-        if (audioRef) {
-          return audioRef.currentTime;
+        const audio = audioElement();
+        const video = videoElement();
+        if (audio) {
+          return audio.currentTime;
         }
-        if (videoRef) {
-          return videoRef.currentTime;
+        if (video) {
+          return video.currentTime;
         }
         return 0;
       },
-      getDuration: () => audioRef?.duration || videoRef?.duration || 0,
+      getDuration: () => {
+        const audio = audioElement();
+        const video = videoElement();
+        if (audio) {
+          return audio.duration;
+        }
+        if (video) {
+          return video.duration;
+        }
+        return 0;
+      },
     })
   );
 
+  onMount(() => {
+    if (canPlayThrough()) {
+      startPlayback();
+    }
+  });
+
   onCleanup(() => {
-    audioRef?.pause();
-    videoRef?.pause();
-    clearTimeout(videoGapTimer());
+    clearTimeout(syncTimeout);
+    stopPlayback();
   });
 
   return (
@@ -165,9 +226,9 @@ export default function SongPlayer(props: SongPlayerProps) {
             <video
               muted={!!props.song.audioUrl}
               class="h-full w-full object-cover"
-              ref={videoRef}
+              ref={setVideoElement}
               preload="auto"
-              on:canplaythrough={onVideoReady}
+              onCanPlayThrough={onCanPlayThrough}
               src={videoUrl()}
             />
           )}
@@ -178,8 +239,7 @@ export default function SongPlayer(props: SongPlayerProps) {
       </Switch>
 
       <Show when={props.song.audioUrl}>
-        {/* biome-ignore lint/a11y/useMediaCaption: Not needed for this game */}
-        {(audioUrl) => <audio ref={audioRef} preload="auto" on:canplaythrough={onAudioReady} src={audioUrl()} />}
+        {(audioUrl) => <audio ref={setAudioElement} preload="auto" onCanPlayThrough={onCanPlayThrough} src={audioUrl()} />}
       </Show>
     </div>
   );

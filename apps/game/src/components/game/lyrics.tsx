@@ -38,8 +38,8 @@ export default function Lyrics() {
       class="w-full bg-black/70 transition-opacity duration-500"
       classList={{
         "opacity-0": !player.phrase(),
-        "rounded-b-xl pt-5 pb-3 ": player.index() === 0,
-        "rounded-t-xl pb-7": player.index() === 1,
+        "rounded-b-xl pt-[1.2cqh] pb-[0.8cqh]": player.index() === 0,
+        "rounded-t-xl pb-[1.8cqh]": player.index() === 1,
       }}
     >
       <div class="grid grid-cols-[1fr_max-content_1fr]">

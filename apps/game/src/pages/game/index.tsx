@@ -1,4 +1,4 @@
-import { Show, createSignal, onCleanup, onMount } from "solid-js";
+import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
 import Menu from "~/components/game/menu";
@@ -10,13 +10,15 @@ import { useRoundStore } from "~/stores/round";
 export default function Game() {
   const roundStore = useRoundStore();
   const [songPlayerRef, setSongPlayerRef] = createSignal<SongPlayerRef>();
+  const [ready, setReady] = createSignal(false);
+  const [canPlayThrough, setCanPlayThrough] = createSignal(false);
 
-  const isPaused = () => !playing() && started();
-
-  const { GameProvider, play, pause, playing, start, started, stop } = createGame(() => ({
+  const { GameProvider, start, pause, resume, playing, started } = createGame(() => ({
     songPlayerRef: songPlayerRef(),
     song: roundStore.settings()?.song,
   }));
+
+  const paused = () => !playing() && started();
 
   useNavigation(() => ({
     layer: 0,
@@ -27,21 +29,20 @@ export default function Game() {
     },
   }));
 
-  const waitForStart = async () => {
-    const started = await start();
-    if (!started) {
-      setTimeout(waitForStart, 500);
+  createEffect(() => {
+    if (ready() && canPlayThrough()) {
+      start();
     }
-  };
+  });
 
   onMount(() => {
     setTimeout(() => {
-      waitForStart();
+      setReady(true);
     }, 3000);
   });
 
   onCleanup(async () => {
-    await stop();
+    stop();
   });
 
   return (
@@ -51,12 +52,20 @@ export default function Game() {
           <div
             class="relative z-1 h-full w-full"
             classList={{
-              "pointer-events-none opacity-0": isPaused(),
+              "pointer-events-none opacity-0": paused(),
             }}
           >
             <div class="absolute inset-0">
               <Show when={roundStore.settings()}>
-                {(settings) => <SongPlayer playerRef={setSongPlayerRef} class="h-full w-full" song={settings().song} />}
+                {(settings) => (
+                  <SongPlayer
+                    onCanPlayThrough={() => setCanPlayThrough(true)}
+                    ref={setSongPlayerRef}
+                    playing={playing()}
+                    class="h-full w-full"
+                    song={settings().song}
+                  />
+                )}
               </Show>
             </div>
             <div class="relative z-1 grid h-full flex-grow grid-rows-[1fr_1fr]">
@@ -65,8 +74,8 @@ export default function Game() {
             </div>
           </div>
 
-          <Show when={isPaused()}>
-            <Menu class="absolute inset-0" onClose={play} />
+          <Show when={paused()}>
+            <Menu class="absolute inset-0" onClose={resume} />
           </Show>
 
           <div

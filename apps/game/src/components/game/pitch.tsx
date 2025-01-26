@@ -176,8 +176,8 @@ export default function Pitch() {
     <div
       class="grid flex-grow px-48"
       classList={{
-        "pt-8 pb-32": player.index() === 0,
-        "pt-32 pb-8": player.index() === 1,
+        "pt-[2cqh] pb-[8cqh]": player.index() === 0,
+        "pt-[8cqh] pb-[2cqh]": player.index() === 1,
       }}
     >
       <div

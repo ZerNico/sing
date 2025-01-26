@@ -15,6 +15,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": {
+        "useMediaCaption": "off"
+      },
       "nursery": {
         "useSortedClasses": {
           "level": "warn",
