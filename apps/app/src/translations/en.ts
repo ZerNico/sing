@@ -39,6 +39,11 @@ const en = {
     join: "Join",
     lobby_not_found: "Lobby not found",
   },
+  header: {
+    app_name: "Tune Perfect",
+    leave_lobby: "Leave Lobby",
+    sign_out: "Sign out",
+  },
   form: {
     username: "Username",
     password: "Password",
@@ -63,7 +68,7 @@ const en = {
   },
   error: {
     unknown: "An unknown error occurred",
-  }
+  },
 };
 
 export type Dict = typeof en;

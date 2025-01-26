@@ -35,7 +35,7 @@ export default function Header() {
     <header class="">
       <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
         <div>
-          <span class="font-bold text-lg">Tune Perfect</span>
+          <span class="font-bold text-lg">{t("header.app_name")}</span>
         </div>
         <Show when={profile()}>
           {(profile) => (
@@ -51,11 +51,11 @@ export default function Header() {
               <DropdownMenu.Content>
                 <Show when={profile().lobbyId}>
                   <DropdownMenu.Item onClick={leaveLobby}>
-                    <IconBan /> Leave Lobby
+                    <IconBan /> {t("header.leave_lobby")}
                   </DropdownMenu.Item>
                 </Show>
                 <DropdownMenu.Item onClick={logout}>
-                  <IconLogOut /> Sign out
+                  <IconLogOut /> {t("header.sign_out")}
                 </DropdownMenu.Item>
               </DropdownMenu.Content>
             </DropdownMenu>

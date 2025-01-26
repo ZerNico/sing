@@ -39,6 +39,11 @@ const de = {
     join: "Beitreten",
     lobby_not_found: "Lobby nicht gefunden",
   },
+  header: {
+    app_name: "Tune Perfect",
+    leave_lobby: "Lobby verlassen",
+    sign_out: "Abmelden",
+  },
   form: {
     username: "Benutzername",
     password: "Passwort",
@@ -51,6 +56,8 @@ const de = {
     password_required: "Passwort wird benötigt",
     password_min_length: "Passwort muss mindestens {{ length }} Zeichen lang sein",
     password_max_length: "Passwort darf maximal {{ length }} Zeichen lang sein",
+    lobby_code: "Lobby-Code",
+    lobby_code_length: "Code muss {{ length }} Zeichen lang sein",
     code_length: "Code muss {{ length }} Zeichen lang sein",
   },
   toast: {
@@ -61,7 +68,7 @@ const de = {
   },
   error: {
     unknown: "Ein unbekannter Fehler ist aufgetreten",
-  }
+  },
 };
 
 export type Dict = typeof de;
