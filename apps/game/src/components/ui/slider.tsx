@@ -46,6 +46,13 @@ export default function Slider(props: SliderProps) {
         changeValue("right");
       }
     },
+    onRepeat: (event) => {
+      if (event.action === "left") {
+        changeValue("left");
+      } else if (event.action === "right") {
+        changeValue("right");
+      }
+    },
   }));
 
   return (

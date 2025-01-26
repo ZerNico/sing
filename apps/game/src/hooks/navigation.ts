@@ -11,6 +11,7 @@ interface UseNavigationOptions {
   onKeydown?: (event: NavigationEvent) => void;
   onKeyup?: (event: NavigationEvent) => void;
   onHold?: (event: NavigationEvent) => void;
+  onRepeat?: (event: NavigationEvent) => void;
 }
 
 type NavigationEvent = {
@@ -57,12 +58,14 @@ type Events = {
   keydown: NavigationEvent;
   keyup: NavigationEvent;
   hold: NavigationEvent;
+  repeat: NavigationEvent;
 };
 
 const emitter = mitt<Events>();
-const pressedKeys = new Map<string, number>();
-const pressedGamepadButtons = new Map<string, number>();
+const pressedKeys = new Map<string, { holdTimeout: number; repeatInterval?: number }>();
+const pressedGamepadButtons = new Map<string, { holdTimeout: number; repeatInterval?: number }>();
 const HOLD_DELAY = 500;
+const REPEAT_DELAY = 100;
 
 makeEventListener(window, "keydown", (event) => {
   if (event.repeat) return;
@@ -76,14 +79,26 @@ makeEventListener(window, "keydown", (event) => {
       action: action,
     });
 
-    const timeout = window.setTimeout(() => {
+    const holdTimeout = window.setTimeout(() => {
       emitter.emit("hold", {
         origin: "keyboard",
         originalKey: event.key,
         action: action,
       });
+
+      // Start repeat interval after hold
+      const repeatInterval = window.setInterval(() => {
+        emitter.emit("repeat", {
+          origin: "keyboard",
+          originalKey: event.key,
+          action: action,
+        });
+      }, REPEAT_DELAY);
+
+      pressedKeys.set(event.key, { holdTimeout, repeatInterval });
     }, HOLD_DELAY);
-    pressedKeys.set(event.key, timeout);
+
+    pressedKeys.set(event.key, { holdTimeout });
   }
 });
 
@@ -93,9 +108,12 @@ makeEventListener(window, "keyup", (event) => {
   const action = KEY_MAPPINGS.get(event.key);
   if (action) {
     event.preventDefault();
-    const timeout = pressedKeys.get(event.key);
-    if (timeout) {
-      clearTimeout(timeout);
+    const timeouts = pressedKeys.get(event.key);
+    if (timeouts) {
+      clearTimeout(timeouts.holdTimeout);
+      if (timeouts.repeatInterval) {
+        clearInterval(timeouts.repeatInterval);
+      }
       pressedKeys.delete(event.key);
     }
 
@@ -117,14 +135,25 @@ createGamepad({
         action,
       });
 
-      const timeout = window.setTimeout(() => {
+      const holdTimeout = window.setTimeout(() => {
         emitter.emit("hold", {
           origin: "gamepad",
           originalKey: event.button,
           action,
         });
+
+        const repeatInterval = window.setInterval(() => {
+          emitter.emit("repeat", {
+            origin: "gamepad",
+            originalKey: event.button,
+            action,
+          });
+        }, REPEAT_DELAY);
+
+        pressedGamepadButtons.set(event.button, { holdTimeout, repeatInterval });
       }, HOLD_DELAY);
-      pressedGamepadButtons.set(event.button, timeout);
+
+      pressedGamepadButtons.set(event.button, { holdTimeout });
       return;
     }
 
@@ -138,20 +167,34 @@ createGamepad({
         action: axisAction,
       });
 
-      const timeout = window.setTimeout(() => {
+      const holdTimeout = window.setTimeout(() => {
         emitter.emit("hold", {
           origin: "gamepad",
           originalKey: event.button,
           action: axisAction,
         });
+
+        const repeatInterval = window.setInterval(() => {
+          emitter.emit("repeat", {
+            origin: "gamepad",
+            originalKey: event.button,
+            action: axisAction,
+          });
+        }, REPEAT_DELAY);
+
+        pressedGamepadButtons.set(event.button, { holdTimeout, repeatInterval });
       }, HOLD_DELAY);
-      pressedGamepadButtons.set(event.button, timeout);
+
+      pressedGamepadButtons.set(event.button, { holdTimeout });
     }
   },
   onButtonUp: (event) => {
-    const timeout = pressedGamepadButtons.get(event.button);
-    if (timeout) {
-      clearTimeout(timeout);
+    const timeouts = pressedGamepadButtons.get(event.button);
+    if (timeouts) {
+      clearTimeout(timeouts.holdTimeout);
+      if (timeouts.repeatInterval) {
+        clearInterval(timeouts.repeatInterval);
+      }
       pressedGamepadButtons.delete(event.button);
     }
 
@@ -164,7 +207,6 @@ createGamepad({
       });
       return;
     }
-
 
     const axisAction = getAxisAction(event.button, event.direction ?? 0);
     if (axisAction) {
@@ -213,15 +255,18 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
     const handleKeydown = (e: NavigationEvent) => opts?.onKeydown?.(e);
     const handleKeyup = (e: NavigationEvent) => opts?.onKeyup?.(e);
     const handleHold = (e: NavigationEvent) => opts?.onHold?.(e);
+    const handleRepeat = (e: NavigationEvent) => opts?.onRepeat?.(e);
 
     emitter.on("keydown", handleKeydown);
     emitter.on("keyup", handleKeyup);
     emitter.on("hold", handleHold);
+    emitter.on("repeat", handleRepeat);
 
     onCleanup(() => {
       emitter.off("keydown", handleKeydown);
       emitter.off("keyup", handleKeyup);
       emitter.off("hold", handleHold);
+      emitter.off("repeat", handleRepeat);
     });
   });
 
