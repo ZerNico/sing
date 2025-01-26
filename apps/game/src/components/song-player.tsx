@@ -31,7 +31,8 @@ export default function SongPlayer(props: SongPlayerProps) {
       const source = audioContext.createMediaElementSource(audio);
       source.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      gainNode.gain.value = props.volume ?? 1;
+      const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
+      gainNode.gain.value = (props.volume ?? 1) * replayGainAdjustment;
       setAudioGainNode(gainNode);
 
       onCleanup(() => {
@@ -48,7 +49,8 @@ export default function SongPlayer(props: SongPlayerProps) {
       const source = audioContext.createMediaElementSource(video);
       source.connect(gainNode);
       gainNode.connect(audioContext.destination);
-      gainNode.gain.value = props.volume ?? 1;
+      const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
+      gainNode.gain.value = (props.volume ?? 1) * replayGainAdjustment;
       setVideoGainNode(gainNode);
 
       onCleanup(() => {
@@ -60,8 +62,11 @@ export default function SongPlayer(props: SongPlayerProps) {
 
   createEffect(() => {
     const volume = props.volume ?? 1;
-    audioGainNode()?.gain.setValueAtTime(volume, audioContext.currentTime);
-    videoGainNode()?.gain.setValueAtTime(volume, audioContext.currentTime);
+    const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
+    const adjustedVolume = volume * replayGainAdjustment;
+
+    audioGainNode()?.gain.setValueAtTime(adjustedVolume, audioContext.currentTime);
+    videoGainNode()?.gain.setValueAtTime(adjustedVolume, audioContext.currentTime);
   });
 
   const canPlayThrough = () => {
