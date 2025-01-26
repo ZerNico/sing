@@ -22,6 +22,10 @@ export default function Settings() {
       action: () => navigate("/settings/microphones"),
     },
     {
+      label: "Volume",
+      action: () => navigate("/settings/volume"),
+    },
+    {
       label: "Credits",
       action: () => navigate("/settings/credits"),
     },
