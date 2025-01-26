@@ -27,45 +27,45 @@ export default function VolumeSettings() {
     {
       type: "slider" as const,
       label: "Master Volume",
-      value: () => volume().master,
+      value: () => Math.round(volume().master * 100),
       min: 0,
       max: 100,
       step: 1,
       onInput: (value: number) => {
-        setVolume((prev) => ({ ...prev, master: value }));
+        setVolume((prev) => ({ ...prev, master: Math.round(value) / 100 }));
       },
     },
     {
       type: "slider" as const,
       label: "Game Volume",
-      value: () => volume().game,
+      value: () => Math.round(volume().game * 100),
       min: 0,
       max: 100,
       step: 1,
       onInput: (value: number) => {
-        setVolume((prev) => ({ ...prev, game: value }));
+        setVolume((prev) => ({ ...prev, game: Math.round(value) / 100 }));
       },
     },
     {
       type: "slider" as const,
       label: "Preview Volume",
-      value: () => volume().preview,
+      value: () => Math.round(volume().preview * 100),
       min: 0,
       max: 100,
       step: 1,
       onInput: (value: number) => {
-        setVolume((prev) => ({ ...prev, preview: value }));
+        setVolume((prev) => ({ ...prev, preview: Math.round(value) / 100 }));
       },
     },
     {
       type: "slider" as const,
       label: "Menu Volume",
-      value: () => volume().menu,
+      value: () => Math.round(volume().menu * 100),
       min: 0,
       max: 100,
       step: 1,
       onInput: (value: number) => {
-        setVolume((prev) => ({ ...prev, menu: value }));
+        setVolume((prev) => ({ ...prev, menu: Math.round(value) / 100 }));
       },
     },
     {

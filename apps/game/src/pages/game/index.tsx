@@ -6,6 +6,7 @@ import SongPlayer, { type SongPlayerRef } from "~/components/song-player";
 import { useNavigation } from "~/hooks/navigation";
 import { createGame } from "~/lib/game/game";
 import { useRoundStore } from "~/stores/round";
+import { settingsStore } from "~/stores/settings";
 
 export default function Game() {
   const roundStore = useRoundStore();
@@ -59,6 +60,7 @@ export default function Game() {
               <Show when={roundStore.settings()}>
                 {(settings) => (
                   <SongPlayer
+                    volume={settingsStore.getVolume("game")}
                     onCanPlayThrough={() => setCanPlayThrough(true)}
                     ref={setSongPlayerRef}
                     playing={playing()}

@@ -24,10 +24,10 @@ function createSettingsStore() {
   });
   const [volume, setVolume] = makePersisted(
     createSignal<VolumeSettings>({
-      master: 100,
-      game: 100,
-      preview: 100,
-      menu: 100,
+      master: 1,
+      game: 1,
+      preview: 0.5,
+      menu: 0.5,
     }),
     {
       name: "settingsStore.volume",
@@ -54,6 +54,10 @@ function createSettingsStore() {
     setVolume(settings);
   };
 
+  const getVolume = (key: keyof VolumeSettings) => {
+    return volume()[key] * volume().master;
+  };
+
   return {
     initialized,
     setInitialized,
@@ -62,6 +66,7 @@ function createSettingsStore() {
     deleteMicrophone,
     volume,
     saveVolume,
+    getVolume,
   };
 }
 

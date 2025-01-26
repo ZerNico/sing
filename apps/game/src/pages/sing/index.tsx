@@ -7,6 +7,7 @@ import TitleBar from "~/components/title-bar";
 import { useNavigation } from "~/hooks/navigation";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { useRoundStore } from "~/stores/round";
+import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
 
 export default function Sing() {
@@ -41,7 +42,7 @@ export default function Sing() {
         <Show when={currentSong()}>
           {(currentSong) => (
             <div class="relative h-full w-full">
-              <SongPlayer volume={0.5} class="h-full w-full opacity-40" playing song={currentSong()} />
+              <SongPlayer volume={settingsStore.getVolume("preview")} class="h-full w-full opacity-40" playing song={currentSong()} />
             </div>
           )}
         </Show>
