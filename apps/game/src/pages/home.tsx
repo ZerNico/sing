@@ -1,12 +1,15 @@
 import { useNavigate } from "@solidjs/router";
+import { createQuery } from "@tanstack/solid-query";
 import { type Component, For, Show, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import Avatar from "~/components/avatar";
 
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { createQRCode } from "~/hooks/qrcode";
+import { lobbyQueryOptions } from "~/lib/queries";
 import { useLobbyStore } from "~/stores/lobby";
 import IconMicVocal from "~icons/lucide/mic-vocal";
 import IconPartyPopper from "~icons/lucide/party-popper";
@@ -74,28 +77,54 @@ export default function Home() {
     width: 1024,
   });
 
+  const lobbyQuery = createQuery(() => lobbyQueryOptions());
+
   return (
-    <Layout footer={<KeyHints hints={["navigate", "confirm"]} />}>
-      <div class="flex flex-grow">
-        <div class="flex-grow" />
-        <Show when={qrcode()}>{(qrcode) => <img src={qrcode()} alt="" class="h-25cqh rounded-lg" />}</Show>
-      </div>
-      <div class="flex gap-1cqw">
-        <For each={cards}>
-          {(card, index) => (
-            <ModeCard
-              selected={position() === index()}
-              active={pressed() && position() === index()}
-              class="flex-1"
-              label={card.label}
-              gradient={card.gradient}
-              icon={card.icon}
-              description={card.description}
-              onMouseEnter={() => set(index())}
-              onClick={card.action}
-            />
-          )}
-        </For>
+    <Layout
+      header={
+        <div class="flex justify-between">
+          <div />
+          <div class="flex gap-0.5cqw">
+            <For each={lobbyQuery.data?.users}>{(user) => <Avatar src={user.picture || undefined} fallback={user.username || "?"} />}</For>
+          </div>
+        </div>
+      }
+      footer={<KeyHints hints={["navigate", "confirm"]} />}
+    >
+      <div class="flex flex-grow flex-col gap-6cqh">
+        <div class="flex flex-grow">
+          <div class="flex-grow" />
+          <Show when={lobbyStore.lobby()}>
+            {(lobby) => (
+              <div class="flex items-end">
+                <div class="flex gap-2cqw">
+                  <div class="flex flex-col items-end justify-center">
+                    <span class="font-bold text-7xl">{lobby().lobby.id}</span>
+                    <span class="text-sm">{import.meta.env.VITE_APP_URL}/join</span>
+                  </div>
+                  <Show when={qrcode()}>{(qrcode) => <img src={qrcode()} alt="" class="h-25cqh rounded-lg" />}</Show>
+                </div>
+              </div>
+            )}
+          </Show>
+        </div>
+        <div class="flex gap-1cqw">
+          <For each={cards}>
+            {(card, index) => (
+              <ModeCard
+                selected={position() === index()}
+                active={pressed() && position() === index()}
+                class="flex-1"
+                label={card.label}
+                gradient={card.gradient}
+                icon={card.icon}
+                description={card.description}
+                onMouseEnter={() => set(index())}
+                onClick={card.action}
+              />
+            )}
+          </For>
+        </div>
       </div>
     </Layout>
   );

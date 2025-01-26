@@ -17,7 +17,7 @@ export default function JoinDirectPage() {
     });
 
     if (response.ok) {
-      navigate("/game");
+      navigate("/");
       return;
     }
 

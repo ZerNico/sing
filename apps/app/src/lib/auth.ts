@@ -15,7 +15,7 @@ export function useAuth() {
   };
 
   return {
-    profile: profileQuery.data,
+    profile: () => profileQuery.data,
     logout,
   };
 }

@@ -1,13 +1,17 @@
-import { DropdownMenu as KDropdownMenu, Trigger as KTrigger } from "@kobalte/core/dropdown-menu";
-import type { PolymorphicProps } from "@kobalte/core/polymorphic";
-import { type JSX, type ValidComponent, splitProps } from "solid-js";
+import type { PolymorphicProps } from "@kobalte/core";
+import { type DropdownMenuItemProps, DropdownMenu as KDropdownMenu } from "@kobalte/core/dropdown-menu";
+import type { JSX, ValidComponent } from "solid-js";
 
 interface DropdownProps {
   children: JSX.Element;
 }
 
-function Root(props: DropdownProps) {
-  return <KDropdownMenu gutter={4} placement="bottom-end">{props.children}</KDropdownMenu>;
+function DropdownMenuRoot(props: DropdownProps) {
+  return (
+    <KDropdownMenu gutter={4} placement="bottom-end">
+      {props.children}
+    </KDropdownMenu>
+  );
 }
 
 interface DropdownMenuContentProps {
@@ -17,38 +21,29 @@ interface DropdownMenuContentProps {
 export function DropdownMenuContent(props: DropdownMenuContentProps) {
   return (
     <KDropdownMenu.Portal>
-      <KDropdownMenu.Content class="min-w-36 rounded-md border border-gray-200 bg-white p-1 shadow-lg data-[closed]:animate-[fadeOut_100ms_ease-out] data-[expanded]:animate-[fadeIn_100ms_ease-out]">
+      <KDropdownMenu.Content class="min-w-36 rounded-md border border-gray-200 bg-white p-1 shadow-lg">
         {props.children}
       </KDropdownMenu.Content>
     </KDropdownMenu.Portal>
   );
 }
 
-interface DropdownMenuItemProps<T extends ValidComponent = "div"> {
-  children: JSX.Element;
-  class?: string;
-}
-export function DropdownMenuItem<T extends ValidComponent = "div">(props: PolymorphicProps<T, DropdownMenuItemProps<T>>) {
-  const [local, others] = splitProps(props as DropdownMenuItemProps, ["class"]);
+interface CustomProps<T extends ValidComponent = "button"> extends DropdownMenuItemProps<T> {}
 
+function DropdownMenuItem<T extends ValidComponent = "button">(props: PolymorphicProps<T, CustomProps<T>>) {
   return (
     <KDropdownMenu.Item
-      as="div"
-      class="flex w-full items-center gap-2 rounded px-4 py-2 text-sm transition-colors hover:bg-slate-200"
-      classList={{
-        [local.class || ""]: !!local.class,
-      }}
-      {...others}
-    >
-      {props.children}
-    </KDropdownMenu.Item>
+      class="flex w-full cursor-pointer items-center gap-2 rounded px-4 py-2 text-sm transition-colors hover:bg-slate-200"
+      as="button"
+      {...props}
+    />
   );
 }
 
-const DropdownMenu = Object.assign(Root, {
+const DropdownMenu = Object.assign(DropdownMenuRoot, {
+  Trigger: KDropdownMenu.Trigger,
   Content: DropdownMenuContent,
   Item: DropdownMenuItem,
-  Trigger: KTrigger,
 });
 
 export default DropdownMenu;

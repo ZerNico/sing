@@ -1,12 +1,14 @@
 import { type SubmitHandler, createForm, valiField } from "@modular-forms/solid";
 import { useNavigate } from "@solidjs/router";
+import { useQueryClient } from "@tanstack/solid-query";
 import * as v from "valibot";
+import Button from "~/components/ui/button";
+import Card from "~/components/ui/card";
+import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { t } from "~/lib/i18n";
+import { profileQueryOptions } from "~/lib/queries";
 import { notify } from "~/lib/toast";
-import Button from "~/components/ui/button";
-import Input from "~/components/ui/input";
-import Card from "~/components/ui/card";
 
 type JoinForm = {
   code: string;
@@ -14,6 +16,7 @@ type JoinForm = {
 
 export default function JoinPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [joinForm, { Form, Field }] = createForm<JoinForm>({
     initialValues: {
       code: "",
@@ -28,7 +31,8 @@ export default function JoinPage() {
     });
 
     if (response.ok) {
-      navigate("/game");
+      await queryClient.invalidateQueries(profileQueryOptions());
+      navigate("/");
       return;
     }
 

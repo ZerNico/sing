@@ -1,6 +1,7 @@
 import { groupRoutes } from "@nokijs/server";
 import { baseRoute } from "../../base";
 import { verified } from "../auth/auth.middlewares";
+import { requireLobbyOrVerifiedUser } from "./lobbies.middlewares";
 import { lobbiesService } from "./lobbies.service";
 
 const createLobby = baseRoute.post("", async ({ res }) => {
@@ -22,7 +23,7 @@ const createLobby = baseRoute.post("", async ({ res }) => {
 });
 
 const joinLobby = baseRoute.use(verified).post("/:lobbyId/join", async ({ res, payload, params }) => {
-  const lobby = lobbiesService.getById(params.lobbyId);
+  const lobby = await lobbiesService.getById(params.lobbyId);
 
   if (!lobby) {
     return res.json({ code: "LOBBY_NOT_FOUND", message: "Lobby not found" }, { status: 404 });
@@ -33,4 +34,29 @@ const joinLobby = baseRoute.use(verified).post("/:lobbyId/join", async ({ res, p
   return res.text("");
 });
 
-export const lobbiesRoutes = groupRoutes([createLobby, joinLobby], { prefix: "/lobbies" });
+const getCurrentLobby = baseRoute.use(requireLobbyOrVerifiedUser).get("/current", async ({ res, payload }) => {
+  if (payload.type === "access") {
+    const lobby = await lobbiesService.getByUserIdWithUsers(payload.sub);
+
+    if (!lobby) {
+      return res.json({ code: "LOBBY_NOT_FOUND", message: "Lobby not found" }, { status: 404 });
+    }
+
+    return res.json(lobby);
+  }
+
+  const lobby = await lobbiesService.getByIdWithUsers(payload.sub);
+
+  if (!lobby) {
+    return res.json({ code: "LOBBY_NOT_FOUND", message: "Lobby not found" }, { status: 404 });
+  }
+
+  return res.json(lobby);
+});
+
+const leaveLobby = baseRoute.use(verified).post("/leave", async ({ res, payload }) => {
+  await lobbiesService.leaveLobby(payload.sub);
+  return res.text("");
+});
+
+export const lobbiesRoutes = groupRoutes([createLobby, joinLobby, getCurrentLobby, leaveLobby], { prefix: "/lobbies" });
