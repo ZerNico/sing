@@ -24,41 +24,49 @@ export default function SongPlayer(props: SongPlayerProps) {
   let syncTimeout: NodeJS.Timeout | undefined = undefined;
   const audioContext = new AudioContext();
 
-  createEffect(() => {
-    const audio = audioElement();
-    if (audio) {
-      const gainNode = audioContext.createGain();
-      const source = audioContext.createMediaElementSource(audio);
-      source.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
-      gainNode.gain.value = (props.volume ?? 1) * replayGainAdjustment;
-      setAudioGainNode(gainNode);
+  createEffect(
+    on(audioElement, (audio) => {
+      let source: MediaElementAudioSourceNode | undefined = undefined;
+      let gainNode: GainNode | undefined = undefined;
+
+      if (audio) {
+        source = audioContext.createMediaElementSource(audio);
+        gainNode = audioContext.createGain();
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
+        gainNode.gain.value = (props.volume ?? 1) * replayGainAdjustment;
+        setAudioGainNode(gainNode);
+      }
 
       onCleanup(() => {
-        gainNode.disconnect();
-        source.disconnect();
+        gainNode?.disconnect();
+        source?.disconnect();
       });
-    }
-  });
+    })
+  );
 
-  createEffect(() => {
-    const video = videoElement();
-    if (video) {
-      const gainNode = audioContext.createGain();
-      const source = audioContext.createMediaElementSource(video);
-      source.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
-      gainNode.gain.value = (props.volume ?? 1) * replayGainAdjustment;
-      setVideoGainNode(gainNode);
+  createEffect(
+    on(videoElement, (video) => {
+      let source: MediaElementAudioSourceNode | undefined = undefined;
+      let gainNode: GainNode | undefined = undefined;
+
+      if (video) {
+        source = audioContext.createMediaElementSource(video);
+        gainNode = audioContext.createGain();
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        const replayGainAdjustment = props.song.replayGainTrackGain ? 10 ** (props.song.replayGainTrackGain / 20) : 1;
+        gainNode.gain.value = (props.volume ?? 1) * replayGainAdjustment;
+        setVideoGainNode(gainNode);
+      }
 
       onCleanup(() => {
-        gainNode.disconnect();
-        source.disconnect();
+        gainNode?.disconnect();
+        source?.disconnect();
       });
-    }
-  });
+    })
+  );
 
   createEffect(() => {
     const volume = props.volume ?? 1;
