@@ -54,7 +54,7 @@ export default function Game() {
               "pointer-events-none opacity-0": isPaused(),
             }}
           >
-            <div class="absolute inset-0 inset-0">
+            <div class="absolute inset-0">
               <Show when={roundStore.settings()}>
                 {(settings) => <SongPlayer playerRef={setSongPlayerRef} class="h-full w-full" song={settings().song} />}
               </Show>
@@ -82,7 +82,7 @@ export default function Game() {
             />
             <div class="relative flex h-full w-full flex-col items-center justify-center gap-2">
               <p class="text-3xl">{roundStore.settings()?.song.artist}</p>
-              <div class="max-w-50cqw">
+              <div class="max-w-200">
                 <span class="gradient-sing bg-gradient-to-b bg-clip-text font-bold text-7xl text-transparent ">
                   {roundStore.settings()?.song.title}
                 </span>

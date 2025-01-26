@@ -31,19 +31,19 @@ export default function Lyrics() {
     };
   });
 
-  const micColor = () => `rgb(var(--${player.microphone().color}-500))`;
+  const micColor = () => `var(--color-${player.microphone().color}-500)`;
 
   return (
     <div
       class="w-full bg-black/70 transition-opacity duration-500"
       classList={{
         "opacity-0": !player.phrase(),
-        "rounded-b-xl pt-1.2cqh pb-0.8cqh": player.index() === 0,
-        "rounded-t-xl pb-1.8cqh": player.index() === 1,
+        "rounded-b-xl pt-5 pb-3 ": player.index() === 0,
+        "rounded-t-xl pb-7": player.index() === 1,
       }}
     >
       <div class="grid grid-cols-[1fr_max-content_1fr]">
-        <div class="pt-0.8cqw pr-0.3cqw pb-0.6cqw">
+        <div class="pt-3 pr-1 pb-2">
           <Show when={leadInPercentage()}>
             {(percentage) => (
               <div
@@ -106,7 +106,7 @@ function LyricsNote(props: LyricsNoteProps) {
       }}
       class="inline-block whitespace-pre bg-clip-text text-4xl text-transparent leading-relaxed"
       classList={{
-        "-m-0.15cqw p-0.15cqw italic": props.note.type === "Freestyle",
+        "m-[-0.15cqw] p-[0.15cqw] italic": props.note.type === "Freestyle",
       }}
     >
       {props.note.text}

@@ -1,8 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { type JSX, Suspense } from "solid-js";
-import "@fontsource/lato/300.css";
-import "@fontsource/lato/400.css";
-import "@fontsource/lato/700.css";
+
 import { ToastRegion } from "./components/ui/toast";
 
 interface AppProps {

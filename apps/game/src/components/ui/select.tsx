@@ -46,7 +46,7 @@ export default function Select<T extends string | number>(props: SelectProps<T>)
   }));
 
   return (
-    <div class="grid h-6.5cqh items-center overflow-hidden rounded-lg" onMouseEnter={props.onMouseEnter}>
+    <div class="grid h-16 items-center overflow-hidden rounded-lg" onMouseEnter={props.onMouseEnter}>
       <div
         class="col-start-1 row-start-1 h-full w-full bg-gradient-to-r transition-opacity"
         classList={{
@@ -54,9 +54,9 @@ export default function Select<T extends string | number>(props: SelectProps<T>)
           "opacity-0": !props.selected,
         }}
       />
-      <div class="z-2 col-start-1 row-start-1 mx-auto grid w-full max-w-80cqw grid-cols-[1fr_3fr] items-center">
+      <div class="z-2 col-start-1 row-start-1 mx-auto grid w-full max-w-320 grid-cols-[1fr_3fr] items-center">
         <div class="text-center font-bold text-xl">{props.label}</div>
-        <div class="flex items-center gap-2cqw">
+        <div class="flex items-center gap-8">
           <button type="button" onClick={() => changeOptions("left")}>
             <IconTriangleLeft />
           </button>

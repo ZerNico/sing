@@ -18,7 +18,7 @@ export default function Menu(props: MenuProps) {
     },
     {
       label: "Exit",
-      action: () => {}
+      action: () => {},
     },
   ];
 
@@ -46,7 +46,7 @@ export default function Menu(props: MenuProps) {
   }));
   return (
     <div
-      class="flex w-full flex-grow flex-col justify-center p-4cqw"
+      class="flex w-full flex-grow flex-col justify-center p-16"
       classList={{
         [props.class || ""]: true,
       }}

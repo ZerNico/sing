@@ -49,7 +49,7 @@ export default function Slider(props: SliderProps) {
   }));
 
   return (
-    <div class="grid h-6.5cqh items-center overflow-hidden rounded-lg" onMouseEnter={props.onMouseEnter}>
+    <div class="grid h-16 items-center overflow-hidden rounded-lg" onMouseEnter={props.onMouseEnter}>
       <div
         class="col-start-1 row-start-1 h-full w-full bg-gradient-to-r transition-opacity"
         classList={{
@@ -57,15 +57,15 @@ export default function Slider(props: SliderProps) {
           "opacity-0": !props.selected,
         }}
       />
-      <div class="z-2 col-start-1 row-start-1 mx-auto grid w-full max-w-80cqw grid-cols-[1fr_3fr] items-center">
+      <div class="z-2 col-start-1 row-start-1 mx-auto grid w-full max-w-320 grid-cols-[1fr_3fr] items-center">
         <div class="text-center font-bold text-xl">{props.label}</div>
-        <div class="flex items-center gap-2cqw">
+        <div class="flex items-center gap-8">
           <button type="button" onClick={() => changeValue("left")}>
             <IconTriangleLeft />
           </button>
-          <div class="grid h-1.2cqw flex-grow items-center">
-            <div class="col-start-1 row-start-1 h-full w-full rounded bg-black/20" />
-            <div class="col-start-1 row-start-1 h-full w-full rounded bg-white" style={{ width: `${percentage()}%` }} />
+          <div class="grid h-5 flex-grow items-center">
+            <div class="col-start-1 row-start-1 h-full w-full rounded-md bg-black/20" />
+            <div class="col-start-1 row-start-1 h-full w-full rounded-md bg-white" style={{ width: `${percentage()}%` }} />
             <div
               class="col-start-1 row-start-1 text-center font-bold text-sm text-white"
               style={{ "clip-path": `inset(0 0 0 ${percentage()}%)` }}

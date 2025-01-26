@@ -9,7 +9,7 @@ interface LayoutProps {
 }
 
 export default function Layout(props: LayoutProps) {
-  const backgroundClass = () => (props.intent === "secondary" ? "bg-secondary" : "bg-primary");
+  const backgroundClass = () => (props.intent === "secondary" ? "gradient-bg-secondary" : "gradient-bg-primary");
 
   return (
     <div>
@@ -22,7 +22,7 @@ export default function Layout(props: LayoutProps) {
         <div class="layout flex">
           <div class="@container relative flex flex-grow overflow-hidden">
             <div class="absolute inset-0 h-full w-full">{props.background}</div>
-            <div class="relative z-1 grid flex-grow grid-rows-[min-content_1fr_min-content] gap-1.5cqw p-4cqw">
+            <div class="relative z-1 grid flex-grow grid-rows-[min-content_1fr_min-content] gap-6 p-16">
               <div>{props.header}</div>
               <div class="flex flex-col">{props.children}</div>
               <div>{props.footer}</div>

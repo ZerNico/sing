@@ -22,7 +22,7 @@ export default function SongPlayer(props: SongPlayerProps) {
   const [playing, setPlaying] = createSignal(props.autoplay ?? false);
   const [ready, setReady] = createSignal(false);
   const [synced, setSynced] = createSignal(false);
-  const [videoGapTimer, setVideoGapTimer] = createSignal<number | undefined>(undefined);
+  const [videoGapTimer, setVideoGapTimer] = createSignal<number | NodeJS.Timeout | undefined>(undefined);
   let audioRef: HTMLAudioElement | undefined;
   let videoRef: HTMLVideoElement | undefined;
 

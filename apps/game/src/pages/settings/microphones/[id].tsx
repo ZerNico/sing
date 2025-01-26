@@ -102,8 +102,8 @@ export default function MicrophoneSettings() {
                 options: ["sky", "red", "blue", "green", "pink", "purple", "yellow", "orange"],
                 renderValue: (color: string | null) => (
                   <div
-                    class="h-2cqw w-2cqw rounded-full border border-0.2cqw border-white"
-                    style={{ background: color ? `rgb(var(--${color}-500))` : "transparent" }}
+                    class="h-8 w-8 rounded-full border-[0.2cqw] border-white"
+                    style={{ background: color ? `var(--color-${color}-500)` : "transparent" }}
                   />
                 ),
               },

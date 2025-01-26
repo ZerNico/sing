@@ -13,7 +13,7 @@ interface ButtonProps {
 export default function Button(props: ButtonProps) {
   return (
     <button
-      class="grid h-6.5cqh items-center overflow-hidden rounded-lg transition-all ease-in-out active:scale-95"
+      class="grid h-16 items-center overflow-hidden rounded-lg transition-all ease-in-out active:scale-95"
       classList={{
         [props.class || ""]: true,
         "scale-95": props.active,

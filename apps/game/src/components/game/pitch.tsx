@@ -170,14 +170,14 @@ export default function Pitch() {
     return grouped;
   });
 
-  const micColor = () => `rgb(var(--${player.microphone().color}-500))`;
+  const micColor = () => `var(--color-${player.microphone().color}-500)`;
 
   return (
     <div
-      class="grid flex-grow px-12cqw"
+      class="grid flex-grow px-48"
       classList={{
-        "pt-2cqh pb-8cqh": player.index() === 0,
-        "pt-8cqh pb-2cqh": player.index() === 1,
+        "pt-8 pb-32": player.index() === 0,
+        "pt-32 pb-8": player.index() === 1,
       }}
     >
       <div
@@ -230,7 +230,7 @@ function PitchNote(props: PitchNoteProps) {
       }}
     >
       <div
-        class="h-2/1 w-full translate-y--1/4 transform rounded-full border border-0.15cqw shadow-md"
+        class="-translate-y-1/4 h-2/1 w-full transform rounded-full border-[0.15cqw] shadow-md"
         classList={{
           "border-yellow-400 bg-yellow-400/20": props.note.type === "Golden",
           "border-white bg-black/20": props.note.type !== "Golden",
@@ -279,7 +279,7 @@ function ProcessedBeat(props: ProcessedBeatProps) {
         "grid-column": `${props.column} / span ${props.length}`,
       }}
     >
-      <div class="absolute h-2/1 w-full translate-y--1/4 transform p-0.35cqw">
+      <div class="-translate-y-1/4 absolute h-2/1 w-full transform p-[0.35cqw]">
         <div
           style={{
             "clip-path": `inset(0 ${fill()["clip-percentage"]}% 0 0)`,

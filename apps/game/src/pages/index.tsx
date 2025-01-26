@@ -87,7 +87,7 @@ export default function Index() {
         </Match>
         <Match when={createLobbyMutation.isError}>
           <div class="flex w-full flex-grow flex-col justify-center">
-            <h1 class="mb-10cqh text-center font-bold text-4xl">Failed to create lobby</h1>
+            <h1 class="mb-[10cqh] text-center font-bold text-4xl">Failed to create lobby</h1>
             <For each={buttons}>
               {(button, index) => (
                 <Button

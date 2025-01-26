@@ -15,7 +15,7 @@ interface KeyHintsProps {
 
 export default function KeyHints(props: KeyHintsProps) {
   return (
-    <div class="flex items-center gap-2cqw text-base">
+    <div class="flex items-center gap-8 text-base">
       <For each={props.hints}>
         {(hint) => (
           <Switch>
@@ -29,9 +29,9 @@ export default function KeyHints(props: KeyHintsProps) {
               <KeyHint
                 label="Navigate"
                 icon={
-                  <div class="flex flex-col items-center gap-0.1cqw text-0.6cqw">
+                  <div class="flex flex-col items-center gap-0.5 text-xs">
                     <IconUpArrowKey />
-                    <div class="flex gap-0.1cqw">
+                    <div class="flex gap-0.5">
                       <IconLeftArrowKey />
                       <IconDownArrowKey />
                       <IconRightArrowKey />
@@ -53,7 +53,7 @@ interface KeyHintProps {
 }
 function KeyHint(props: KeyHintProps) {
   return (
-    <div class="flex items-center gap-0.5cqw">
+    <div class="flex items-center gap-2">
       {props.icon} {props.label}
     </div>
   );

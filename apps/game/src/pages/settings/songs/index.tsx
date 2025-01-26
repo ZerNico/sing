@@ -17,7 +17,6 @@ export default function SongsSettings() {
   const [loading, setLoading] = createSignal(false);
   const navigate = useNavigate();
   const onBack = () => {
-    
     if (songsStore.needsUpdate()) {
       navigate(withQuery("/loading", { redirect: "/settings" }));
       return;
@@ -92,7 +91,7 @@ export default function SongsSettings() {
       header={<TitleBar title="Settings" description="Songs" onBack={onBack} />}
       footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
     >
-      <div class="flex w-full flex-grow items-center justify-center gap-1cqw">
+      <div class="flex w-full flex-grow items-center justify-center gap-4">
         <For each={buttons()}>
           {(button, index) => (
             <IconButton

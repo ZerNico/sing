@@ -76,7 +76,7 @@ export default function MicrophonesSettings() {
       header={<TitleBar title="Settings" description="Microphones" onBack={onBack} />}
       footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
     >
-      <div class="flex w-full flex-grow items-center justify-center gap-1cqw">
+      <div class="flex w-full flex-grow items-center justify-center gap-4">
         <For each={buttons()}>
           {(button, index) => (
             <IconButton

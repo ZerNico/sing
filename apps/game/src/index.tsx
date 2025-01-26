@@ -1,12 +1,12 @@
-import "uno.css";
-import "./assets/scss/styles.scss";
-import "@unocss/reset/tailwind.css";
-import '@fontsource/lato/300.css';
-import '@fontsource/lato/400.css';
-import '@fontsource/lato/700.css';
 import { Router } from "@solidjs/router";
 import { Suspense, render } from "solid-js/web";
 import { Transition } from "solid-transition-group";
+
+import "./app.css";
+import "@fontsource/lato/300.css";
+import "@fontsource/lato/400.css";
+import "@fontsource/lato/700.css";
+
 import routes from "~solid-pages";
 import App from "./app";
 
@@ -35,7 +35,6 @@ render(
                 });
                 a.finished.then(done);
               }}
-       
             >
               {props.children}
             </Transition>
@@ -46,5 +45,6 @@ render(
       {routes}
     </Router>
   ),
+  // biome-ignore lint/style/noNonNullAssertion: This is a root element that is required for the app to function
   root!
 );

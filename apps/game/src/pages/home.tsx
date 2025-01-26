@@ -3,7 +3,6 @@ import { createQuery } from "@tanstack/solid-query";
 import { type Component, For, Show, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import Avatar from "~/components/avatar";
-
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import { createLoop } from "~/hooks/loop";
@@ -84,31 +83,31 @@ export default function Home() {
       header={
         <div class="flex justify-between">
           <div />
-          <div class="flex gap-0.5cqw">
+          <div class="flex gap-2">
             <For each={lobbyQuery.data?.users}>{(user) => <Avatar src={user.picture || undefined} fallback={user.username || "?"} />}</For>
           </div>
         </div>
       }
       footer={<KeyHints hints={["navigate", "confirm"]} />}
     >
-      <div class="flex flex-grow flex-col gap-6cqh">
+      <div class="flex flex-grow flex-col gap-[6cqh]">
         <div class="flex flex-grow">
           <div class="flex-grow" />
           <Show when={lobbyStore.lobby()}>
             {(lobby) => (
               <div class="flex items-end">
-                <div class="flex gap-2cqw">
+                <div class="flex gap-8">
                   <div class="flex flex-col items-end justify-center">
                     <span class="font-bold text-7xl">{lobby().lobby.id}</span>
                     <span class="text-sm">{import.meta.env.VITE_APP_URL}/join</span>
                   </div>
-                  <Show when={qrcode()}>{(qrcode) => <img src={qrcode()} alt="" class="h-25cqh rounded-lg" />}</Show>
+                  <Show when={qrcode()}>{(qrcode) => <img src={qrcode()} alt="" class="h-[25cqh] rounded-lg" />}</Show>
                 </div>
               </div>
             )}
           </Show>
         </div>
-        <div class="flex gap-1cqw">
+        <div class="flex gap-4">
           <For each={cards}>
             {(card, index) => (
               <ModeCard
@@ -144,11 +143,10 @@ interface ModeCardProps {
 function ModeCard(props: ModeCardProps) {
   return (
     <button
-      class="flex transform flex-col gap-0.3cqw p-1 transition-all ease-in-out active:scale-95"
+      class="flex transform flex-col gap-1.5 p-1 transition-all ease-in-out active:scale-95"
       type="button"
       classList={{
         [props.class || ""]: true,
-        "bg-white": props.selected,
         "opacity-50": !props.selected,
         "scale-95": props.active,
       }}
@@ -163,7 +161,7 @@ function ModeCard(props: ModeCardProps) {
         }}
       >
         <div
-          class="flex items-center justify-center rounded-t-lg bg-gradient-to-b px-3cqw py-4cqw transition-all"
+          class="flex items-center justify-center rounded-t-lg bg-gradient-to-b px-12 py-16 transition-all"
           classList={{
             [props.gradient || ""]: true,
             "rounded-b-lg": !props.selected,
@@ -172,7 +170,7 @@ function ModeCard(props: ModeCardProps) {
           <Dynamic class="text-6xl" component={props.icon} />
         </div>
         <div
-          class="flex-grow rounded-b-md bg-white px-2cqw py-1cqw text-left font-semibold text-base text-black transition-all"
+          class="flex-grow rounded-b-md bg-white px-8 py-4 text-left font-semibold text-base text-black transition-all"
           classList={{
             "opacity-0": !props.selected,
           }}

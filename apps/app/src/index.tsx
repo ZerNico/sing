@@ -1,14 +1,19 @@
 import { Route, Router } from "@solidjs/router";
 import { render } from "solid-js/web";
+
 import "./app.css";
+import "@fontsource/lato/300.css";
+import "@fontsource/lato/400.css";
+import "@fontsource/lato/700.css";
+
 import App from "./app";
 
 import AuthLayout from "./layouts/auth";
 import NoAuthLayout from "./layouts/no-auth";
 import IndexPage from "./routes/auth";
 import CompleteProfilePage from "./routes/auth/complete-profile";
-import JoinPage from "./routes/auth/join/index";
 import JoinDirectPage from "./routes/auth/join/[code]";
+import JoinPage from "./routes/auth/join/index";
 import DiscordCallbackPage from "./routes/no-auth/auth/discord-callback";
 import GoogleCallbackPage from "./routes/no-auth/auth/google-callback";
 import LoginPage from "./routes/no-auth/sign-in";

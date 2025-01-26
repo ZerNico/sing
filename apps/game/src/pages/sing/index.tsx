@@ -50,7 +50,7 @@ export default function Sing() {
       <div class="flex flex-grow flex-col">
         <div class="flex flex-grow flex-col justify-center">
           <p class="text-xl">{currentSong()?.artist}</p>
-          <div class="max-w-50cqw">
+          <div class="max-w-200">
             <span class="gradient-sing bg-gradient-to-b bg-clip-text font-bold text-6xl text-transparent ">{currentSong()?.title}</span>
           </div>
         </div>
@@ -185,17 +185,17 @@ function SongScroller(props: SongScrollerProps) {
   const getSongTransform = (index: number, animating: "left" | "right" | null) => {
     // Translate the middle song to the left or right depending on the direction of the animation
     if (index === MIDDLE_SONG_INDEX) {
-      return animating === "right" ? "translate-x--2cqw" : animating === "left" ? "translate-x-2cqw" : "";
+      return animating === "right" ? "-translate-x-8" : animating === "left" ? "translate-x-8" : "";
     }
 
     // Translate the previous song to the left if it's not the next song and the animation
     if (index < MIDDLE_SONG_INDEX && !isNext(index, animating)) {
-      return "translate-x--2cqw";
+      return "-translate-x-8";
     }
 
     // Translate the next song to the right if it's not the previous song and the animation
     if (index > MIDDLE_SONG_INDEX && !isNext(index, animating)) {
-      return "translate-x-2cqw";
+      return "translate-x-8";
     }
 
     return "";
@@ -208,7 +208,7 @@ function SongScroller(props: SongScrollerProps) {
         classList={{
           "translate-x-0": animating() === null,
           "translate-x-1/11 transition-transform duration-250": animating() === "left",
-          "translate-x--1/11 transition-transform duration-250": animating() === "right",
+          "-translate-x-1/11 transition-transform duration-250": animating() === "right",
           "duration-150! ease-linear!": isFastScrolling() && !!animating(),
         }}
         onTransitionEnd={onTransitionEnd}
@@ -217,7 +217,7 @@ function SongScroller(props: SongScrollerProps) {
           {(song, index) => (
             <button
               type="button"
-              class="w-1/7 transform-gpu p-0.5cqw transition-all duration-250 will-change-transform"
+              class="w-1/7 transform-gpu p-2 transition-all duration-250 will-change-transform"
               classList={{
                 [getSongTransform(index(), animating())]: true,
                 "hover:opacity-50 active:scale-90": isActive(index(), animating()),
