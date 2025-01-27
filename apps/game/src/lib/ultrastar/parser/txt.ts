@@ -53,7 +53,7 @@ export function parseUltrastarTxt(content: string) {
             break;
           }
           case "bpm": {
-            partialSong.bpm = parseUSInt(value);
+            partialSong.bpm = parseUSFloat(value);
             break;
           }
           case "gap": {
