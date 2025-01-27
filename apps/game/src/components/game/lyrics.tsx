@@ -1,3 +1,4 @@
+import { Key } from "@solid-primitives/keyed";
 import { For, Show, createMemo } from "solid-js";
 import { useGame } from "~/lib/game/game";
 import { usePlayer } from "~/lib/game/player";
@@ -58,9 +59,13 @@ export default function Lyrics() {
           </Show>
         </div>
         <div>
-          <For fallback={<span class="text-4xl text-transparent leading-relaxed">{"\u00A0"}</span>} each={player.phrase()?.notes}>
-            {(note) => <LyricsNote note={note} micColor={micColor()} />}
-          </For>
+          <Key
+            fallback={<span class="text-4xl text-transparent leading-relaxed">{"\u00A0"}</span>}
+            each={player.phrase()?.notes}
+            by={(note) => note.startBeat}
+          >
+            {(note) => <LyricsNote note={note()} micColor={micColor()} />}
+          </Key>
         </div>
         <div />
       </div>
