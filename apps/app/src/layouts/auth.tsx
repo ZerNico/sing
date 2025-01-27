@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { type JSX, Match, Switch, createEffect } from "solid-js";
+import { type JSX, Match, Switch } from "solid-js";
 import { withQuery } from "ufo";
 import Header from "~/components/header";
 import { profileQueryOptions } from "~/lib/queries";

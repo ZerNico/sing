@@ -12,6 +12,13 @@ interface InputProps {
   errorMessage?: string;
   maxLength?: number;
   autocomplete?: string;
+  value?: string;
+  disabled?: boolean;
+  name?: string;
+  autofocus?: boolean;
+  ref?: (element: HTMLInputElement) => void;
+  onChange?: JSX.EventHandler<HTMLInputElement, Event>;
+  onBlur?: JSX.EventHandler<HTMLInputElement, FocusEvent>;
 }
 
 export default function Input(props: InputProps) {
@@ -24,6 +31,13 @@ export default function Input(props: InputProps) {
       <Show when={props.label}>{(label) => <TextField.Label class="block text-slate-800 text-sm">{label()}</TextField.Label>}</Show>
       <div class="flex items-center gap-1 pb-1">
         <TextField.Input
+          value={props.value}
+          disabled={props.disabled}
+          name={props.name}
+          autofocus={props.autofocus}
+          ref={props.ref}
+          onChange={props.onChange}
+          onBlur={props.onBlur}
           autocomplete={props.autocomplete}
           maxLength={props.maxLength}
           type={type()}

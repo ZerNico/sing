@@ -1,6 +1,9 @@
+import path from "node:path";
 import { groupRoutes } from "@nokijs/server";
 import postgres from "postgres";
+import * as v from "valibot";
 import { baseRoute } from "../../base";
+import { config } from "../../config";
 import { authenticated, verified } from "../auth/auth.middlewares";
 import { patchMeSchema } from "./users.models";
 import { usersService } from "./users.service";
@@ -21,7 +24,13 @@ const patchMe = baseRoute
   .body(patchMeSchema)
   .patch("/me", async ({ res, payload, body }) => {
     try {
-      const user = await usersService.update(payload.sub, body);
+      const { picture, ...rest } = body;
+
+      if (picture) {
+        await usersService.uploadPicture(payload.sub, picture);
+      }
+
+      const user = await usersService.update(payload.sub, rest);
 
       if (!user) {
         return res.json({ code: "USER_NOT_FOUND", message: "User not found" }, { status: 404 });
@@ -44,4 +53,17 @@ const patchMe = baseRoute
     }
   });
 
-export const usersRoutes = groupRoutes([getMe, patchMe], { prefix: "/users" });
+const getPicture = baseRoute.get("/pictures/:path", async ({ res, params }) => {
+  const picture = await usersService.getPicture(params.path);
+  if (!picture) {
+    return res.json({ code: "PICTURE_NOT_FOUND", message: "Picture not found" }, { status: 404 });
+  }
+
+  return new Response(picture.stream(), {
+    headers: {
+      "Content-Type": picture.type,
+    },
+  });
+});
+
+export const usersRoutes = groupRoutes([getMe, patchMe, getPicture], { prefix: "/users" });

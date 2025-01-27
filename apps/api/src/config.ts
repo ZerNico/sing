@@ -14,6 +14,7 @@ const ConfigSchema = v.object({
   DISCORD_CLIENT_ID: v.string(),
   DISCORD_CLIENT_SECRET: v.string(),
   DISCORD_REDIRECT_URI: v.string(),
+  UPLOADS_PATH: v.string(),
 });
 
 export const config = v.parse(ConfigSchema, process.env);

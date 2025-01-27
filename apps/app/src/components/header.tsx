@@ -8,6 +8,7 @@ import { profileQueryOptions } from "~/lib/queries";
 import { notify } from "~/lib/toast";
 import IconBan from "~icons/lucide/ban";
 import IconLogOut from "~icons/lucide/log-out";
+import IconUser from "~icons/lucide/user";
 import Avatar from "./ui/avatar";
 import DropdownMenu from "./ui/dropdown-menu";
 
@@ -41,14 +42,13 @@ export default function Header() {
           {(profile) => (
             <DropdownMenu>
               <DropdownMenu.Trigger class="cursor-pointer">
-                <Avatar
-                  class="transition-opacity hover:opacity-75"
-                  src={profile().picture || undefined}
-                  fallback={profile().username || undefined}
-                />
+                <Avatar class="transition-opacity hover:opacity-75" user={profile()} />
               </DropdownMenu.Trigger>
 
               <DropdownMenu.Content>
+                <DropdownMenu.Item onClick={() => navigate("/edit-profile")}>
+                  <IconUser /> {t("header.edit_profile")}
+                </DropdownMenu.Item>
                 <Show when={profile().lobbyId}>
                   <DropdownMenu.Item onClick={leaveLobby}>
                     <IconBan /> {t("header.leave_lobby")}

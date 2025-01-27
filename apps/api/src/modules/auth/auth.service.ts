@@ -18,9 +18,7 @@ class AuthService {
 
   async register({ username, password, email }: { username: string; password: string; email: string }) {
     try {
-      const hashedPassword = await Bun.password.hash(password);
-
-      const user = await usersService.create({ username, email, password: hashedPassword });
+      const user = await usersService.create({ username, email, password });
 
       return user;
     } catch (error) {
@@ -157,15 +155,12 @@ class AuthService {
   }
 
   async sendVerificationEmail(user: User) {
-    const [existingToken] = await db
-      .select()
-      .from(verificationTokens)
-      .where(eq(verificationTokens.userId, user.id));
+    const [existingToken] = await db.select().from(verificationTokens).where(eq(verificationTokens.userId, user.id));
 
     if (existingToken) {
       const timeSinceLastToken = Date.now() - existingToken.createdAt.getTime();
       const fiveMinutes = 5 * 60 * 1000;
-      
+
       if (timeSinceLastToken < fiveMinutes) {
         const expiresAt = new Date(existingToken.createdAt.getTime() + fiveMinutes);
         return { rateLimited: true, expiresAt };

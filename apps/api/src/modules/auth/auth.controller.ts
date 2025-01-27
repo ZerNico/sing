@@ -48,7 +48,7 @@ const login = baseRoute.body(loginSchema).post("/login", async ({ res, body }) =
 });
 
 const logout = baseRoute.use(authenticated).post("/logout", async ({ res, getCookie }) => {
-  const refreshToken = getCookie("refreshToken");
+  const refreshToken = getCookie("refresh_token");
   if (refreshToken) {
     const payload = await authService.verifyRefreshToken(refreshToken);
     if (payload) {
@@ -62,7 +62,7 @@ const logout = baseRoute.use(authenticated).post("/logout", async ({ res, getCoo
 });
 
 const refresh = baseRoute.post("/refresh", async ({ res, getCookie }) => {
-  const oldRefreshToken = getCookie("refreshToken");
+  const oldRefreshToken = getCookie("refresh_token");
 
   if (!oldRefreshToken) {
     return res.json(
@@ -142,7 +142,7 @@ const verify = baseRoute
       );
     }
 
-    const oldRefreshToken = getCookie("refresh_token");    
+    const oldRefreshToken = getCookie("refresh_token");
 
     if (!oldRefreshToken) {
       return res.json(

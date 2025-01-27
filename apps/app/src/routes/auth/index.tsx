@@ -11,7 +11,7 @@ export default function IndexPage() {
       <Key each={lobbyQuery.data?.users} by={(user) => user.id}>
         {(user) => (
           <div class="flex w-80 items-center gap-2 rounded-lg bg-white p-2 text-slate-800">
-            <Avatar class="flex-shrink-0" src={user().picture || undefined} fallback={user().username || undefined} />
+            <Avatar class="flex-shrink-0" user={user()} />
             <div>{user().username}</div>
           </div>
         )}

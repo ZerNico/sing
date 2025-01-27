@@ -13,7 +13,7 @@ const api = client<App>(import.meta.env.VITE_API_URL, {
     if (response.status === 401) {
       await v1.auth.refresh.post({ credentials: "include" });
 
-      return fetch(url, options);
+      return fetch(url, { ...options, credentials: "include" });
     }
 
     return response;

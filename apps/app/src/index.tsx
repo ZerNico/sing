@@ -12,6 +12,8 @@ import AuthLayout from "./layouts/auth";
 import NoAuthLayout from "./layouts/no-auth";
 import IndexPage from "./routes/auth";
 import CompleteProfilePage from "./routes/auth/complete-profile";
+import EditProfilePage from "./routes/auth/edit-profile";
+import EditPasswordPage from "./routes/auth/edit-profile/password";
 import JoinDirectPage from "./routes/auth/join/[code]";
 import JoinPage from "./routes/auth/join/index";
 import DiscordCallbackPage from "./routes/no-auth/auth/discord-callback";
@@ -33,6 +35,8 @@ render(
         <Route path="/complete-profile" component={CompleteProfilePage} />
         <Route path="/join" component={JoinPage} />
         <Route path="/join/:code" component={JoinDirectPage} />
+        <Route path="/edit-profile" component={EditProfilePage} />
+        <Route path="/edit-profile/password" component={EditPasswordPage} />
       </Route>
 
       <Route path="/" component={NoAuthLayout}>
