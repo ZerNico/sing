@@ -2,6 +2,7 @@ import { Navigate, useLocation } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { type JSX, Match, Switch } from "solid-js";
 import { withQuery } from "ufo";
+import Footer from "~/components/footer";
 import Header from "~/components/header";
 import { profileQueryOptions } from "~/lib/queries";
 
@@ -32,7 +33,15 @@ export default function AuthLayout(props: AuthLayoutProps) {
             <Navigate href={redirectTo("/verify-email")} />
           </Match>
 
-          <Match when={profile()?.username && profile()?.emailVerified && !profile()?.lobbyId && location.pathname !== "/join"}>
+          <Match
+            when={
+              profile()?.username &&
+              profile()?.emailVerified &&
+              !profile()?.lobbyId &&
+              location.pathname !== "/join" &&
+              !location.pathname.startsWith("/edit-profile")
+            }
+          >
             <Navigate href="/join" />
           </Match>
 
@@ -49,6 +58,7 @@ export default function AuthLayout(props: AuthLayoutProps) {
           <Match when>
             <Header />
             {props.children}
+            <Footer />
           </Match>
         </Switch>
       </Match>

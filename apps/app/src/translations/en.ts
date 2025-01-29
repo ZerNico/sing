@@ -60,6 +60,11 @@ const en = {
     leave_lobby: "Leave Lobby",
     sign_out: "Sign out",
   },
+  nav: {
+    join: "Join",
+    lobby: "Lobby",
+    profile: "Profil",
+  },
   form: {
     username: "Username",
     password: "Password",

@@ -9,6 +9,7 @@ import { notify } from "~/lib/toast";
 import IconBan from "~icons/lucide/ban";
 import IconLogOut from "~icons/lucide/log-out";
 import IconUser from "~icons/lucide/user";
+import NavItems from "./nav-items";
 import Avatar from "./ui/avatar";
 import DropdownMenu from "./ui/dropdown-menu";
 
@@ -33,35 +34,43 @@ export default function Header() {
   };
 
   return (
-    <header class="">
-      <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
-        <div>
-          <span class="font-bold text-lg">{t("header.app_name")}</span>
-        </div>
-        <Show when={profile()}>
-          {(profile) => (
-            <DropdownMenu>
-              <DropdownMenu.Trigger class="cursor-pointer">
-                <Avatar class="transition-opacity hover:opacity-75" user={profile()} />
-              </DropdownMenu.Trigger>
+    <>
+      <div class="h-16" />
+      <header class="fixed top-0 right-0 left-0 border-white/10 border-b">
+        <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
+          <div>
+            <span class="font-bold text-lg">{t("header.app_name")}</span>
+          </div>
+          <div class="flex flex-grow justify-center">
+            <NavItems class="hidden md:flex" />
+          </div>
+          <div>
+            <Show when={profile()}>
+              {(profile) => (
+                <DropdownMenu>
+                  <DropdownMenu.Trigger class="cursor-pointer">
+                    <Avatar class="transition-opacity hover:opacity-75" user={profile()} />
+                  </DropdownMenu.Trigger>
 
-              <DropdownMenu.Content>
-                <DropdownMenu.Item onClick={() => navigate("/edit-profile")}>
-                  <IconUser /> {t("header.edit_profile")}
-                </DropdownMenu.Item>
-                <Show when={profile().lobbyId}>
-                  <DropdownMenu.Item onClick={leaveLobby}>
-                    <IconBan /> {t("header.leave_lobby")}
-                  </DropdownMenu.Item>
-                </Show>
-                <DropdownMenu.Item onClick={logout}>
-                  <IconLogOut /> {t("header.sign_out")}
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu>
-          )}
-        </Show>
-      </div>
-    </header>
+                  <DropdownMenu.Content>
+                    <DropdownMenu.Item onClick={() => navigate("/edit-profile")}>
+                      <IconUser /> {t("header.edit_profile")}
+                    </DropdownMenu.Item>
+                    <Show when={profile().lobbyId}>
+                      <DropdownMenu.Item onClick={leaveLobby}>
+                        <IconBan /> {t("header.leave_lobby")}
+                      </DropdownMenu.Item>
+                    </Show>
+                    <DropdownMenu.Item onClick={logout}>
+                      <IconLogOut /> {t("header.sign_out")}
+                    </DropdownMenu.Item>
+                  </DropdownMenu.Content>
+                </DropdownMenu>
+              )}
+            </Show>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }
