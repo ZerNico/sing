@@ -8,7 +8,7 @@ import "@fontsource/lato/700.css";
 
 import App from "./app";
 
-import AuthLayout from "./layouts/auth";
+import AuthLayout, { LobbyLayout, NoLobbyLayout } from "./layouts/auth";
 import NoAuthLayout from "./layouts/no-auth";
 import IndexPage from "./routes/auth";
 import CompleteProfilePage from "./routes/auth/complete-profile";
@@ -31,10 +31,16 @@ render(
   () => (
     <Router root={App}>
       <Route path="/" component={AuthLayout}>
-        <Route path="/" component={IndexPage} />
+        <Route path="/" component={LobbyLayout}>
+          <Route path="/" component={IndexPage} />
+        </Route>
+
+        <Route path="/" component={NoLobbyLayout}>
+          <Route path="/join" component={JoinPage} />
+          <Route path="/join/:code" component={JoinDirectPage} />
+        </Route>
+
         <Route path="/complete-profile" component={CompleteProfilePage} />
-        <Route path="/join" component={JoinPage} />
-        <Route path="/join/:code" component={JoinDirectPage} />
         <Route path="/edit-profile" component={EditProfilePage} />
         <Route path="/edit-profile/password" component={EditPasswordPage} />
       </Route>
