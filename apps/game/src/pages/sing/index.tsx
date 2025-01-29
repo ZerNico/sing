@@ -9,6 +9,7 @@ import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { useRoundStore } from "~/stores/round";
 import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
+import IconDices from "~icons/lucide/dices";
 
 const [currentSong, setCurrentSong] = createSignal<LocalSong | null>();
 
@@ -21,6 +22,7 @@ export default function Sing() {
   const onBack = () => navigate("/home");
   const [sort, setSort] = createSignal<"artist" | "title" | "year">("artist");
   const roundStore = useRoundStore();
+  const [animationsDisabled, setAnimationsDisabled] = createSignal(false);
 
   useNavigation(() => ({
     layer: 0,
@@ -39,27 +41,47 @@ export default function Sing() {
     },
   }));
 
+  const selectRandomSong = () => {
+    setAnimationsDisabled(true);
+
+    const songs = songsStore.songs();
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomSong = songs[randomIndex];
+    if (randomSong) {
+      setCurrentSong(randomSong);
+    }
+
+    setTimeout(() => {
+      setAnimationsDisabled(false);
+    }, 0);
+  };
+
   return (
     <Layout
       intent="secondary"
       footer={
         <div class="flex justify-between">
           <KeyHints hints={["back", "navigate", "confirm"]} />
-          <div class="flex gap-2">
-            <For each={["artist", "title", "year"] as const}>
-              {(sortKey) => (
-                <button
-                  type="button"
-                  class="gradient-sing rounded-full px-2 text-md text-white capitalize"
-                  classList={{
-                    "gradient-sing bg-gradient-to-b": sortKey.toLowerCase() === sort(),
-                  }}
-                  onClick={() => setSort(sortKey)}
-                >
-                  {sortKey}
-                </button>
-              )}
-            </For>
+          <div class="flex items-center gap-8">
+            <button type="button" class="text-2xl transition-all hover:opacity-75 active:scale-95" onClick={selectRandomSong}>
+              <IconDices />
+            </button>
+            <div class="flex gap-2">
+              <For each={["artist", "title", "year"] as const}>
+                {(sortKey) => (
+                  <button
+                    type="button"
+                    class="gradient-sing rounded-full px-2 text-md text-white capitalize"
+                    classList={{
+                      "gradient-sing bg-gradient-to-b": sortKey.toLowerCase() === sort(),
+                    }}
+                    onClick={() => setSort(sortKey)}
+                  >
+                    {sortKey}
+                  </button>
+                )}
+              </For>
+            </div>
           </div>
         </div>
       }
@@ -82,7 +104,13 @@ export default function Sing() {
           </div>
         </div>
         <div>
-          <SongScroller onSongChange={setCurrentSong} songs={songsStore.songs()} sort={sort()} currentSong={currentSong()} />
+          <SongScroller
+            onSongChange={setCurrentSong}
+            songs={songsStore.songs()}
+            sort={sort()}
+            currentSong={currentSong() || null}
+            animationsDisabled={animationsDisabled()}
+          />
         </div>
       </div>
     </Layout>
@@ -93,6 +121,7 @@ interface SongScrollerProps {
   songs: LocalSong[];
   sort: "artist" | "title" | "year";
   currentSong: LocalSong | null;
+  animationsDisabled: boolean;
   onSongChange?: (song: LocalSong) => void;
 }
 
@@ -261,6 +290,7 @@ function SongScroller(props: SongScrollerProps) {
           "translate-x-1/11 transition-transform duration-250": animating() === "left",
           "-translate-x-1/11 transition-transform duration-250": animating() === "right",
           "duration-150! ease-linear!": isFastScrolling() && !!animating(),
+          "duration-0! ease-linear!": props.animationsDisabled,
         }}
         onTransitionEnd={onTransitionEnd}
       >
@@ -274,10 +304,16 @@ function SongScroller(props: SongScrollerProps) {
                 "hover:opacity-50 active:scale-90": isActive(index(), animating()),
                 "scale-90": isActive(index(), animating()) && isPressed(),
                 "duration-150! ease-linear!": isFastScrolling() && !!animating(),
+                "duration-0! ease-linear!": props.animationsDisabled,
               }}
               onTransitionEnd={(e) => e.stopPropagation()}
             >
-              <SongCard fastScrolling={isFastScrolling() && !!animating()} song={song} active={isActive(index(), animating())} />
+              <SongCard
+                fastScrolling={isFastScrolling() && !!animating()}
+                song={song}
+                active={isActive(index(), animating())}
+                animationsDisabled={props.animationsDisabled}
+              />
             </button>
           )}
         </For>
@@ -292,6 +328,7 @@ interface SongCardProps {
   classList?: Record<string, boolean>;
   active?: boolean;
   fastScrolling?: boolean;
+  animationsDisabled?: boolean;
 }
 function SongCard(props: SongCardProps) {
   return (
@@ -301,6 +338,7 @@ function SongCard(props: SongCardProps) {
         [props.class || ""]: true,
         "scale-130": props.active,
         "duration-150! ease-linear!": props.fastScrolling,
+        "duration-0! ease-linear!": props.animationsDisabled,
       }}
     >
       <img
@@ -309,6 +347,7 @@ function SongCard(props: SongCardProps) {
           "opacity-60": !props.active,
           "opacity-100": props.active,
           "duration-150! ease-linear!": props.fastScrolling,
+          "duration-0! ease-linear!": props.animationsDisabled,
         }}
         src={props.song.coverUrl}
         alt={props.song.title}
