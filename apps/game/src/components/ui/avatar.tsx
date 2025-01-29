@@ -1,8 +1,11 @@
 import { Show, createEffect, createSignal, on } from "solid-js";
+import { joinURL } from "ufo";
 
 interface AvatarProps {
-  src?: string;
-  fallback?: string;
+  user: {
+    picture?: string | null;
+    username?: string | null;
+  };
   class?: string;
 }
 
@@ -11,14 +14,22 @@ export default function Avatar(props: AvatarProps) {
 
   createEffect(
     on(
-      () => props.src,
+      () => props.user,
       () => {
         setError(false);
       }
     )
   );
 
-  const fallback = () => props.fallback?.at(0) || "?";
+  const fallback = () => props.user?.username?.at(0) || "?";
+
+  const pictureUrl = () => {
+    if (props.user?.picture?.startsWith("/")) {
+      return joinURL(import.meta.env.VITE_API_URL, props.user.picture);
+    }
+
+    return props.user?.picture || undefined;
+  };
 
   return (
     <div
@@ -27,14 +38,14 @@ export default function Avatar(props: AvatarProps) {
         [props.class || ""]: !!props.class,
       }}
     >
-      <div class="col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-rt from-cyan-400 to-blue-500">
+      <div class="gradient-settings col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-tr">
         {fallback()}
       </div>
       <Show when={!error()}>
         <img
           onError={() => setError(true)}
-          src={props.src || props.fallback}
-          alt={props.fallback || "Avatar"}
+          src={pictureUrl()}
+          alt={props.user?.username || "Avatar"}
           class="col-start-1 row-start-1 block h-full w-full rounded-full"
         />
       </Show>

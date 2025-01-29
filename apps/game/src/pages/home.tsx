@@ -2,9 +2,9 @@ import { useNavigate } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { type Component, For, Show, createSignal } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import Avatar from "~/components/avatar";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
+import Avatar from "~/components/ui/avatar";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { createQRCode } from "~/hooks/qrcode";
@@ -84,7 +84,7 @@ export default function Home() {
         <div class="flex justify-between">
           <div />
           <div class="flex gap-2">
-            <For each={lobbyQuery.data?.users}>{(user) => <Avatar src={user.picture || undefined} fallback={user.username || "?"} />}</For>
+            <For each={lobbyQuery.data?.users}>{(user) => <Avatar user={user} />}</For>
           </div>
         </div>
       }
@@ -143,7 +143,7 @@ interface ModeCardProps {
 function ModeCard(props: ModeCardProps) {
   return (
     <button
-      class="flex transform flex-col gap-1.5 p-1 transition-all ease-in-out active:scale-95"
+      class="flex transform flex-col gap-1 p-1 transition-all ease-in-out active:scale-95"
       type="button"
       classList={{
         [props.class || ""]: true,
