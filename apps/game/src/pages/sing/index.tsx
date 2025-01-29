@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { For, Show, createMemo, createSignal, onMount } from "solid-js";
+import { For, Show, createMemo, createSignal } from "solid-js";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import SongPlayer from "~/components/song-player";
@@ -10,10 +10,16 @@ import { useRoundStore } from "~/stores/round";
 import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
 
+const [currentSong, setCurrentSong] = createSignal<LocalSong | null>();
+
 export default function Sing() {
+  if (!currentSong()) {
+    setCurrentSong(songsStore.songs()[0] || null);
+  }
+
   const navigate = useNavigate();
   const onBack = () => navigate("/home");
-  const [currentSong, setCurrentSong] = createSignal<LocalSong | null>(null);
+  const [sort, setSort] = createSignal<"artist" | "title" | "year">("artist");
   const roundStore = useRoundStore();
 
   useNavigation(() => ({
@@ -36,7 +42,27 @@ export default function Sing() {
   return (
     <Layout
       intent="secondary"
-      footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
+      footer={
+        <div class="flex justify-between">
+          <KeyHints hints={["back", "navigate", "confirm"]} />
+          <div class="flex gap-2">
+            <For each={["artist", "title", "year"] as const}>
+              {(sortKey) => (
+                <button
+                  type="button"
+                  class="gradient-sing rounded-full px-2 text-md text-white capitalize"
+                  classList={{
+                    "gradient-sing bg-gradient-to-b": sortKey.toLowerCase() === sort(),
+                  }}
+                  onClick={() => setSort(sortKey)}
+                >
+                  {sortKey}
+                </button>
+              )}
+            </For>
+          </div>
+        </div>
+      }
       header={<TitleBar title="Songs" onBack={onBack} />}
       background={
         <Show when={currentSong()}>
@@ -56,7 +82,7 @@ export default function Sing() {
           </div>
         </div>
         <div>
-          <SongScroller onSongChange={setCurrentSong} songs={songsStore.songs()} />
+          <SongScroller onSongChange={setCurrentSong} songs={songsStore.songs()} sort={sort()} currentSong={currentSong()} />
         </div>
       </div>
     </Layout>
@@ -65,25 +91,46 @@ export default function Sing() {
 
 interface SongScrollerProps {
   songs: LocalSong[];
+  sort: "artist" | "title" | "year";
+  currentSong: LocalSong | null;
   onSongChange?: (song: LocalSong) => void;
 }
 
 const DISPLAYED_SONGS = 11;
 const MIDDLE_SONG_INDEX = Math.floor(DISPLAYED_SONGS / 2);
-const [currentIndex, setCurrentIndex] = createSignal(0);
 
 function SongScroller(props: SongScrollerProps) {
   const [isPressed, setIsPressed] = createSignal(false);
   const [isHeld, setIsHeld] = createSignal(false);
   const [isFastScrolling, setIsFastScrolling] = createSignal(false);
-
   const [animating, setAnimating] = createSignal<null | "left" | "right">(null);
 
-  onMount(() => {
-    const song = props.songs.at(currentIndex() % props.songs.length);
-    if (song) {
-      props.onSongChange?.(song);
+  const sortedSongs = createMemo(() => {
+    const songs = props.songs;
+
+    if (props.sort === "title") {
+      return songs.toSorted((a, b) => a.title.localeCompare(b.title));
     }
+    if (props.sort === "year") {
+      return songs.toSorted((a, b) => {
+        if (a.year === undefined) {
+          return -1;
+        }
+        if (b.year === undefined) {
+          return 1;
+        }
+
+        return a.year - b.year;
+      });
+    }
+
+    return songs.toSorted((a, b) => a.artist.localeCompare(b.artist));
+  });
+
+  const currentIndex = createMemo(() => {
+    const currentSong = props.currentSong;
+    if (!currentSong) return 0;
+    return sortedSongs().findIndex((song) => song === currentSong);
   });
 
   const displayedSongs = createMemo(() => {
@@ -91,13 +138,13 @@ function SongScroller(props: SongScrollerProps) {
     const index = currentIndex();
     const offset = Math.floor(DISPLAYED_SONGS / 2);
     for (let i = index - offset; i < index + offset + 1; i++) {
-      const index = i % props.songs.length;
-
-      const song = props.songs.at(index);
+      const index = i % sortedSongs().length;
+      const song = sortedSongs().at(index);
       if (song) {
         songs.push(song);
       }
     }
+
     return songs;
   });
 
@@ -146,22 +193,25 @@ function SongScroller(props: SongScrollerProps) {
 
   const onTransitionEnd = () => {
     const direction = animating();
-
     if (!direction) {
       return;
     }
 
+    const index = currentIndex();
+    let nextIndex: number;
+
     if (direction === "left") {
-      setCurrentIndex(currentIndex() - 1);
-    } else if (direction === "right") {
-      setCurrentIndex(currentIndex() + 1);
+      nextIndex = (index - 1 + sortedSongs().length) % sortedSongs().length;
+    } else {
+      nextIndex = (index + 1) % sortedSongs().length;
+    }
+
+    const nextSong = sortedSongs()[nextIndex];
+    if (nextSong) {
+      props.onSongChange?.(nextSong);
     }
 
     setAnimating(null);
-    const currentSong = props.songs.at(currentIndex() % props.songs.length);
-    if (currentSong) {
-      props.onSongChange?.(currentSong);
-    }
 
     if (isHeld()) {
       setIsFastScrolling(true);
