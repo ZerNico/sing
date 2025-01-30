@@ -87,7 +87,8 @@ class UsersService {
   }
 
   async getPicture(picturePath: string) {
-    const filePath = path.join(config.UPLOADS_PATH, "pictures", picturePath);
+    const filename = path.basename(picturePath);
+    const filePath = path.join(config.UPLOADS_PATH, "pictures", filename);
     return Bun.file(filePath);
   }
 }
