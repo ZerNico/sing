@@ -41,7 +41,7 @@ export default function Avatar(props: AvatarProps) {
       <div class="gradient-settings col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-tr">
         {fallback()}
       </div>
-      <Show when={!error()}>
+      <Show when={!error() && props.user?.picture}>
         <img
           onError={() => setError(true)}
           src={pictureUrl()}
