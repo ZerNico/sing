@@ -16,6 +16,7 @@ import EditProfilePage from "./routes/auth/edit-profile";
 import EditPasswordPage from "./routes/auth/edit-profile/password";
 import JoinDirectPage from "./routes/auth/join/[code]";
 import JoinPage from "./routes/auth/join/index";
+import VerifyEmailPage from "./routes/auth/verify-email";
 import DiscordCallbackPage from "./routes/no-auth/auth/discord-callback";
 import GoogleCallbackPage from "./routes/no-auth/auth/google-callback";
 import LoginPage from "./routes/no-auth/sign-in";
@@ -43,6 +44,7 @@ render(
         <Route path="/complete-profile" component={CompleteProfilePage} />
         <Route path="/edit-profile" component={EditProfilePage} />
         <Route path="/edit-profile/password" component={EditPasswordPage} />
+        <Route path="/verify-email" component={VerifyEmailPage} />
       </Route>
 
       <Route path="/" component={NoAuthLayout}>

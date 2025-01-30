@@ -90,7 +90,7 @@ export default function VerifyEmailPage() {
         </Form>
         <p class="text-slate-500 text-sm">
           {t("verify_email.not_received")}{" "}
-          <button onClick={handleResend} class="bg-none text-slate-800" type="button">
+          <button onClick={handleResend} class="cursor-pointer bg-none text-slate-800" type="button">
             {t("verify_email.resend")}
           </button>
         </p>
