@@ -48,7 +48,7 @@ export default function Header() {
             <Show when={profile()}>
               {(profile) => (
                 <DropdownMenu>
-                  <DropdownMenu.Trigger class="cursor-pointer">
+                  <DropdownMenu.Trigger class="cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-white">
                     <Avatar class="transition-opacity hover:opacity-75" user={profile()} />
                   </DropdownMenu.Trigger>
 
