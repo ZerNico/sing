@@ -18,6 +18,7 @@ const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
     sameSite: "lax",
     domain: config.COOKIE_DOMAIN,
     path: "/v1.0/oauth/google/callback",
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 1), // 1 day
   });
 
   res.setCookie("google_state", auth.state, {
@@ -26,6 +27,7 @@ const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
     sameSite: "lax",
     domain: config.COOKIE_DOMAIN,
     path: "/v1.0/oauth/google/callback",
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 1), // 1 day
   });
 
   return res.json({ url });

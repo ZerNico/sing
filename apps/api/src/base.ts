@@ -13,7 +13,7 @@ export const baseRoute = new RouteBuilder()
       allowHeaders: ["Content-Type", "Authorization"],
     }),
   )
-  .use(rateLimit({ max: 100, window: 60, generateKey: (ctx) => ctx.raw.headers.get("x-forwarded-for") ?? "anonymous" }))
+  .use(rateLimit({ max: 100, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
   .use(csrf({ allowedOrigins: [`https://app.${config.BASE_DOMAIN}`, "http://localhost:1420"] }))
   .error((error, { res }) => {
     if (error instanceof v.ValiError) {

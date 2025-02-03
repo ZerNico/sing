@@ -1,9 +1,9 @@
 import { type BaseContext, RouteBuilder } from "@nokijs/server";
 
-interface RateLimitOptions {
+interface RateLimitOptions<TContext extends EmptyObject = EmptyObject> {
   max?: number;
   window?: number;
-  generateKey: (context: BaseContext) => string;
+  generateKey: (context: BaseContext & TContext) => string;
 }
 
 interface RateLimitInfo {
@@ -16,7 +16,11 @@ const defaultOptions = {
   window: 60, // 1 minute
 };
 
-export function rateLimit(options: RateLimitOptions): RouteBuilder {
+type EmptyObject = Record<string, never>;
+
+export function rateLimit<TContext extends EmptyObject = EmptyObject>(
+  options: RateLimitOptions<TContext>,
+): RouteBuilder {
   const opts = { ...defaultOptions, ...options };
 
   const rateLimitStore = new Map<string, RateLimitInfo>();
@@ -31,7 +35,7 @@ export function rateLimit(options: RateLimitOptions): RouteBuilder {
   }, 60000);
 
   return new RouteBuilder().before((context) => {
-    const key = opts.generateKey(context);
+    const key = opts.generateKey(context as BaseContext & TContext);
     const now = Date.now();
     let limitInfo = rateLimitStore.get(key);
     if (!limitInfo || limitInfo.resetAt <= now) {
@@ -51,11 +55,12 @@ export function rateLimit(options: RateLimitOptions): RouteBuilder {
     if (limitInfo.count > opts.max) {
       context.res.headers.set("Retry-After", Math.ceil((limitInfo.resetAt - now) / 1000).toString());
 
+      const retryAfterDate = new Date(limitInfo.resetAt);
       return context.res.json(
         {
-          error: "Too Many Requests",
+          code: "RATE_LIMIT_EXCEEDED",
           message: "Rate limit exceeded",
-          retryAfter: Math.ceil((limitInfo.resetAt - now) / 1000),
+          retryAfter: retryAfterDate.toISOString(),
         },
         { status: 429 },
       );

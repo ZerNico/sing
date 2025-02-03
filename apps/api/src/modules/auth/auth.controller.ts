@@ -1,51 +1,58 @@
 import { groupRoutes } from "@nokijs/server";
 import * as v from "valibot";
 import { baseRoute } from "../../base";
+import { rateLimit } from "../../utils/rate-limit";
 import { usersService } from "../users/users.service";
 import { authenticated } from "./auth.middlewares";
 import { loginSchema, registerSchema } from "./auth.models";
 import { authService } from "./auth.service";
 import { clearAuthCookies, setAuthCookies } from "./auth.utils";
 
-const register = baseRoute.body(registerSchema).post("/register", async ({ res, body }) => {
-  const user = await authService.register(body);
+const register = baseRoute
+  .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
+  .body(registerSchema)
+  .post("/register", async ({ res, body }) => {
+    const user = await authService.register(body);
 
-  if (!user) {
-    return res.json(
-      {
-        code: "USER_OR_EMAIL_ALREADY_EXISTS",
-        message: "User or email already exists",
-      },
-      { status: 400 },
-    );
-  }
+    if (!user) {
+      return res.json(
+        {
+          code: "USER_OR_EMAIL_ALREADY_EXISTS",
+          message: "User or email already exists",
+        },
+        { status: 400 },
+      );
+    }
 
-  await authService.sendVerificationEmail(user);
+    await authService.sendVerificationEmail(user);
 
-  const { accessToken, refreshToken } = await authService.createTokens(user);
+    const { accessToken, refreshToken } = await authService.createTokens(user);
 
-  setAuthCookies(res, accessToken, refreshToken);
-  return res.text("", { status: 201 });
-});
+    setAuthCookies(res, accessToken, refreshToken);
+    return res.text("", { status: 201 });
+  });
 
-const login = baseRoute.body(loginSchema).post("/login", async ({ res, body }) => {
-  const user = await authService.login(body);
+const login = baseRoute
+  .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
+  .body(loginSchema)
+  .post("/login", async ({ res, body }) => {
+    const user = await authService.login(body);
 
-  if (!user) {
-    return res.json(
-      {
-        code: "INVALID_CREDENTIALS",
-        message: "Invalid credentials",
-      },
-      { status: 400 },
-    );
-  }
+    if (!user) {
+      return res.json(
+        {
+          code: "INVALID_CREDENTIALS",
+          message: "Invalid credentials",
+        },
+        { status: 400 },
+      );
+    }
 
-  const { accessToken, refreshToken } = await authService.createTokens(user);
+    const { accessToken, refreshToken } = await authService.createTokens(user);
 
-  setAuthCookies(res, accessToken, refreshToken);
-  return res.text("", { status: 200 });
-});
+    setAuthCookies(res, accessToken, refreshToken);
+    return res.text("", { status: 200 });
+  });
 
 const logout = baseRoute.use(authenticated).post("/logout", async ({ res, getCookie }) => {
   const refreshToken = getCookie("refresh_token");
@@ -119,7 +126,7 @@ const resend = baseRoute.use(authenticated).post("/resend", async ({ res, payloa
       {
         code: "RESEND_RATE_LIMITED",
         message: "Too many requests",
-        retryAt: result.expiresAt.toISOString(),
+        retryAfter: result.expiresAt.toISOString(),
       } as const,
       { status: 429 },
     );
@@ -129,6 +136,7 @@ const resend = baseRoute.use(authenticated).post("/resend", async ({ res, payloa
 });
 
 const verify = baseRoute
+  .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
   .body(v.object({ code: v.string() }))
   .use(authenticated)
   .post("/verify", async ({ res, payload, body, getCookie }) => {

@@ -1,5 +1,6 @@
 import { groupRoutes } from "@nokijs/server";
 import { baseRoute } from "../../base";
+import { rateLimit } from "../../utils/rate-limit";
 import { verified } from "../auth/auth.middlewares";
 import { requireLobbyOrVerifiedUser } from "./lobbies.middlewares";
 import { lobbiesService } from "./lobbies.service";
@@ -22,17 +23,20 @@ const createLobby = baseRoute.post("", async ({ res }) => {
   return res.json({ lobby, token: lobbyToken.token });
 });
 
-const joinLobby = baseRoute.use(verified).post("/:lobbyId/join", async ({ res, payload, params }) => {
-  const lobby = await lobbiesService.getById(params.lobbyId);
+const joinLobby = baseRoute
+  .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
+  .use(verified)
+  .post("/:lobbyId/join", async ({ res, payload, params }) => {
+    const lobby = await lobbiesService.getById(params.lobbyId);
 
-  if (!lobby) {
-    return res.json({ code: "LOBBY_NOT_FOUND", message: "Lobby not found" }, { status: 404 });
-  }
+    if (!lobby) {
+      return res.json({ code: "LOBBY_NOT_FOUND", message: "Lobby not found" }, { status: 404 });
+    }
 
-  await lobbiesService.joinLobby(params.lobbyId, payload.sub);
+    await lobbiesService.joinLobby(params.lobbyId, payload.sub);
 
-  return res.text("");
-});
+    return res.text("");
+  });
 
 const getCurrentLobby = baseRoute.use(requireLobbyOrVerifiedUser).get("/current", async ({ res, payload }) => {
   if (payload.type === "access") {
