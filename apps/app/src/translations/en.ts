@@ -6,6 +6,7 @@ const en = {
     no_account: "Don't have an account?",
     sign_up: "Sign up",
     invalid_username_or_password: "Invalid username or password",
+    forgot_password: "Forgot password?",
   },
   register: {
     title: "Sign Up",
@@ -80,6 +81,7 @@ const en = {
     lobby_code: "Lobby Code",
     lobby_code_length: "Code must be {{ length }} characters long",
     code_length: "Code must be {{ length }} characters long",
+    passwords_dont_match: "Passwords don't match",
   },
   toast: {
     success: "Success",
@@ -89,6 +91,41 @@ const en = {
   },
   error: {
     unknown: "An unknown error occurred",
+  },
+  auth: {
+    forgot_password: {
+      title: "Forgot Password",
+      description: "Enter your email address and we'll send you a code to reset your password.",
+      submit: "Send Reset Code",
+      loading: "Sending...",
+      success_title: "Check your email",
+      success_description: "If an account exists with that email, we've sent you a code to reset your password.",
+      error_title: "Something went wrong",
+      error_description: "We couldn't send the reset code. Please try again.",
+      rate_limited_title: "Too many attempts",
+      rate_limited_description: "Please wait a few minutes before trying again.",
+      already_have_code: "Already have a reset code?",
+      reset_password: "Reset password",
+    },
+    reset_password: {
+      title: "Reset Password",
+      description: "Enter the code you received via email and choose a new password.",
+      code: "Reset Code",
+      code_placeholder: "Enter the code from your email",
+      confirm_password: "Confirm Password",
+      confirm_password_placeholder: "Re-enter your new password",
+      submit: "Reset Password",
+      loading: "Resetting...",
+      success_title: "Password reset successful",
+      success_description: "Your password has been reset. You can now log in with your new password.",
+      error_title: "Something went wrong",
+      error_description: "We couldn't reset your password. Please try again.",
+      invalid_code_title: "Invalid code",
+      invalid_code_description: "The reset code is invalid or has expired. Please request a new one.",
+      password_placeholder: "Enter your new password",
+      no_code: "Don't have a reset code?",
+      request_code: "Request one",
+    },
   },
 };
 

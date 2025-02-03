@@ -61,7 +61,8 @@ export default function VerifyEmailPage() {
     }
 
     if (response.status === 429 && response.data.code === "RESEND_RATE_LIMITED") {
-      const seconds = Math.ceil((new Date(response.data.retryAt).getTime() - Date.now()) / 1000);
+      const retryAfter = new Date(response.data.retryAfter);
+      const seconds = Math.ceil((retryAfter.getTime() - Date.now()) / 1000);
       notify({
         message: t("verify_email.wait_before_resend", { seconds }),
         intent: "info",
@@ -81,8 +82,8 @@ export default function VerifyEmailPage() {
         <h1 class="font-semibold text-xl">{t("verify_email.title")}</h1>
         <p class="text-slate-500">{t("verify_email.description")}</p>
         <Form class="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <Field name="code" validate={valiField(v.pipe(v.string(), v.length(6, t("form.code_length", { length: 6 }))))}>
-            {(field, props) => <Input maxLength={6} label={t("form.code")} {...props} errorMessage={field.error} />}
+          <Field name="code" validate={valiField(v.pipe(v.string(), v.length(8, t("form.code_length", { length: 8 }))))}>
+            {(field, props) => <Input maxLength={8} label={t("form.code")} {...props} errorMessage={field.error} />}
           </Field>
           <Button type="submit" class="mt-4" intent="gradient" loading={verifyEmailForm.submitting}>
             {t("verify_email.verify")}

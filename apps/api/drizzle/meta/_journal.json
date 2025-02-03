@@ -36,6 +36,13 @@
       "when": 1736939334847,
       "tag": "0004_abnormal_stepford_cuckoos",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1738590542275,
+      "tag": "0005_safe_sentry",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { renderVerifyEmail } from "@sing/email";
+import { renderResetPassword, renderVerifyEmail } from "@sing/email";
 import { and, eq, sql } from "drizzle-orm";
 import { SignJWT, jwtVerify } from "jose";
 import nodemailer from "nodemailer";
@@ -6,7 +6,7 @@ import postgres from "postgres";
 import * as v from "valibot";
 import { config } from "../../config";
 import { db } from "../../db/connection";
-import { refreshTokens, verificationTokens } from "../../db/schema";
+import { passwordResetTokens, refreshTokens, verificationTokens } from "../../db/schema";
 import { randomReadableCode } from "../../utils/random";
 import type { User } from "../users/users.models";
 import { usersService } from "../users/users.service";
@@ -167,7 +167,7 @@ class AuthService {
       }
     }
 
-    const code = randomReadableCode(6);
+    const code = randomReadableCode(8);
     const verificationData = {
       token: code,
       userId: user.id,
@@ -199,6 +199,82 @@ class AuthService {
       html: emailHtml,
       text: emailText,
     });
+  }
+
+  async sendPasswordResetEmail(email: string) {
+    const user = await usersService.getByEmail(email);
+    if (!user) {
+      return { notFound: true };
+    }
+
+    const [existingToken] = await db.select().from(passwordResetTokens).where(eq(passwordResetTokens.userId, user.id));
+
+    if (existingToken) {
+      const timeSinceLastToken = Date.now() - existingToken.createdAt.getTime();
+      const fiveMinutes = 5 * 60 * 1000;
+
+      if (timeSinceLastToken < fiveMinutes) {
+        const expiresAt = new Date(existingToken.createdAt.getTime() + fiveMinutes);
+        return { rateLimited: true, expiresAt };
+      }
+    }
+
+    const code = randomReadableCode(8);
+    const resetData = {
+      token: code,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+    };
+
+    await db
+      .insert(passwordResetTokens)
+      .values(resetData)
+      .onConflictDoUpdate({
+        target: passwordResetTokens.userId,
+        set: { ...resetData, createdAt: sql`now()` },
+      })
+      .execute();
+
+    const props = {
+      code: code,
+      url: `https://app.${config.BASE_DOMAIN}/reset-password`,
+      supportUrl: `mailto:${config.SUPPORT_EMAIL}`,
+    };
+
+    const emailHtml = await renderResetPassword(props);
+    const emailText = await renderResetPassword(props, { plainText: true });
+
+    await this.transporter.sendMail({
+      from: config.EMAIL_FROM_MAIL,
+      to: user.email,
+      subject: "Reset your Password",
+      html: emailHtml,
+      text: emailText,
+    });
+
+    return { success: true };
+  }
+
+  async resetPassword(code: string, newPassword: string) {
+    const [resetToken] = await db
+      .select()
+      .from(passwordResetTokens)
+      .where(and(eq(passwordResetTokens.token, code), sql`expires_at > now()`));
+
+    if (!resetToken) {
+      return { invalidCode: true };
+    }
+
+    const user = await db.transaction(async (tx) => {
+      await tx.delete(passwordResetTokens).where(eq(passwordResetTokens.userId, resetToken.userId)).execute();
+      return await usersService.update(resetToken.userId, { password: newPassword }, { tx });
+    });
+
+    if (!user) {
+      return { userNotFound: true };
+    }
+
+    return { success: true };
   }
 }
 

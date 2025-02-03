@@ -38,6 +38,10 @@ export const usersRelations = relations(users, ({ one }) => ({
     fields: [users.id],
     references: [refreshTokens.userId],
   }),
+  passwordResetTokens: one(passwordResetTokens, {
+    fields: [users.id],
+    references: [passwordResetTokens.userId],
+  }),
 }));
 
 export const refreshTokens = pgTable("refresh_tokens", {
@@ -66,9 +70,30 @@ export const verificationTokens = pgTable("verification_tokens", {
   expiresAt: timestamp("expires_at").notNull(),
 });
 
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  token: varchar({ length: 255 }).notNull(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .unique()
+    .primaryKey(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  expiresAt: timestamp("expires_at").notNull(),
+});
+
 export const verificationTokensRelations = relations(verificationTokens, ({ one }) => ({
   user: one(users, {
     fields: [verificationTokens.userId],
+    references: [users.id],
+  }),
+}));
+
+export const passwordResetTokensRelations = relations(passwordResetTokens, ({ one }) => ({
+  user: one(users, {
+    fields: [passwordResetTokens.userId],
     references: [users.id],
   }),
 }));

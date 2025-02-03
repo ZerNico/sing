@@ -81,9 +81,14 @@ export default function LoginPage() {
               <Input autocomplete="current-password" type="password" label={t("form.password")} {...props} errorMessage={field.error} />
             )}
           </Field>
-          <Button type="submit" class="mt-4" intent="gradient" loading={loginForm.submitting}>
-            {t("login.sign_in")}
-          </Button>
+          <div class="flex flex-col gap-2">
+            <Button type="submit" class="mt-4" intent="gradient" loading={loginForm.submitting}>
+              {t("login.sign_in")}
+            </Button>
+            <a href="/forgot-password" class="text-sm text-slate-500 hover:text-slate-800">
+              {t("login.forgot_password")}
+            </a>
+          </div>
         </Form>
         <div class="flex items-center gap-2 text-slate-400">
           <div class="h-0.5 flex-1 rounded-full bg-slate-400" />

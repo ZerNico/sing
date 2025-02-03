@@ -6,6 +6,7 @@ const de = {
     no_account: "Noch kein Konto?",
     sign_up: "Registrieren",
     invalid_username_or_password: "Ungültiger Benutzername oder Passwort",
+    forgot_password: "Passwort vergessen?",
   },
   register: {
     title: "Registrieren",
@@ -80,6 +81,7 @@ const de = {
     lobby_code: "Lobby-Code",
     lobby_code_length: "Code muss {{ length }} Zeichen lang sein",
     code_length: "Code muss {{ length }} Zeichen lang sein",
+    passwords_dont_match: "Passwörter stimmen nicht überein",
   },
   toast: {
     success: "Erfolg",
@@ -89,6 +91,43 @@ const de = {
   },
   error: {
     unknown: "Ein unbekannter Fehler ist aufgetreten",
+  },
+  auth: {
+    forgot_password: {
+      title: "Passwort vergessen",
+      description: "Gib deine E-Mail-Adresse ein und wir senden dir einen Code zum Zurücksetzen deines Passworts.",
+      submit: "Reset-Code senden",
+      loading: "Senden...",
+      success_title: "Überprüfe deine E-Mails",
+      success_description:
+        "Wenn ein Konto mit dieser E-Mail existiert, haben wir dir einen Code zum Zurücksetzen deines Passworts gesendet.",
+      error_title: "Etwas ist schiefgelaufen",
+      error_description: "Wir konnten den Reset-Code nicht senden. Bitte versuche es erneut.",
+      rate_limited_title: "Zu viele Versuche",
+      rate_limited_description: "Bitte warte einige Minuten, bevor du es erneut versuchst.",
+      already_have_code: "Hast du bereits einen Reset-Code?",
+      reset_password: "Passwort zurücksetzen",
+    },
+    reset_password: {
+      title: "Passwort zurücksetzen",
+      description: "Gib den Code ein, den du per E-Mail erhalten hast, und wähle ein neues Passwort.",
+      code: "Reset-Code",
+      code_placeholder: "Gib den Code aus deiner E-Mail ein",
+      confirm_password: "Passwort bestätigen",
+      confirm_password_placeholder: "Gib dein neues Passwort erneut ein",
+      submit: "Passwort zurücksetzen",
+      loading: "Zurücksetzen...",
+      success_title: "Passwort erfolgreich zurückgesetzt",
+      success_description:
+        "Dein Passwort wurde zurückgesetzt. Du kannst dich jetzt mit deinem neuen Passwort anmelden.",
+      error_title: "Etwas ist schiefgelaufen",
+      error_description: "Wir konnten dein Passwort nicht zurücksetzen. Bitte versuche es erneut.",
+      invalid_code_title: "Ungültiger Code",
+      invalid_code_description: "Der Reset-Code ist ungültig oder abgelaufen. Bitte fordere einen neuen an.",
+      password_placeholder: "Gib dein neues Passwort ein",
+      no_code: "Keinen Reset-Code erhalten?",
+      request_code: "Neuen anfordern",
+    },
   },
 };
 

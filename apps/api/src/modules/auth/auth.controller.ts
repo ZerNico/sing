@@ -137,7 +137,7 @@ const resend = baseRoute.use(authenticated).post("/resend", async ({ res, payloa
 
 const verify = baseRoute
   .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
-  .body(v.object({ code: v.string() }))
+  .body(v.object({ code: v.pipe(v.string(), v.length(8)) }))
   .use(authenticated)
   .post("/verify", async ({ res, payload, body, getCookie }) => {
     if (payload.emailVerified) {
@@ -190,4 +190,70 @@ const verify = baseRoute
     return res.text("", { status: 200 });
   });
 
-export const authRoutes = groupRoutes([register, login, resend, verify, refresh, logout], { prefix: "/auth" });
+const requestPasswordReset = baseRoute
+  .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
+  .body(
+    v.object({
+      email: v.pipe(v.string(), v.email(), v.maxLength(128)),
+    }),
+  )
+  .post("/request-reset", async ({ res, body }) => {
+    const result = await authService.sendPasswordResetEmail(body.email);
+
+    if (result.notFound) {
+      // Return success even if user not found to prevent email enumeration
+      return res.text("", { status: 200 });
+    }
+
+    if (result.rateLimited) {
+      return res.json(
+        {
+          code: "RESET_RATE_LIMITED",
+          message: "Too many requests",
+          retryAfter: result.expiresAt.toISOString(),
+        } as const,
+        { status: 429 },
+      );
+    }
+
+    return res.text("", { status: 200 });
+  });
+
+const resetPassword = baseRoute
+  .use(rateLimit({ max: 5, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
+  .body(
+    v.object({
+      code: v.pipe(v.string(), v.length(8)),
+      password: v.pipe(v.string(), v.minLength(6), v.maxLength(128)),
+    }),
+  )
+  .post("/reset", async ({ res, body }) => {
+    const result = await authService.resetPassword(body.code, body.password);
+
+    if (result.invalidCode) {
+      return res.json(
+        {
+          code: "INVALID_CODE",
+          message: "Invalid code",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (result.userNotFound) {
+      return res.json(
+        {
+          code: "USER_NOT_FOUND",
+          message: "User not found",
+        },
+        { status: 404 },
+      );
+    }
+
+    return res.text("", { status: 200 });
+  });
+
+export const authRoutes = groupRoutes(
+  [register, login, resend, verify, refresh, logout, requestPasswordReset, resetPassword],
+  { prefix: "/auth" },
+);

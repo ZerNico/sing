@@ -19,6 +19,8 @@ import JoinPage from "./routes/auth/join/index";
 import VerifyEmailPage from "./routes/auth/verify-email";
 import DiscordCallbackPage from "./routes/no-auth/auth/discord-callback";
 import GoogleCallbackPage from "./routes/no-auth/auth/google-callback";
+import ForgotPasswordPage from "./routes/no-auth/forgot-password";
+import ResetPasswordPage from "./routes/no-auth/reset-password";
 import LoginPage from "./routes/no-auth/sign-in";
 import RegisterPage from "./routes/no-auth/sign-up";
 
@@ -50,6 +52,8 @@ render(
       <Route path="/" component={NoAuthLayout}>
         <Route path="/sign-in" component={LoginPage} />
         <Route path="/sign-up" component={RegisterPage} />
+        <Route path="/forgot-password" component={ForgotPasswordPage} />
+        <Route path="/reset-password" component={ResetPasswordPage} />
         <Route path="/auth/google/callback" component={GoogleCallbackPage} />
         <Route path="/auth/discord/callback" component={DiscordCallbackPage} />
       </Route>
