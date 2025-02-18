@@ -7,8 +7,7 @@ import "@fontsource/lato/400.css";
 import "@fontsource/lato/700.css";
 
 import App from "./app";
-
-import AuthLayout, { LobbyLayout, NoLobbyLayout } from "./layouts/auth";
+import AuthGuard from "./layouts/auth";
 import NoAuthLayout from "./layouts/no-auth";
 import IndexPage from "./routes/auth";
 import CompleteProfilePage from "./routes/auth/complete-profile";
@@ -33,20 +32,20 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 render(
   () => (
     <Router root={App}>
-      <Route path="/" component={AuthLayout}>
-        <Route path="/" component={LobbyLayout}>
-          <Route path="/" component={IndexPage} />
-        </Route>
-
-        <Route path="/" component={NoLobbyLayout}>
-          <Route path="/join" component={JoinPage} />
-          <Route path="/join/:code" component={JoinDirectPage} />
-        </Route>
-
+      <Route path="/" component={AuthGuard}>
         <Route path="/complete-profile" component={CompleteProfilePage} />
         <Route path="/edit-profile" component={EditProfilePage} />
         <Route path="/edit-profile/password" component={EditPasswordPage} />
         <Route path="/verify-email" component={VerifyEmailPage} />
+      </Route>
+
+      <Route path="/" component={() => <AuthGuard mode="requireLobby" />}>
+        <Route path="/" component={IndexPage} />
+      </Route>
+
+      <Route path="/" component={() => <AuthGuard mode="requireNoLobby" />}>
+        <Route path="/join" component={JoinPage} />
+        <Route path="/join/:code" component={JoinDirectPage} />
       </Route>
 
       <Route path="/" component={NoAuthLayout}>
