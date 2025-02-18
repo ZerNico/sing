@@ -52,39 +52,42 @@ export default function Header() {
           <div class="flex justify-end gap-2">
             <Show when={profile()}>
               {(profile) => (
-                <DropdownMenu>
-                  <DropdownMenu.Trigger class="cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-white">
-                    <Avatar class="transition-opacity hover:opacity-75" user={profile()} />
-                  </DropdownMenu.Trigger>
-
-                  <DropdownMenu.Content>
-                    <DropdownMenu.Item onClick={() => navigate("/edit-profile")}>
-                      <IconUser /> {t("header.edit_profile")}
+                <DropdownMenu
+                  trigger={
+                    <Avatar 
+                      class="cursor-pointer rounded-full transition-opacity hover:opacity-75 focus-visible:outline-2 focus-visible:outline-white" 
+                      user={profile()} 
+                    />
+                  }
+                >
+                  <DropdownMenu.Item onClick={() => navigate("/edit-profile")}>
+                    <IconUser /> {t("header.edit_profile")}
+                  </DropdownMenu.Item>
+                  <Show when={profile().lobbyId}>
+                    <DropdownMenu.Item onClick={leaveLobby}>
+                      <IconBan /> {t("header.leave_lobby")}
                     </DropdownMenu.Item>
-                    <Show when={profile().lobbyId}>
-                      <DropdownMenu.Item onClick={leaveLobby}>
-                        <IconBan /> {t("header.leave_lobby")}
-                      </DropdownMenu.Item>
-                    </Show>
-                    <DropdownMenu.Item onClick={logout}>
-                      <IconLogOut /> {t("header.sign_out")}
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Content>
+                  </Show>
+                  <DropdownMenu.Item onClick={logout}>
+                    <IconLogOut /> {t("header.sign_out")}
+                  </DropdownMenu.Item>
                 </DropdownMenu>
               )}
             </Show>
-            <DropdownMenu>
-              <DropdownMenu.Trigger class="cursor-pointer rounded-full p-2 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">
-                <IconEarth />
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Item onClick={() => setLocale("en")}>
-                  <IconEnUs /> English
-                </DropdownMenu.Item>
-                <DropdownMenu.Item onClick={() => setLocale("de")}>
-                  <IconDe /> Deutsch
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
+
+            <DropdownMenu
+              trigger={
+                <div class="cursor-pointer rounded-full p-2 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">
+                  <IconEarth />
+                </div>
+              }
+            >
+              <DropdownMenu.Item onClick={() => setLocale("en")}>
+                <IconEnUs /> English
+              </DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => setLocale("de")}>
+                <IconDe /> Deutsch
+              </DropdownMenu.Item>
             </DropdownMenu>
           </div>
         </div>
