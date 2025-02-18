@@ -1,4 +1,4 @@
-import { Route, Router } from "@solidjs/router";
+import { Navigate, Route, Router } from "@solidjs/router";
 import { render } from "solid-js/web";
 
 import "./app.css";
@@ -37,6 +37,7 @@ render(
         <Route path="/edit-profile" component={EditProfilePage} />
         <Route path="/edit-profile/password" component={EditPasswordPage} />
         <Route path="/verify-email" component={VerifyEmailPage} />
+        <Route path="*" component={() => <Navigate href="/" />} />
       </Route>
 
       <Route path="/" component={() => <AuthGuard mode="requireLobby" />}>

@@ -34,9 +34,6 @@ export default function AuthGuard(props: LayoutProps) {
             on(
               () => location.pathname,
               (pathname) => {
-                console.log("pathname", pathname);
-                
-
                 if (!profile()?.emailVerified) {
                   if (!pathname.startsWith("/verify-email")) {
                     navigate(redirectTo("/verify-email"));
