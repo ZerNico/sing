@@ -1,11 +1,13 @@
-const de = {
+import type { DictEn } from "./en";
+
+const de: DictEn = {
   login: {
     title: "Anmelden",
     sign_in: "Anmelden",
     or: "oder",
     no_account: "Noch kein Konto?",
     sign_up: "Registrieren",
-    invalid_username_or_password: "Ungültiger Benutzername oder Passwort",
+    invalid_credentials: "Ungültige Anmeldedaten",
     forgot_password: "Passwort vergessen?",
   },
   register: {
@@ -67,12 +69,15 @@ const de = {
     profile: "Profil",
   },
   form: {
+    login: "Benutzername / E-Mail",
     username: "Benutzername",
-    password: "Passwort",
-    email: "E-Mail",
-    code: "Code",
     username_min_length: "Benutzername muss mindestens {{ length }} Zeichen lang sein",
     username_max_length: "Benutzername darf maximal {{ length }} Zeichen lang sein",
+    username_invalid: "Benutzername darf nur Buchstaben und Zahlen enthalten",
+    password: "Passwort",
+    repeat_password: "Passwort wiederholen",
+    email: "E-Mail",
+    code: "Code",
     email_invalid: "E-Mail ist ungültig",
     email_max_length: "E-Mail darf maximal {{ length }} Zeichen lang sein",
     password_required: "Passwort wird benötigt",
@@ -81,7 +86,7 @@ const de = {
     lobby_code: "Lobby-Code",
     lobby_code_length: "Code muss {{ length }} Zeichen lang sein",
     code_length: "Code muss {{ length }} Zeichen lang sein",
-    passwords_dont_match: "Passwörter stimmen nicht überein",
+    password_mismatch: "Passwörter stimmen nicht überein",
   },
   toast: {
     success: "Erfolg",

@@ -13,7 +13,6 @@ export default function DiscordCallbackPage() {
   const [searchParams] = useSearchParams<{
     code: string;
     state: string;
-    redirect?: string;
   }>();
 
   const sendCallback = async () => {
@@ -28,7 +27,9 @@ export default function DiscordCallbackPage() {
 
     if (response.ok) {
       await queryClient.invalidateQueries(profileQueryOptions());
-      navigate(searchParams.redirect || "/", { replace: true });
+      const storedRedirect = localStorage.getItem('discord_auth_redirect');
+      localStorage.removeItem('discord_auth_redirect'); // Clear the stored redirect
+      navigate(storedRedirect || "/", { replace: true });
       return;
     }
 

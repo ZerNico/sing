@@ -13,7 +13,6 @@ export default function GoogleCallbackPage() {
   const [searchParams] = useSearchParams<{
     code: string;
     state: string;
-    redirect?: string;
   }>();
 
   const sendCallback = async () => {
@@ -28,7 +27,9 @@ export default function GoogleCallbackPage() {
 
     if (response.ok) {
       await queryClient.invalidateQueries(profileQueryOptions());
-      navigate(searchParams.redirect || "/", { replace: true });
+      const storedRedirect = localStorage.getItem('google_auth_redirect');
+      localStorage.removeItem('google_auth_redirect');
+      navigate(storedRedirect || "/", { replace: true });
       return;
     }
 

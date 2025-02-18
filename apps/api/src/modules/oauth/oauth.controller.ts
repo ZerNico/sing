@@ -8,9 +8,8 @@ import { setAuthCookies } from "../auth/auth.utils";
 import { usersService } from "../users/users.service";
 import { oAuthService } from "./oauth.service";
 
-const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
+const googleAuthUrl = baseRoute.get("/google/url", async ({ res }) => {
   const auth = oAuthService.getGoogleAuthUrl();
-  const url = withQuery(auth.url.href, query);
 
   res.setCookie("google_code_verifier", auth.codeVerifier, {
     secure: true,
@@ -30,7 +29,7 @@ const googleAuthUrl = baseRoute.get("/google/url", async ({ res, query }) => {
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 1), // 1 day
   });
 
-  return res.json({ url });
+  return res.json({ url: auth.url.href });
 });
 
 const googleCallback = baseRoute

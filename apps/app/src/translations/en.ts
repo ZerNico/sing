@@ -5,7 +5,7 @@ const en = {
     or: "or",
     no_account: "Don't have an account?",
     sign_up: "Sign up",
-    invalid_username_or_password: "Invalid username or password",
+    invalid_credentials: "Invalid credentials",
     forgot_password: "Forgot password?",
   },
   register: {
@@ -67,12 +67,15 @@ const en = {
     profile: "Profil",
   },
   form: {
+    login: "Username / Email",
     username: "Username",
-    password: "Password",
-    email: "Email",
-    code: "Code",
     username_min_length: "Username must be at least {{ length }} characters long",
     username_max_length: "Username must be at most {{ length }} characters long",
+    username_invalid: "Username must contain only letters and numbers",
+    password: "Password",
+    repeat_password: "Repeat Password",
+    email: "Email",
+    code: "Code",
     email_invalid: "Email is invalid",
     email_max_length: "Email must be at most {{ length }} characters long",
     password_required: "Password is required",
@@ -81,7 +84,7 @@ const en = {
     lobby_code: "Lobby Code",
     lobby_code_length: "Code must be {{ length }} characters long",
     code_length: "Code must be {{ length }} characters long",
-    passwords_dont_match: "Passwords don't match",
+    password_mismatch: "Passwords don't match",
   },
   toast: {
     success: "Success",
@@ -130,4 +133,5 @@ const en = {
 };
 
 export type Dict = typeof en;
+export type DictEn = typeof en;
 export const dict = en;

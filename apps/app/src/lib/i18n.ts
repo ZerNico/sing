@@ -1,6 +1,5 @@
 import * as i18n from "@solid-primitives/i18n";
 import { makePersisted } from "@solid-primitives/storage";
-import { useNavigate } from "@solidjs/router";
 import { createMemo, createSignal } from "solid-js";
 import * as de from "~/translations/de";
 import * as en from "~/translations/en";

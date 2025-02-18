@@ -6,6 +6,7 @@ export function profileQueryOptions() {
   return queryOptions({
     queryKey: ["v1", "me"],
     retry: false,
+    refetchOnMount: false,
     queryFn: async () => {
       const response = await v1.users.me.get({ credentials: "include" });
 

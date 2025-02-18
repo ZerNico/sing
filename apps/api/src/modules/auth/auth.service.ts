@@ -16,9 +16,9 @@ class AuthService {
   private jwtSecret = new TextEncoder().encode(config.JWT_SECRET);
   private transporter = nodemailer.createTransport(config.EMAIL_SMTP_URI);
 
-  async register({ username, password, email }: { username: string; password: string; email: string }) {
+  async register({ password, email }: { password: string; email: string }) {
     try {
-      const user = await usersService.create({ username, email, password });
+      const user = await usersService.create({ email, password });
 
       return user;
     } catch (error) {
@@ -30,8 +30,8 @@ class AuthService {
     }
   }
 
-  async login({ username, password }: { username: string; password: string }) {
-    const user = await usersService.getByUsername(username);
+  async login({ login, password }: { login: string; password: string }) {
+    const user = (await usersService.getByUsername(login)) ?? (await usersService.getByEmail(login));
 
     if (!user || !user.password) {
       return null;

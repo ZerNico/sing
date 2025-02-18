@@ -14,6 +14,13 @@ export default function GoogleLogin() {
 
   const login = async () => {
     setLoading(true);
+    
+    if (searchParams.redirect) {
+      localStorage.setItem('google_auth_redirect', searchParams.redirect);
+    } else {
+      localStorage.removeItem('google_auth_redirect');
+    }
+
     const response = await v1.oauth.google.url.get({
       credentials: "include",
       query: {

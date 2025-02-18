@@ -4,8 +4,10 @@ import type { users } from "../../db/schema";
 
 export type User = InferSelectModel<typeof users>;
 
+export const usernameSchema = v.pipe(v.string(), v.trim(), v.minLength(3), v.maxLength(20), v.regex(/^[a-zA-Z0-9]+$/));
+
 export const patchMeSchema = v.object({
-  username: v.optional(v.pipe(v.string(), v.minLength(3), v.maxLength(20))),
+  username: v.optional(usernameSchema),
   password: v.optional(v.pipe(v.string(), v.minLength(6), v.maxLength(128))),
   picture: v.optional(
     v.pipe(
