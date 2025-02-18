@@ -77,8 +77,8 @@ export default function Header() {
 
             <DropdownMenu
               trigger={
-                <div class="cursor-pointer rounded-full p-2 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">
-                  <IconEarth />
+                <div class="cursor-pointer rounded-full p-2 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">
+                  <IconEarth class="text-lg" />
                 </div>
               }
             >
