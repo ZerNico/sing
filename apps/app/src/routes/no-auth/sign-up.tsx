@@ -59,14 +59,6 @@ export default function RegisterPage() {
             return;
           }
 
-          if (response.status === 400) {
-            notify({
-              message: t("login.invalid_username_or_password"),
-              intent: "error",
-            });
-            return;
-          }
-
           notify({
             message: t("error.unknown"),
             intent: "error",
@@ -85,13 +77,7 @@ export default function RegisterPage() {
                 </Field>
                 <Field name="password">
                   {(field, props) => (
-                    <Input
-                      autocomplete="new-password"
-                      type="password"
-                      label={t("form.password")}
-                      {...props}
-                      errorMessage={field.error}
-                    />
+                    <Input autocomplete="new-password" type="password" label={t("form.password")} {...props} errorMessage={field.error} />
                   )}
                 </Field>
                 <Field name="repeatPassword">

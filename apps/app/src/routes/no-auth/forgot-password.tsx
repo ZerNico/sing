@@ -54,8 +54,8 @@ export default function ForgotPasswordPage() {
         };
 
         return (
-          <div class="flex flex-grow flex-col items-center justify-center">
-            <Card class="flex w-100 flex-col gap-4">
+          <div class="flex flex-grow flex-col items-center justify-center p-2">
+            <Card class="flex w-100 max-w-full flex-col gap-4">
               <h1 class="font-semibold text-xl">{t("auth.forgot_password.title")}</h1>
               <p class="text-slate-500">{t("auth.forgot_password.description")}</p>
               <Form class="flex flex-col gap-4" onSubmit={handleSubmit}>
