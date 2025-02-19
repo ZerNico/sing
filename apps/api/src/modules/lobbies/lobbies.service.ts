@@ -105,6 +105,10 @@ class LobbiesService {
   async leaveLobby(userId: number) {
     await db.update(users).set({ lobbyId: null }).where(eq(users.id, userId));
   }
+
+  async deleteLobby(id: string) {
+    await db.delete(lobbies).where(eq(lobbies.id, id));
+  }
 }
 
 export const lobbiesService = new LobbiesService();

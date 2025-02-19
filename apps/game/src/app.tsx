@@ -2,8 +2,11 @@ import { makeEventListener } from "@solid-primitives/event-listener";
 import { debounce } from "@solid-primitives/scheduled";
 import { useNavigate } from "@solidjs/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { event } from "@tauri-apps/api";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { type JSX, createSignal } from "solid-js";
+import { v1 } from "./lib/api";
+
 interface AppProps {
   children: JSX.Element;
 }
@@ -38,6 +41,10 @@ export default function App(props: AppProps) {
   makeEventListener(document, "mousemove", () => {
     setMouseHidden(false);
     hideMouse();
+  });
+
+  event.listen("tauri://close-requested", async () => {
+    await v1.lobbies.current.delete();
   });
 
   if (!initialized()) {

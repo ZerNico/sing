@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/solid-query";
-import { useLobbyStore } from "~/stores/lobby";
+import { lobbyStore } from "~/stores/lobby";
 import { v1 } from "./api";
 import { ApiError } from "./error";
 
@@ -9,7 +9,6 @@ export function lobbyQueryOptions() {
     queryKey: ["v1", "lobby"],
     retry: false,
     queryFn: async () => {
-      const lobbyStore = useLobbyStore();
       if (!lobbyStore.lobby()) {
         return null;
       }

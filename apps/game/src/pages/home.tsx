@@ -9,7 +9,7 @@ import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { createQRCode } from "~/hooks/qrcode";
 import { lobbyQueryOptions } from "~/lib/queries";
-import { useLobbyStore } from "~/stores/lobby";
+import { lobbyStore } from "~/stores/lobby";
 import IconMicVocal from "~icons/lucide/mic-vocal";
 import IconPartyPopper from "~icons/lucide/party-popper";
 import IconSettings from "~icons/lucide/settings";
@@ -17,7 +17,6 @@ import IconUsers from "~icons/lucide/users";
 
 export default function Home() {
   const navigate = useNavigate();
-  const lobbyStore = useLobbyStore();
   const [pressed, setPressed] = createSignal(false);
 
   const cards = [

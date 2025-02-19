@@ -7,11 +7,18 @@ type LobbyStore = {
   };
 };
 
-const [lobby, setLobby] = createSignal<LobbyStore>();
+function createLobbyStore() {
+  const [lobby, setLobby] = createSignal<LobbyStore>();
 
-export function useLobbyStore() {
+  const clearLobby = () => {
+    setLobby(undefined);
+  };
+
   return {
     lobby,
     setLobby,
+    clearLobby,
   };
 }
+
+export const lobbyStore = createLobbyStore();

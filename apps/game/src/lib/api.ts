@@ -1,10 +1,9 @@
 import { client } from "@nokijs/client";
 import type { App } from "api";
-import { useLobbyStore } from "~/stores/lobby";
+import { lobbyStore } from "~/stores/lobby";
 
 const api = client<App>(import.meta.env.VITE_API_URL, {
   fetch: async (url, init) => {
-    const lobbyStore = useLobbyStore();
     const lobbyToken = lobbyStore.lobby()?.token;
 
     const modifiedInit = {

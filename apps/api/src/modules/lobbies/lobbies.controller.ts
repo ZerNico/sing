@@ -2,7 +2,7 @@ import { groupRoutes } from "@nokijs/server";
 import { baseRoute } from "../../base";
 import { rateLimit } from "../../utils/rate-limit";
 import { verified } from "../auth/auth.middlewares";
-import { requireLobbyOrVerifiedUser } from "./lobbies.middlewares";
+import { requireLobby, requireLobbyOrVerifiedUser } from "./lobbies.middlewares";
 import { lobbiesService } from "./lobbies.service";
 
 const createLobby = baseRoute.post("", async ({ res }) => {
@@ -58,9 +58,18 @@ const getCurrentLobby = baseRoute.use(requireLobbyOrVerifiedUser).get("/current"
   return res.json(lobby);
 });
 
-const leaveLobby = baseRoute.use(verified).post("/leave", async ({ res, payload }) => {
-  await lobbiesService.leaveLobby(payload.sub);
+const deleteCurrentLobby = baseRoute.use(requireLobby).delete("/current", async ({ res, payload }) => {
+  await lobbiesService.deleteLobby(payload.sub);
+
   return res.text("");
 });
 
-export const lobbiesRoutes = groupRoutes([createLobby, joinLobby, getCurrentLobby, leaveLobby], { prefix: "/lobbies" });
+const leaveLobby = baseRoute.use(verified).post("/leave", async ({ res, payload }) => {
+  await lobbiesService.leaveLobby(payload.sub);
+  
+  return res.text("");
+});
+
+export const lobbiesRoutes = groupRoutes([createLobby, joinLobby, getCurrentLobby, leaveLobby, deleteCurrentLobby], {
+  prefix: "/lobbies",
+});

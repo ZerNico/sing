@@ -8,18 +8,15 @@ import Button from "~/components/ui/button";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { v1 } from "~/lib/api";
-import { useLobbyStore } from "~/stores/lobby";
+import { lobbyStore } from "~/stores/lobby";
 import IconLoaderCircle from "~icons/lucide/loader-circle";
 
 export default function Index() {
   const navigate = useNavigate();
-  const lobbyStore = useLobbyStore();
 
   const createLobbyMutation = createMutation(() => ({
     mutationKey: ["createLobby"],
     mutationFn: async () => {
-      await sleep(1000);
-
       const response = await v1.lobbies.post();
 
       if (response.ok) {
@@ -107,5 +104,3 @@ export default function Index() {
     </Layout>
   );
 }
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
