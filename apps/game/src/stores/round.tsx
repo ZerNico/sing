@@ -1,9 +1,11 @@
 import { useNavigate } from "@solidjs/router";
 import { createSignal } from "solid-js";
+import type { User } from "~/lib/types";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 
 type RoundSettings = {
   song: LocalSong;
+  players: (User | null)[];
 };
 
 const [settings, setSettings] = createSignal<RoundSettings>();

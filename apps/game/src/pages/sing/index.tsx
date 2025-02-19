@@ -21,8 +21,11 @@ export default function Sing() {
   const navigate = useNavigate();
   const onBack = () => navigate("/home");
   const [sort, setSort] = createSignal<"artist" | "title" | "year">("artist");
-  const roundStore = useRoundStore();
   const [animationsDisabled, setAnimationsDisabled] = createSignal(false);
+
+  const startGame = (song: LocalSong) => {
+    navigate(`/sing/${song.hash}`);
+  };
 
   useNavigation(() => ({
     layer: 0,
@@ -35,7 +38,7 @@ export default function Sing() {
       if (event.action === "confirm") {
         const song = currentSong();
         if (song) {
-          roundStore.startRound({ song });
+          startGame(song);
         }
       }
     },
