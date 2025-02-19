@@ -9,7 +9,7 @@ interface DropdownMenuProps {
 function DropdownMenuRoot(props: DropdownMenuProps) {
   return (
     <KDropdownMenu gutter={4} placement="bottom-end">
-      <KDropdownMenu.Trigger>{props.trigger}</KDropdownMenu.Trigger>
+      {props.trigger}
       <KDropdownMenu.Portal>
         <KDropdownMenu.Content class="min-w-36 rounded-md border border-gray-200 bg-white p-1 shadow-lg focus:outline-slate-800">
           {props.children}
@@ -24,7 +24,6 @@ interface DropdownMenuItemProps {
   onClick?: () => void;
 }
 
-
 function DropdownMenuItem(props: DropdownMenuItemProps) {
   return (
     <KDropdownMenu.Item
@@ -38,6 +37,7 @@ function DropdownMenuItem(props: DropdownMenuItemProps) {
 }
 
 const DropdownMenu = Object.assign(DropdownMenuRoot, {
+  Trigger: KDropdownMenu.Trigger,
   Item: DropdownMenuItem,
 });
 

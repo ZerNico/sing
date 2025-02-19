@@ -54,10 +54,9 @@ export default function Header() {
               {(profile) => (
                 <DropdownMenu
                   trigger={
-                    <Avatar 
-                      class="cursor-pointer rounded-full transition-opacity hover:opacity-75 focus-visible:outline-2 focus-visible:outline-white" 
-                      user={profile()} 
-                    />
+                    <DropdownMenu.Trigger class="cursor-pointer rounded-full transition-opacity hover:opacity-75 focus-visible:outline-2 focus-visible:outline-white">
+                      <Avatar class="rounded-full" user={profile()} />
+                    </DropdownMenu.Trigger>
                   }
                 >
                   <DropdownMenu.Item onClick={() => navigate("/edit-profile")}>
@@ -77,9 +76,9 @@ export default function Header() {
 
             <DropdownMenu
               trigger={
-                <div class="cursor-pointer rounded-full p-2 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">
+                <DropdownMenu.Trigger class="cursor-pointer rounded-full p-2 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white">
                   <IconEarth class="text-lg" />
-                </div>
+                </DropdownMenu.Trigger>
               }
             >
               <DropdownMenu.Item onClick={() => setLocale("en")}>
