@@ -7,7 +7,7 @@ import { profileQueryOptions } from "~/lib/queries";
 // Common type for all layout components
 type LayoutProps = {
   children?: JSX.Element;
-  mode?: 'default' | 'requireLobby' | 'requireNoLobby';
+  mode?: "default" | "requireLobby" | "requireNoLobby";
 };
 
 function useProfileQuery() {
@@ -34,30 +34,42 @@ export default function AuthGuard(props: LayoutProps) {
             on(
               () => location.pathname,
               (pathname) => {
-                if (!profile()?.emailVerified) {
+                const user = profile();
+
+                if (!user) {
+                  return;
+                }
+
+                if (!user.emailVerified) {
                   if (!pathname.startsWith("/verify-email")) {
                     navigate(redirectTo("/verify-email"));
                   }
                   return;
                 }
 
-                if (!profile()?.username) {
+                if (!user.username) {
                   if (!pathname.startsWith("/complete-profile")) {
                     navigate(redirectTo("/complete-profile"));
                   }
                   return;
                 }
 
-                if (props.mode === 'requireLobby' && !profile()?.lobbyId) {
+                if (props.mode === "requireLobby" && !user.lobbyId) {
                   navigate("/join");
-                } else if (props.mode === 'requireNoLobby' && profile()?.lobbyId) {
+                }
+
+                if (props.mode === "requireNoLobby" && user.lobbyId) {
                   navigate("/");
                 }
               }
             )
           );
 
-          return <>{props.children}</>;
+          return (
+            <>
+              {props.children}
+            </>
+          );
         }}
       </Match>
     </Switch>

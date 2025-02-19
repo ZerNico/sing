@@ -40,11 +40,11 @@ render(
         <Route path="*" component={() => <Navigate href="/" />} />
       </Route>
 
-      <Route path="/" component={() => <AuthGuard mode="requireLobby" />}>
+      <Route path="/" component={(props) => <AuthGuard mode="requireLobby" {...props} />}>
         <Route path="/" component={IndexPage} />
       </Route>
 
-      <Route path="/" component={() => <AuthGuard mode="requireNoLobby" />}>
+      <Route path="/" component={(props) => <AuthGuard mode="requireNoLobby" {...props} />}>
         <Route path="/join" component={JoinPage} />
         <Route path="/join/:code" component={JoinDirectPage} />
       </Route>
