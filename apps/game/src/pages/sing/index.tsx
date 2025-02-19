@@ -6,7 +6,6 @@ import SongPlayer from "~/components/song-player";
 import TitleBar from "~/components/title-bar";
 import { useNavigation } from "~/hooks/navigation";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
-import { useRoundStore } from "~/stores/round";
 import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
 import IconDices from "~icons/lucide/dices";
@@ -109,6 +108,7 @@ export default function Sing() {
         <div>
           <SongScroller
             onSongChange={setCurrentSong}
+            onSelect={startGame}
             songs={songsStore.songs()}
             sort={sort()}
             currentSong={currentSong() || null}
@@ -126,6 +126,7 @@ interface SongScrollerProps {
   currentSong: LocalSong | null;
   animationsDisabled: boolean;
   onSongChange?: (song: LocalSong) => void;
+  onSelect?: (song: LocalSong) => void;
 }
 
 const DISPLAYED_SONGS = 11;
@@ -310,6 +311,13 @@ function SongScroller(props: SongScrollerProps) {
                 "duration-0! ease-linear!": props.animationsDisabled,
               }}
               onTransitionEnd={(e) => e.stopPropagation()}
+              onClick={() => {
+                if (index() !== MIDDLE_SONG_INDEX) {
+                  animateTo(index() > MIDDLE_SONG_INDEX ? "right" : "left");
+                } else {
+                  props.onSelect?.(song);
+                }
+              }}
             >
               <SongCard
                 fastScrolling={isFastScrolling() && !!animating()}
