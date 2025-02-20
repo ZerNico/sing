@@ -1,5 +1,6 @@
+import { mergeRefs } from "@solid-primitives/refs";
 import { useNavigate } from "@solidjs/router";
-import { For, Show, createMemo, createSignal } from "solid-js";
+import { For, type Ref, Show, createMemo, createSignal } from "solid-js";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import SongPlayer from "~/components/song-player";
@@ -9,6 +10,8 @@ import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
 import IconDices from "~icons/lucide/dices";
+import IconSearch from "~icons/lucide/search";
+import IconF3Key from "~icons/sing/f3-key";
 
 const [currentSong, setCurrentSong] = createSignal<LocalSong | null>();
 
@@ -21,16 +24,20 @@ export default function Sing() {
   const onBack = () => navigate("/home");
   const [sort, setSort] = createSignal<"artist" | "title" | "year">("artist");
   const [animationsDisabled, setAnimationsDisabled] = createSignal(false);
+  const [searchQuery, setSearchQuery] = createSignal("");
+  const [searchFocused, setSearchFocused] = createSignal(false);
+  let searchRef!: HTMLInputElement;
 
   const startGame = (song: LocalSong) => {
     navigate(`/sing/${song.hash}`);
   };
 
   useNavigation(() => ({
-    layer: 0,
     onKeydown(event) {
       if (event.action === "back") {
         onBack();
+      } else if (event.action === "search") {
+        searchRef.focus();
       }
     },
     onKeyup(event) {
@@ -87,7 +94,23 @@ export default function Sing() {
           </div>
         </div>
       }
-      header={<TitleBar title="Songs" onBack={onBack} />}
+      header={
+        <div class="flex gap-20">
+          <TitleBar title="Songs" onBack={onBack} />
+          <SearchBar
+            ref={searchRef}
+            onSearch={setSearchQuery}
+            onFocus={() => {
+              setSearchFocused(true);
+              setAnimationsDisabled(true);
+            }}
+            onBlur={() => {
+              setSearchFocused(false);
+              setAnimationsDisabled(false);
+            }}
+          />
+        </div>
+      }
       background={
         <Show when={currentSong()}>
           {(currentSong) => (
@@ -107,6 +130,7 @@ export default function Sing() {
         </div>
         <div>
           <SongScroller
+            searchQuery={searchQuery()}
             onSongChange={setCurrentSong}
             onSelect={startGame}
             songs={songsStore.songs()}
@@ -125,7 +149,8 @@ interface SongScrollerProps {
   sort: "artist" | "title" | "year";
   currentSong: LocalSong | null;
   animationsDisabled: boolean;
-  onSongChange?: (song: LocalSong) => void;
+  searchQuery: string;
+  onSongChange?: (song: LocalSong | null) => void;
   onSelect?: (song: LocalSong) => void;
 }
 
@@ -139,7 +164,16 @@ function SongScroller(props: SongScrollerProps) {
   const [animating, setAnimating] = createSignal<null | "left" | "right">(null);
 
   const sortedSongs = createMemo(() => {
-    const songs = props.songs;
+    let songs = props.songs;
+
+    if (props.searchQuery.trim()) {
+      const query = props.searchQuery.toLowerCase().trim();
+      songs = songs.filter((song) => song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query));
+    }
+
+    if (songs.length === 0) {
+      return [];
+    }
 
     if (props.sort === "title") {
       return songs.toSorted((a, b) => a.title.localeCompare(b.title));
@@ -161,9 +195,32 @@ function SongScroller(props: SongScrollerProps) {
   });
 
   const currentIndex = createMemo(() => {
+    const songs = sortedSongs();
+    if (songs.length === 0) {
+      props.onSongChange?.(null);
+      return 0;
+    }
+
     const currentSong = props.currentSong;
-    if (!currentSong) return 0;
-    return sortedSongs().findIndex((song) => song === currentSong);
+    if (!currentSong) {
+      const firstSong = songs[0];
+      if (firstSong) {
+        props.onSongChange?.(firstSong);
+      }
+      return 0;
+    }
+
+    const index = songs.findIndex((song) => song === currentSong);
+
+    if (index === -1) {
+      const firstSong = songs[0];
+      if (firstSong) {
+        props.onSongChange?.(firstSong);
+      }
+      return 0;
+    }
+
+    return index;
   });
 
   const displayedSongs = createMemo(() => {
@@ -182,7 +239,6 @@ function SongScroller(props: SongScrollerProps) {
   });
 
   useNavigation(() => ({
-    layer: 0,
     onKeydown(event) {
       if (event.action === "left") {
         animateTo("left");
@@ -364,6 +420,85 @@ function SongCard(props: SongCardProps) {
         alt={props.song.title}
       />
       <div class="absolute inset-0 bg-black" />
+    </div>
+  );
+}
+
+interface SearchBarProps {
+  onSearch?: (query: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  ref?: Ref<HTMLInputElement>;
+}
+
+function SearchBar(props: SearchBarProps) {
+  const [focused, setFocused] = createSignal(false);
+  let searchRef!: HTMLInputElement;
+
+  const onFocus = () => {
+    setFocused(true);
+    props.onFocus?.();
+  };
+
+  const onBlur = () => {
+    setFocused(false);
+    props.onBlur?.();
+  };
+
+  const onChange = (e: InputEvent & { currentTarget: HTMLInputElement }) => {
+    props.onSearch?.(e.currentTarget.value);
+  };
+
+  const moveCursor = (direction: "left" | "right") => {
+    const start = searchRef.selectionStart ?? 0;
+    searchRef.setSelectionRange(Math.max(0, start + (direction === "left" ? -1 : 1)), Math.max(0, start + (direction === "left" ? -1 : 1)));
+  };
+
+  useNavigation(() => ({
+    layer: 1,
+    enabled: focused(),
+    onKeydown(event) {
+      if (event.action === "back") {
+        onBlur();
+      }
+
+      if (event.origin === "keyboard") {
+        if (event.action === "left") {
+          moveCursor("left");
+        } else if (event.action === "right") {
+          moveCursor("right");
+        }
+      }
+    },
+
+    onRepeat(event) {
+      if (event.origin !== "keyboard") {
+        return;
+      }
+
+      if (event.action === "left") {
+        moveCursor("left");
+      } else if (event.action === "right") {
+        moveCursor("right");
+      }
+    },
+  }));
+
+  return (
+    <div class="flex items-center gap-1 rounded-full border-[0.12cqw] border-white px-1 py-0.5 text-sm">
+      <IconSearch />
+      <input
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onInput={onChange}
+        ref={mergeRefs(props.ref, (el) => {
+          searchRef = el;
+        })}
+        type="text"
+        placeholder="Search"
+        class="bg-transparent text-white focus:outline-none"
+      />
+      <IconF3Key class="transition-opacity" classList={{ "opacity-0": focused() }} />
     </div>
   );
 }

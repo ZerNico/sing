@@ -1,4 +1,4 @@
-import { makeEventListener } from "@solid-primitives/event-listener";
+import { createEventListener } from "@solid-primitives/event-listener";
 import { ReactiveMap } from "@solid-primitives/map";
 import { type MaybeAccessor, access } from "@solid-primitives/utils";
 import mitt from "mitt";
@@ -6,7 +6,7 @@ import { createEffect, createMemo, on, onCleanup } from "solid-js";
 import { type GamepadButton, createGamepad } from "./gamepad";
 
 interface UseNavigationOptions {
-  layer: number;
+  layer?: number;
   enabled?: boolean;
   onKeydown?: (event: NavigationEvent) => void;
   onKeyup?: (event: NavigationEvent) => void;
@@ -17,7 +17,7 @@ interface UseNavigationOptions {
 type NavigationEvent = {
   origin: "gamepad" | "keyboard";
   originalKey: string;
-  action: "left" | "right" | "up" | "down" | "back" | "confirm";
+  action: "left" | "right" | "up" | "down" | "back" | "confirm" | "search";
 };
 
 const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
@@ -27,11 +27,8 @@ const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
   ["ArrowDown", "down"],
   ["Escape", "back"],
   ["Enter", "confirm"],
-  ["a", "left"],
-  ["d", "right"],
-  ["w", "up"],
-  ["s", "down"],
   [" ", "confirm"],
+  ["F3", "search"],
 ]);
 
 const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
@@ -41,6 +38,7 @@ const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
   ["DPAD_DOWN", "down"],
   ["B", "back"],
   ["A", "confirm"],
+  ["START", "search"],
 ]);
 
 const getAxisAction = (button: GamepadButton, direction: number): NavigationEvent["action"] | undefined => {
@@ -67,7 +65,7 @@ const pressedGamepadButtons = new Map<string, { holdTimeout: number; repeatInter
 const HOLD_DELAY = 500;
 const REPEAT_DELAY = 100;
 
-makeEventListener(window, "keydown", (event) => {
+createEventListener(window, "keydown", (event) => {
   if (event.repeat) return;
 
   const action = KEY_MAPPINGS.get(event.key);
@@ -102,7 +100,7 @@ makeEventListener(window, "keydown", (event) => {
   }
 });
 
-makeEventListener(window, "keyup", (event) => {
+createEventListener(window, "keyup", (event) => {
   if (event.repeat) return;
 
   const action = KEY_MAPPINGS.get(event.key);
@@ -121,7 +119,7 @@ makeEventListener(window, "keyup", (event) => {
       origin: "keyboard",
       originalKey: event.key,
       action: action,
-    });
+    }); 
   }
 });
 
@@ -226,14 +224,17 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
     on(
       () => access(options),
       (options) => {
-        layerInstances.set(options.layer, (layerInstances.get(options.layer) ?? 0) + 1);
+        if (options.enabled === false) return;
+        
+        const layer = options.layer ?? 0;
+        layerInstances.set(layer, (layerInstances.get(layer) ?? 0) + 1);
 
         onCleanup(() => {
-          const current = layerInstances.get(options.layer) || 0;
+          const current = layerInstances.get(layer) || 0;
           if (current <= 1) {
-            layerInstances.delete(options.layer);
+            layerInstances.delete(layer);
           } else {
-            layerInstances.set(options.layer, current - 1);
+            layerInstances.set(layer, current - 1);
           }
         });
       },
@@ -242,8 +243,10 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
 
   const isActive = createMemo(() => {
     const opts = access(options);
+    if (opts?.enabled === false) return false;
+    
     const highestLayer = Math.max(...layerInstances.keys());
-    return (opts?.enabled ?? true) && opts?.layer === highestLayer;
+    return (opts.layer ?? 0) === highestLayer;
   });
 
   createEffect(() => {
