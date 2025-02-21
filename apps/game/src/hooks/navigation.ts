@@ -17,7 +17,7 @@ interface UseNavigationOptions {
 type NavigationEvent = {
   origin: "gamepad" | "keyboard";
   originalKey: string;
-  action: "left" | "right" | "up" | "down" | "back" | "confirm" | "search";
+  action: "left" | "right" | "up" | "down" | "back" | "confirm" | "search" | "random";
 };
 
 const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
@@ -29,6 +29,7 @@ const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
   ["Enter", "confirm"],
   [" ", "confirm"],
   ["F3", "search"],
+  ["F4", "random"],
 ]);
 
 const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
@@ -39,6 +40,7 @@ const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
   ["B", "back"],
   ["A", "confirm"],
   ["START", "search"],
+  ["Y", "random"],
 ]);
 
 const getAxisAction = (button: GamepadButton, direction: number): NavigationEvent["action"] | undefined => {

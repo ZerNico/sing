@@ -32,24 +32,6 @@ export default function Sing() {
     navigate(`/sing/${song.hash}`);
   };
 
-  useNavigation(() => ({
-    onKeydown(event) {
-      if (event.action === "back") {
-        onBack();
-      } else if (event.action === "search") {
-        searchRef.focus();
-      }
-    },
-    onKeyup(event) {
-      if (event.action === "confirm") {
-        const song = currentSong();
-        if (song) {
-          startGame(song);
-        }
-      }
-    },
-  }));
-
   const selectRandomSong = () => {
     setAnimationsDisabled(true);
 
@@ -64,6 +46,26 @@ export default function Sing() {
       setAnimationsDisabled(false);
     }, 0);
   };
+
+  useNavigation(() => ({
+    onKeydown(event) {
+      if (event.action === "back") {
+        onBack();
+      } else if (event.action === "search") {
+        searchRef.focus();
+      } else if (event.action === "random") {
+        selectRandomSong();
+      }
+    },
+    onKeyup(event) {
+      if (event.action === "confirm") {
+        const song = currentSong();
+        if (song) {
+          startGame(song);
+        }
+      }
+    },
+  }));
 
   return (
     <Layout

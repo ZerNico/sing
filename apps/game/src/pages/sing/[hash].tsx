@@ -24,6 +24,7 @@ export default function PlayerSelect() {
 
   return (
     <Layout
+      intent="secondary"
       header={<TitleBar title="Settings" description={"Microphones"} onBack={onBack} />}
       footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
     >
