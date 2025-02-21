@@ -1,6 +1,7 @@
 import { mergeRefs } from "@solid-primitives/refs";
 import { useNavigate } from "@solidjs/router";
 import { For, type Ref, Show, createMemo, createSignal } from "solid-js";
+import { Transition } from "solid-transition-group";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import SongPlayer from "~/components/song-player";
@@ -114,13 +115,42 @@ export default function Sing() {
         </div>
       }
       background={
-        <Show when={currentSong()}>
-          {(currentSong) => (
-            <div class="relative h-full w-full">
-              <SongPlayer volume={settingsStore.getVolume("preview")} class="h-full w-full opacity-40" playing song={currentSong()} />
-            </div>
-          )}
-        </Show>
+        <div class="relative h-full w-full">
+          <Transition
+            onExit={(el, done) => {
+              const element = el as HTMLElement;
+              element.style.position = "absolute";
+              element.style.zIndex = "1";
+              element.style.top = "0";
+              element.style.left = "0";
+
+              const a = el.animate([{ opacity: 1 }, { opacity: 0 }], {
+                duration: 300,
+              });
+              a.finished.then(done);
+            }}
+            onEnter={(el, done) => {
+              const element = el as HTMLElement;
+              element.style.position = "absolute";
+              element.style.zIndex = "1";
+              element.style.top = "0";
+              element.style.left = "0";
+
+              const a = el.animate([{ opacity: 0 }, { opacity: 1 }], {
+                duration: 300,
+              });
+              a.finished.then(done);
+            }}
+          >
+            <Show when={currentSong()} keyed>
+              {(currentSong) => (
+                <div class="h-full w-full">
+                  <SongPlayer volume={settingsStore.getVolume("preview")} class="h-full w-full opacity-60" playing song={currentSong} />
+                </div>
+              )}
+            </Show>
+          </Transition>
+        </div>
       }
     >
       <div class="flex flex-grow flex-col">
