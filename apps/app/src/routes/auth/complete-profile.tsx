@@ -40,7 +40,6 @@ export default function CompleteProfilePage() {
           if (response.ok) {
             await queryClient.invalidateQueries(profileQueryOptions());
             navigate(searchParams.redirect || "/");
-            console.log("redirecting to", searchParams.redirect || "/");
             return;
           }
 

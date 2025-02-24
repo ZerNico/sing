@@ -21,6 +21,16 @@ export interface GameContextValue {
   ms: Accessor<number>;
   beat: Accessor<number>;
   song: Accessor<LocalSong | undefined>;
+  currentTime: Accessor<number>;
+  duration: Accessor<number>;
+  scores: Accessor<
+    {
+      note: number;
+      golden: number;
+      bonus: number;
+    }[]
+  >;
+  addScore: (index: number, type: "note" | "golden" | "bonus", value: number) => void;
 }
 
 const GameContext = createContext<GameContextValue>();
@@ -30,6 +40,9 @@ export function createGame(options: Accessor<CreateGameOptions>) {
   const [beat, setBeat] = createSignal(0);
   const [started, setStarted] = createSignal(false);
   const [playing, setPlaying] = createSignal(false);
+  const [currentTime, setCurrentTime] = createSignal(0);
+  const [duration, setDuration] = createSignal(0);
+  const [scores, setScores] = createSignal<{ note: number; golden: number; bonus: number }[]>([]);
 
   const start = async () => {
     const opts = options();
@@ -65,12 +78,16 @@ export function createGame(options: Accessor<CreateGameOptions>) {
       return;
     }
 
-    const ms = opts.songPlayerRef?.getCurrentTime() * 1000;
+    const currentTime = opts.songPlayerRef.getCurrentTime();
+    const duration = opts.songPlayerRef.getDuration();
+    const ms = currentTime * 1000;
     const beat = msToBeat(opts.song, ms);
 
     batch(() => {
       setMs(ms);
       setBeat(beat);
+      setCurrentTime(currentTime);
+      setDuration(duration);
     });
   });
 
@@ -85,6 +102,16 @@ export function createGame(options: Accessor<CreateGameOptions>) {
       stopLoop();
     }
   });
+  const addScore = (index: number, type: "note" | "golden" | "bonus", value: number) => {
+    setScores((prev) => {
+      const newScores = [...prev];
+      if (!newScores[index]) {
+        newScores[index] = { note: 0, golden: 0, bonus: 0 };
+      }
+      newScores[index][type] += value;
+      return newScores;
+    });
+  };
 
   const values = {
     start,
@@ -96,6 +123,10 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     ms,
     beat,
     song: () => options().song,
+    currentTime,
+    duration,
+    scores,
+    addScore,
   };
 
   const Provider = (props: { children: JSX.Element }) => <GameContext.Provider value={values}>{props.children}</GameContext.Provider>;

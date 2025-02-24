@@ -491,7 +491,7 @@ function SearchBar(props: SearchBarProps) {
     enabled: focused(),
     onKeydown(event) {
       if (event.action === "back") {
-        onBlur();
+        searchRef.blur();
       }
 
       if (event.origin === "keyboard") {

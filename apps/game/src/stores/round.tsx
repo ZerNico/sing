@@ -5,7 +5,7 @@ import type { LocalSong } from "~/lib/ultrastar/parser/local";
 
 type RoundSettings = {
   song: LocalSong;
-  players: (User | null)[];
+  players: (User | undefined)[];
 };
 
 const [settings, setSettings] = createSignal<RoundSettings>();

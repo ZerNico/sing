@@ -2,6 +2,7 @@ import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
 import Menu from "~/components/game/menu";
+import Progress from "~/components/game/progress";
 import SongPlayer, { type SongPlayerRef } from "~/components/song-player";
 import { useNavigation } from "~/hooks/navigation";
 import { createGame } from "~/lib/game/game";
@@ -73,6 +74,9 @@ export default function Game() {
             <div class="relative z-1 grid h-full flex-grow grid-rows-[1fr_1fr]">
               <Half index={0} />
               <Half index={1} />
+            </div>
+            <div class="absolute inset-0">
+              <Progress />
             </div>
           </div>
 

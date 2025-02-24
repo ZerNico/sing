@@ -10,6 +10,7 @@ import Select from "~/components/ui/select";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { lobbyQueryOptions } from "~/lib/queries";
+import type { LocalUser } from "~/lib/types";
 import { useRoundStore } from "~/stores/round";
 import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
@@ -37,15 +38,28 @@ export default function PlayerSelect() {
       >
         <Show when={lobbyQuery.data}>
           {(lobby) => {
+            const localUsers: LocalUser[] = [
+              {
+                id: "guest",
+                username: "Guest",
+                picture: null,
+                type: "local",
+              },
+            ];
+
             const roundStore = useRoundStore();
             const { hash } = useParams<{ hash: string }>();
             const [playerCount, setPlayerCount] = createSignal(settingsStore.microphones().length);
-            const [selectedPlayers, setSelectedPlayers] = createSignal<number[]>(Array(settingsStore.microphones().length).fill(-1));
+            const [selectedPlayers, setSelectedPlayers] = createSignal<(number | string)[]>(
+              Array(settingsStore.microphones().length).fill(localUsers[0]?.id || -1)
+            );
+
+            const users = () => [...lobby().users, ...localUsers];
 
             const startGame = () => {
               const players = selectedPlayers()
                 .slice(0, playerCount())
-                .map((player) => lobby().users[player] || null);
+                .map((player) => users().find((user) => user.id === player) || undefined);
               const song = songsStore.songs().find((song) => song.hash === hash);
 
               if (!song) {
@@ -67,7 +81,9 @@ export default function PlayerSelect() {
                 } else if (event.action === "up") {
                   decrement();
                 } else if (event.action === "confirm") {
-                  setPressed(true);
+                  if (position() === playerCount() + 1) {
+                    setPressed(true);
+                  }
                 }
               },
               onKeyup(event) {
@@ -77,6 +93,10 @@ export default function PlayerSelect() {
                 }
               },
             }));
+
+            const setPlayer = (playerNumber: number, value: number | string) => {
+              setSelectedPlayers((prev) => [...prev.slice(0, playerNumber), value, ...prev.slice(playerNumber + 1)]);
+            };
 
             return (
               <div class="flex w-full flex-grow flex-col justify-center">
@@ -97,12 +117,10 @@ export default function PlayerSelect() {
                       gradient="gradient-sing"
                       label={`Player ${playerNumber + 1}`}
                       value={selectedPlayers()[playerNumber] || -1}
-                      options={[...lobby().users.map((user) => user.id), -1]}
-                      onChange={(value) =>
-                        setSelectedPlayers((prev) => [...prev.slice(0, playerNumber), value, ...prev.slice(playerNumber + 1)])
-                      }
+                      options={users().map((user) => user.id)}
+                      onChange={(value) => setPlayer(playerNumber, value)}
                       renderValue={(value) => {
-                        const player = lobby().users.find((user) => user.id === value) || { username: "Guest" };
+                        const player = users().find((user) => user.id === value) || { username: "?" };
                         return (
                           <div class="flex items-center gap-4">
                             <Avatar user={player} />
