@@ -195,7 +195,7 @@ function ScoreCard(props: ScoreCardProps) {
 
   return (
     <div
-      class="flex w-140 flex-col gap-3 rounded-xl p-6 shadow-xl transition-all"
+      class="flex w-140 flex-col gap-4 rounded-xl p-6 shadow-xl transition-all"
       style={{
         background: `linear-gradient(90deg, ${getColorVar(props.micColor, 600)}, ${getColorVar(props.micColor, 500)})`,
       }}
@@ -214,7 +214,7 @@ function ScoreCard(props: ScoreCardProps) {
         <ScoreBar isAnimated={animated().bonus} percentage={getPercentage(props.score.bonus)} color={getColorVar(props.micColor, 50)} />
       </div>
 
-      <div class="mt-2 grid grid-cols-3 gap-2">
+      <div class="grid grid-cols-3 gap-3">
         <ScoreDetail label="Notes" value={animatedScores().note} color={getColorVar(props.micColor, 400)} />
         <ScoreDetail label="Golden" value={animatedScores().golden} color={getColorVar(props.micColor, 300)} />
         <ScoreDetail label="Bonus" value={animatedScores().bonus} color={getColorVar(props.micColor, 50)} />
