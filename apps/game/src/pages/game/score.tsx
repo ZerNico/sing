@@ -5,6 +5,7 @@ import Layout from "~/components/layout";
 import TitleBar from "~/components/title-bar";
 import Avatar from "~/components/ui/avatar";
 import Button from "~/components/ui/button";
+import { useNavigation } from "~/hooks/navigation";
 import type { User } from "~/lib/types";
 import { getMaxScore } from "~/lib/ultrastar/voice";
 import { getColorVar } from "~/lib/utils/color";
@@ -30,6 +31,26 @@ interface PlayerScoreData {
 export default function ScorePage() {
   const roundStore = useRoundStore();
   const navigate = useNavigate();
+  const [pressed, setPressed] = createSignal(false);
+
+  const handleContinue = () => {
+    navigate("/sing");
+  };
+
+  useNavigation(() => ({
+    layer: 0,
+    onKeydown(event) {
+      if (event.action === "confirm") {
+        setPressed(true);
+      }
+    },
+    onKeyup(event) {
+      if (event.action === "confirm") {
+        setPressed(false);
+        handleContinue();
+      }
+    },
+  }));
 
   const scoreData = createMemo<PlayerScoreData[]>(() => {
     const players = roundStore.settings()?.players || [];
@@ -80,10 +101,6 @@ export default function ScorePage() {
     return Array.from(stages);
   });
 
-  const handleContinue = () => {
-    navigate("/game/selection");
-  };
-
   return (
     <Layout intent="secondary" header={<TitleBar title="Score" />} footer={<KeyHints hints={["confirm"]} />}>
       <div class="flex flex-grow flex-col">
@@ -100,7 +117,7 @@ export default function ScorePage() {
             )}
           </For>
         </div>
-        <Button selected gradient="gradient-sing" class="w-full" onClick={handleContinue}>
+        <Button active={pressed()} selected gradient="gradient-sing" class="w-full" onClick={handleContinue}>
           Continue
         </Button>
       </div>
