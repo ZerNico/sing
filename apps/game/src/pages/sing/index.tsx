@@ -1,6 +1,6 @@
 import { mergeRefs } from "@solid-primitives/refs";
 import { useNavigate } from "@solidjs/router";
-import { For, type Ref, Show, createMemo, createSignal } from "solid-js";
+import { For, type Ref, Show, batch, createMemo, createSignal } from "solid-js";
 import { Transition } from "solid-transition-group";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
@@ -27,6 +27,7 @@ export default function Sing() {
   const [animationsDisabled, setAnimationsDisabled] = createSignal(false);
   const [searchQuery, setSearchQuery] = createSignal("");
   const [searchFocused, setSearchFocused] = createSignal(false);
+  const [isFastScrolling, setIsFastScrolling] = createSignal(false);
   let searchRef!: HTMLInputElement;
 
   const startGame = (song: LocalSong) => {
@@ -142,7 +143,7 @@ export default function Sing() {
               a.finished.then(done);
             }}
           >
-            <Show when={currentSong()} keyed>
+            <Show when={!isFastScrolling() && currentSong()} keyed>
               {(currentSong) => (
                 <div class="h-full w-full">
                   <SongPlayer volume={settingsStore.getVolume("preview")} class="h-full w-full opacity-60" playing song={currentSong} />
@@ -169,6 +170,7 @@ export default function Sing() {
             sort={sort()}
             currentSong={currentSong() || null}
             animationsDisabled={animationsDisabled()}
+            onIsFastScrolling={setIsFastScrolling}
           />
         </div>
       </div>
@@ -184,6 +186,7 @@ interface SongScrollerProps {
   searchQuery: string;
   onSongChange?: (song: LocalSong | null) => void;
   onSelect?: (song: LocalSong) => void;
+  onIsFastScrolling?: (fastScrolling: boolean) => void;
 }
 
 const DISPLAYED_SONGS = 11;
@@ -306,6 +309,7 @@ function SongScroller(props: SongScrollerProps) {
     }
 
     if (isHeld()) {
+      props.onIsFastScrolling?.(true);
       setIsFastScrolling(true);
     }
 
@@ -328,18 +332,24 @@ function SongScroller(props: SongScrollerProps) {
     }
 
     const nextSong = sortedSongs()[nextIndex];
-    if (nextSong) {
-      props.onSongChange?.(nextSong);
-    }
 
-    setAnimating(null);
+    batch(() => {
+      if (nextSong) {
+        props.onSongChange?.(nextSong);
+      }
 
-    if (isHeld()) {
-      setIsFastScrolling(true);
-      setTimeout(() => animateTo(direction), 0);
-    } else {
-      setIsFastScrolling(false);
-    }
+      setAnimating(null);
+
+      if (isHeld()) {
+        props.onIsFastScrolling?.(true);
+        setIsFastScrolling(true);
+
+        setTimeout(() => animateTo(direction), 0);
+      } else {
+        props.onIsFastScrolling?.(false);
+        setIsFastScrolling(false);
+      }
+    });
   };
 
   const isActive = (index: number, animating: "left" | "right" | null) => {
@@ -429,6 +439,7 @@ interface SongCardProps {
   fastScrolling?: boolean;
   animationsDisabled?: boolean;
 }
+
 function SongCard(props: SongCardProps) {
   return (
     <div
@@ -450,6 +461,7 @@ function SongCard(props: SongCardProps) {
         }}
         src={props.song.coverUrl}
         alt={props.song.title}
+        loading="lazy"
       />
       <div class="absolute inset-0 bg-black" />
     </div>
