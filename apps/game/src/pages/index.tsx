@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { createMutation } from "@tanstack/solid-query";
+import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { For, Match, Switch, createSignal, onMount } from "solid-js";
 import { withQuery } from "ufo";
 import KeyHints from "~/components/key-hints";
@@ -8,11 +8,13 @@ import Button from "~/components/ui/button";
 import { createLoop } from "~/hooks/loop";
 import { useNavigation } from "~/hooks/navigation";
 import { v1 } from "~/lib/api";
+import { lobbyQueryOptions } from "~/lib/queries";
 import { lobbyStore } from "~/stores/lobby";
 import IconLoaderCircle from "~icons/lucide/loader-circle";
 
 export default function Index() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const createLobbyMutation = createMutation(() => ({
     mutationKey: ["createLobby"],
@@ -33,9 +35,15 @@ export default function Index() {
 
   const goToLoading = () => navigate(withQuery("/loading", { redirect: "/home" }));
 
-  onMount(() => {
+  onMount(async () => {
     if (lobbyStore.lobby()) {
-      goToLoading();
+      try {
+        await queryClient.fetchQuery(lobbyQueryOptions());
+        goToLoading();
+      } catch (error) {
+        lobbyStore.clearLobby();
+        createLobbyMutation.mutate();
+      }
     } else {
       createLobbyMutation.mutate();
     }

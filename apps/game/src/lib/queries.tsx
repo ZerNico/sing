@@ -19,7 +19,7 @@ export function lobbyQueryOptions() {
         return response.data;
       }
 
-      throw new ApiError({ code: response.data.code });
+      throw new ApiError({ code: response.data.code, status: response.status });
     },
   });
 }
