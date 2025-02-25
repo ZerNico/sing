@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { For, Show, createMemo } from "solid-js";
+import { For, Show, createMemo, createSignal, onMount } from "solid-js";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import TitleBar from "~/components/title-bar";
@@ -34,6 +34,24 @@ export default function ScorePage() {
     });
   });
 
+  const animatedStage = createMemo(() => {
+    const animatedStages = new Set<"note" | "golden" | "bonus">();
+
+    const scores = scoreData();
+
+    if (!scores) return [];
+
+    for (const score of scores) {
+      if (!score) continue;
+
+      if (score.score.note > 0) animatedStages.add("note");
+      if (score.score.golden > 0) animatedStages.add("golden");
+      if (score.score.bonus > 0) animatedStages.add("bonus");
+    }
+
+    return Array.from(animatedStages);
+  });
+
   return (
     <Layout intent="secondary" header={<TitleBar title="Score" />} footer={<KeyHints hints={["confirm"]} />}>
       <div class="flex flex-grow flex-col">
@@ -41,7 +59,15 @@ export default function ScorePage() {
           <For each={scoreData()}>
             {(scoreData) => (
               <Show when={scoreData}>
-                {(data) => <ScoreCard score={data().score} player={data().player} micColor={data().micColor} position={data().position} />}
+                {(data) => (
+                  <ScoreCard
+                    animatedStages={animatedStage()}
+                    score={data().score}
+                    player={data().player}
+                    micColor={data().micColor}
+                    position={data().position}
+                  />
+                )}
               </Show>
             )}
           </For>
@@ -59,6 +85,7 @@ interface ScoreCardProps {
   player: User;
   micColor: string;
   position: number;
+  animatedStages: ("note" | "golden" | "bonus")[];
 }
 
 function ScoreCard(props: ScoreCardProps) {
@@ -68,6 +95,23 @@ function ScoreCard(props: ScoreCardProps) {
   const notePercentage = (props.score.note / maxPossibleScore) * 100;
   const goldenPercentage = (props.score.golden / maxPossibleScore) * 100;
   const bonusPercentage = (props.score.bonus / maxPossibleScore) * 100;
+
+  const [animated, setAnimated] = createSignal<{ note: boolean; golden: boolean; bonus: boolean }>({
+    note: false,
+    golden: false,
+    bonus: false,
+  });
+
+  onMount(() => {
+    for (const [index, stage] of props.animatedStages.entries()) {
+      setTimeout(
+        () => {
+          setAnimated((prev) => ({ ...prev, [stage]: true }));
+        },
+        index * 1.5 * 1000
+      );
+    }
+  });
 
   return (
     <div
@@ -88,22 +132,25 @@ function ScoreCard(props: ScoreCardProps) {
         <div
           class="flex h-full items-center justify-center font-medium text-white/90 text-xs"
           style={{
-            width: `${notePercentage}%`,
+            width: `${animated().note ? notePercentage : 0}%`,
             "background-color": getColorVar(props.micColor, 400),
+            transition: "width 1s ease-in-out",
           }}
         />
         <div
           class="flex h-full items-center justify-center font-medium text-white/90 text-xs"
           style={{
-            width: `${goldenPercentage}%`,
+            width: `${animated().golden ? goldenPercentage : 0}%`,
             "background-color": getColorVar(props.micColor, 300),
+            transition: "width 1s ease-in-out",
           }}
         />
         <div
           class="flex h-full items-center justify-center font-medium text-white/90 text-xs"
           style={{
-            width: `${bonusPercentage}%`,
+            width: `${animated().bonus ? bonusPercentage : 0}%`,
             "background-color": getColorVar(props.micColor, 50),
+            transition: "width 1s ease-in-out",
           }}
         />
       </div>
