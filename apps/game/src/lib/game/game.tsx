@@ -86,10 +86,14 @@ export function createGame(options: Accessor<CreateGameOptions>) {
   const addScore = (index: number, type: "note" | "golden" | "bonus", value: number) => {
     setScores((prev) => {
       const newScores = [...prev];
-      if (!newScores[index]) {
-        newScores[index] = { note: 0, golden: 0, bonus: 0 };
+      for (let i = 0; i <= index; i++) {
+        if (!newScores[i]) {
+          newScores[i] = { note: 0, golden: 0, bonus: 0 };
+        }
       }
-      newScores[index][type] += value;
+      if (newScores[index]) {
+        newScores[index][type] += value;
+      }
       return newScores;
     });
   };
