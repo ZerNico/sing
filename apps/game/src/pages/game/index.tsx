@@ -1,4 +1,3 @@
-import { useNavigate } from "@solidjs/router";
 import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
@@ -12,7 +11,6 @@ import { settingsStore } from "~/stores/settings";
 
 export default function Game() {
   const roundStore = useRoundStore();
-  const navigate = useNavigate();
   const [songPlayerRef, setSongPlayerRef] = createSignal<SongPlayerRef>();
   const [ready, setReady] = createSignal(false);
   const [canPlayThrough, setCanPlayThrough] = createSignal(false);
@@ -88,7 +86,7 @@ export default function Game() {
           </div>
 
           <Show when={paused()}>
-            <Menu class="absolute inset-0" onClose={resume} />
+            <Menu class="absolute inset-0" onClose={resume} onExit={handleEnded} />
           </Show>
 
           <div

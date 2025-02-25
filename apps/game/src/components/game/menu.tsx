@@ -5,6 +5,7 @@ import Button from "../ui/button";
 
 interface MenuProps {
   onClose?: () => void;
+  onExit?: () => void;
   class?: string;
 }
 
@@ -18,7 +19,7 @@ export default function Menu(props: MenuProps) {
     },
     {
       label: "Exit",
-      action: () => {},
+      action: () => props.onExit?.(),
     },
   ];
 
