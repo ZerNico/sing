@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { event } from "@tauri-apps/api";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { type JSX, createSignal } from "solid-js";
-import { v1 } from "./lib/api";
+import { lobbyStore } from "./stores/lobby";
 
 interface AppProps {
   children: JSX.Element;
@@ -44,7 +44,7 @@ export default function App(props: AppProps) {
   });
 
   event.listen("tauri://close-requested", async () => {
-    await v1.lobbies.current.delete();
+    await lobbyStore.clearLobby();
   });
 
   if (!initialized()) {

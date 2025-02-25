@@ -34,7 +34,11 @@ export default function Index() {
   const goToLoading = () => navigate(withQuery("/loading", { redirect: "/home" }));
 
   onMount(() => {
-    createLobbyMutation.mutate();
+    if (lobbyStore.lobby()) {
+      goToLoading();
+    } else {
+      createLobbyMutation.mutate();
+    }
   });
 
   const [pressed, setPressed] = createSignal(false);
