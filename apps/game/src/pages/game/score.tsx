@@ -13,7 +13,7 @@ import { useRoundStore } from "~/stores/round";
 import type { Score } from "~/stores/round";
 import { settingsStore } from "~/stores/settings";
 
-type ScoreCategory = "note" | "golden" | "bonus";
+type ScoreCategory = "normal" | "golden" | "bonus";
 type AnimatedState = Record<ScoreCategory, boolean>;
 
 const MAX_POSSIBLE_SCORE = 100000;
@@ -63,11 +63,11 @@ export default function ScorePage() {
       if (!voice || !player) continue;
 
       const maxScore = getMaxScore(voice);
-      const maxScoreTotal = maxScore.note + maxScore.golden + maxScore.bonus;
-      const absoluteScore = roundStore.scores()[index] ?? { note: 0, golden: 0, bonus: 0 };
+      const maxScoreTotal = maxScore.normal + maxScore.golden + maxScore.bonus;
+      const absoluteScore = roundStore.scores()[index] ?? { normal: 0, golden: 0, bonus: 0 };
 
       const relativeScore = {
-        note: (absoluteScore.note / maxScoreTotal) * MAX_POSSIBLE_SCORE,
+        normal: (absoluteScore.normal / maxScoreTotal) * MAX_POSSIBLE_SCORE,
         golden: (absoluteScore.golden / maxScoreTotal) * MAX_POSSIBLE_SCORE,
         bonus: (absoluteScore.bonus / maxScoreTotal) * MAX_POSSIBLE_SCORE,
       };
@@ -93,7 +93,7 @@ export default function ScorePage() {
     if (!scores.length) return [];
 
     for (const data of scores) {
-      if (data.score.note > 0) stages.add("note");
+      if (data.score.normal > 0) stages.add("normal");
       if (data.score.golden > 0) stages.add("golden");
       if (data.score.bonus > 0) stages.add("bonus");
     }
@@ -137,13 +137,13 @@ function ScoreCard(props: ScoreCardProps) {
   const getPercentage = (value: number) => (value / MAX_POSSIBLE_SCORE) * 100;
 
   const [animated, setAnimated] = createSignal<AnimatedState>({
-    note: false,
+    normal: false,
     golden: false,
     bonus: false,
   });
 
   const [animatedScores, setAnimatedScores] = createSignal<Score>({
-    note: 0,
+    normal: 0,
     golden: 0,
     bonus: 0,
   });
@@ -209,13 +209,13 @@ function ScoreCard(props: ScoreCardProps) {
       </div>
 
       <div class="flex h-10 w-full overflow-hidden rounded-lg bg-black/20">
-        <ScoreBar isAnimated={animated().note} percentage={getPercentage(props.score.note)} color={getColorVar(props.micColor, 400)} />
+        <ScoreBar isAnimated={animated().normal} percentage={getPercentage(props.score.normal)} color={getColorVar(props.micColor, 400)} />
         <ScoreBar isAnimated={animated().golden} percentage={getPercentage(props.score.golden)} color={getColorVar(props.micColor, 300)} />
         <ScoreBar isAnimated={animated().bonus} percentage={getPercentage(props.score.bonus)} color={getColorVar(props.micColor, 50)} />
       </div>
 
       <div class="grid grid-cols-3 gap-3">
-        <ScoreDetail label="Notes" value={animatedScores().note} color={getColorVar(props.micColor, 400)} />
+        <ScoreDetail label="Normal" value={animatedScores().normal} color={getColorVar(props.micColor, 400)} />
         <ScoreDetail label="Golden" value={animatedScores().golden} color={getColorVar(props.micColor, 300)} />
         <ScoreDetail label="Bonus" value={animatedScores().bonus} color={getColorVar(props.micColor, 50)} />
       </div>

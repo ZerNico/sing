@@ -15,7 +15,7 @@ export interface GameContextValue {
   currentTime: Accessor<number>;
   duration: Accessor<number>;
   scores: Accessor<Score[]>;
-  addScore: (index: number, type: "note" | "golden" | "bonus", value: number) => void;
+  addScore: (index: number, type: "normal" | "golden" | "bonus", value: number) => void;
 }
 
 export const GameContext = createContext<GameContextValue>();

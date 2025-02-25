@@ -15,8 +15,8 @@ export default function Score(props: ScoreProps) {
     const maxScore = player.maxScore();
     const currentScore = player.score();
 
-    const maxScoreTotal = maxScore.note + maxScore.golden + maxScore.bonus;
-    const currentScoreTotal = currentScore.note + currentScore.golden + currentScore.bonus;
+    const maxScoreTotal = maxScore.normal + maxScore.golden + maxScore.bonus;
+    const currentScoreTotal = currentScore.normal + currentScore.golden + currentScore.bonus;
 
     const score = (currentScoreTotal / maxScoreTotal) * 100000;
 

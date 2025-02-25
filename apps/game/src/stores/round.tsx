@@ -9,7 +9,7 @@ export interface RoundSettings {
 }
 
 export interface Score {
-  note: number;
+  normal: number;
   golden: number;
   bonus: number;
 }

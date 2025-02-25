@@ -13,9 +13,9 @@ export interface PlayerContextValue {
   microphone: Accessor<Microphone>;
   delayedBeat: Accessor<number>;
   processedBeats: ReactiveMap<number, { note: Note; midiNote: number; isFirstInPhrase: boolean }>;
-  addScore: (type: "note" | "golden" | "bonus", value: number) => void;
+  addScore: (type: "normal" | "golden" | "bonus", value: number) => void;
   score: Accessor<Score>;
-  maxScore: Accessor<{ note: number; golden: number; bonus: number }>;
+  maxScore: Accessor<{ normal: number; golden: number; bonus: number }>;
   player: Accessor<User | null>;
 }
 
@@ -32,4 +32,4 @@ export function usePlayer() {
   }
 
   return context;
-} 
+}

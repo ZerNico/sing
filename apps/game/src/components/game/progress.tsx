@@ -9,7 +9,7 @@ export default function Progress() {
 
   const leadingPlayer = createMemo(() => {
     const scores = game.scores();
-    const scoresTotal = scores.map((score) => score.note + score.golden + score.bonus);
+    const scoresTotal = scores.map((score) => score.normal + score.golden + score.bonus);
 
     const maxScore = Math.max(...scoresTotal);
     const maxScoreCount = scoresTotal.filter((score) => score === maxScore).length;
@@ -35,7 +35,10 @@ export default function Progress() {
   return (
     <div class="flex h-full w-full items-center justify-center p-20">
       <div class="h-1.5 w-full bg-white/20">
-        <div class="h-full rounded-full transition-colors duration-500" style={{ width: `${progress() * 100}%`, "background-color": progressColor() }} />
+        <div
+          class="h-full rounded-full transition-colors duration-500"
+          style={{ width: `${progress() * 100}%`, "background-color": progressColor() }}
+        />
       </div>
     </div>
   );

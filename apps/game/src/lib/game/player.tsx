@@ -29,7 +29,7 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
     const v = voice();
     if (!v) {
       return {
-        note: 0,
+        normal: 0,
         golden: 0,
         bonus: 0,
       };
@@ -107,7 +107,7 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
 
     if (!beatInfo) {
       return;
-    }    
+    }
 
     if (beatInfo.isFirstInPhrase) {
       if (correctBeats / totalBeats > 0.9) {
@@ -140,7 +140,7 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
       if (beatInfo.note.type === "Golden") {
         addScore("golden", noteScore);
       } else if (beatInfo.note.type === "Normal") {
-        addScore("note", noteScore);
+        addScore("normal", noteScore);
       }
     }
 
@@ -155,11 +155,11 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
     });
   });
 
-  const addScore = (type: "note" | "golden" | "bonus", value: number) => {
+  const addScore = (type: "normal" | "golden" | "bonus", value: number) => {
     game.addScore(options().index, type, value);
   };
 
-  const score = () => game.scores()[options().index] ?? { note: 0, golden: 0, bonus: 0 };
+  const score = () => game.scores()[options().index] ?? { normal: 0, golden: 0, bonus: 0 };
   const player = () => roundStore.settings()?.players[options().index] || null;
 
   const values: PlayerContextValue = {
@@ -176,9 +176,7 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
     score,
   };
 
-  const Provider = (props: { children: JSX.Element }) => (
-    <PlayerProvider value={values}>{props.children}</PlayerProvider>
-  );
+  const Provider = (props: { children: JSX.Element }) => <PlayerProvider value={values}>{props.children}</PlayerProvider>;
 
   return {
     ...values,

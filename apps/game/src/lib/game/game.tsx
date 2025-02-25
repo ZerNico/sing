@@ -83,12 +83,12 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     }
   });
 
-  const addScore = (index: number, type: "note" | "golden" | "bonus", value: number) => {
+  const addScore = (index: number, type: "normal" | "golden" | "bonus", value: number) => {
     setScores((prev) => {
       const newScores = [...prev];
       for (let i = 0; i <= index; i++) {
         if (!newScores[i]) {
-          newScores[i] = { note: 0, golden: 0, bonus: 0 };
+          newScores[i] = { normal: 0, golden: 0, bonus: 0 };
         }
       }
       if (newScores[index]) {
