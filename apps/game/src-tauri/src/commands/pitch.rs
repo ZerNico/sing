@@ -16,9 +16,10 @@ pub fn start_recording(
     let mut recorder = state.recorder.write().unwrap();
 
     if recorder.is_some() {
-        return Err(AppError::RecorderError(
-            "recorder already started".to_string(),
-        ));
+        let mut processors = state.processors.write().unwrap();
+        processors.clear();
+        
+        recorder.take();
     }
 
     *recorder = Some(Recorder::new(
