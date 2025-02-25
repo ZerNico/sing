@@ -1,5 +1,6 @@
 import { type Accessor, type JSX, createContext, useContext } from "solid-js";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
+import type { Score } from "~/stores/round";
 
 export interface GameContextValue {
   start: () => void;
@@ -13,13 +14,7 @@ export interface GameContextValue {
   song: Accessor<LocalSong | undefined>;
   currentTime: Accessor<number>;
   duration: Accessor<number>;
-  scores: Accessor<
-    {
-      note: number;
-      golden: number;
-      bonus: number;
-    }[]
-  >;
+  scores: Accessor<Score[]>;
   addScore: (index: number, type: "note" | "golden" | "bonus", value: number) => void;
 }
 
@@ -36,4 +31,4 @@ export function useGame() {
   }
 
   return context;
-} 
+}

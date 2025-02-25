@@ -1,3 +1,4 @@
+import { useNavigate } from "@solidjs/router";
 import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
@@ -11,11 +12,12 @@ import { settingsStore } from "~/stores/settings";
 
 export default function Game() {
   const roundStore = useRoundStore();
+  const navigate = useNavigate();
   const [songPlayerRef, setSongPlayerRef] = createSignal<SongPlayerRef>();
   const [ready, setReady] = createSignal(false);
   const [canPlayThrough, setCanPlayThrough] = createSignal(false);
 
-  const { GameProvider, start, pause, resume, playing, started } = createGame(() => ({
+  const { GameProvider, start, pause, resume, playing, started, scores } = createGame(() => ({
     songPlayerRef: songPlayerRef(),
     song: roundStore.settings()?.song,
   }));
@@ -47,6 +49,10 @@ export default function Game() {
     stop();
   });
 
+  const handleEnded = () => {
+    roundStore.endRound(scores());
+  };
+
   return (
     <GameLayout>
       <GameProvider>
@@ -67,6 +73,7 @@ export default function Game() {
                     playing={playing()}
                     class="h-full w-full"
                     song={settings().song}
+                    onEnded={handleEnded}
                   />
                 )}
               </Show>

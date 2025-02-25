@@ -14,6 +14,7 @@ interface SongPlayerProps {
   playing?: boolean;
   class?: string;
   onCanPlayThrough?: () => void;
+  onEnded?: () => void;
 }
 
 export default function SongPlayer(props: SongPlayerProps) {
@@ -187,6 +188,10 @@ export default function SongPlayer(props: SongPlayerProps) {
     )
   );
 
+  const handleEnded = () => {
+    props.onEnded?.();
+  };
+
   createRefContent(
     () => props.ref,
     () => ({
@@ -242,6 +247,7 @@ export default function SongPlayer(props: SongPlayerProps) {
               ref={setVideoElement}
               preload="auto"
               onCanPlayThrough={onCanPlayThrough}
+              onEnded={!props.song.audioUrl ? handleEnded : undefined}
               src={videoUrl()}
             />
           )}
@@ -252,7 +258,9 @@ export default function SongPlayer(props: SongPlayerProps) {
       </Switch>
 
       <Show when={props.song.audioUrl}>
-        {(audioUrl) => <audio ref={setAudioElement} preload="auto" onCanPlayThrough={onCanPlayThrough} src={audioUrl()} />}
+        {(audioUrl) => (
+          <audio ref={setAudioElement} preload="auto" onCanPlayThrough={onCanPlayThrough} onEnded={handleEnded} src={audioUrl()} />
+        )}
       </Show>
     </div>
   );

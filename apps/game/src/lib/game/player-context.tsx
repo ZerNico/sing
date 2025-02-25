@@ -1,10 +1,10 @@
 import type { ReactiveMap } from "@solid-primitives/map";
 import { type Accessor, type JSX, createContext, useContext } from "solid-js";
 import type { Phrase } from "~/lib/ultrastar/phrase";
+import type { Score } from "~/stores/round";
 import type { Microphone } from "~/stores/settings";
 import type { User } from "../types";
 import type { Note } from "../ultrastar/note";
-
 export interface PlayerContextValue {
   index: Accessor<number>;
   phraseIndex: Accessor<number>;
@@ -14,7 +14,7 @@ export interface PlayerContextValue {
   delayedBeat: Accessor<number>;
   processedBeats: ReactiveMap<number, { note: Note; midiNote: number; isFirstInPhrase: boolean }>;
   addScore: (type: "note" | "golden" | "bonus", value: number) => void;
-  score: Accessor<{ note: number; golden: number; bonus: number }>;
+  score: Accessor<Score>;
   maxScore: Accessor<{ note: number; golden: number; bonus: number }>;
   player: Accessor<User | null>;
 }

@@ -4,6 +4,7 @@ import { commands } from "~/bindings";
 import type { SongPlayerRef } from "~/components/song-player";
 import { beatToMsWithoutGap, msToBeat } from "~/lib/ultrastar/bpm";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
+import type { Score } from "~/stores/round";
 import { settingsStore } from "~/stores/settings";
 import { type GameContextValue, GameProvider } from "./game-context";
 
@@ -21,7 +22,7 @@ export function createGame(options: Accessor<CreateGameOptions>) {
   const [playing, setPlaying] = createSignal(false);
   const [currentTime, setCurrentTime] = createSignal(0);
   const [duration, setDuration] = createSignal(0);
-  const [scores, setScores] = createSignal<{ note: number; golden: number; bonus: number }[]>([]);
+  const [scores, setScores] = createSignal<Score[]>([]);
 
   const start = async () => {
     const opts = options();
@@ -81,6 +82,7 @@ export function createGame(options: Accessor<CreateGameOptions>) {
       stopLoop();
     }
   });
+
   const addScore = (index: number, type: "note" | "golden" | "bonus", value: number) => {
     setScores((prev) => {
       const newScores = [...prev];
