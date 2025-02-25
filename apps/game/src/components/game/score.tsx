@@ -1,5 +1,5 @@
 import { createMemo } from "solid-js";
-import { usePlayer } from "~/lib/game/player";
+import { usePlayer } from "~/lib/game/player-context";
 
 interface ScoreProps {
   class?: string;

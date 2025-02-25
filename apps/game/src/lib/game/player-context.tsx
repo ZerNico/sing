@@ -1,0 +1,35 @@
+import type { ReactiveMap } from "@solid-primitives/map";
+import { type Accessor, type JSX, createContext, useContext } from "solid-js";
+import type { Phrase } from "~/lib/ultrastar/phrase";
+import type { Microphone } from "~/stores/settings";
+import type { User } from "../types";
+import type { Note } from "../ultrastar/note";
+
+export interface PlayerContextValue {
+  index: Accessor<number>;
+  phraseIndex: Accessor<number>;
+  phrase: Accessor<Phrase | undefined>;
+  nextPhrase: Accessor<Phrase | undefined>;
+  microphone: Accessor<Microphone>;
+  delayedBeat: Accessor<number>;
+  processedBeats: ReactiveMap<number, { note: Note; midiNote: number; isFirstInPhrase: boolean }>;
+  addScore: (type: "note" | "golden" | "bonus", value: number) => void;
+  score: Accessor<{ note: number; golden: number; bonus: number }>;
+  maxScore: Accessor<{ note: number; golden: number; bonus: number }>;
+  player: Accessor<User | null>;
+}
+
+export const PlayerContext = createContext<PlayerContextValue>();
+
+export function PlayerProvider(props: { value: PlayerContextValue; children: JSX.Element }) {
+  return <PlayerContext.Provider value={props.value}>{props.children}</PlayerContext.Provider>;
+}
+
+export function usePlayer() {
+  const context = useContext(PlayerContext);
+  if (!context) {
+    throw new Error("usePlayer must be used within a PlayerProvider");
+  }
+
+  return context;
+} 

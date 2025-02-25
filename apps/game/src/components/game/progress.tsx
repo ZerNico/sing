@@ -1,5 +1,5 @@
 import { createMemo } from "solid-js";
-import { useGame } from "~/lib/game/game";
+import { useGame } from "~/lib/game/game-context";
 import { settingsStore } from "~/stores/settings";
 
 export default function Progress() {

@@ -1,6 +1,6 @@
 import { Key } from "@solid-primitives/keyed";
 import { For, createMemo, createSignal } from "solid-js";
-import { usePlayer } from "~/lib/game/player";
+import { usePlayer } from "~/lib/game/player-context";
 import type { Note } from "~/lib/ultrastar/note";
 import { clamp } from "~/lib/utils/math";
 

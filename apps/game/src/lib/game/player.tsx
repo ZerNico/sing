@@ -1,35 +1,20 @@
 import { ReactiveMap } from "@solid-primitives/map";
-import { type Accessor, type JSX, createContext, createEffect, createMemo, createSignal, useContext } from "solid-js";
+import { type Accessor, type JSX, createEffect, createMemo, createSignal } from "solid-js";
 import { commands } from "~/bindings";
-import type { Phrase } from "~/lib/ultrastar/phrase";
 import { useRoundStore } from "~/stores/round";
-import { type Microphone, settingsStore } from "~/stores/settings";
-import type { User } from "../types";
+import { settingsStore } from "~/stores/settings";
 import { msToBeatWithoutGap } from "../ultrastar/bpm";
 import { type Note, getNoteScore } from "../ultrastar/note";
 import { getMaxScore } from "../ultrastar/voice";
 import { useGame } from "./game";
 import { PitchProcessor } from "./pitch";
+import { type PlayerContextValue, PlayerProvider } from "./player-context";
 
 interface CreatePlayerOptions {
   index: number;
 }
 
-interface PlayerContextValue {
-  index: Accessor<number>;
-  phraseIndex: Accessor<number>;
-  phrase: Accessor<Phrase | undefined>;
-  nextPhrase: Accessor<Phrase | undefined>;
-  microphone: Accessor<Microphone>;
-  delayedBeat: Accessor<number>;
-  processedBeats: ReactiveMap<number, { note: Note; midiNote: number; isFirstInPhrase: boolean }>;
-  addScore: (type: "note" | "golden" | "bonus", value: number) => void;
-  score: Accessor<{ note: number; golden: number; bonus: number }>;
-  maxScore: Accessor<{ note: number; golden: number; bonus: number }>;
-  player: Accessor<User | null>;
-}
-
-const PlayerContext = createContext<PlayerContextValue>();
+export { usePlayer } from "./player-context";
 
 export function createPlayer(options: Accessor<CreatePlayerOptions>) {
   const pitchProcessor = new PitchProcessor();
@@ -122,7 +107,7 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
 
     if (!beatInfo) {
       return;
-    }
+    }    
 
     if (beatInfo.isFirstInPhrase) {
       if (correctBeats / totalBeats > 0.9) {
@@ -191,21 +176,12 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
     score,
   };
 
-  const PlayerProvider = (props: { children: JSX.Element }) => (
-    <PlayerContext.Provider value={values}>{props.children}</PlayerContext.Provider>
+  const Provider = (props: { children: JSX.Element }) => (
+    <PlayerProvider value={values}>{props.children}</PlayerProvider>
   );
 
   return {
     ...values,
-    PlayerProvider,
+    PlayerProvider: Provider,
   };
-}
-
-export function usePlayer() {
-  const context = useContext(PlayerContext);
-  if (!context) {
-    throw new Error("usePlayer must be used within a PlayerProvider");
-  }
-
-  return context;
 }

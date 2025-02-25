@@ -1,7 +1,7 @@
 import { Key } from "@solid-primitives/keyed";
 import { For, Show, createMemo } from "solid-js";
-import { useGame } from "~/lib/game/game";
-import { usePlayer } from "~/lib/game/player";
+import { useGame } from "~/lib/game/game-context";
+import { usePlayer } from "~/lib/game/player-context";
 import { msToBeatWithoutGap } from "~/lib/ultrastar/bpm";
 import type { Note } from "~/lib/ultrastar/note";
 import { clamp } from "~/lib/utils/math";

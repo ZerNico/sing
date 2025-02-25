@@ -1,39 +1,18 @@
 import createRAF from "@solid-primitives/raf";
-import { type Accessor, type JSX, batch, createContext, createEffect, createSignal, useContext } from "solid-js";
+import { type Accessor, type JSX, batch, createEffect, createSignal } from "solid-js";
 import { commands } from "~/bindings";
 import type { SongPlayerRef } from "~/components/song-player";
 import { beatToMsWithoutGap, msToBeat } from "~/lib/ultrastar/bpm";
 import type { LocalSong } from "~/lib/ultrastar/parser/local";
 import { settingsStore } from "~/stores/settings";
+import { type GameContextValue, GameProvider } from "./game-context";
 
 export interface CreateGameOptions {
   songPlayerRef?: SongPlayerRef;
   song?: LocalSong;
 }
 
-export interface GameContextValue {
-  start: () => void;
-  stop: () => void;
-  pause: () => void;
-  resume: () => void;
-  started: Accessor<boolean>;
-  playing: Accessor<boolean>;
-  ms: Accessor<number>;
-  beat: Accessor<number>;
-  song: Accessor<LocalSong | undefined>;
-  currentTime: Accessor<number>;
-  duration: Accessor<number>;
-  scores: Accessor<
-    {
-      note: number;
-      golden: number;
-      bonus: number;
-    }[]
-  >;
-  addScore: (index: number, type: "note" | "golden" | "bonus", value: number) => void;
-}
-
-const GameContext = createContext<GameContextValue>();
+export { useGame } from "./game-context";
 
 export function createGame(options: Accessor<CreateGameOptions>) {
   const [ms, setMs] = createSignal(0);
@@ -113,7 +92,7 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     });
   };
 
-  const values = {
+  const values: GameContextValue = {
     start,
     stop,
     pause,
@@ -129,19 +108,10 @@ export function createGame(options: Accessor<CreateGameOptions>) {
     addScore,
   };
 
-  const Provider = (props: { children: JSX.Element }) => <GameContext.Provider value={values}>{props.children}</GameContext.Provider>;
+  const Provider = (props: { children: JSX.Element }) => <GameProvider value={values}>{props.children}</GameProvider>;
 
   return {
     GameProvider: Provider,
     ...values,
   };
-}
-
-export function useGame() {
-  const context = useContext(GameContext);
-  if (!context) {
-    throw new Error("useGame must be used within a GameProvider");
-  }
-
-  return context;
 }
