@@ -42,12 +42,13 @@ export default function ScorePage() {
       if (!voice || !player) continue;
 
       const maxScore = getMaxScore(voice);
+      const maxScoreTotal = maxScore.note + maxScore.golden + maxScore.bonus;
       const absoluteScore = roundStore.scores()[index] ?? { note: 0, golden: 0, bonus: 0 };
 
       const relativeScore = {
-        note: (absoluteScore.note / maxScore.note) * MAX_POSSIBLE_SCORE,
-        golden: (absoluteScore.golden / maxScore.golden) * MAX_POSSIBLE_SCORE,
-        bonus: (absoluteScore.bonus / maxScore.bonus) * MAX_POSSIBLE_SCORE,
+        note: (absoluteScore.note / maxScoreTotal) * MAX_POSSIBLE_SCORE,
+        golden: (absoluteScore.golden / maxScoreTotal) * MAX_POSSIBLE_SCORE,
+        bonus: (absoluteScore.bonus / maxScoreTotal) * MAX_POSSIBLE_SCORE,
       };
 
       const micColor = settingsStore.microphones()[index]?.color;
