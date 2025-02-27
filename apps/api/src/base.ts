@@ -8,13 +8,13 @@ import { rateLimit } from "./utils/rate-limit";
 export const baseRoute = new RouteBuilder()
   .use(
     cors({
-      origin: [`https://app.${config.BASE_DOMAIN}`, "http://localhost:1420"],
+      origin: [config.APP_URL, "http://localhost:1420"],
       credentials: true,
       allowHeaders: ["Content-Type", "Authorization"],
     }),
   )
   .use(rateLimit({ max: 100, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
-  .use(csrf({ allowedOrigins: [`https://app.${config.BASE_DOMAIN}`, "http://localhost:1420"] }))
+  .use(csrf({ allowedOrigins: [config.APP_URL, "http://localhost:1420"] }))
   .error((error, { res }) => {
     if (error instanceof v.ValiError) {
       const flattened = v.flatten(error.issues);

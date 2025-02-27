@@ -3,7 +3,8 @@ import * as v from "valibot";
 const ConfigSchema = v.object({
   POSTGRES_URI: v.string(),
   JWT_SECRET: v.string(),
-  BASE_DOMAIN: v.string(),
+  LANDING_URL: v.string(),
+  APP_URL: v.string(),
   COOKIE_DOMAIN: v.string(),
   GOOGLE_CLIENT_ID: v.string(),
   GOOGLE_CLIENT_SECRET: v.string(),

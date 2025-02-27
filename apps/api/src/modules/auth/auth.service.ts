@@ -3,6 +3,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { SignJWT, jwtVerify } from "jose";
 import nodemailer from "nodemailer";
 import postgres from "postgres";
+import { joinURL } from "ufo";
 import * as v from "valibot";
 import { config } from "../../config";
 import { db } from "../../db/connection";
@@ -185,7 +186,7 @@ class AuthService {
 
     const props = {
       code: code,
-      url: `https://${config.BASE_DOMAIN}`,
+      url: config.LANDING_URL,
       supportUrl: `mailto:${config.SUPPORT_EMAIL}`,
     };
 
@@ -237,7 +238,7 @@ class AuthService {
 
     const props = {
       code: code,
-      url: `https://app.${config.BASE_DOMAIN}/reset-password`,
+      url: joinURL(config.APP_URL, "/reset-password"),
       supportUrl: `mailto:${config.SUPPORT_EMAIL}`,
     };
 
