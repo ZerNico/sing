@@ -8,6 +8,7 @@ import { ParseError } from "./error";
 export function parseUltrastarTxt(content: string) {
   const partialSong: Partial<Song> = {
     relative: false,
+    gap: 0,
   };
   let notes: Note[] = [];
   let phrases: Phrase[] = [];
@@ -166,9 +167,7 @@ export function parseUltrastarTxt(content: string) {
     }
   }
 
-  if (!isValidSong(partialSong)) {
-    throw new ParseError("Invalid song");
-  }
+  checkIsValidSong(partialSong);
 
   return partialSong;
 }
@@ -186,8 +185,9 @@ const parseUSFloat = (value: string) => {
 };
 
 const parseUsBool = (value: string) => {
-  if (value === "yes" || value === "true") return true;
-  if (value === "no" || value === "false") return false;
+  const lower = value.toLowerCase();
+  if (lower === "yes" || lower === "true") return true;
+  if (lower === "no" || lower === "false") return false;
   throw new ParseError("Invalid boolean");
 };
 
@@ -213,6 +213,20 @@ function tagToNoteType(tag: string): NoteType {
   return "Normal";
 }
 
-function isValidSong(song: Partial<Song>): song is Song {
-  return !!song.title && !!song.artist && !!song.bpm && !!song.gap && !!song.hash && (!!song.audio || !!song.video);
+function checkIsValidSong(song: Partial<Song>): asserts song is Song {
+  if (!song.title) {
+    throw new ParseError("Missing song title");
+  }
+  if (!song.artist) {
+    throw new ParseError("Missing song artist");
+  }
+  if (!song.bpm) {
+    throw new ParseError("Missing song BPM");
+  }
+  if (!song.hash) {
+    throw new ParseError("Missing song hash");
+  }
+  if (!song.audio && !song.video) {
+    throw new ParseError("Song must have either audio or video file");
+  }
 }

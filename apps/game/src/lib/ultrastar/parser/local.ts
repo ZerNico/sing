@@ -43,14 +43,27 @@ export async function parseLocalTxtFile(txt: DirEntryWithChildren, files: DirEnt
     const song = parseUltrastarTxt(content);
 
     const localSong: LocalSong = song;
+    const hasAudio = !!song.audio && files.some((f) => f.name === song.audio);
 
     for (const type of ["audio", "video", "cover", "background"] as const) {
       if (!song[type]) {
         continue;
       }
+
       const file = files.find((f) => f.name === song[type]);
+
       if (!file) {
-        throw new ParseError(`File for ${song[type]} not found`);
+        // Handle missing files according to requirements
+        if (type === "audio") {
+          throw new ParseError(`Audio file ${song[type]} not found`);
+        }
+
+        if (type === "video" && !hasAudio) {
+          throw new ParseError(`Video file ${song[type]} not found and no audio file available`);
+        }
+
+        console.warn(`Warning: ${type} file ${song[type]} not found for ${txt.name}`);
+        continue;
       }
 
       const keyUrl: `${typeof type}Url` = `${type}Url`;
