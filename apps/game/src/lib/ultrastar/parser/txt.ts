@@ -92,6 +92,13 @@ export function parseUltrastarTxt(content: string) {
             partialSong.author = value;
             break;
           }
+          case "duetsingerp1": {
+            partialSong.duetSingerP1 = value;
+            break;
+          }
+          case "duetsingerp2": {
+            partialSong.duetSingerP2 = value;
+          }
         }
       } else if ([":", "*", "F", "R", "G"].includes(line.charAt(0))) {
         const [tag, startBeat, length, txtPitch, ...text] = line.slice(0, Math.max(0, line.length)).split(" ");

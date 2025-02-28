@@ -17,16 +17,22 @@ interface SelectProps<T extends string | number> {
 
 export default function Select<T extends string | number>(props: SelectProps<T>) {
   const changeOptions = (direction: "right" | "left") => {
-    const index = (props.value ? props.options?.indexOf(props.value) : -1) ?? -1;
-
-    let newIndex = direction === "right" ? index + 1 : index - 1;
-    if (index === -1) {
-      newIndex = direction === "right" ? 0 : -1;
+    if (!props.options || props.options.length === 0) {
+      return;
     }
 
-    const newValue = props.options?.at(newIndex % props.options.length);
+    const optionsLength = props.options.length;
+    const currentIndex = props.value !== null ? props.options.indexOf(props.value) : -1;
 
-    if (!newValue) {
+    let newIndex: number;
+    if (direction === "right") {
+      newIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % optionsLength;
+    } else {
+      newIndex = currentIndex === -1 ? optionsLength - 1 : (currentIndex - 1 + optionsLength) % optionsLength;
+    }
+
+    const newValue = props.options[newIndex];
+    if (newValue === undefined) {
       return;
     }
 

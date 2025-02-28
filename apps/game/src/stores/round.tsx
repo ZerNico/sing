@@ -6,6 +6,7 @@ import type { LocalSong } from "~/lib/ultrastar/parser/local";
 export interface RoundSettings {
   song: LocalSong;
   players: (User | undefined)[];
+  voices: number[];
 }
 
 export interface Score {

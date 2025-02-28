@@ -22,7 +22,12 @@ export function createPlayer(options: Accessor<CreatePlayerOptions>) {
   const roundStore = useRoundStore();
 
   const voice = createMemo(() => {
-    return game.song()?.voices[0];
+    const voiceIndex = roundStore.settings()?.voices[options().index];
+    if (voiceIndex === undefined) {
+      return undefined;
+    }
+
+    return game.song()?.voices[voiceIndex];
   });
 
   const maxScore = createMemo(() => {

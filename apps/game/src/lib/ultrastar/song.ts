@@ -15,9 +15,11 @@ interface Data {
   author?: string;
   relative?: boolean;
   audio?: string;
-  cover?: string
-  video?: string
-  background?: string
+  cover?: string;
+  video?: string;
+  background?: string;
+  duetSingerP1?: string;
+  duetSingerP2?: string;
 }
 
 export interface Song extends Data {

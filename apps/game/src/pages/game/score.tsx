@@ -58,7 +58,10 @@ export default function ScorePage() {
 
     for (let index = 0; index < players.length; index++) {
       const player = players[index];
-      const voice = roundStore.settings()?.song?.voices[0];
+      const voiceIndex = roundStore.settings()?.voices[index];
+      if (voiceIndex === undefined) continue;
+
+      const voice = roundStore.settings()?.song?.voices[voiceIndex];
 
       if (!voice || !player) continue;
 
@@ -104,6 +107,7 @@ export default function ScorePage() {
   return (
     <Layout intent="secondary" header={<TitleBar title="Score" />} footer={<KeyHints hints={["confirm"]} />}>
       <div class="flex flex-grow flex-col">
+        <div class="flex-1" />
         <div class="flex flex-grow flex-col items-center justify-center gap-10">
           <For each={scoreData()}>
             {(data) => (
@@ -117,9 +121,11 @@ export default function ScorePage() {
             )}
           </For>
         </div>
-        <Button active={pressed()} selected gradient="gradient-sing" class="w-full" onClick={handleContinue}>
-          Continue
-        </Button>
+        <div class="flex flex-1 items-center">
+          <Button active={pressed()} selected gradient="gradient-sing" class="w-full" onClick={handleContinue}>
+            Continue
+          </Button>
+        </div>
       </div>
     </Layout>
   );
