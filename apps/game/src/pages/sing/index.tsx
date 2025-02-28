@@ -12,9 +12,17 @@ import { settingsStore } from "~/stores/settings";
 import { songsStore } from "~/stores/songs";
 import IconDices from "~icons/lucide/dices";
 import IconSearch from "~icons/lucide/search";
+import IconDuet from "~icons/sing/duet";
 import IconF3Key from "~icons/sing/f3-key";
+import IconF4Key from "~icons/sing/f4-key";
+import IconF5Key from "~icons/sing/f5-key";
+import IconF6Key from "~icons/sing/f6-key";
+import IconTriangleLeft from "~icons/sing/triangle-left";
+import IconTriangleRight from "~icons/sing/triangle-right";
 
 const [currentSong, setCurrentSong] = createSignal<LocalSong | null>();
+
+const SORT_OPTIONS = ["artist", "title", "year"] as const;
 
 export default function Sing() {
   if (!currentSong()) {
@@ -49,6 +57,12 @@ export default function Sing() {
     }, 0);
   };
 
+  const moveSorting = (direction: "left" | "right") => {
+    const currentIndex = SORT_OPTIONS.indexOf(sort());
+    const newIndex = (currentIndex + (direction === "left" ? -1 : 1) + SORT_OPTIONS.length) % SORT_OPTIONS.length;
+    setSort(SORT_OPTIONS[newIndex] || "artist");
+  };
+
   useNavigation(() => ({
     onKeydown(event) {
       if (event.action === "back") {
@@ -57,6 +71,10 @@ export default function Sing() {
         searchRef.focus();
       } else if (event.action === "random") {
         selectRandomSong();
+      } else if (event.action === "sort-left") {
+        moveSorting("left");
+      } else if (event.action === "sort-right") {
+        moveSorting("right");
       }
     },
     onKeyup(event) {
@@ -75,25 +93,43 @@ export default function Sing() {
       footer={
         <div class="flex justify-between">
           <KeyHints hints={["back", "navigate", "confirm"]} />
-          <div class="flex items-center gap-8">
-            <button type="button" class="text-2xl transition-all hover:opacity-75 active:scale-95" onClick={selectRandomSong}>
-              <IconDices />
-            </button>
-            <div class="flex gap-2">
-              <For each={["artist", "title", "year"] as const}>
-                {(sortKey) => (
-                  <button
-                    type="button"
-                    class="gradient-sing rounded-full px-2 text-md text-white capitalize"
-                    classList={{
-                      "gradient-sing bg-gradient-to-b": sortKey.toLowerCase() === sort(),
-                    }}
-                    onClick={() => setSort(sortKey)}
-                  >
-                    {sortKey}
-                  </button>
-                )}
-              </For>
+          <div class="flex items-center gap-12">
+            <div class="flex items-center gap-2">
+              <IconF4Key class="text-sm" />
+              <button type="button" class="text-2xl transition-all hover:opacity-75 active:scale-95" onClick={selectRandomSong}>
+                <IconDices />
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <IconF5Key class="text-sm" />
+              <button
+                type="button"
+                class="flex items-center gap-2 transition-all hover:opacity-75 active:scale-95"
+                onClick={() => moveSorting("left")}
+              >
+                <IconTriangleLeft />
+              </button>
+              <div>
+                <For each={SORT_OPTIONS}>
+                  {(sortKey) => (
+                    <button
+                      type="button"
+                      class="gradient-sing cursor-pointer rounded-full px-2 text-md text-white capitalize shadow-xl transition-all hover:opacity-75 active:scale-95"
+                      classList={{
+                        "gradient-sing bg-gradient-to-b": sortKey.toLowerCase() === sort(),
+                      }}
+                      onClick={() => setSort(sortKey)}
+                    >
+                      {sortKey}
+                    </button>
+                  )}
+                </For>
+              </div>
+
+              <button type="button" class="transition-all hover:opacity-75 active:scale-95" onClick={() => moveSorting("right")}>
+                <IconTriangleRight />
+              </button>
+              <IconF6Key class="text-sm" />
             </div>
           </div>
         </div>
@@ -156,9 +192,16 @@ export default function Sing() {
     >
       <div class="flex flex-grow flex-col">
         <div class="flex flex-grow flex-col justify-center">
-          <p class="text-xl">{currentSong()?.artist}</p>
-          <div class="max-w-200">
-            <span class="gradient-sing bg-gradient-to-b bg-clip-text font-bold text-6xl text-transparent ">{currentSong()?.title}</span>
+          <div class="relative flex flex-col">
+            <p class="text-xl">{currentSong()?.artist}</p>
+            <div class="max-w-200">
+              <span class="gradient-sing bg-gradient-to-b bg-clip-text font-bold text-6xl text-transparent ">{currentSong()?.title}</span>
+            </div>
+            <div class="absolute top-full">
+              <Show when={(currentSong()?.voices.length || 0) > 1}>
+                <IconDuet />
+              </Show>
+            </div>
           </div>
         </div>
         <div>
@@ -498,6 +541,14 @@ function SearchBar(props: SearchBarProps) {
     searchRef.setSelectionRange(Math.max(0, start + (direction === "left" ? -1 : 1)), Math.max(0, start + (direction === "left" ? -1 : 1)));
   };
 
+  const addChar = (char: string) => {
+    const start = searchRef.selectionStart ?? 0;
+    const end = searchRef.selectionEnd ?? 0;
+    const value = searchRef.value;
+    searchRef.value = value.substring(0, start) + char + value.substring(end);
+    searchRef.setSelectionRange(start + 1, start + 1);
+  };
+
   useNavigation(() => ({
     layer: 1,
     enabled: focused(),
@@ -512,6 +563,10 @@ function SearchBar(props: SearchBarProps) {
         } else if (event.action === "right") {
           moveCursor("right");
         }
+      }
+
+      if (event.origin === "keyboard" && event.originalKey === " ") {
+        addChar(" ");
       }
     },
 

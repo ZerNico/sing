@@ -17,7 +17,7 @@ interface UseNavigationOptions {
 type NavigationEvent = {
   origin: "gamepad" | "keyboard";
   originalKey: string;
-  action: "left" | "right" | "up" | "down" | "back" | "confirm" | "search" | "random";
+  action: "left" | "right" | "up" | "down" | "back" | "confirm" | "search" | "random" | "sort-left" | "sort-right";
 };
 
 const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
@@ -30,6 +30,8 @@ const KEY_MAPPINGS = new Map<string, NavigationEvent["action"]>([
   [" ", "confirm"],
   ["F3", "search"],
   ["F4", "random"],
+  ["F5", "sort-left"],
+  ["F6", "sort-right"],
 ]);
 
 const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
@@ -41,6 +43,8 @@ const GAMEPAD_MAPPINGS = new Map<GamepadButton, NavigationEvent["action"]>([
   ["A", "confirm"],
   ["START", "search"],
   ["Y", "random"],
+  ["LB", "sort-left"],
+  ["RB", "sort-right"],
 ]);
 
 const getAxisAction = (button: GamepadButton, direction: number): NavigationEvent["action"] | undefined => {
@@ -121,7 +125,7 @@ createEventListener(window, "keyup", (event) => {
       origin: "keyboard",
       originalKey: event.key,
       action: action,
-    }); 
+    });
   }
 });
 
@@ -227,7 +231,7 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
       () => access(options),
       (options) => {
         if (options.enabled === false) return;
-        
+
         const layer = options.layer ?? 0;
         layerInstances.set(layer, (layerInstances.get(layer) ?? 0) + 1);
 
@@ -246,7 +250,7 @@ export function useNavigation(options: MaybeAccessor<UseNavigationOptions>) {
   const isActive = createMemo(() => {
     const opts = access(options);
     if (opts?.enabled === false) return false;
-    
+
     const highestLayer = Math.max(...layerInstances.keys());
     return (opts.layer ?? 0) === highestLayer;
   });
