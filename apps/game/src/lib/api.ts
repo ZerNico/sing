@@ -2,22 +2,34 @@ import { client } from "@nokijs/client";
 import type { App } from "api";
 import { lobbyStore } from "~/stores/lobby";
 
+export function joinHeaders(...headers: (HeadersInit | undefined)[]): Headers {
+  const result = new Headers();
+
+  for (const header of headers) {
+    for (const [key, value] of new Headers(header)) {
+      result.append(key, value);
+    }
+  }
+
+  return result;
+}
+
 const api = client<App>(import.meta.env.VITE_API_URL, {
   fetch: async (url, init) => {
     const lobbyToken = lobbyStore.lobby()?.token;
-
-    const modifiedInit = {
+    
+    // Create authorization headers if token exists
+    const authHeaders = lobbyToken 
+      ? { Authorization: `Bearer ${lobbyToken}` }
+      : undefined;
+    
+    // Join the original headers with auth headers
+    const headers = joinHeaders(init?.headers, authHeaders);
+    
+    return fetch(url, {
       ...init,
-    };
-
-    if (lobbyToken) {
-      modifiedInit.headers = {
-        ...modifiedInit.headers,
-        Authorization: `Bearer ${lobbyToken}`,
-      };
-    }
-
-    return fetch(url, modifiedInit);
+      headers,
+    });
   },
 });
 

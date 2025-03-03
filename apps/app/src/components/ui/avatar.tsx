@@ -47,6 +47,7 @@ export default function Avatar(props: AvatarProps) {
           src={pictureUrl()}
           alt={props.user?.username || "Avatar"}
           class="col-start-1 row-start-1 block h-full w-full rounded-full"
+          referrerPolicy="no-referrer"
         />
       </Show>
     </div>

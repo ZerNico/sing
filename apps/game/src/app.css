@@ -145,6 +145,7 @@
   --animate-hide: hide 0.1s ease-in;
   --animate-slide-in: slideIn 0.15s ease-out;
   --animate-swipe-out: swipeOut 0.1s ease-in;
+  --animate-scroll: scroll 10s linear infinite;
 
   --text-*: initial;
   --text-xs: 0.67cqw;
@@ -193,6 +194,15 @@
     }
     to {
       transform: translateX(100%);
+    }
+  }
+
+  @keyframes scroll {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
     }
   }
 }
@@ -263,4 +273,18 @@ body {
   ::-webkit-slider-runnable-track {
     height: 100%;
   }
+}
+
+.styled-scrollbars {
+  scrollbar-color: #fff transparent;
+}
+.styled-scrollbars::-webkit-scrollbar {
+  width: 0.5rem; /* Mostly for vertical scrollbars */
+}
+.styled-scrollbars::-webkit-scrollbar-thumb {
+  background: #fff;
+  border-radius: 0.125rem;
+}
+.styled-scrollbars::-webkit-scrollbar-track {
+  background: transparent;
 }

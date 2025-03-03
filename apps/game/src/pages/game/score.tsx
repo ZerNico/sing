@@ -1,11 +1,15 @@
 import { useNavigate } from "@solidjs/router";
+import { createMutation, createQuery } from "@tanstack/solid-query";
 import { For, createMemo, createSignal, onCleanup, onMount } from "solid-js";
+import HighscoreList from "~/components/highscore-list";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
 import TitleBar from "~/components/title-bar";
 import Avatar from "~/components/ui/avatar";
 import Button from "~/components/ui/button";
 import { useNavigation } from "~/hooks/navigation";
+import { v1 } from "~/lib/api";
+import { highscoresQueryOptions } from "~/lib/queries";
 import type { User } from "~/lib/types";
 import { getMaxScore } from "~/lib/ultrastar/voice";
 import { getColorVar } from "~/lib/utils/color";
@@ -24,40 +28,35 @@ const ANIMATION_DELAY = 2250;
 interface PlayerScoreData {
   player: User;
   score: Score;
+  totalScore: number;
   micColor: string;
   position: number;
 }
+
+const getRelativeScore = (score: Score, maxScore: Score) => {
+  const maxScoreTotal = maxScore.normal + maxScore.golden + maxScore.bonus;
+  const absoluteScore = score ?? { normal: 0, golden: 0, bonus: 0 };
+
+  const relativeScore = {
+    normal: (absoluteScore.normal / maxScoreTotal) * MAX_POSSIBLE_SCORE,
+    golden: (absoluteScore.golden / maxScoreTotal) * MAX_POSSIBLE_SCORE,
+    bonus: (absoluteScore.bonus / maxScoreTotal) * MAX_POSSIBLE_SCORE,
+  };
+
+  return relativeScore;
+};
 
 export default function ScorePage() {
   const roundStore = useRoundStore();
   const navigate = useNavigate();
   const [pressed, setPressed] = createSignal(false);
-
-  const handleContinue = () => {
-    navigate("/sing");
-  };
-
-  useNavigation(() => ({
-    layer: 0,
-    onKeydown(event) {
-      if (event.action === "confirm") {
-        setPressed(true);
-      }
-    },
-    onKeyup(event) {
-      if (event.action === "confirm") {
-        setPressed(false);
-        handleContinue();
-      }
-    },
-  }));
+  const highscoresQuery = createQuery(() => highscoresQueryOptions(roundStore.settings()?.song?.hash ?? ""));
 
   const scoreData = createMemo<PlayerScoreData[]>(() => {
     const players = roundStore.settings()?.players || [];
     const result: PlayerScoreData[] = [];
 
-    for (let index = 0; index < players.length; index++) {
-      const player = players[index];
+    for (const [index, player] of players.entries()) {
       const voiceIndex = roundStore.settings()?.voices[index];
       if (voiceIndex === undefined) continue;
 
@@ -66,14 +65,9 @@ export default function ScorePage() {
       if (!voice || !player) continue;
 
       const maxScore = getMaxScore(voice);
-      const maxScoreTotal = maxScore.normal + maxScore.golden + maxScore.bonus;
       const absoluteScore = roundStore.scores()[index] ?? { normal: 0, golden: 0, bonus: 0 };
 
-      const relativeScore = {
-        normal: (absoluteScore.normal / maxScoreTotal) * MAX_POSSIBLE_SCORE,
-        golden: (absoluteScore.golden / maxScoreTotal) * MAX_POSSIBLE_SCORE,
-        bonus: (absoluteScore.bonus / maxScoreTotal) * MAX_POSSIBLE_SCORE,
-      };
+      const relativeScore = getRelativeScore(absoluteScore, maxScore);
 
       const micColor = settingsStore.microphones()[index]?.color;
       if (!micColor) continue;
@@ -81,6 +75,7 @@ export default function ScorePage() {
       result.push({
         player,
         score: relativeScore,
+        totalScore: Math.floor(relativeScore.normal + relativeScore.golden + relativeScore.bonus),
         micColor,
         position: index + 1,
       });
@@ -88,6 +83,50 @@ export default function ScorePage() {
 
     return result;
   });
+
+  const updateHighscoresMutation = createMutation(() => ({
+    mutationFn: async () => {
+      const scores = scoreData();
+      const songHash = roundStore.settings()?.song?.hash;
+
+      if (!songHash) return;
+
+      for (const score of scores) {
+        if ("type" in score.player) continue;
+        if (score.totalScore <= 0) continue;
+
+        await v1.highscores[":hash"][":userId"].put({
+          params: {
+            hash: songHash,
+            userId: score.player.id.toString(),
+          },
+          body: { score: score.totalScore },
+        });
+      }
+    },
+  }));
+
+  const handleContinue = () => {
+    navigate("/sing");
+  };
+
+  useNavigation(() => ({
+    layer: 0,
+    onKeydown(event) {
+      if (updateHighscoresMutation.isPending) return;
+      if (event.action === "confirm") {
+        setPressed(true);
+      }
+    },
+    onKeyup(event) {
+      if (updateHighscoresMutation.isPending) return;
+
+      if (event.action === "confirm") {
+        setPressed(false);
+        handleContinue();
+      }
+    },
+  }));
 
   const animatedStages = createMemo(() => {
     const stages = new Set<ScoreCategory>();
@@ -104,25 +143,76 @@ export default function ScorePage() {
     return Array.from(stages);
   });
 
+  onMount(() => {
+    updateHighscoresMutation.mutate();
+  });
+
+  const highscores = () => {
+    if (updateHighscoresMutation.isPending) return [];
+
+    const highscores: { user: User; score: number }[] = [...(highscoresQuery.data || [])];
+    const scores = scoreData();
+
+    for (const score of scores) {
+      if ("type" in score.player) continue;
+      if (score.totalScore <= 0) continue;
+
+      const existingHighscoreIndex = highscores.findIndex((highscore) => highscore.user.id === score.player.id);
+      const existingHighscore = highscores[existingHighscoreIndex];
+
+      if (!existingHighscore) {
+        highscores.push({
+          user: score.player,
+          score: score.totalScore,
+        });
+        continue;
+      }
+
+      if (score.totalScore > existingHighscore.score) {
+        highscores[existingHighscoreIndex] = {
+          user: score.player,
+          score: score.totalScore,
+        };
+      }
+    }
+
+    return highscores.toSorted((a, b) => b.score - a.score);
+  };
+
   return (
     <Layout intent="secondary" header={<TitleBar title="Score" />} footer={<KeyHints hints={["confirm"]} />}>
       <div class="flex flex-grow flex-col">
         <div class="flex-1" />
-        <div class="flex flex-grow flex-col items-center justify-center gap-10">
-          <For each={scoreData()}>
-            {(data) => (
-              <ScoreCard
-                animatedStages={animatedStages()}
-                score={data.score}
-                player={data.player}
-                micColor={data.micColor}
-                position={data.position}
-              />
-            )}
-          </For>
+        <div class="grid grid-cols-[2fr_3fr]">
+          <div class="relative">
+            <div class="absolute inset-0 flex max-w-full justify-center">
+              <HighscoreList scores={highscores()} class="w-100" />
+            </div>
+          </div>
+          <div class="flex flex-grow flex-col items-center justify-center gap-10">
+            <For each={scoreData()}>
+              {(data) => (
+                <ScoreCard
+                  animatedStages={animatedStages()}
+                  score={data.score}
+                  player={data.player}
+                  micColor={data.micColor}
+                  position={data.position}
+                />
+              )}
+            </For>
+          </div>
         </div>
+
         <div class="flex flex-1 items-center">
-          <Button active={pressed()} selected gradient="gradient-sing" class="w-full" onClick={handleContinue}>
+          <Button
+            loading={updateHighscoresMutation.isPending}
+            active={pressed()}
+            selected
+            gradient="gradient-sing"
+            class="w-full"
+            onClick={handleContinue}
+          >
             Continue
           </Button>
         </div>
@@ -190,7 +280,12 @@ function ScoreCard(props: ScoreCardProps) {
 
         if (totalInterval) clearInterval(totalInterval);
 
-        totalInterval = animateCounter(animatedTotalScore(), animatedTotalScore() + scoreValue, setAnimatedTotalScore, ANIMATION_DURATION);
+        totalInterval = animateCounter(
+          animatedTotalScore(),
+          Math.floor(animatedTotalScore() + scoreValue),
+          setAnimatedTotalScore,
+          ANIMATION_DURATION
+        );
       }, index * ANIMATION_DELAY);
     }
 

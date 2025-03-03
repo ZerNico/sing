@@ -23,3 +23,18 @@ export function lobbyQueryOptions() {
     },
   });
 }
+
+export function highscoresQueryOptions(hash: string) {
+  return queryOptions({
+    queryKey: ["v1", "highscores", hash],
+    queryFn: async () => {
+      const response = await v1.highscores[":hash"].get({ params: { hash } });
+
+      if (!response.ok) {
+        throw new ApiError({ code: response.data.code, status: response.status });
+      }
+
+      return response.data;
+    },
+  });
+}

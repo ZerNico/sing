@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, primaryKey, timestamp, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 import { lower } from "../utils/db";
 
 export const users = pgTable(
@@ -14,6 +14,10 @@ export const users = pgTable(
     googleId: varchar("google_id", { length: 255 }).unique(),
     discordId: varchar("discord_id", { length: 255 }).unique(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
     lobbyId: varchar("lobby_id", { length: 8 }).references(() => lobbies.id, {
       onDelete: "set null",
       onUpdate: "cascade",
@@ -25,7 +29,7 @@ export const users = pgTable(
   ],
 );
 
-export const usersRelations = relations(users, ({ one }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   lobby: one(lobbies, {
     fields: [users.lobbyId],
     references: [lobbies.id],
@@ -42,6 +46,7 @@ export const usersRelations = relations(users, ({ one }) => ({
     fields: [users.id],
     references: [passwordResetTokens.userId],
   }),
+  highscores: many(highscores),
 }));
 
 export const refreshTokens = pgTable("refresh_tokens", {
@@ -105,4 +110,31 @@ export const lobbies = pgTable("lobbies", {
 
 export const lobbiesRelations = relations(lobbies, ({ many }) => ({
   users: many(users),
+}));
+
+export const highscores = pgTable(
+  "highscores",
+  {
+    hash: varchar({ length: 255 }).notNull(),
+    userId: integer("user_id")
+      .references(() => users.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
+      .notNull(),
+    score: integer("score").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (table) => [primaryKey({ columns: [table.hash, table.userId] })],
+);
+
+export const highscoresRelations = relations(highscores, ({ one }) => ({
+  user: one(users, {
+    fields: [highscores.userId],
+    references: [users.id],
+  }),
 }));

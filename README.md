@@ -9,9 +9,7 @@
 
 On MacOS add this to your `/etc/hosts`:
 ```bash
-127.0.0.1 tuneperfect.local
-127.0.0.1 api.tuneperfect.local
-127.0.0.1 app.tuneperfect.local
+127.0.0.1 tuneperfect.localhost api.tuneperfect.localhost app.tuneperfect.localhost
 ```
 
 ```bash

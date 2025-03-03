@@ -1,4 +1,5 @@
 import { Show, createEffect, createSignal, on } from "solid-js";
+import { twMerge } from "tailwind-merge";
 import { joinURL } from "ufo";
 
 interface AvatarProps {
@@ -32,12 +33,7 @@ export default function Avatar(props: AvatarProps) {
   };
 
   return (
-    <div
-      class="grid h-10 w-10"
-      classList={{
-        [props.class || ""]: !!props.class,
-      }}
-    >
+    <div class={twMerge("grid h-10 w-10", props.class)}>
       <div class="gradient-settings col-start-1 row-start-1 flex h-full w-full items-center justify-center rounded-full bg-gradient-to-tr">
         {fallback()}
       </div>
@@ -47,6 +43,7 @@ export default function Avatar(props: AvatarProps) {
           src={pictureUrl()}
           alt={props.user?.username || "Avatar"}
           class="col-start-1 row-start-1 block h-full w-full rounded-full"
+          referrerPolicy="no-referrer"
         />
       </Show>
     </div>

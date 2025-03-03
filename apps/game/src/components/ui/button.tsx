@@ -1,4 +1,5 @@
 import type { JSX } from "solid-js";
+import IconLoaderCircle from "~icons/lucide/loader-circle";
 
 interface ButtonProps {
   selected?: boolean;
@@ -8,6 +9,7 @@ interface ButtonProps {
   class?: string;
   onClick?: () => void;
   onMouseEnter?: () => void;
+  loading?: boolean;
 }
 
 export default function Button(props: ButtonProps) {
@@ -21,8 +23,26 @@ export default function Button(props: ButtonProps) {
       type="button"
       onClick={props.onClick}
       onMouseEnter={props.onMouseEnter}
+      disabled={props.loading}
     >
-      <div class="z-2 col-start-1 row-start-1 text-center font-bold text-xl">{props.children}</div>
+      <div
+        class="z-2 col-start-1 row-start-1 text-center font-bold text-xl transition-opacity"
+        classList={{
+          "pointer-events-none opacity-0": props.loading,
+        }}
+      >
+        {props.children}
+      </div>
+
+      <div
+        class="z-2 col-start-1 row-start-1 flex items-center justify-center transition-opacity"
+        classList={{
+          "pointer-events-none opacity-0": !props.loading,
+        }}
+      >
+        <IconLoaderCircle class="animate-spin text-2xl" />
+      </div>
+
       <div
         class="col-start-1 row-start-1 h-full w-full bg-gradient-to-r transition-all"
         classList={{
