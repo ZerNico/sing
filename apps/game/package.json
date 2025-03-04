@@ -41,6 +41,7 @@
     "@tauri-apps/plugin-dialog": "^2.2.0",
     "@tauri-apps/plugin-fs": "^2.2.0",
     "@tauri-apps/plugin-opener": "^2.2.5",
+    "@tauri-apps/plugin-shell": "^2.2.0",
     "@tauri-apps/plugin-window-state": "^2.2.1",
     "api": "*",
     "mitt": "^3.0.1",

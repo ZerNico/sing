@@ -10,6 +10,7 @@
     "fs:read-dirs",
     "fs:read-files",
     "fs:read-meta",
-    "core:window:allow-set-fullscreen"
+    "core:window:allow-set-fullscreen",
+    "shell:allow-open"
   ]
 }
