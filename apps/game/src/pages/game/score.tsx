@@ -7,7 +7,6 @@ import Layout from "~/components/layout";
 import TitleBar from "~/components/title-bar";
 import Avatar from "~/components/ui/avatar";
 import Button from "~/components/ui/button";
-import { useNavigation } from "~/hooks/navigation";
 import { v1 } from "~/lib/api";
 import { highscoresQueryOptions } from "~/lib/queries";
 import type { User } from "~/lib/types";
@@ -49,7 +48,6 @@ const getRelativeScore = (score: Score, maxScore: Score) => {
 export default function ScorePage() {
   const roundStore = useRoundStore();
   const navigate = useNavigate();
-  const [pressed, setPressed] = createSignal(false);
   const highscoresQuery = createQuery(() => highscoresQueryOptions(roundStore.settings()?.song?.hash ?? ""));
 
   const scoreData = createMemo<PlayerScoreData[]>(() => {
@@ -107,26 +105,10 @@ export default function ScorePage() {
   }));
 
   const handleContinue = () => {
+    if (updateHighscoresMutation.isPending) return;
+
     navigate("/sing");
   };
-
-  useNavigation(() => ({
-    layer: 0,
-    onKeydown(event) {
-      if (updateHighscoresMutation.isPending) return;
-      if (event.action === "confirm") {
-        setPressed(true);
-      }
-    },
-    onKeyup(event) {
-      if (updateHighscoresMutation.isPending) return;
-
-      if (event.action === "confirm") {
-        setPressed(false);
-        handleContinue();
-      }
-    },
-  }));
 
   const animatedStages = createMemo(() => {
     const stages = new Set<ScoreCategory>();
@@ -205,14 +187,7 @@ export default function ScorePage() {
         </div>
 
         <div class="flex flex-1 items-center">
-          <Button
-            loading={updateHighscoresMutation.isPending}
-            active={pressed()}
-            selected
-            gradient="gradient-sing"
-            class="w-full"
-            onClick={handleContinue}
-          >
+          <Button loading={updateHighscoresMutation.isPending} selected gradient="gradient-sing" class="w-full" onClick={handleContinue}>
             Continue
           </Button>
         </div>

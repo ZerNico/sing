@@ -1,7 +1,7 @@
 import { Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import GameLayout from "~/components/game/game-layout";
 import Half from "~/components/game/half";
-import Menu from "~/components/game/menu";
+import PauseMenu from "~/components/game/pause-menu";
 import Progress from "~/components/game/progress";
 import SongPlayer, { type SongPlayerRef } from "~/components/song-player";
 import { useNavigation } from "~/hooks/navigation";
@@ -86,7 +86,7 @@ export default function Game() {
           </div>
 
           <Show when={paused()}>
-            <Menu class="absolute inset-0" onClose={resume} onExit={handleEnded} />
+            <PauseMenu class="absolute inset-0" onClose={resume} onExit={handleEnded} />
           </Show>
 
           <div

@@ -1,17 +1,15 @@
 import { Navigate, useNavigate, useParams } from "@solidjs/router";
 import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-query";
-import { Match, Switch, createSignal } from "solid-js";
+import { Match, Switch } from "solid-js";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
+import Menu, { type MenuItem } from "~/components/menu";
 import TitleBar from "~/components/title-bar";
-import Button from "~/components/ui/button";
-import { useNavigation } from "~/hooks/navigation";
 import { v1 } from "~/lib/api";
 import { lobbyQueryOptions } from "~/lib/queries";
 
 export default function LobbyUserPage() {
   const { id } = useParams<{ id: string }>();
-  const [pressed, setPressed] = createSignal(false);
   const navigate = useNavigate();
   const onBack = () => navigate("/lobby");
   const queryClient = useQueryClient();
@@ -36,22 +34,13 @@ export default function LobbyUserPage() {
     },
   }));
 
-  useNavigation(() => ({
-    layer: 0,
-    onKeydown(event) {
-      if (event.action === "back") {
-        onBack();
-      } else if (event.action === "confirm") {
-        setPressed(true);
-      }
+  const menuItems: MenuItem[] = [
+    {
+      type: "button",
+      label: "Kick",
+      action: () => kickUserMutation.mutate(),
     },
-    onKeyup(event) {
-      if (event.action === "confirm") {
-        setPressed(false);
-        kickUserMutation.mutate();
-      }
-    },
-  }));
+  ];
 
   return (
     <Layout
@@ -61,17 +50,7 @@ export default function LobbyUserPage() {
     >
       <Switch>
         <Match when={user()}>
-          <div class="flex w-full flex-grow flex-col justify-center">
-            <Button
-              selected
-              gradient="gradient-lobby"
-              onClick={() => kickUserMutation.mutate()}
-              loading={kickUserMutation.isPending}
-              active={pressed()}
-            >
-              Kick
-            </Button>
-          </div>
+          <Menu items={menuItems} onBack={onBack} gradient="gradient-lobby" />
         </Match>
         <Match when={!lobbyQuery.isPending && !user()}>
           <Navigate href="/lobby" />

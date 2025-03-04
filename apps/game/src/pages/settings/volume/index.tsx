@@ -1,16 +1,12 @@
 import { useNavigate } from "@solidjs/router";
-import { For, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
+import Menu, { type MenuItem } from "~/components/menu";
 import TitleBar from "~/components/title-bar";
-import Button from "~/components/ui/button";
-import Slider from "~/components/ui/slider";
-import { createLoop } from "~/hooks/loop";
-import { useNavigation } from "~/hooks/navigation";
 import { settingsStore } from "~/stores/settings";
 
 export default function VolumeSettings() {
-  const [pressed, setPressed] = createSignal(false);
   const navigate = useNavigate();
   const onBack = () => {
     navigate("/settings");
@@ -23,9 +19,9 @@ export default function VolumeSettings() {
     onBack();
   };
 
-  const inputs = [
+  const menuItems: MenuItem[] = [
     {
-      type: "slider" as const,
+      type: "slider",
       label: "Master Volume",
       value: () => Math.round(volume().master * 100),
       min: 0,
@@ -36,7 +32,7 @@ export default function VolumeSettings() {
       },
     },
     {
-      type: "slider" as const,
+      type: "slider",
       label: "Game Volume",
       value: () => Math.round(volume().game * 100),
       min: 0,
@@ -47,7 +43,7 @@ export default function VolumeSettings() {
       },
     },
     {
-      type: "slider" as const,
+      type: "slider",
       label: "Preview Volume",
       value: () => Math.round(volume().preview * 100),
       min: 0,
@@ -58,7 +54,7 @@ export default function VolumeSettings() {
       },
     },
     {
-      type: "slider" as const,
+      type: "slider",
       label: "Menu Volume",
       value: () => Math.round(volume().menu * 100),
       min: 0,
@@ -69,37 +65,11 @@ export default function VolumeSettings() {
       },
     },
     {
-      type: "button" as const,
+      type: "button",
       label: "Save",
       action: saveVolume,
     },
   ];
-
-  const { position, increment, decrement, set } = createLoop(() => inputs.length);
-
-  useNavigation(() => ({
-    layer: 0,
-    onKeydown(event) {
-      if (event.action === "back") {
-        onBack();
-      } else if (event.action === "up") {
-        decrement();
-      } else if (event.action === "down") {
-        increment();
-      } else if (event.action === "confirm") {
-        setPressed(true);
-      }
-    },
-    onKeyup(event) {
-      if (event.action === "confirm") {
-        setPressed(false);
-        const input = inputs[position()];
-        if (input?.type === "button") {
-          input.action();
-        }
-      }
-    },
-  }));
 
   return (
     <Layout
@@ -107,34 +77,7 @@ export default function VolumeSettings() {
       header={<TitleBar title="Settings" description="Volume" onBack={onBack} />}
       footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
     >
-      <div class="flex w-full flex-grow flex-col justify-center">
-        <For each={inputs}>
-          {(input, index) => {
-            if (input.type === "slider") {
-              return (
-                <Slider
-                  selected={position() === index()}
-                  gradient="gradient-settings"
-                  onMouseEnter={() => set(index())}
-                  {...input}
-                  value={input.value()}
-                />
-              );
-            }
-            return (
-              <Button
-                selected={position() === index()}
-                active={pressed() && position() === index()}
-                gradient="gradient-settings"
-                onClick={input.action}
-                onMouseEnter={() => set(index())}
-              >
-                {input.label}
-              </Button>
-            );
-          }}
-        </For>
-      </div>
+      <Menu items={menuItems} onBack={onBack} />
     </Layout>
   );
 }

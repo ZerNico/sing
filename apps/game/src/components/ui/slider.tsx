@@ -15,6 +15,7 @@ interface SliderProps {
   value: number;
   onInput?: (value: number) => void;
   onMouseEnter?: () => void;
+  layer?: number;
 }
 
 export default function Slider(props: SliderProps) {
@@ -37,7 +38,7 @@ export default function Slider(props: SliderProps) {
   };
 
   useNavigation(() => ({
-    layer: 0,
+    layer: props.layer,
     enabled: props.selected || false,
     onKeydown: (event) => {
       if (event.action === "left") {

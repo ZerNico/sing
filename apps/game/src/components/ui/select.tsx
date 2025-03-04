@@ -13,6 +13,7 @@ interface SelectProps<T extends string | number> {
   onChange?: (value: T) => void;
   onMouseEnter?: () => void;
   renderValue?: (value: T | null) => JSX.Element;
+  layer?: number;
 }
 
 export default function Select<T extends string | number>(props: SelectProps<T>) {
@@ -40,7 +41,7 @@ export default function Select<T extends string | number>(props: SelectProps<T>)
   };
 
   useNavigation(() => ({
-    layer: 0,
+    layer: props.layer,
     enabled: props.selected || false,
     onKeydown: (event) => {
       if (event.action === "left") {

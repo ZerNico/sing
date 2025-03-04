@@ -1,12 +1,10 @@
 import { useNavigate } from "@solidjs/router";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
-import { For, Match, Switch, createSignal, onMount } from "solid-js";
+import { Match, Switch, onMount } from "solid-js";
 import { withQuery } from "ufo";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
-import Button from "~/components/ui/button";
-import { createLoop } from "~/hooks/loop";
-import { useNavigation } from "~/hooks/navigation";
+import Menu, { type MenuItem } from "~/components/menu";
 import { v1 } from "~/lib/api";
 import { lobbyQueryOptions } from "~/lib/queries";
 import { lobbyStore } from "~/stores/lobby";
@@ -49,42 +47,18 @@ export default function Index() {
     }
   });
 
-  const [pressed, setPressed] = createSignal(false);
-
-  const onBack = () => navigate("/home");
-  const buttons = [
+  const menuItems: MenuItem[] = [
     {
+      type: "button",
       label: "Retry",
       action: () => createLobbyMutation.mutate(),
     },
     {
+      type: "button",
       label: "Play Offline",
       action: goToLoading,
     },
   ];
-
-  const { position, increment, decrement, set } = createLoop(buttons.length);
-
-  useNavigation(() => ({
-    layer: 0,
-    onKeydown(event) {
-      if (event.action === "back") {
-        onBack();
-      } else if (event.action === "up") {
-        decrement();
-      } else if (event.action === "down") {
-        increment();
-      } else if (event.action === "confirm") {
-        setPressed(true);
-      }
-    },
-    onKeyup(event) {
-      if (event.action === "confirm") {
-        setPressed(false);
-        buttons[position()]?.action();
-      }
-    },
-  }));
 
   return (
     <Layout intent="primary" footer={<KeyHints hints={["navigate", "confirm"]} />}>
@@ -97,19 +71,7 @@ export default function Index() {
         <Match when={createLobbyMutation.isError}>
           <div class="flex w-full flex-grow flex-col justify-center">
             <h1 class="mb-[10cqh] text-center font-bold text-4xl">Failed to create lobby</h1>
-            <For each={buttons}>
-              {(button, index) => (
-                <Button
-                  gradient="gradient-settings"
-                  selected={position() === index()}
-                  active={pressed() && position() === index()}
-                  onClick={button.action}
-                  onMouseEnter={() => set(index())}
-                >
-                  {button.label}
-                </Button>
-              )}
-            </For>
+            <Menu items={menuItems} gradient="gradient-settings" class="h-min grow-0" />
           </div>
         </Match>
       </Switch>

@@ -1,19 +1,14 @@
 import { useNavigate, useParams } from "@solidjs/router";
-import { type Accessor, For, type JSX, Match, Show, Suspense, Switch, createResource, createSignal } from "solid-js";
+import { Show, Suspense, createResource, createSignal } from "solid-js";
 import { commands } from "~/bindings";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
+import Menu, { type MenuItem } from "~/components/menu";
 import TitleBar from "~/components/title-bar";
-import Button from "~/components/ui/button";
-import Select from "~/components/ui/select";
-import Slider from "~/components/ui/slider";
-import { createLoop } from "~/hooks/loop";
-import { useNavigation } from "~/hooks/navigation";
 import { type Microphone, settingsStore } from "~/stores/settings";
 import IconLoaderCircle from "~icons/lucide/loader-circle";
 
 export default function MicrophoneSettings() {
-  const [pressed, setPressed] = createSignal(false);
   const navigate = useNavigate();
   const onBack = () => {
     navigate("/settings/microphones");
@@ -41,7 +36,7 @@ export default function MicrophoneSettings() {
     >
       <Suspense
         fallback={
-          <div class="flex flex-grow items-center justify-center">
+          <div class="flex h-screen w-screen items-center justify-center">
             <IconLoaderCircle class="animate-spin text-6xl" />
           </div>
         }
@@ -73,7 +68,7 @@ export default function MicrophoneSettings() {
               onBack();
             };
 
-            const inputs: Input[] = [
+            const menuItems: MenuItem[] = [
               {
                 type: "select-string",
                 label: "Microphone",
@@ -152,93 +147,7 @@ export default function MicrophoneSettings() {
               },
             ];
 
-            const { position, increment, decrement, set } = createLoop(() => inputs.length);
-
-            useNavigation(() => ({
-              layer: 0,
-              onKeydown(event) {
-                if (event.action === "back") {
-                  onBack();
-                } else if (event.action === "up") {
-                  decrement();
-                } else if (event.action === "down") {
-                  increment();
-                } else if (event.action === "confirm") {
-                  setPressed(true);
-                }
-              },
-              onKeyup(event) {
-                if (event.action === "confirm") {
-                  setPressed(false);
-                  const button = inputs[position()];
-                  if (button?.type === "button") {
-                    button.action();
-                  }
-                }
-              },
-            }));
-
-            return (
-              <div class="flex w-full flex-grow flex-col justify-center">
-                <For each={inputs}>
-                  {(button, index) => (
-                    <Switch>
-                      <Match when={button.type === "select-string" && button}>
-                        {(button) => (
-                          <Select
-                            selected={position() === index()}
-                            gradient="gradient-settings"
-                            label={button().label}
-                            value={button().value()}
-                            options={button().options}
-                            onChange={button().onChange}
-                            renderValue={button().renderValue}
-                            onMouseEnter={() => set(index())}
-                          />
-                        )}
-                      </Match>
-                      <Match when={button.type === "select-number" && button}>
-                        {(button) => (
-                          <Select
-                            selected={position() === index()}
-                            gradient="gradient-settings"
-                            label={button().label}
-                            value={button().value()}
-                            options={button().options}
-                            onChange={button().onChange}
-                            onMouseEnter={() => set(index())}
-                          />
-                        )}
-                      </Match>
-                      <Match when={button.type === "slider" && button}>
-                        {(button) => (
-                          <Slider
-                            selected={position() === index()}
-                            gradient="gradient-settings"
-                            onMouseEnter={() => set(index())}
-                            {...button()}
-                            value={button().value()}
-                          />
-                        )}
-                      </Match>
-                      <Match when={button.type === "button" && button}>
-                        {(button) => (
-                          <Button
-                            selected={position() === index()}
-                            active={pressed() && position() === index()}
-                            gradient="gradient-settings"
-                            onClick={button().action}
-                            onMouseEnter={() => set(index())}
-                          >
-                            {button().label}
-                          </Button>
-                        )}
-                      </Match>
-                    </Switch>
-                  )}
-                </For>
-              </div>
-            );
+            return <Menu items={menuItems} onBack={onBack} />;
           }}
         </Show>
       </Suspense>
@@ -248,36 +157,5 @@ export default function MicrophoneSettings() {
 
 type NullablePartial<T> = { [P in keyof T]?: T[P] | null };
 function isValidMicrophone(microphone: NullablePartial<Microphone>): microphone is Microphone {
-  return microphone.name !== null && microphone.channel !== null && microphone.color !== null;
+  return microphone.name !== null && microphone.name !== undefined;
 }
-
-type Input =
-  | {
-      type: "select-string";
-      label: string;
-      value: Accessor<string | null>;
-      onChange: (value: string) => void;
-      options: string[];
-      renderValue?: (value: string | null) => JSX.Element;
-    }
-  | {
-      type: "select-number";
-      label: string;
-      value: Accessor<number | null>;
-      onChange: (value: number) => void;
-      options: number[];
-    }
-  | {
-      type: "slider";
-      label: string;
-      value: Accessor<number>;
-      min: number;
-      max: number;
-      step: number;
-      onInput: (value: number) => void;
-    }
-  | {
-      type: "button";
-      label: string;
-      action: () => void;
-    };

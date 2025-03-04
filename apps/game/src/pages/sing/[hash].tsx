@@ -1,14 +1,11 @@
 import { useNavigate, useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { type Accessor, For, type JSX, Match, Switch, createMemo, createSignal } from "solid-js";
+import { type Accessor, createSignal } from "solid-js";
 import KeyHints from "~/components/key-hints";
 import Layout from "~/components/layout";
+import Menu, { type MenuItem } from "~/components/menu";
 import TitleBar from "~/components/title-bar";
 import Avatar from "~/components/ui/avatar";
-import Button from "~/components/ui/button";
-import Select from "~/components/ui/select";
-import { createLoop } from "~/hooks/loop";
-import { useNavigation } from "~/hooks/navigation";
 import { lobbyQueryOptions } from "~/lib/queries";
 import type { LocalUser } from "~/lib/types";
 import { useRoundStore } from "~/stores/round";
@@ -30,7 +27,6 @@ export default function PlayerSelect() {
   const song = () => songsStore.songs().find((song) => song.hash === hash);
   const voiceCount = () => song()?.voices.length || 0;
 
-  const [pressed, setPressed] = createSignal(false);
   const navigate = useNavigate();
   const onBack = () => navigate("/sing");
   const roundStore = useRoundStore();
@@ -72,8 +68,8 @@ export default function PlayerSelect() {
     setSelectedVoices((prev) => [...prev.slice(0, playerNumber), value, ...prev.slice(playerNumber + 1)]);
   };
 
-  const inputs: Accessor<Input[]> = createMemo(() => {
-    const inputs: Input[] = [
+  const menuItems: Accessor<MenuItem[]> = () => {
+    const inputs: MenuItem[] = [
       {
         type: "select-number",
         label: "Players",
@@ -132,34 +128,7 @@ export default function PlayerSelect() {
     });
 
     return inputs;
-  });
-
-  const { position, increment, decrement, set } = createLoop(() => inputs().length);
-
-  useNavigation(() => ({
-    layer: 0,
-    onKeydown(event) {
-      if (event.action === "back") {
-        onBack();
-      } else if (event.action === "down") {
-        increment();
-      } else if (event.action === "up") {
-        decrement();
-      } else if (event.action === "confirm") {
-        setPressed(true);
-      }
-    },
-    onKeyup(event) {
-      if (event.action === "confirm") {
-        setPressed(false);
-
-        const currentInput = inputs()[position()];
-        if (currentInput?.type === "button") {
-          currentInput.action();
-        }
-      }
-    },
-  }));
+  };
 
   return (
     <Layout
@@ -167,78 +136,7 @@ export default function PlayerSelect() {
       header={<TitleBar title="Players" onBack={onBack} />}
       footer={<KeyHints hints={["back", "navigate", "confirm"]} />}
     >
-      <div class="flex w-full flex-grow flex-col justify-center">
-        <For each={inputs()}>
-          {(button, index) => (
-            <Switch>
-              <Match when={button.type === "select-string-number" && button}>
-                {(button) => (
-                  <Select
-                    selected={position() === index()}
-                    gradient="gradient-settings"
-                    label={button().label}
-                    value={button().value()}
-                    options={button().options}
-                    onChange={button().onChange}
-                    renderValue={button().renderValue}
-                    onMouseEnter={() => set(index())}
-                  />
-                )}
-              </Match>
-              <Match when={button.type === "select-number" && button}>
-                {(button) => (
-                  <Select
-                    selected={position() === index()}
-                    gradient="gradient-settings"
-                    label={button().label}
-                    value={button().value()}
-                    options={button().options}
-                    onChange={button().onChange}
-                    renderValue={button().renderValue}
-                    onMouseEnter={() => set(index())}
-                  />
-                )}
-              </Match>
-              <Match when={button.type === "button" && button}>
-                {(button) => (
-                  <Button
-                    selected={position() === index()}
-                    active={pressed() && position() === index()}
-                    gradient="gradient-settings"
-                    onClick={button().action}
-                    onMouseEnter={() => set(index())}
-                  >
-                    {button().label}
-                  </Button>
-                )}
-              </Match>
-            </Switch>
-          )}
-        </For>
-      </div>
+      <Menu items={menuItems()} onBack={onBack} gradient="gradient-sing" />
     </Layout>
   );
 }
-
-type Input =
-  | {
-      type: "select-number";
-      label: string;
-      value: Accessor<number | null>;
-      onChange: (value: number) => void;
-      options: number[];
-      renderValue?: (value: number | null) => JSX.Element;
-    }
-  | {
-      type: "select-string-number";
-      label: string;
-      value: Accessor<string | number | null>;
-      onChange: (value: string | number) => void;
-      options: (string | number)[];
-      renderValue?: (value: string | number | null) => JSX.Element;
-    }
-  | {
-      type: "button";
-      label: string;
-      action: () => void;
-    };
