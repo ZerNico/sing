@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { SignJWT, jwtVerify } from "jose";
 import * as v from "valibot";
 import { config } from "../../config";
@@ -108,6 +108,13 @@ class LobbiesService {
 
   async deleteLobby(id: string) {
     await db.delete(lobbies).where(eq(lobbies.id, id));
+  }
+
+  async kickPlayer(lobbyId: string, userId: number) {
+    await db
+      .update(users)
+      .set({ lobbyId: null })
+      .where(and(eq(users.id, userId), eq(users.lobbyId, lobbyId)));
   }
 }
 

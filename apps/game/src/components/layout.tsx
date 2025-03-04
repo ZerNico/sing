@@ -1,4 +1,4 @@
-import type { JSX } from "solid-js";
+import { type JSX, Suspense } from "solid-js";
 
 interface LayoutProps {
   children?: JSX.Element;
@@ -21,12 +21,14 @@ export default function Layout(props: LayoutProps) {
       >
         <div class="layout flex">
           <div class="@container relative flex flex-grow overflow-hidden">
-            <div class="absolute inset-0 h-full w-full">{props.background}</div>
-            <div class="relative z-1 grid flex-grow grid-rows-[min-content_1fr_min-content] gap-6 p-16">
-              <div>{props.header}</div>
-              <div class="flex flex-col">{props.children}</div>
-              <div>{props.footer}</div>
-            </div>
+            <Suspense fallback={<div />}>
+              <div class="absolute inset-0 h-full w-full">{props.background}</div>
+              <div class="relative z-1 grid flex-grow grid-rows-[min-content_1fr_min-content] gap-6 p-16">
+                <div>{props.header}</div>
+                <div class="flex flex-col">{props.children}</div>
+                <div>{props.footer}</div>
+              </div>
+            </Suspense>
           </div>
         </div>
       </div>

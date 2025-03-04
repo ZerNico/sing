@@ -26,7 +26,7 @@ export default function Button(props: ButtonProps) {
       disabled={props.loading}
     >
       <div
-        class="z-2 col-start-1 row-start-1 text-center font-bold text-xl transition-opacity"
+        class="z-2 col-start-1 row-start-1 flex items-center justify-center gap-3 text-center font-bold text-xl transition-opacity"
         classList={{
           "pointer-events-none opacity-0": props.loading,
         }}

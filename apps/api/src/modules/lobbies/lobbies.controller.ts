@@ -1,4 +1,5 @@
 import { groupRoutes } from "@nokijs/server";
+import * as v from "valibot";
 import { baseRoute } from "../../base";
 import { rateLimit } from "../../utils/rate-limit";
 import { verified } from "../auth/auth.middlewares";
@@ -66,10 +67,25 @@ const deleteCurrentLobby = baseRoute.use(requireLobby).delete("/current", async 
 
 const leaveLobby = baseRoute.use(verified).post("/leave", async ({ res, payload }) => {
   await lobbiesService.leaveLobby(payload.sub);
-  
+
   return res.text("");
 });
 
-export const lobbiesRoutes = groupRoutes([createLobby, joinLobby, getCurrentLobby, leaveLobby, deleteCurrentLobby], {
-  prefix: "/lobbies",
-});
+const kickPlayer = baseRoute
+  .use(requireLobby)
+  .params(
+    v.object({
+      userId: v.pipe(v.string(), v.transform(Number.parseInt), v.number()),
+    }),
+  )
+  .post("/current/kick/:userId", async ({ res, payload, params }) => {
+    await lobbiesService.kickPlayer(payload.sub, params.userId);
+    return res.text("");
+  });
+
+export const lobbiesRoutes = groupRoutes(
+  [createLobby, joinLobby, getCurrentLobby, leaveLobby, deleteCurrentLobby, kickPlayer],
+  {
+    prefix: "/lobbies",
+  },
+);

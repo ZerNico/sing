@@ -1,4 +1,5 @@
-import { RouteBuilder, SchemaError } from "@nokijs/server";
+import { RouteBuilder } from "@nokijs/server";
+import { SchemaError } from "@standard-schema/utils";
 import { config } from "./config";
 import { cors } from "./utils/cors";
 import { csrf } from "./utils/csrf";

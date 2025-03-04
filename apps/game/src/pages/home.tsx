@@ -38,6 +38,7 @@ export default function Home() {
       gradient: "gradient-lobby",
       icon: IconUsers,
       description: "Manage the party you are in and invite your friends.",
+      action: () => navigate("/lobby"),
     },
     {
       label: "Settings",
