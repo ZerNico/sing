@@ -7,7 +7,7 @@ import Card from "~/components/ui/card";
 import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { locale, t } from "~/lib/i18n";
-import { passwordSchema } from "~/lib/schemas";
+import { getPasswordSchema } from "~/lib/schemas";
 import { notify } from "~/lib/toast";
 
 export default function ResetPasswordPage() {
@@ -17,8 +17,8 @@ export default function ResetPasswordPage() {
         const ResetPasswordSchema = v.pipe(
           v.object({
             code: v.pipe(v.string(), v.length(8, t("form.code_length", { length: 8 }))),
-            password: passwordSchema,
-            repeatPassword: passwordSchema,
+            password: getPasswordSchema(),
+            repeatPassword: getPasswordSchema(),
           }),
           v.forward(
             v.partialCheck(

@@ -12,7 +12,7 @@ import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { locale, t } from "~/lib/i18n";
 import { profileQueryOptions } from "~/lib/queries";
-import { emailSchema, passwordSchema } from "~/lib/schemas";
+import { getEmailSchema, getPasswordSchema } from "~/lib/schemas";
 import { notify } from "~/lib/toast";
 
 export default function RegisterPage() {
@@ -21,9 +21,9 @@ export default function RegisterPage() {
       {(_) => {
         const RegisterFormSchema = v.pipe(
           v.object({
-            email: emailSchema,
-            password: passwordSchema,
-            repeatPassword: passwordSchema,
+            email: getEmailSchema(),
+            password: getPasswordSchema(),
+            repeatPassword: getPasswordSchema(),
           }),
           v.forward(
             v.partialCheck(

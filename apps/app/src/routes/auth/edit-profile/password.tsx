@@ -9,7 +9,7 @@ import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { locale, t } from "~/lib/i18n";
 import { profileQueryOptions } from "~/lib/queries";
-import { passwordSchema } from "~/lib/schemas";
+import { getPasswordSchema } from "~/lib/schemas";
 import { notify } from "~/lib/toast";
 
 export default function EditPasswordPage() {
@@ -18,8 +18,8 @@ export default function EditPasswordPage() {
       {(_) => {
         const PasswordFormSchema = v.pipe(
           v.object({
-            password: passwordSchema,
-            repeatPassword: passwordSchema,
+            password: getPasswordSchema(),
+            repeatPassword: getPasswordSchema(),
           }),
           v.forward(
             v.partialCheck(

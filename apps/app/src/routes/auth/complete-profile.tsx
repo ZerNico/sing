@@ -9,7 +9,7 @@ import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { locale, t } from "~/lib/i18n";
 import { profileQueryOptions } from "~/lib/queries";
-import { usernameSchema } from "~/lib/schemas";
+import { getUsernameSchema } from "~/lib/schemas";
 import { notify } from "~/lib/toast";
 
 export default function CompleteProfilePage() {
@@ -17,7 +17,7 @@ export default function CompleteProfilePage() {
     <Show when={locale()} keyed>
       {(_) => {
         const CompleteProfileSchema = v.object({
-          username: usernameSchema,
+          username: getUsernameSchema(),
         });
         type CompleteProfileForm = v.InferOutput<typeof CompleteProfileSchema>;
 

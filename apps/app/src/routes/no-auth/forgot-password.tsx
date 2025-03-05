@@ -7,7 +7,7 @@ import Card from "~/components/ui/card";
 import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { locale, t } from "~/lib/i18n";
-import { emailSchema } from "~/lib/schemas";
+import { getEmailSchema } from "~/lib/schemas";
 import { notify } from "~/lib/toast";
 
 export default function ForgotPasswordPage() {
@@ -15,7 +15,7 @@ export default function ForgotPasswordPage() {
     <Show when={locale()} keyed>
       {(_) => {
         const ForgotPasswordSchema = v.object({
-          email: emailSchema,
+          email: getEmailSchema(),
         });
         type ForgotPasswordForm = v.InferOutput<typeof ForgotPasswordSchema>;
 

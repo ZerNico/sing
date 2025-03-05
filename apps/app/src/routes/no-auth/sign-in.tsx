@@ -12,7 +12,7 @@ import Input from "~/components/ui/input";
 import { v1 } from "~/lib/api";
 import { locale, t } from "~/lib/i18n";
 import { profileQueryOptions } from "~/lib/queries";
-import { passwordSchema } from "~/lib/schemas";
+import { getPasswordSchema } from "~/lib/schemas";
 import { notify } from "~/lib/toast";
 
 export default function LoginPage() {
@@ -21,7 +21,7 @@ export default function LoginPage() {
       {(_) => {
         const LoginFormSchema = v.object({
           login: v.pipe(v.string(), v.trim(), v.maxLength(128)),
-          password: passwordSchema,
+          password: getPasswordSchema(),
         });
         type LoginForm = v.InferOutput<typeof LoginFormSchema>;
 
