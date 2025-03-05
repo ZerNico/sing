@@ -1,5 +1,5 @@
 {
-  "name": "game",
+  "name": "@tuneperfect/game",
   "private": true,
   "type": "module",
   "scripts": {

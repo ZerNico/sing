@@ -9,13 +9,13 @@ import { flattenIssues } from "./utils/validation";
 export const baseRoute = new RouteBuilder()
   .use(
     cors({
-      origin: [config.APP_URL, "http://localhost:1420"],
+      origin: [config.APP_URL, "http://localhost:1420", "tauri://localhost"],
       credentials: true,
       allowHeaders: ["Content-Type", "Authorization"],
     }),
   )
   .use(rateLimit({ max: 100, window: 60, generateKey: (ctx) => ctx.headers["x-forwarded-for"] ?? "anonymous" }))
-  .use(csrf({ allowedOrigins: [config.APP_URL, "http://localhost:1420"] }))
+  .use(csrf({ allowedOrigins: [config.APP_URL, "http://localhost:1420", "tauri://localhost"] }))
   .error((error, { res }) => {
     if (error instanceof SchemaError) {
       const flattened = flattenIssues(error.issues);

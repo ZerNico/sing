@@ -7,6 +7,72 @@
 
   --color-*: initial;
 
+  --animate-hide: hide 0.1s ease-in;
+  --animate-slide-in: slideIn 0.15s ease-out;
+  --animate-swipe-out: swipeOut 0.1s ease-in;
+  --animate-scroll: scroll 10s linear infinite;
+
+  --text-*: initial;
+  --text-xs: 0.67cqw;
+  --text-sm: 0.78cqw;
+  --text-base: 1cqw;
+  --text-lg: 1cqw;
+  --text-xl: 1.11cqw;
+  --text-2xl: 1.33cqw;
+  --text-3xl: 1.67cqw;
+  --text-4xl: 2cqw;
+  --text-5xl: 2.67cqw;
+  --text-6xl: 3.33cqw;
+  --text-7xl: 4cqw;
+  --text-8xl: 5.33cqw;
+  --text-9xl: 7.33cqw;
+
+  --radius-*: initial;
+  --radius-sm: 0.25cqw;
+  --radius-md: 0.375cqw;
+  --radius-lg: 0.5cqw;
+  --radius-xl: 0.75cqw;
+  --radius-2xl: 1cqw;
+  --radius-3xl: 1.5cqw;
+
+  @keyframes hide {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes swipeOut {
+    from {
+      transform: translateX(var(--kb-toast-swipe-end-x));
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes scroll {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+}
+
+@theme static {
   --color-white: oklch(1 0 0);
   --color-black: oklch(0 0 0);
 
@@ -141,70 +207,6 @@
   --color-slate-800: oklch(0.279 0.041 260.031);
   --color-slate-900: oklch(0.208 0.042 265.755);
   --color-slate-950: oklch(0.129 0.042 264.695);
-
-  --animate-hide: hide 0.1s ease-in;
-  --animate-slide-in: slideIn 0.15s ease-out;
-  --animate-swipe-out: swipeOut 0.1s ease-in;
-  --animate-scroll: scroll 10s linear infinite;
-
-  --text-*: initial;
-  --text-xs: 0.67cqw;
-  --text-sm: 0.78cqw;
-  --text-base: 1cqw;
-  --text-lg: 1cqw;
-  --text-xl: 1.11cqw;
-  --text-2xl: 1.33cqw;
-  --text-3xl: 1.67cqw;
-  --text-4xl: 2cqw;
-  --text-5xl: 2.67cqw;
-  --text-6xl: 3.33cqw;
-  --text-7xl: 4cqw;
-  --text-8xl: 5.33cqw;
-  --text-9xl: 7.33cqw;
-
-  --radius-*: initial;
-  --radius-sm: 0.25cqw;
-  --radius-md: 0.375cqw;
-  --radius-lg: 0.5cqw;
-  --radius-xl: 0.75cqw;
-  --radius-2xl: 1cqw;
-  --radius-3xl: 1.5cqw;
-
-  @keyframes hide {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes swipeOut {
-    from {
-      transform: translateX(var(--kb-toast-swipe-end-x));
-    }
-    to {
-      transform: translateX(100%);
-    }
-  }
-
-  @keyframes scroll {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-50%);
-    }
-  }
 }
 
 html,

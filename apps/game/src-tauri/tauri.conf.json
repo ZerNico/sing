@@ -7,7 +7,7 @@
   "build": {
     "beforeDevCommand": "bun run dev:vite",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "bun run build",
+    "beforeBuildCommand": "bun run build:vite",
     "frontendDist": "../dist"
   },
   "app": {
@@ -23,7 +23,7 @@
         "enable": true,
         "scope": ["**"]
       },
-      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost"
+      "csp": "default-src 'self' ipc: http://ipc.localhost; font-src 'self' data:; img-src 'self' asset: http://asset.localhost data:; media-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost *"
     }
   },
 
