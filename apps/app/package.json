@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "@tuneperfect/app",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -12,6 +12,7 @@
     "@iconify-json/circle-flags": "^1.2.6",
     "@iconify-json/logos": "^1.2.4",
     "@iconify-json/lucide": "^1.2.24",
+    "@import-meta-env/unplugin": "^0.6.2",
     "@tailwindcss/vite": "^4.0.0",
     "@tuneperfect/api": "*",
     "tailwindcss": "^4.0.0",

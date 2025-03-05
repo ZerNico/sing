@@ -30,7 +30,7 @@ jobs:
         if: matrix.platform.os == 'ubuntu-22.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libglib2.0-dev
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libglib2.0-dev alsa-base alsa-utils
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -46,7 +46,7 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './apps/game/src-tauri -> target'
-          key: ${{ matrix.platform.target }}
+          key: ${{ matrix.platform.target }}-${{ matrix.platform.os }}-game
 
       - name: Install dependencies
         run: bun install

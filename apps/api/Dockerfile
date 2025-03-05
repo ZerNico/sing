@@ -9,6 +9,7 @@ COPY ./package.json ./bun.lock ./turbo.json ./
 RUN bun install
 RUN bun run build --filter @tuneperfect/api
 
+
 FROM oven/bun:1 AS runner
 
 WORKDIR /usr/src/app
