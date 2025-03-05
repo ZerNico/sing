@@ -1,4 +1,4 @@
-import { renderResetPassword, renderVerifyEmail } from "@sing/email";
+import { renderResetPassword, renderVerifyEmail } from "@tuneperfect/email";
 import { and, eq, sql } from "drizzle-orm";
 import { SignJWT, jwtVerify } from "jose";
 import nodemailer from "nodemailer";

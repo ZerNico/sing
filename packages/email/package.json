@@ -1,5 +1,5 @@
 {
-  "name": "@sing/email",
+  "name": "@tuneperfect/email",
   "module": "index.tsx",
   "type": "module",
   "private": true,

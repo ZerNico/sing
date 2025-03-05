@@ -1,7 +1,8 @@
 {
-  "name": "sing-next",
+  "name": "tuneperfect",
   "scripts": {
-    "dev": "turbo run dev --parallel --force"
+    "dev": "turbo run dev --parallel --force",
+    "build": "turbo run build"
   },
   "devDependencies": {
     "turbo": "^2.3.3"

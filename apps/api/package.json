@@ -7,13 +7,14 @@
   },
   "scripts": {
     "dev": "bun --watch --hot src/index.ts",
+    "build": "bun build.ts",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@kobalte/core": "^0.13.7",
     "@nokijs/server": "0.0.1-alpha.36",
-    "@sing/email": "*",
+    "@tuneperfect/email": "*",
     "arctic": "^3.2.0",
     "drizzle-orm": "^0.38.4",
     "jose": "^5.9.6",

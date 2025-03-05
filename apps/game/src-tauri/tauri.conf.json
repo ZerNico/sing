@@ -1,8 +1,9 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "game",
-  "version": "0.1.0",
-  "identifier": "sing",
+  "productName": "Tune Perfect",
+  "mainBinaryName": "tuneperfect",
+  "version": "0.0.3",
+  "identifier": "org.tuneperfect.game",
   "build": {
     "beforeDevCommand": "bun run dev:vite",
     "devUrl": "http://localhost:1420",
@@ -12,7 +13,7 @@
   "app": {
     "windows": [
       {
-        "title": "game",
+        "title": "Tune Perfect",
         "width": 800,
         "height": 600
       }
